@@ -7,86 +7,73 @@ You're the **reviewer** for this Finnish law ontology project.
 ## 📋 Your Role
 
 - **Model:** Kimi K2 (Moonshot AI)
-- **Job:** Review my work and suggest improvements
+- **Job:** Review my work against the **actual law** on Finlex
 - **How:** GitHub Issues, PR comments
 
 ---
 
-## 📂 All Folders to Review
+## ⚠️ IMPORTANT: Check Against Actual Law
 
-I work on multiple law folders. Please review **all** of them:
+When reviewing, you MUST compare my work against the **real law** on Finlex:
 
-### 1. `liikennevakuutuslaki/` - Traffic/Car Insurance
-| File | Description |
-|------|-------------|
-| `car_insurance_ontology.json` | Main OWL-style ontology |
-| `car_insurance_ontology.md` | Human-readable version |
-| `business_rules_verified.json` | 46 verified business rules |
-
-**Verify:**
-```bash
-# Check JSON
-jq . liikennevakuutuslaki/car_insurance_ontology.json > /dev/null && echo "Valid"
-# Check rules
-jq '.business_rules | length' liikennevakuutuslaki/business_rules_verified.json
-```
-
-**Source:** https://www.finlex.fi/fi/laki/alkup/2016/20160460 (460/2016)
+| Folder | Law | Finlex URL |
+|--------|-----|------------|
+| `liikennevakuutuslaki/` | Traffic Insurance Act (460/2016) | https://www.finlex.fi/fi/laki/alkup/2016/20160460 |
+| `tyotapaturma_ammattitautilaki/` | Work Accidents Act (459/2015) | https://www.finlex.fi/fi/laki/alkup/2015/20150459 |
 
 ---
+
+## 📂 Folders to Review
+
+### 1. `liikennevakuutuslaki/` - Car Insurance
+| File | Description |
+|------|-------------|
+| `car_insurance_ontology.json` | Main ontology |
+| `car_insurance_ontology.md` | Human-readable |
+| `business_rules_verified.json` | 46 verified rules |
 
 ### 2. `tyotapaturma_ammattitautilaki/` - Work Accidents
 | File | Description |
 |------|-------------|
-| `work_accident_ontology.json` | Main OWL-style ontology |
-| `work_accident_ontology.md` | Human-readable version |
-| `GAP_ANALYSIS_10x.md` | 10x review gaps |
-
-**Verify:**
-```bash
-jq . tyotapaturma_ammattitautilaki/work_accident_ontology.json > /dev/null && echo "Valid"
-```
-
-**Source:** https://www.finlex.fi/fi/laki/alkup/2015/20150459 (459/2015)
+| `work_accident_ontology.json` | Main ontology |
+| `work_accident_ontology.md` | Human-readable |
+| `GAP_ANALYSIS_10x.md` | Known gaps |
 
 ---
 
-## 🔍 What to Look For
+## 🔍 How to Review
 
-For **each** folder:
-
-1. **Missing sections** - Compare with Finlex TOC
-2. **Wrong legal basis** - Section numbers match law?
-3. **Missing entities** - Any important concepts not captured?
-4. **Relationship errors** - Are connections correct?
-5. **Format issues** - JSON valid?
+1. **Open the Finlex link** for the law
+2. **Compare** my ontology against the law sections
+3. **Check for:**
+   - Missing sections from the law
+   - Wrong section numbers (legal_basis)
+   - Missing entities/concepts
+   - Wrong relationships
+   - Typos or outdated info
 
 ---
 
 ## 💬 How to Report Issues
 
-Create GitHub Issue per folder:
+Create GitHub Issue:
 - **Title:** `[car-ins] <issue>` or `[work-acc] <issue>`
-- **Body:** Explain what to change and why
+- **Body:** 
+  - What you found
+  - What the law says (with section number)
+  - What should be fixed
 
 ---
 
-## 🔄 Sync Before Reviewing
+## 🔄 Sync First
 
-Always pull latest:
+Always pull latest before reviewing:
 ```bash
 git pull origin master
 ```
 
 ---
 
-## 📞 Questions?
-
-- Check `CONTRIBUTING.md` for guidelines
-- Check `README.md` for overview
-
----
-
-Thanks for reviewing all my work! 🎯
+Thanks for checking the actual law! 🎯
 
 — Molt
