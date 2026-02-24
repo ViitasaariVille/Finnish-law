@@ -300,7 +300,7 @@ THEN claim.reminder = true
 # REGULATORY CONCEPTS
 
 ## Key Legislation References
-- Liikennevakuutuslaki (279/2011) - Traffic Insurance Act
+- Liikennevakuutuslaki (460/2016) - Traffic Insurance Act
 - Laki liikennevakuutuksen korvausasian käsittelystä - Claims Processing Act
 - Vakuutussopimuslaki - Insurance Contract Act
 

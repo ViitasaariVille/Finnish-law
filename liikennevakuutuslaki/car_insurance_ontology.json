@@ -70,7 +70,26 @@
       "Compensation": {
         "description": "Payment or benefit from insurance",
         "attributes": ["compensationId", "claimId", "amount", "currency", "paymentDate", "recipient"],
-        "subclasses": ["PropertyDamageCompensation", "MedicalExpenseCompensation", "DisabilityCompensation", "DeathCompensation", "PainAndSuffering", "LostWagesCompensation"]
+        "subclasses": {
+          "PropertyDamageCompensation": {"description": "Vehicle or property damage", "legal_basis": "Section 3"},
+          "MedicalExpenseCompensation": {
+            "description": "Medical care costs from traffic accident",
+            "legal_basis": "Sections 5-5f",
+            "attributes": ["treatmentType", "startDate", "endDate", "reimbursementRate"],
+            "subclasses": {
+              "HospitalCare": {"description": "Hospital treatment costs", "legal_basis": "Section 5a"},
+              "MedicineCost": {"description": "Prescription medicine costs", "legal_basis": "Section 5b"},
+              "RehabilitationCost": {"description": "Medical rehabilitation expenses", "legal_basis": "Section 5c"},
+              "TravelCost": {"description": "Travel to/from treatment", "legal_basis": "Section 5d"},
+              "DentalTreatment": {"description": "Dental injury treatment", "legal_basis": "Section 5e"},
+              "ProsthesisCost": {"description": "Prosthetics and orthotics", "legal_basis": "Section 5f"}
+            }
+          },
+          "DisabilityCompensation": {"description": "Permanent disability compensation", "legal_basis": "Section 6"},
+          "DeathCompensation": {"description": "Death benefits", "legal_basis": "Section 7"},
+          "PainAndSuffering": {"description": "Pain and suffering compensation", "legal_basis": "Section 5"},
+          "LostWagesCompensation": {"description": "Loss of earning capacity", "legal_basis": "Section 4"}
+        }
       }
     },
     "relationships": [
@@ -110,7 +129,7 @@
       "Liikennevakuutuskeskus - Finnish Motor Insurance Centre"
     ],
     "key_legislation": [
-      "Liikennevakuutuslaki 279/2011 - Traffic Insurance Act",
+      "Liikennevakuutuslaki 460/2016 - Traffic Insurance Act",
       "Vakuutussopimuslaki - Insurance Contract Act",
       "Laki liikennevakuutuksen korvausasian käsittelystä - Claims Processing Act"
     ]
