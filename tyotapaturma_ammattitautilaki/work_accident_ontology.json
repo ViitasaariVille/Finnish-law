@@ -208,7 +208,33 @@
               "PublicHealthcareCompensation": "Coverage for public healthcare costs",
               "PrivateHealthcareCompensation": "Coverage for private healthcare costs",
               "ForeignHealthcareCompensation": "Coverage for medical care abroad",
-              "MedicineCompensation": "Reimbursement for prescribed medicines"
+              "MedicineCompensation": "Reimbursement for prescribed medicines",
+              "InvestigationCost": {
+                "description": "Costs for medical examinations to determine injury cause",
+                "legal_basis": "Section 38"
+              },
+              "CareSupport": {
+                "description": "Daily allowance for care needs",
+                "legal_basis": "Section 51",
+                "amounts": {
+                  "basic": "€8.70/day",
+                  "enhanced": "€19.55/day",
+                  "highest": "€23.41/day"
+                }
+              },
+              "ClothingAllowance": {
+                "description": "Allowance for damaged clothing/appliances",
+                "legal_basis": "Section 52",
+                "amounts": {
+                  "soft_materials": "€0.58/day",
+                  "prosthetics": "€2.31/day"
+                }
+              },
+              "PersonalItemsCompensation": {
+                "description": "Compensation for damaged personal items",
+                "legal_basis": "Section 54",
+                "items": ["Glasses", "HearingAids", "DentalProsthetics", "SupportBandages", "ArtificialLimbs", "Clothing"]
+              }
             }
           },
           "DailyAllowance": {
@@ -299,6 +325,22 @@
           "Appeal": {
             "description": "Process to challenge decision",
             "legal_basis": "Sections 237-243"
+          },
+          "BaseAppeal": {
+            "description": "Appeal based on incorrect law application or factual findings",
+            "legal_basis": "Section 240"
+          },
+          "SelfCorrection": {
+            "description": "Insurance company can correct own decision before formal appeal",
+            "legal_basis": "Section 242"
+          },
+          "DecisionRemoval": {
+            "description": "Administrative removal of clearly unlawful decision",
+            "legal_basis": "Section 246"
+          },
+          "RecoveryProcedure": {
+            "description": "Recovery of incorrectly paid compensation",
+            "legal_basis": "Section 247"
           },
           "Recovery": {
             "description": "Recovery of overpaid compensation",
