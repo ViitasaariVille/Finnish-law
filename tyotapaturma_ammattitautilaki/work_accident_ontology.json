@@ -1,0 +1,295 @@
+{
+  "ontology": {
+    "name": "Finnish Work Accident and Occupational Disease Insurance Ontology",
+    "version": "1.0",
+    "based_on": "Työtapaturma- ja ammattitautilaki (459/2015) - Occupational Accident and Occupational Diseases Act",
+    "language": "en",
+    "effective_date": "2016-01-01",
+    "source": "https://www.finlex.fi/fi/laki/alkup/2015/20150459",
+    "entities": {
+      "Person": {
+        "description": "Natural person involved in work accident insurance",
+        "attributes": ["personalId", "firstName", "lastName", "address"],
+        "subclasses": {
+          "Employee": {
+            "description": "Person working in employment relationship under employment contract, public service, or similar",
+            "legal_basis": "Section 8"
+          },
+          "Entrepreneur": {
+            "description": "Self-employed person with YEL insurance",
+            "legal_basis": "Sections 188-190"
+          },
+          "Farmer": {
+            "description": "Agricultural entrepreneur under separate farmer accident insurance",
+            "legal_basis": "Section 11",
+            "note": "Excluded from this law"
+          },
+          "InjuredParty": {
+            "description": "Person who suffered a work accident or occupational disease",
+            "attributes": ["injuryDate", "injuryType", "severity", "medicalFindings"]
+          },
+          "Survivor": {
+            "description": "Family member entitled to benefits after death of injured party",
+            "subclasses": ["Widow", "Child", "Dependent"]
+          },
+          "Employer": {
+            "description": "Entity with mandatory insurance obligation",
+            "attributes": ["businessId", "companyName", "annualPayroll"]
+          }
+        }
+      },
+      "Insurance": {
+        "description": "Insurance contract for work accidents and occupational diseases",
+        "attributes": ["policyNumber", "insuranceCompany", "policyHolder", "startDate", "premium", "coverage"],
+        "subclasses": {
+          "MandatoryInsurance": {
+            "description": "Compulsory insurance that employers must obtain for employees",
+            "legal_basis": "Section 3",
+            "attributes": ["coverageType", "minimumCoverage"]
+          },
+          "VoluntaryWorkTimeInsurance": {
+            "description": "Voluntary insurance for entrepreneurs covering work hours",
+            "legal_basis": "Sections 188-198",
+            "eligibility": "Entrepreneur with YEL insurance"
+          },
+          "VoluntaryFreeTimeInsurance": {
+            "description": "Voluntary insurance for leisure time accidents",
+            "legal_basis": "Sections 199-203"
+          }
+        }
+      },
+      "InsurableEvent": {
+        "description": "Event that triggers insurance coverage",
+        "attributes": ["eventDate", "eventType", "location", "circumstances"],
+        "subclasses": {
+          "OccupationalAccident": {
+            "description": "Accident occurring during work, at workplace, or on work commute",
+            "legal_basis": "Sections 17-25",
+            "subclasses": {
+              "WorkplaceAccident": "Accident at workplace during work",
+              "CommuteAccident": "Accident on home-work journey",
+              "BusinessTripAccident": "Accident during work-related travel",
+              "WorkRelatedActivityAccident": "Accident during employer-organized activity"
+            }
+          },
+          "OccupationalDisease": {
+            "description": "Disease caused by occupational exposure to physical, chemical, or biological factors",
+            "legal_basis": "Sections 26-32",
+            "attributes": ["diseaseCode", "exposureDuration", "latencyPeriod"]
+          },
+          "RepetitiveStrainInjury": {
+            "description": "Muscle or tendon strain from single work movement",
+            "legal_basis": "Section 33",
+            "note": "Maximum 6 weeks compensation"
+          },
+          "ViolenceDamage": {
+            "description": "Injury from assault or intentional act by another person",
+            "legal_basis": "Section 34",
+            "condition": "Must be related to work duties"
+          },
+          "PsychologicalShock": {
+            "description": "Mental reaction resulting from occupational accident",
+            "legal_basis": "Section 35",
+            "subclasses": ["AcuteStressReaction", "PTSD", "PersonalityChange"]
+          }
+        }
+      },
+      "Compensation": {
+        "description": "Benefit or payment provided due to insured event",
+        "attributes": ["amount", "startDate", "duration", "paymentFrequency"],
+        "subclasses": {
+          "MedicalCareCompensation": {
+            "description": "Reimbursement for medical treatment costs",
+            "legal_basis": "Sections 36-49",
+            "subclasses": {
+              "PublicHealthcareCompensation": "Coverage for public healthcare costs",
+              "PrivateHealthcareCompensation": "Coverage for private healthcare costs",
+              "ForeignHealthcareCompensation": "Coverage for medical care abroad",
+              "MedicineCompensation": "Reimbursement for prescribed medicines"
+            }
+          },
+          "DailyAllowance": {
+            "description": "Compensation for loss of earnings during incapacity",
+            "legal_basis": "Sections 56-62",
+            "attributes": ["calculationBase", "minimumAmount", "maximumDuration"]
+          },
+          "DisabilityPension": {
+            "description": "Pension paid when work capacity is permanently reduced",
+            "legal_basis": "Sections 63-68",
+            "attributes": ["reductionPercentage", "calculationBase", "oneTimeIncrease"],
+            "subclasses": {
+              "FullDisabilityPension": "100% reduction in work capacity",
+              "PartialDisabilityPension": "10-100% reduction in work capacity"
+            }
+          },
+          "RehabilitationAllowance": {
+            "description": "Compensation during vocational rehabilitation",
+            "legal_basis": "Sections 69, 88-98"
+          },
+          "PermanentDamageCompensation": {
+            "description": "One-time or continuous payment for permanent disability",
+            "legal_basis": "Sections 83-87",
+            "attributes": ["damageClass", "oneTimePayment", "continuousPayment"]
+          },
+          "RehabilitationCompensation": {
+            "description": "Coverage for rehabilitation costs",
+            "legal_basis": "Sections 88-98",
+            "subclasses": {
+              "VocationalRehabilitation": "Job-related rehabilitation",
+              "MedicalRehabilitation": "Medical rehabilitation services",
+              "RehabilitationEquipment": "Assistive devices and modifications"
+            }
+          },
+          "DeathCompensation": {
+            "description": "Benefits paid upon death of injured party",
+            "legal_basis": "Sections 99-109",
+            "subclasses": {
+              "SurvivorsPension": "Pension for widow/children",
+              "FuneralExpenses": "Coverage for burial costs"
+            }
+          },
+          "CostCompensation": {
+            "description": "Reimbursement for related expenses",
+            "subclasses": {
+              "TravelExpenses": "Transportation to/from treatment",
+              "AccommodationExpenses": "Lodging during treatment",
+              "CareSupport": "Additional care costs",
+              "ClothingAllowance": "Compensation for damaged clothing"
+            }
+          }
+        }
+      },
+      "Income": {
+        "description": "Earnings calculations for compensation",
+        "subclasses": {
+          "AnnualWorkIncome": {
+            "description": "Yearly earnings used as basis for compensation",
+            "legal_basis": "Sections 71-80",
+            "attributes": ["baseAmount", "calculationMethod"]
+          },
+          "MinimumAnnualIncome": {
+            "description": "Minimum guaranteed annual income",
+            "legal_basis": "Section 79",
+            "current_amount": "13,680 EUR (2014 base year)"
+          }
+        }
+      },
+      "Procedure": {
+        "description": "Administrative process for claims and appeals",
+        "subclasses": {
+          "ClaimFiling": {
+            "description": "Process of filing compensation claim",
+            "legal_basis": "Sections 110-116"
+          },
+          "Investigation": {
+            "description": "Insurance company investigation of claim",
+            "legal_basis": "Sections 119-127"
+          },
+          "MedicalAssessment": {
+            "description": "Medical evaluation of injury/disease",
+            "legal_basis": "Section 121"
+          },
+          "Payment": {
+            "description": "Compensation payment process",
+            "legal_basis": "Sections 135-145"
+          },
+          "Appeal": {
+            "description": "Process to challenge decision",
+            "legal_basis": "Sections 237-243"
+          },
+          "Recovery": {
+            "description": "Recovery of overpaid compensation",
+            "legal_basis": "Section 247"
+          }
+        }
+      },
+      "Institution": {
+        "description": "Organizations involved in insurance system",
+        "subclasses": {
+          "InsuranceCompany": {
+            "description": "Private company authorized to provide insurance",
+            "legal_basis": "Section 205"
+          },
+          "StateTreasury": {
+            "description": "State organization paying compensation for state employees",
+            "legal_basis": "Section 207"
+          },
+          "AccidentInsuranceCentre": {
+            "description": "Central organization coordinating the system (Tapaturmavakuutuskeskus)",
+            "legal_basis": "Sections 209-225"
+          },
+          "ClaimAppealBoard": {
+            "description": "Board for dispute resolution",
+            "legal_basis": "Sections 226-228"
+          }
+        }
+      }
+    },
+    "relationships": [
+      {
+        "subject": "Employee",
+        "predicate": "has_right_to",
+        "object": "Compensation",
+        "condition": "When suffering occupational accident or disease"
+      },
+      {
+        "subject": "Employer",
+        "predicate": "must_obtain",
+        "object": "MandatoryInsurance",
+        "condition": "For all employees"
+      },
+      {
+        "subject": "InsuranceCompany",
+        "predicate": "must_pay",
+        "object": "Compensation",
+        "condition": "When insured event occurs"
+      },
+      {
+        "subject": "OccupationalAccident",
+        "predicate": "triggers",
+        "object": "Compensation"
+      },
+      {
+        "subject": "OccupationalDisease",
+        "predicate": "triggers",
+        "object": "Compensation"
+      },
+      {
+        "subject": "InjuredParty",
+        "predicate": "must_file_claim_within",
+        "object": "5 years",
+        "note": "From date of accident or disease discovery"
+      },
+      {
+        "subject": "DailyAllowance",
+        "predicate": "maximum_duration",
+        "object": "1 year",
+        "note": "From date of accident"
+      },
+      {
+        "subject": "DisabilityPension",
+        "predicate": "requires",
+        "object": "minimum_10_percent_work_capacity_reduction"
+      },
+      {
+        "subject": "Survivor",
+        "predicate": "has_right_to",
+        "object": "DeathCompensation",
+        "condition": "When injured party dies from insured event"
+      }
+    ],
+    "key_dates": {
+      "effective_date": "2016-01-01",
+      "replaced_laws": [
+        "Tapaturmavakuutuslaki (608/1948)",
+        "Ammattitautilaki (1343/1988)",
+        "Tapaturmavakuutuslain mukainen kuntoutuslaki (625/1991)",
+        "Valtion virkamiesten tapaturmakorvaukset (449/1990)"
+      ]
+    },
+    "coverage": {
+      "geographical": "Finland primarily, extended to EU/agreement countries",
+      "personal_scope": "Employees, entrepreneurs (voluntary), certain other groups"
+    }
+  }
+}
