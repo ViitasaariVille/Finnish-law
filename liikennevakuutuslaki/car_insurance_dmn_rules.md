@@ -12,7 +12,7 @@
 
 **Legal Source:** Section 5
 
-| Vehicle Location | Requires Insurance | Vehicle Type | Insurance Required | Legal Basis | Source Text |
+| Vehicle Location | Requires Insurance | Vehicle Type | **Insurance Required** | Legal Basis | Source Text |
 |------------------|-------------------|--------------|-------------------|-------------|-------------|
 | FI | true | MotorVehicle | MandatoryTrafficInsurance | Section 5(1) | Liikenteeseen käytettäväksi tarkoitettu ajoneuvo |
 | FI | true | Trailer | MandatoryTrafficInsurance | Section 5(1) | Perävaunu |
@@ -25,7 +25,7 @@
 
 **Legal Source:** Section 6
 
-| Owner | Holder | Ownership Transferred | Liable Party | Legal Basis | Source Text |
+| Owner | Holder | Ownership Transferred | **Liable Party** | Legal Basis | Source Text |
 |-------|--------|----------------------|--------------|-------------|-------------|
 | exists | exists | true | Owner and Holder jointly liable | Section 6(1) | Omistaja ja haltija yhteisvastuussa |
 | exists | null | true | Owner liable | Section 6(1) | Omistaja vastaa |
@@ -38,7 +38,7 @@
 
 **Legal Source:** Sections 12-16
 
-| Damage Type | Personal Injury | Property Damage | Coverage | Legal Basis | Source Text |
+| Damage Type | Personal Injury | Property Damage | **Coverage** | Legal Basis | Source Text |
 |-------------|----------------|-----------------|----------|-------------|-------------|
 | PersonalInjury | true | false | 100% covered | Section 12(1) | Henkilövahinko |
 | PersonalInjury | true | true | 100% covered | Section 12(1) | Henkilö- ja esinevahinko |
@@ -52,7 +52,7 @@
 
 **Legal Source:** Sections 17-21
 
-| Driver Intent | Drunkenness | Vehicle Purpose | Location | Excluded | Legal Basis | Source Text |
+| Driver Intent | Drunkenness | Vehicle Purpose | Location | **Excluded** | Legal Basis | Source Text |
 |---------------|-------------|-----------------|----------|----------|-------------|-------------|
 | Intentional | any | any | any | Excluded - Intentional damage | Section 17(1) | Tahallinen vahinko |
 | any | intoxicated | any | any | Excluded - Drunken driving | Section 18(1) | Humalassa ajaminen |
@@ -160,7 +160,7 @@
 
 **Legal Source:** Sections 10-11
 
-| Accident Country | Green Card Valid | Vehicle Registered | Coverage | Legal Basis | Source Text |
+| Accident Country | Green Card Valid | Vehicle Registered | **Coverage** | Legal Basis | Source Text |
 |-----------------|------------------|-------------------|----------|-------------|-------------|
 | Finland | any | FI | Full coverage | Section 10(1) | Suomessa |
 | EEA | true | any | Full coverage - Green Card | Section 10(2) | Eta-maassa vihreällä kortilla |
@@ -193,7 +193,7 @@
 | Section 6a | EEA vehicle insurance choice |
 | Sections 7-8 | Death compensation |
 | Sections 10-11 | International coverage |
-| Sections 12-16 | Coverage |
+| Sections 12-16 | **Coverage** |
 | Sections 17-21 | Exclusions |
 | Section 74 | Claim time limits |
 | Sections 76-77 | Claims handling + insolvency |
