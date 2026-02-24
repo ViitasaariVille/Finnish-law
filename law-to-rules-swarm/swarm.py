@@ -55,6 +55,109 @@ class RulePackage(BaseModel):
 # ============================================================================
 
 @tool
+def fetch_finlex_law(law_reference: str, section: Optional[str] = None) -> str:
+    """
+    Fetch Finnish law text from Finlex database.
+    
+    Args:
+        law_reference: Law reference in format "460/2016" or "459/2015"
+        section: Optional section number to extract (e.g., "§5" or "5")
+    
+    Returns:
+        Full law text or specific section if provided
+    """
+    import requests
+    import re
+    
+    try:
+        # Construct Finlex URL
+        base_url = "https://www.finlex.fi/fi/laki/alkup/"
+        year, number = law_reference.split("/")
+        url = f"{base_url}{year}/{year}{number.zfill(5)}"
+        
+        # Try to fetch the law
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (compatible; LawBot/1.0)',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
+        }
+        
+        response = requests.get(url, headers=headers, timeout=30, allow_redirects=True)
+        response.raise_for_status()
+        
+        # Extract text from HTML (basic cleanup)
+        text = response.text
+        
+        # Remove HTML tags
+        text = re.sub(r'<[^>]+>', '', text)
+        # Remove excessive whitespace
+        text = re.sub(r'\n\s*\n', '\n\n', text)
+        # Decode HTML entities
+        import html
+        text = html.unescape(text)
+        
+        if section:
+            # Try to extract specific section
+            return extract_section(text, section)
+        
+        return text[:50000]  # Return first 50K chars to avoid token limits
+        
+    except Exception as e:
+        return f"Error fetching law {law_reference}: {str(e)}\n\nNote: Finlex uses dynamic rendering. Use local law text file instead."
+
+
+@tool
+def read_local_law(law_name: str, law_reference: str) -> str:
+    """
+    Read Finnish law from local repository files.
+    
+    Args:
+        law_name: Name of law folder (e.g., "liikennevakuutuslaki" or "tyotapaturma_ammattitautilaki")
+        law_reference: Law reference (e.g., "460/2016", "459/2015")
+    
+    Returns:
+        Combined text from ontology files and gap analysis for the law
+    """
+    import os
+    
+    base_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    law_path = os.path.join(base_path, law_name)
+    
+    if not os.path.exists(law_path):
+        available = [d for d in os.listdir(base_path) 
+                     if os.path.isdir(os.path.join(base_path, d)) 
+                     and not d.startswith('.') 
+                     and not d == 'law-to-rules-swarm']
+        return f"Law folder '{law_name}' not found. Available: {available}"
+    
+    # Read ontology and rules files
+    result = []
+    
+    # Try to read ontology
+    ontology_files = [
+        f"{law_name.replace('liikennevakuutuslaki', 'car_insurance').replace('tyotapaturma_ammattitautilaki', 'work_accident').replace('potilasvakuutuslaki', 'patient_insurance')}_ontology.md",
+        f"{law_name.replace('liikennevakuutuslaki', 'car_insurance').replace('tyotapaturma_ammattitautilaki', 'work_accident').replace('potilasvakuutuslaki', 'patient_insurance')}_dmn_rules.md",
+        "GAP_ANALYSIS_10x.md",
+        "business_rules_verified.md"
+    ]
+    
+    for filename in ontology_files:
+        filepath = os.path.join(law_path, filename)
+        if os.path.exists(filepath):
+            try:
+                with open(filepath, 'r', encoding='utf-8') as f:
+                    content = f.read()
+                    result.append(f"=== {filename} ===\n{content[:10000]}\n")
+            except Exception as e:
+                result.append(f"=== {filename} ===\nError reading: {e}\n")
+    
+    if not result:
+        files = os.listdir(law_path)
+        return f"No law text files found in {law_name}. Available files: {files}"
+    
+    return "\n".join(result)
+
+
+@tool
 def extract_section(text: str, section_number: str) -> str:
     """Extract a specific section from Finnish law text by section number (e.g., '§5' or '5 §')"""
     # Match Finnish section formats: "5 §", "§5", "5§"
