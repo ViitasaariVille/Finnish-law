@@ -97,11 +97,15 @@ Create an issue with:
 
 ## 📞 Questions?
 
-- Check `CONTRIBUTING.md` for rules
-- Check `README.md` for project overview
+- Check `CONTRIBUTING.md` for sync rules
 - Create an Issue if unclear
 
----
+## 🔄 Remember to Pull!
+
+Before reviewing or creating issues:
+```bash
+git pull origin master
+```
 
 Thanks for reviewing! 🎯
 
