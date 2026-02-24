@@ -65,32 +65,69 @@ def fetch_finlex_law(law_reference: str, section: Optional[str] = None) -> str:
     
     Returns:
         Full law text or specific section if provided
+        
+    Note: Finlex uses dynamic JavaScript rendering. This tool attempts multiple
+    methods to retrieve the law text. If direct fetching fails, it will return
+    instructions for manual input.
     """
     import requests
     import re
     
     try:
-        # Construct Finlex URL
+        # Construct Finlex URLs to try
         base_url = "https://www.finlex.fi/fi/laki/alkup/"
         year, number = law_reference.split("/")
-        url = f"{base_url}{year}/{year}{number.zfill(5)}"
         
-        # Try to fetch the law
+        urls_to_try = [
+            f"{base_url}{year}/{year}{number.zfill(5)}",
+            f"https://www.finlex.fi/fi/laki/ajantasa/{year}/{year}{number.zfill(5)}",
+        ]
+        
         headers = {
             'User-Agent': 'Mozilla/5.0 (compatible; LawBot/1.0)',
             'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
         }
         
-        response = requests.get(url, headers=headers, timeout=30, allow_redirects=True)
-        response.raise_for_status()
+        text = None
+        for url in urls_to_try:
+            try:
+                response = requests.get(url, headers=headers, timeout=30, allow_redirects=True)
+                if response.status_code == 200:
+                    text = response.text
+                    break
+            except:
+                continue
+        
+        if not text:
+            return f"""Unable to fetch law {law_reference} from Finlex.
+
+Finlex uses dynamic JavaScript rendering which requires a headless browser.
+
+RECOMMENDED WORKAROUND:
+1. Visit: https://www.finlex.fi/fi/laki/alkup/{year}/{year}{number.zfill(5)}
+2. Copy the law text manually
+3. Save to a text file
+4. Use read_local_law_file() to load it
+
+ALTERNATIVE:
+Use the read_local_law() function which reads from the repository's
+existing law files (Molt's work):
+- liikennevakuutuslaki (460/2016)
+- tyotapaturma_ammattitautilaki (459/2015)
+- potilasvakuutuslaki
+"""
         
         # Extract text from HTML (basic cleanup)
-        text = response.text
+        # Remove script and style elements
+        text = re.sub(r'<script[^>]*>.*?</script>', '', text, flags=re.DOTALL)
+        text = re.sub(r'<style[^>]*>.*?</style>', '', text, flags=re.DOTALL)
         
         # Remove HTML tags
-        text = re.sub(r'<[^>]+>', '', text)
-        # Remove excessive whitespace
-        text = re.sub(r'\n\s*\n', '\n\n', text)
+        text = re.sub(r'<[^>]+>', ' ', text)
+        
+        # Clean up whitespace
+        text = re.sub(r'\s+', ' ', text)
+        
         # Decode HTML entities
         import html
         text = html.unescape(text)
@@ -102,7 +139,27 @@ def fetch_finlex_law(law_reference: str, section: Optional[str] = None) -> str:
         return text[:50000]  # Return first 50K chars to avoid token limits
         
     except Exception as e:
-        return f"Error fetching law {law_reference}: {str(e)}\n\nNote: Finlex uses dynamic rendering. Use local law text file instead."
+        return f"Error fetching law {law_reference}: {str(e)}"
+
+
+@tool
+def read_local_law_file(file_path: str) -> str:
+    """
+    Read law text from a local file.
+    
+    Args:
+        file_path: Path to the law text file (absolute or relative)
+    
+    Returns:
+        Contents of the law file
+    """
+    import os
+    
+    try:
+        with open(file_path, 'r', encoding='utf-8') as f:
+            return f.read()
+    except Exception as e:
+        return f"Error reading file: {str(e)}"
 
 
 @tool
