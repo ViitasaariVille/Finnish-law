@@ -74,21 +74,21 @@
           "PropertyDamageCompensation": {"description": "Vehicle or property damage", "legal_basis": "Section 3"},
           "MedicalExpenseCompensation": {
             "description": "Medical care costs from traffic accident",
-            "legal_basis": "Sections 5-5f",
+            "legal_basis": "Sections 53-59",
             "attributes": ["treatmentType", "startDate", "endDate", "reimbursementRate"],
             "subclasses": {
-              "HospitalCare": {"description": "Hospital treatment costs", "legal_basis": "Section 5a"},
-              "MedicineCost": {"description": "Prescription medicine costs", "legal_basis": "Section 5b"},
-              "RehabilitationCost": {"description": "Medical rehabilitation expenses", "legal_basis": "Section 5c"},
-              "TravelCost": {"description": "Travel to/from treatment", "legal_basis": "Section 5d"},
-              "DentalTreatment": {"description": "Dental injury treatment", "legal_basis": "Section 5e"},
-              "ProsthesisCost": {"description": "Prosthetics and orthotics", "legal_basis": "Section 5f"}
+              "HospitalCare": {"description": "Hospital treatment costs", "legal_basis": "Section 54"},
+              "MedicineCost": {"description": "Prescription medicine costs", "legal_basis": "Section 54"},
+              "RehabilitationCost": {"description": "Medical rehabilitation expenses", "legal_basis": "Section 54"},
+              "TravelCost": {"description": "Travel to/from treatment", "legal_basis": "Section 54"},
+              "DentalTreatment": {"description": "Dental injury treatment", "legal_basis": "Section 54"},
+              "ProsthesisCost": {"description": "Prosthetics and orthotics", "legal_basis": "Section 54"}
             }
           },
-          "DisabilityCompensation": {"description": "Permanent disability compensation", "legal_basis": "Section 6"},
-          "DeathCompensation": {"description": "Death benefits", "legal_basis": "Section 7"},
-          "PainAndSuffering": {"description": "Pain and suffering compensation", "legal_basis": "Section 5"},
-          "LostWagesCompensation": {"description": "Loss of earning capacity", "legal_basis": "Section 4"}
+          "DisabilityCompensation": {"description": "Permanent disability compensation", "legal_basis": "Section 34"},
+          "DeathCompensation": {"description": "Death benefits", "legal_basis": "Section 34"},
+          "PainAndSuffering": {"description": "Pain and suffering compensation", "legal_basis": "Section 34"},
+          "LostWagesCompensation": {"description": "Loss of earning capacity", "legal_basis": "Section 34"}
         }
       }
     },
