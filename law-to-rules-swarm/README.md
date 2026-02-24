@@ -2,6 +2,8 @@
 
 A CrewAI-based multi-agent system for converting Finnish legal text into structured business rules (DMN format).
 
+**Multi-Model Support**: Uses Claude, Kimi K2, and MiniMax M2.5 - each assigned to agents based on their strengths.
+
 ## Architecture
 
 The swarm consists of 6 specialized agents working in sequence:
@@ -125,6 +127,44 @@ with open("rules.json", "w") as f:
   ]
 }
 ```
+
+## Multi-Model Configuration
+
+Each agent is assigned to the model best suited for its task:
+
+| Agent | Model | Reason |
+|-------|-------|--------|
+| Law Reader | **Kimi K2** | Long context, excellent Finnish language handling |
+| Legal Analyst | **Claude** | Superior legal reasoning and nuanced analysis |
+| Rule Extractor | **MiniMax M2.5** | Fast pattern matching, cost-efficient |
+| Validator | **Claude (+ Ensemble)** | High accuracy with multi-model consensus |
+| DMN Formatter | **MiniMax M2.5** | Structured output, fast formatting |
+| Gap Analyzer | **Kimi K2** | Long context for full law comparison |
+
+### Ensemble Validation
+
+For critical validation tasks, the swarm uses ensemble voting:
+- All 3 models validate important rules
+- Consensus required for high-confidence output
+- Falls back to single model if consensus fails
+
+### Cost Optimization
+
+```python
+from multi_model_router import CostOptimizer, ModelRouter
+
+optimizer = CostOptimizer(ModelRouter())
+model = optimizer.select_model(
+    task_complexity="medium",  # simple/medium/complex
+    required_accuracy=0.90     # 0.0-1.0
+)
+# Returns most cost-effective model for the task
+```
+
+### Fallback Chain
+
+If the primary model fails (rate limit, error), the swarm automatically tries:
+1. Claude → 2. Kimi K2 → 3. MiniMax M2.5
 
 ## Installation
 
