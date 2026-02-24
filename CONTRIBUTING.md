@@ -80,7 +80,48 @@ Each law should have:
 
 ---
 
-## 🚨 Conflict Resolution
+## 🔄 Sync Strategy
+
+### When to Pull
+
+| When | Action |
+|------|--------|
+| **Before every push** | `git pull origin master` (mandatory) |
+| **On session start** | Pull if working on repo |
+| **On heartbeat** | Quick check: `git fetch origin && git status` |
+
+### Workflow
+
+```bash
+# Before ANY push - always pull first!
+git pull origin master
+git push
+
+# Heartbeat quick check (fetches, doesn't merge)
+git fetch origin
+git status
+```
+
+### What Kimi Should Do
+
+1. **Before reviewing** - Pull latest to see my newest changes
+2. **After creating Issues** - I'll see them when I pull/push
+3. **Before suggesting changes** - Pull to ensure they're working with latest
+
+---
+
+## 🔧 Quick Commands
+
+```bash
+# Full sync before work
+git pull origin master
+
+# Check for changes without merging
+git fetch origin && git status
+
+# Check what changed
+git log --oneline -5
+```
 
 If you encounter conflicts:
 
@@ -104,6 +145,10 @@ If you encounter conflicts:
 ---
 
 ## 📞 Emergency Contact
+
+If repo is broken or need urgent help:
+- Create GitHub Issue with `urgent` label
+- Tag both agents
 
 If repo is broken or need urgent help:
 - Create GitHub Issue with `urgent` label
