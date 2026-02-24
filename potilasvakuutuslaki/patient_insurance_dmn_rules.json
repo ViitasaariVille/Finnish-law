@@ -1,0 +1,162 @@
+{
+  "model": {
+    "name": "Finnish Patient Insurance DMN",
+    "namespace": "https://potilasvakuutus-fi/dmn/patient-insurance",
+    "version": "1.0",
+    "description": "DMN-compatible business rules for Potilasvakuutuslaki (948/2019)",
+    "based_on": "Potilasvakuutuslaki (Patient Insurance Act) 948/2019",
+    "source": "https://www.finlex.fi/fi/laki/alkup/2019/20190948",
+    "decisions": [
+      {
+        "name": "InsuranceObligation",
+        "description": "Determine if organization has patient insurance obligation",
+        "hit_policy": "FIRST",
+        "input_variables": ["organization.type", "organization.is_free", "organization.has_employer"],
+        "output_variable": "insurance_required",
+        "legal_source": "Section 6",
+        "rules": [
+          {"inputs": ["PublicHealthcareEntity", "any", "any"], "output": "PatientInsurance", "legal_basis": "Section 6(1)", "source_text": "Yhteisö tai säätiö"},
+          {"inputs": ["PrivateHealthcareEntity", "any", "any"], "output": "PatientInsurance", "legal_basis": "Section 6(1)", "source_text": "Yksityinen terveydenhuolto"},
+          {"inputs": ["SelfEmployedProfessional", "any", "any"], "output": "PatientInsurance", "legal_basis": "Section 6(1)", "source_text": "Itsenäinen ammatinharjoittaja"},
+          {"inputs": ["HealthcareProfessional", true, false], "output": "PatientInsurance (personal)", "legal_basis": "Section 6(2)", "source_text": "Vastikkeetta annettu hoito"},
+          {"inputs": ["HealthcareProfessional", true, true], "output": "Employer liable", "legal_basis": "Section 6(2)", "source_text": "Yhteisön lukuun"}
+        ]
+      },
+      {
+        "name": "CompensableInjury",
+        "description": "Determine if patient injury is compensable",
+        "hit_policy": "FIRST",
+        "input_variables": ["injury.type", "injury.condition_met"],
+        "output_variable": "compensable",
+        "legal_source": "Section 23",
+        "rules": [
+          {"inputs": ["TreatmentInjury", true], "output": "Compensable", "legal_basis": "Section 23(1)(1)", "source_text": "Poikkeama hyvästä hoitokäytännöstä"},
+          {"inputs": ["DeviceInjury", true], "output": "Compensable", "legal_basis": "Section 23(1)(2)", "source_text": "Laitteen vika"},
+          {"inputs": ["ImplantInjury", true], "output": "Compensable", "legal_basis": "Section 23(1)(3)", "source_text": "Laite ei niin turvallinen"},
+          {"inputs": ["InfectionInjury", true], "output": "Compensable", "legal_basis": "Section 23(1)(4)", "source_text": "Infektio hoidon yhteydessä"},
+          {"inputs": ["AccidentInjury", true], "output": "Compensable", "legal_basis": "Section 23(1)(5)", "source_text": "Tapaturma tutkimuksen aikana"},
+          {"inputs": ["FacilityInjury", true], "output": "Compensable", "legal_basis": "Section 23(1)(6)", "source_text": "Hoitohuoneiston palo"},
+          {"inputs": ["MedicationInjury", true], "output": "Compensable", "legal_basis": "Section 23(1)(7)", "source_text": "Lääkkeen toimittaminen vastoin asetusta"},
+          {"inputs": ["SevereConsequenceInjury", true], "output": "Compensable", "legal_basis": "Section 23(1)(8)", "source_text": "Kohtuuttoman vaikea seuraus"},
+          {"inputs": ["any", false], "output": "Not compensable", "legal_basis": "Section 23", "source_text": "Ei täytä edellytyksiä"}
+        ]
+      },
+      {
+        "name": "ClaimTimeLimit",
+        "description": "Determine claim time limit",
+        "hit_policy": "UNIQUE",
+        "input_variables": ["claim.knowledge_date", "claim.event_date"],
+        "output_variable": "time_limit",
+        "legal_source": "Section 31",
+        "rules": [
+          {"inputs": ["within_3_years", "any"], "output": "3 years from knowledge", "legal_basis": "Section 31(1)", "source_text": "3 vuotta tiedon saamisesta"},
+          {"inputs": ["any", "within_10_years"], "output": "10 years from event", "legal_basis": "Section 31(1)", "source_text": "10 vuotta tapahtumasta"},
+          {"inputs": ["after_3_years", "over_10_years"], "output": "Claim barred", "legal_basis": "Section 31(1)", "source_text": "Määräaika umpeutunut"}
+        ]
+      },
+      {
+        "name": "CompensationType",
+        "description": "Determine type of compensation",
+        "hit_policy": "FIRST",
+        "input_variables": ["injury.result", "patient.status"],
+        "output_variable": "compensation_type",
+        "legal_source": "Section 24",
+        "rules": [
+          {"inputs": ["medical_costs", "alive"], "output": "MedicalExpenseCompensation", "legal_basis": "Section 24", "source_text": "Sairaanhoidon kustannukset"},
+          {"inputs": ["income_loss", "alive"], "output": "LostEarningsCompensation", "legal_basis": "Section 24", "source_text": "Ansiomenetys"},
+          {"inputs": ["permanent_damage", "alive"], "output": "PermanentInjuryCompensation", "legal_basis": "Section 24", "source_text": "Pysyvä haitta"},
+          {"inputs": ["pain", "alive"], "output": "PainAndSuffering", "legal_basis": "Section 24", "source_text": "Kipu ja kärsimys"},
+          {"inputs": ["death", "deceased"], "output": "DeathCompensation", "legal_basis": "Section 24", "source_text": "Kuoleman korvaus"},
+          {"inputs": ["work_ability_affected", "alive"], "output": "VocationalRehabilitation", "legal_basis": "Section 25", "source_text": "Ammatillinen kuntoutus"}
+        ]
+      },
+      {
+        "name": "ProcessingDeadline",
+        "description": "Determine processing deadline",
+        "hit_policy": "UNIQUE",
+        "input_variables": ["claim.stage"],
+        "output_variable": "deadline",
+        "legal_source": "Section 33",
+        "rules": [
+          {"inputs": ["filing"], "output": "7 days to start", "legal_basis": "Section 33(1)", "source_text": "7 arkipäivän kuluessa"},
+          {"inputs": ["complete"], "output": "3 months to decision", "legal_basis": "Section 33(2)", "source_text": "3 kuukauden kuluessa"},
+          {"inputs": ["undisputed"], "output": "Immediate payment", "legal_basis": "Section 33(3)", "source_text": "Riidaton osa heti"}
+        ]
+      },
+      {
+        "name": "LatePaymentInterest",
+        "description": "Determine late payment interest",
+        "hit_policy": "UNIQUE",
+        "input_variables": ["payment.status", "payment.amount"],
+        "output_variable": "interest",
+        "legal_source": "Section 42",
+        "rules": [
+          {"inputs": ["late", "over_8_euros"], "output": "Interest Act 4a§ rate", "legal_basis": "Section 42(1)", "source_text": "Viivästyskorko"},
+          {"inputs": ["late", "under_8_euros"], "output": "Not paid", "legal_basis": "Section 42(3)", "source_text": "Alle 8 euroa ei makseta"},
+          {"inputs": ["on_time", "any"], "output": "No interest", "legal_basis": "Section 42", "source_text": "Maksu ajallaan"}
+        ]
+      },
+      {
+        "name": "RehabilitationEligibility",
+        "description": "Determine rehabilitation eligibility",
+        "hit_policy": "FIRST",
+        "input_variables": ["work_ability.affected", "future.affect_probable"],
+        "output_variable": "eligible",
+        "legal_source": "Section 25",
+        "rules": [
+          {"inputs": [true, "any"], "output": "Vocational rehabilitation", "legal_basis": "Section 25(1)", "source_text": "Työkyky heikentynyt"},
+          {"inputs": [false, true], "output": "May become eligible", "legal_basis": "Section 25(1)", "source_text": "Voi myöhemmin heikentyä"},
+          {"inputs": [false, false], "output": "Not eligible", "legal_basis": "Section 25", "source_text": "Ei oikeutta kuntoutukseen"}
+        ]
+      },
+      {
+        "name": "SubrogationRight",
+        "description": "Determine subrogation rights",
+        "hit_policy": "FIRST",
+        "input_variables": ["claimant.type", "injury.causation"],
+        "output_variable": "subrogation",
+        "legal_source": "Sections 45-47",
+        "rules": [
+          {"inputs": ["PatientInsuranceCentre", "any"], "output": "Can recover from wrongdoer", "legal_basis": "Section 45", "source_text": "Takautumisoikeus vahingonaiheuttajalta"},
+          {"inputs": ["OtherInsurer", "coordinate"], "output": "Coordination required", "legal_basis": "Section 46", "source_text": "Yhteensovitus"},
+          {"inputs": ["WorkAccidentInsurer", "duplicate"], "output": "Can recover from Centre", "legal_basis": "Section 47", "source_text": "Takautumisoikeus Potilasvakuutuskeskukselta"}
+        ]
+      },
+      {
+        "name": "AppealProcess",
+        "description": "Determine appeal path",
+        "hit_policy": "FIRST",
+        "input_variables": ["decision.type", "timeline"],
+        "output_variable": "appeal_path",
+        "legal_source": "Sections 38-40",
+        "rules": [
+          {"inputs": ["rejection", "within_1_year"], "output": "Request Board recommendation", "legal_basis": "Section 38", "source_text": "Ratkaisusuositus 1 vuoden sisällä"},
+          {"inputs": ["amount_dispute", "any"], "output": "Request Board recommendation", "legal_basis": "Section 38", "source_text": "Korvausmäärä"},
+          {"inputs": ["permanent_disability", "any"], "output": "Mandatory Board consultation", "legal_basis": "Section 40", "source_text": "Pakollinen kuuleminen"},
+          {"inputs": ["death_benefit", "any"], "output": "Mandatory Board consultation", "legal_basis": "Section 40", "source_text": "Kuoleman perusteella"}
+        ]
+      },
+      {
+        "name": "IndexAdjustment",
+        "description": "Determine if compensation is index-adjusted",
+        "hit_policy": "UNIQUE",
+        "input_variables": ["compensation.type"],
+        "output_variable": "index_adjusted",
+        "legal_source": "Section 28",
+        "rules": [
+          {"inputs": ["continuous"], "output": "Annual adjustment (TyEL index)", "legal_basis": "Section 28", "source_text": "Työeläkeindeksi"},
+          {"inputs": ["lump_sum"], "output": "No adjustment", "legal_basis": "Section 28", "source_text": "Kertakorvaus"},
+          {"inputs": ["medical_expenses"], "output": "As incurred", "legal_basis": "Section 24", "source_text": "Kulloinkin aiheutuneet"}
+        ]
+      }
+    ],
+    "metadata": {
+      "created": "2026-02-24",
+      "dmn_version": "1.3",
+      "compatible_engines": ["Camunda DMN", "Drools DMN", "IBM ODM", "Flowable DMN"],
+      "law_reference": "Potilasvakuutuslaki 948/2019",
+      "chapters": 7,
+      "sections": 70
+    }
+  }
+}
