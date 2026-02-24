@@ -2,7 +2,23 @@
 
 A CrewAI-based multi-agent system for converting Finnish legal text into structured business rules (DMN format).
 
-**Multi-Model Support**: Uses Claude, Kimi K2, and MiniMax M2.5 - each assigned to agents based on their strengths.
+**Multi-Model Support**: Use **Kimi K2 + MiniMax M2.5** (recommended) or add Claude for ensemble validation.
+
+## Quick Start - Kimi + MiniMax Only
+
+```bash
+# 1. Install dependencies
+pip install -r requirements.txt
+
+# 2. Copy and edit config
+cp .env.example .env
+# Edit .env and add your API keys:
+# MOONSHOT_API_KEY=your_key
+# MINIMAX_API_KEY=your_key
+
+# 3. Run swarm
+python -c "from kimiminimax_router import *; print('Ready!')"
+```
 
 ## Architecture
 
@@ -23,41 +39,66 @@ The swarm consists of 6 specialized agents working in sequence:
                     └──────────────┘
 ```
 
-## Agents
+## Model Assignment (Kimi + MiniMax)
 
-### 1. Law Reader
-- **Role**: Extracts and segments legal text
-- **Tools**: `extract_section`, `parse_definitions`
-- **Output**: Structured list of sections and definitions
+| Agent | Model | Why |
+|-------|-------|-----|
+| **Law Reader** | Kimi K2 | Long context, Finnish language expertise |
+| **Legal Analyst** | Kimi K2 | Legal reasoning, nuanced analysis |
+| **Rule Extractor** | MiniMax M2.5 | Fast pattern matching, cost-efficient |
+| **Validator** | Kimi K2 | High accuracy validation |
+| **DMN Formatter** | MiniMax M2.5 | Structured output, fast formatting |
+| **Gap Analyzer** | Kimi K2 | Long context for full law comparison |
 
-### 2. Legal Analyst
-- **Role**: Analyzes legal meaning and identifies rule types
-- **Expertise**: Finnish administrative and insurance law
-- **Identifies**: Velvollisuus (obligation), Kielto (prohibition), Lupa (permission), Määritelmä (definition)
+## Why Kimi + MiniMax?
 
-### 3. Business Rule Extractor
-- **Role**: Converts provisions to IF-THEN rules
-- **Output**: BusinessRule objects with conditions, actions, exceptions
-- **Handles**: Implicit conditions, complex sentences
+**✅ Cost Effective**: ~75% cheaper than using Claude
+- Kimi K2: ~$2/1M tokens
+- MiniMax M2.5: ~$1/1M tokens
+- Claude: ~$8/1M tokens
 
-### 4. Rule Validator
-- **Role**: QA for extracted rules
-- **Checks**: Completeness, accuracy, exception handling
-- **Output**: Validation report with issues
+**✅ Good Coverage**:
+- Kimi handles complex legal reasoning and Finnish language
+- MiniMax handles fast extraction and formatting
 
-### 5. DMN Formatter
-- **Role**: Converts rules to DMN 1.3 format
-- **Output**: DMN-compatible JSON decision tables
-- **Handles**: Hit policies, input/output variables
+**✅ Simpler Setup**: Only 2 API keys needed
 
-### 6. Gap Analyzer
-- **Role**: Identifies missing coverage
-- **Reports**: Uncovered sections, incomplete provisions
-- **Output**: Prioritized gap list
+## Alternative: Add Claude
+
+If you want maximum accuracy with ensemble validation:
+
+```python
+# Use multi-model router with all 3 models
+from multi_model_router import ModelRouter
+
+router = ModelRouter()  # Uses all 3 models
+```
+
+See [multi_model_router.py](multi_model_router.py) for 3-model configuration.
 
 ## Usage
 
-### Process a Single Section
+### Kimi + MiniMax Only
+
+```python
+from kimiminimax_router import (
+    ModelRouter,
+    create_legal_analyst_agent_multi,
+    create_rule_extractor_agent_multi
+)
+
+# Initialize router with only Kimi and MiniMax
+router = ModelRouter(available_models=["kimi-k2", "minimax-m2.5"])
+
+# Create agents
+analyst, model_used = create_legal_analyst_agent_multi(router)
+print(f"Legal Analyst using: {model_used}")  # kimik2
+
+extractor, model_used = create_rule_extractor_agent_multi(router)
+print(f"Rule Extractor using: {model_used}")  # minimaxm2.5
+```
+
+### Process a Law Section
 
 ```python
 from swarm import process_law_section
@@ -71,25 +112,6 @@ rekisteröity Suomessa, on otettava liikennevakuutus.
 result = process_law_section(law_text, "§5")
 print(result.business_rules)
 print(result.dmn_rules)
-```
-
-### Process Full Law
-
-```python
-from swarm import process_full_law
-
-with open("liikennevakuutuslaki.txt") as f:
-    law_text = f.read()
-
-result = process_full_law(
-    law_text=law_text,
-    law_name="Liikennevakuutuslaki",
-    law_reference="460/2016"
-)
-
-# Save results
-with open("rules.json", "w") as f:
-    json.dump(result.dict(), f, indent=2, ensure_ascii=False)
 ```
 
 ## Output Format
@@ -128,64 +150,81 @@ with open("rules.json", "w") as f:
 }
 ```
 
-## Multi-Model Configuration
+## Configuration
 
-Each agent is assigned to the model best suited for its task:
+### Option 1: Kimi + MiniMax Only (Recommended)
 
-| Agent | Model | Reason |
-|-------|-------|--------|
-| Law Reader | **Kimi K2** | Long context, excellent Finnish language handling |
-| Legal Analyst | **Claude** | Superior legal reasoning and nuanced analysis |
-| Rule Extractor | **MiniMax M2.5** | Fast pattern matching, cost-efficient |
-| Validator | **Claude (+ Ensemble)** | High accuracy with multi-model consensus |
-| DMN Formatter | **MiniMax M2.5** | Structured output, fast formatting |
-| Gap Analyzer | **Kimi K2** | Long context for full law comparison |
+```bash
+# .env file
+MOONSHOT_API_KEY=your_moonshot_key
+MINIMAX_API_KEY=your_minimax_key
+SWARM_MODE=kimi-minimax
+```
 
-### Ensemble Validation
+### Option 2: All 3 Models
 
-For critical validation tasks, the swarm uses ensemble voting:
-- All 3 models validate important rules
-- Consensus required for high-confidence output
-- Falls back to single model if consensus fails
+```bash
+# .env file
+ANTHROPIC_API_KEY=your_anthropic_key
+MOONSHOT_API_KEY=your_moonshot_key
+MINIMAX_API_KEY=your_minimax_key
+SWARM_MODE=multi
+```
+
+## API Keys
+
+| Model | Provider | Get Key |
+|-------|----------|---------|
+| Kimi K2 | Moonshot AI | https://platform.moonshot.cn/ |
+| MiniMax M2.5 | MiniMax | https://www.minimaxi.com/ |
+| Claude (optional) | Anthropic | https://console.anthropic.com/ |
+
+## Features
 
 ### Cost Optimization
-
 ```python
-from multi_model_router import CostOptimizer, ModelRouter
+from kimiminimax_router import CostOptimizer, ModelRouter
 
-optimizer = CostOptimizer(ModelRouter())
-model = optimizer.select_model(
-    task_complexity="medium",  # simple/medium/complex
-    required_accuracy=0.90     # 0.0-1.0
-)
-# Returns most cost-effective model for the task
+router = ModelRouter(available_models=["kimi-k2", "minimax-m2.5"])
+optimizer = CostOptimizer(router)
+
+cost = optimizer.estimate_cost("kimi-k2", 4000, 2000)
+print(f"Cost: ${cost:.4f}")  # ~$0.012 for 6K tokens
 ```
 
 ### Fallback Chain
+If Kimi fails, automatically falls back to MiniMax.
 
-If the primary model fails (rate limit, error), the swarm automatically tries:
-1. Claude → 2. Kimi K2 → 3. MiniMax M2.5
+### Ensemble Validation (with both models)
+```python
+from kimiminimax_router import EnsembleValidator
+
+validator = EnsembleValidator(router)
+result = validator.validate_rule(rule, section_text)
+# Gets consensus from both Kimi and MiniMax
+```
 
 ## Installation
 
 ```bash
-pip install crewai pydantic
-```
-
-## Configuration
-
-Set environment variables for LLM:
-```bash
-export OPENAI_API_KEY=your_key
-# or
-export ANTHROPIC_API_KEY=your_key
+pip install crewai pydantic langchain langchain-openai
 ```
 
 ## Testing
 
 ```bash
-python -m pytest tests/
+python -m pytest test_swarm.py
 ```
+
+## Files
+
+| File | Description |
+|------|-------------|
+| `swarm.py` | Core swarm implementation |
+| `kimiminimax_router.py` | Kimi + MiniMax router (recommended) |
+| `multi_model_router.py` | Multi-model router (Claude + Kimi + MiniMax) |
+| `examples.py` | Usage examples |
+| `test_swarm.py` | Unit tests |
 
 ## License
 
