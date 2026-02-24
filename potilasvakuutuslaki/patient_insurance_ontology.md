@@ -1,200 +1,202 @@
 # Finnish Patient Insurance Ontology
 
 **Based on:** Potilasvakuutuslaki (Patient Insurance Act) 948/2019  
-**Version:** 1.0  
+**Version:** 2.0  
 **Effective:** 2021-01-01  
 **Source:** https://www.finlex.fi/fi/laki/alkup/2019/20190948
 
 ---
 
-## Overview
+## Law Structure
 
-This ontology represents the Finnish Patient Insurance system, which provides compensation for patient injuries that occur during healthcare treatment.
-
----
-
-## 1. Person
-
-### Patient
-- **Description:** Person receiving healthcare services
-- **Legal Basis:** Section 2
-- **Attributes:**
-  - patientId
-  - treatmentDate
-  - healthcareProvider
-
-### HealthcareProfessional
-- **Description:** Doctor, nurse, or other healthcare provider
-- **Legal Basis:** Section 2
-- **Attributes:**
-  - licenseNumber
-  - specialty
-  - employer
-
-### InjuredParty
-- **Description:** Patient who suffered injury due to healthcare
-- **Attributes:**
-  - injuryDate
-  - injuryType
-  - severity
-  - causation
+| Chapter | Sections | Topic |
+|---------|----------|-------|
+| 1 | 1-5 | General Provisions |
+| 2 | 6-21 | Insurance and Premium |
+| 3 | 22-30 | Compensating Patient Injury |
+| 4 | 31-47 | Compensation Procedure and Subrogation |
+| 5 | 48-51 | Distribution System |
+| 6 | 52-66 | Miscellaneous |
+| 7 | 67-70 | Entry into Force |
 
 ---
 
-## 2. HealthcareProvider
+## Chapter 1: General Provisions (Sections 1-5)
 
-### PublicHealthcare
-- **Description:** Public hospital or health center
-- **Legal Basis:** Section 5
-- **Subclasses:**
-  - Hospital
-  - HealthCenter
-  - MunicipalHealthService
+### Section 1 - Scope of Application
+This Act regulates compensation for personal injury suffered by a patient in connection with health and medical care.
 
-### PrivateHealthcare
-- **Description:** Private clinic or practice
-- **Legal Basis:** Section 5
-- **Subclasses:**
-  - PrivateClinic
-  - PrivateHospital
-  - DentalClinic
+### Section 2 - Definitions
+| Term | Definition |
+|------|------------|
+| PolicyHolder | Person who made insurance contract with insurance company |
+| Insured | Person for whose benefit insurance is valid |
+| HealthcareProfessional | Per Health Care Professionals Act (559/1994) Section 2 |
+| HealthcareProvider | Per Patient Rights Act (785/1992) Section 2(4) |
+| HealthAndMedicalCare | Procedures for health condition, restoration, maintenance using medical methods |
+| Patient | Person using or target of health services |
+| PatientInjury | Personal injury compensable under this Act |
 
-### SocialServices
-- **Description:** Social and welfare services
-- **Legal Basis:** Section 4
+### Section 3 - Mandatory Nature
+Contract terms deviating from this Act to detriment of policyholder/insured are void.
 
----
+### Section 4 - Application of Insurance Contract Act
+References to Insurance Contract Act (543/1994) sections: 3, 4b(1), 5(1,3,4), 5a, 5b, 5d(1), 7-9, 9a(1), 11(2-5), 12, 17b, 18, 19, 22, 26(1-2), 35(1,2,4), 38, 41, 45, 76-78
 
-## 3. Insurance
-
-### MandatoryPatientInsurance
-- **Description:** Compulsory patient insurance for healthcare providers
-- **Legal Basis:** Section 5
-- **Attributes:**
-  - coverageType
-  - minimumCoverage
+### Section 5 - Patient Insurance Centre
+Separate act (949/2019) governs the Centre.
 
 ---
 
-## 4. PatientInjury (Section 2-3)
+## Chapter 2: Insurance and Premium (Sections 6-21)
 
-### TreatmentInjury
-- **Description:** Injury caused by examination, treatment, or care
-- **Legal Basis:** Section 3
+### Section 6 - Insurance Obligation
+Healthcare providers MUST have insurance:
+- Companies, foundations, self-employed professionals
+- Employers with healthcare professionals
+- Even if free, healthcare professional is liable (unless working for organization)
 
-### InfectionInjury
-- **Description:** Healthcare-associated infection
-- **Legal Basis:** Section 3(1)
+### Section 7 - Liability Distribution Between Insurers
+Compensation from insurance that was valid when injury-causing care was provided.
 
-### DeviceInjury
-- **Description:** Injury caused by medical device
-- **Legal Basis:** Section 3(1)
+### Section 8 - Insurance Certificate and Terms
+Insurance company must provide certificate and terms.
 
-### MedicationInjury
-- **Description:** Injury from medication error
-- **Legal Basis:** Section 3(1)
+### Section 9 - Validity Period
+Insurance starts when acceptance is given. One-year periods thereafter.
 
-### DiagnosticInjury
-- **Description:** Injury from delayed or missed diagnosis
-- **Legal Basis:** Section 3(2)
+### Section 10 - Disclosure Violation
+Premium adjustment possible for false/misleading information.
 
----
+### Section 11 - Increased Risk Notification
+Premium adjustment possible for failure to notify of increased risk.
 
-## 5. Compensation (Sections 7-9)
+### Section 12 - Policyholder Right to Cancel
+Can cancel if switching to another insurer.
 
-### MedicalExpenseCompensation
-- **Description:** Costs of medical care for injury
-- **Legal Basis:** Section 7(1)
-- **Subclasses:**
-  - TreatmentCost
-  - MedicineCost
-  - TravelCost
-  - RehabilitationCost
-  - EquipmentCost
+### Section 13 - Insurance Company Obligation to Provide
+Companies with vahinkovakuutusluokka 13 must provide patient insurance.
 
-### LostEarningsCompensation
-- **Description:** Loss of income due to injury
-- **Legal Basis:** Section 7(2)
+### Section 14 - Premium Calculation Bases
+Premium must be reasonable relative to expected costs.
 
-### PermanentInjuryCompensation
-- **Description:** Compensation for permanent injury
-- **Legal Basis:** Section 8
+### Section 15 - Damage History Information
+Insurer can request statistics from Patient Insurance Centre.
 
-### PainAndSuffering
-- **Description:** Compensation for pain and suffering
-- **Legal Basis:** Section 9
+### Section 16 - Interest on Late Payment
+Interest on overdue premiums per Interest Act.
 
-### DeathCompensation
-- **Description:** Compensation in case of patient death
-- **Legal Basis:** Section 9a
+### Section 17 - Liability Continuation
+Liability continues even if premium unpaid.
 
----
+### Section 18 - Premium Claim Limitation
+5-year limitation period.
 
-## 6. Claim (Sections 16-23)
+### Section 19 - Premium Equivalent Payment
+For failure to insure - payment equal to reasonable premium.
 
-### InitialClaim
-- **Description:** First claim submission
-- **Legal Basis:** Section 16
+### Section 20 - Negligence Fee
+Up to 3x premium for failure to insure.
 
-### Appeal
-- **Description:** Appeal of claim decision
-- **Legal Basis:** Section 24
+### Section 21 - Determining Fees
+State Treasury proposes, Patient Insurance Centre bills.
 
 ---
 
-## 7. Investigation (Sections 11-15)
+## Chapter 3: Compensating Patient Injury (Sections 22-30)
 
-### MedicalInvestigation
-- **Description:** Medical expert assessment
-- **Legal Basis:** Section 12
+### Section 22 - Patient Insurance Centre Responsibility
+Centre handles compensation operations and ensures consistency.
 
-### CausationAssessment
-- **Description:** Assessment of causation between care and injury
-- **Legal Basis:** Section 13
+### Section 23 - Right to Compensation
+Compensation paid if probable injury caused by:
+1. Examination/treatment/omission (Section 23(1)(1))
+2. Device defect (Section 23(1)(2))
+3. Unsafe implant (Section 23(1)(3))
+4. Healthcare-associated infection (Section 23(1)(4))
+5. Accident during care/transport (Section 23(1)(5))
+6. Facility fire/damage (Section 23(1)(6))
+7. Medication dispensing violation (Section 23(1)(7))
+8. Severe permanent injury/death - unreasonable (Section 23(1)(8))
 
----
+### Section 24 - Determining Compensation
+Per Tort Liability Act Chapter 5: Sections 2, 2a-2d, 3, 4, 7, 8; Chapter 6(1); Chapter 7(3)
+- No reduction for victim's contribution unless intentional/gross negligence
+- Minor injuries not compensated
+- Lump sum requires special reason
 
-## Relationships
+### Section 25 - Vocational Rehabilitation
+Costs covered for injured whose work ability/earnings affected.
 
-| From | To | Type |
-|------|-----|------|
-| Patient | HealthcareProvider | receives_care_from |
-| HealthcareProvider | MandatoryPatientInsurance | must_have |
-| PatientInjury | Patient | suffers |
-| PatientInjury | HealthcareProvider | occurs_at |
-| Compensation | PatientInjury | compensates |
-| Claim | PatientInjury | filed_for |
-| Investigation | PatientInjury | investigates |
+### Section 26 - Rehabilitation Costs
+Covered: assessments, work trials, training, equipment, vehicle modifications.
 
----
+### Section 27 - Rehabilitation Allowance + Work Accident Insurance
+Allowance during rehabilitation + work accident insurance during trials.
 
-## Business Rules
+### Section 28 - Index Adjustments
+Annual adjustments per employment pension index.
 
-### Rule 1: Healthcare Provider Insurance Obligation
-- **Condition:** healthcareProvider.type IN [PublicHealthcare, PrivateHealthcare, SocialServices]
-- **Conclusion:** healthcareProvider.mustHave = MandatoryPatientInsurance
-- **Legal Basis:** Section 5(1)
+### Section 29 - Interaction with Other Benefits
+Coordination with other systems.
 
-### Rule 2: Compensable Injury
-- **Condition:** patientInjury.type IN [TreatmentInjury, InfectionInjury, DeviceInjury, MedicationInjury, DiagnosticInjury] AND patientInjury.causation = probable
-- **Conclusion:** patientInjury.compensable = true
-- **Legal Basis:** Section 3
-
-### Rule 3: Claim Time Limit
-- **Condition:** patientInjury.eventDate > 3 years ago
-- **Conclusion:** claim.timeLimit = expired
-- **Legal Basis:** Section 16(2)
+### Section 30 - Deduction of Other Compensation
+Other compensation can be deducted.
 
 ---
 
-## Law Structure Summary
+## Chapter 4: Compensation Procedure (Sections 31-47)
 
-| Part | Sections | Topic |
-|------|----------|-------|
-| 1 | 1-3 | Purpose, Definitions, Scope |
-| 2 | 4-10 | Insurance, Compensation |
-| 3 | 11-15 | Investigation |
-| 4 | 16-24 | Claims, Appeals |
+### Section 31 - Claim Submission and Limitation
+- Must file within 3 years of knowing about injury
+- Absolute deadline: 10 years from injury event
+- Special circumstances can override
+
+### Section 32 - Claimant's Obligation to Provide Information
+Claimant must provide necessary documents.
+
+### Section 33 - Investigation and Processing
+- Start within 7 days
+- Decision within 3 months
+
+### Section 34 - Payment to Minor/Incapacitated
+If >1000€ and not medical expenses, notify guardian.
+
+### Section 35 - Decision Reasoning and Delivery
+Must explain decision and appeal rights.
+
+### Section 36 - False Information After Event
+Compensation can be reduced/denied for fraudulent claims.
+
+### Section 37 - Traffic and Patient Injury Board
+Separate act (959/2019) governs the Board.
+
+### Section 38-41 - Board Procedures
+Right to request recommendation, opinions, mandatory consultation.
+
+### Section 42 - Late Payment
+Interest on late compensation.
+
+### Section 43 - Recipient's Notification Duty
+Must notify of changes affecting compensation.
+
+### Section 44 - Rehabilitation Interruption
+No allowance if rehabilitation interrupted due to claimant.
+
+### Section 45 - Centre's Subrogation Right
+Right to recover from wrongdoer.
+
+### Section 46 - Centre's Subrogation vs Other Payers
+Coordination with other insurance systems.
+
+### Section 47 - Insurer's Subrogation vs Centre
+Right to recover from Centre.
+
+---
+
+## Entities
+
+See `patient_insurance_ontology.json` for full entity definitions.
 
 ---
 

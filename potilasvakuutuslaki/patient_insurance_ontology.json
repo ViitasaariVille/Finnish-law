@@ -1,29 +1,42 @@
 {
   "ontology": {
     "name": "Finnish Patient Insurance Ontology",
-    "version": "1.0",
+    "version": "2.0",
     "based_on": "Potilasvakuutuslaki (Patient Insurance Act) 948/2019",
     "language": "en",
     "effective_date": "2021-01-01",
     "source": "https://www.finlex.fi/fi/laki/alkup/2019/20190948",
+    "parts": 7,
+    "sections": "70 sections",
     "entities": {
       "Person": {
         "description": "Natural person involved in patient insurance",
-        "attributes": ["personalId", "firstName", "lastName", "address"],
+        "attributes": ["personalId", "firstName", "lastName"],
         "subclasses": {
+          "PolicyHolder": {
+            "description": "Entity that has made insurance contract with insurance company",
+            "legal_basis": "Section 2(1)"
+          },
+          "Insured": {
+            "description": "Person for whose benefit insurance is valid",
+            "legal_basis": "Section 2(2)"
+          },
           "Patient": {
-            "description": "Person receiving healthcare services",
-            "legal_basis": "Section 2",
-            "attributes": ["patientId", "treatmentDate", "healthcareProvider"]
+            "description": "Person using or target of health and medical care services",
+            "legal_basis": "Section 2(7)",
+            "subclasses": ["HealthcarePatient", "BloodDonor", "OrganDonor", "ResearchSubject"]
           },
           "HealthcareProfessional": {
-            "description": "Doctor, nurse, or other healthcare provider",
-            "legal_basis": "Section 2",
-            "attributes": ["licenseNumber", "specialty", "employer"]
+            "description": "Health care professional as defined in Health Care Professionals Act",
+            "legal_basis": "Section 2(4)"
           },
-          " InjuredParty": {
-            "description": "Patient who suffered injury due to healthcare",
-            "attributes": ["injuryDate", "injuryType", "severity", "causation"]
+          "HealthcareProvider": {
+            "description": "Health care unit as defined in Patient Rights Act",
+            "legal_basis": "Section 2(5)"
+          },
+          "InjuredParty": {
+            "description": "Patient who suffered personal injury",
+            "legal_basis": "Section 2(8)"
           },
           "Survivor": {
             "description": "Family member entitled to compensation after patient death",
@@ -31,184 +44,207 @@
           }
         }
       },
-      "HealthcareProvider": {
-        "description": "Entity providing healthcare services",
-        "attributes": ["businessId", "name", "type", "address"],
+      "Healthcare": {
+        "description": "Health and medical care services",
+        "legal_basis": "Section 2(6)",
         "subclasses": {
-          "PublicHealthcare": {
-            "description": "Public hospital or health center",
-            "legal_basis": "Section 5",
-            "subclasses": ["Hospital", "HealthCenter", "MunicipalHealthService"]
+          "MedicalExamination": {
+            "description": "Procedures to determine patient's health condition"
           },
-          "PrivateHealthcare": {
-            "description": "Private clinic or practice",
-            "legal_basis": "Section 5",
-            "subclasses": ["PrivateClinic", "PrivateHospital", "DentalClinic"]
+          "Treatment": {
+            "description": "Procedures to restore or maintain patient's health"
           },
-          "SocialServices": {
-            "description": "Social and welfare services",
-            "legal_basis": "Section 4"
+          "FirstAid": {
+            "description": "Emergency care as per Section 2(6)(d)",
+            "legal_basis": "Section 2(6)(d)"
+          },
+          "PharmacyService": {
+            "description": "Dispensing of prescription medicines",
+            "legal_basis": "Section 2(6)(c)"
+          },
+          "EmergencyMedicalService": {
+            "description": "EMS as per Health Care Act Section 40",
+            "legal_basis": "Section 2(6)(b)"
+          }
+        }
+      },
+      "HealthcareProviderOrganization": {
+        "description": "Entity providing healthcare services",
+        "legal_basis": "Section 6",
+        "subclasses": {
+          "PublicHealthcareEntity": {
+            "description": "Public healthcare provider - company, foundation, or independent practitioner",
+            "legal_basis": "Section 6(1)"
+          },
+          "PrivateHealthcareEntity": {
+            "description": "Private healthcare provider",
+            "legal_basis": "Section 6(1)"
+          },
+          "Employer": {
+            "description": "Employer with health care professionals in service",
+            "legal_basis": "Section 6(1)"
           }
         }
       },
       "Insurance": {
-        "description": "Patient insurance coverage",
-        "attributes": ["policyNumber", "insuranceCompany", "startDate"],
+        "description": "Patient insurance contract",
         "subclasses": {
-          "MandatoryPatientInsurance": {
-            "description": "Compulsory patient insurance for healthcare providers",
-            "legal_basis": "Section 5",
-            "attributes": ["coverageType", "minimumCoverage"]
-          },
           "PatientInsurance": {
-            "description": "Patient insurance under this law",
+            "description": "Patient insurance under this Act",
             "legal_basis": "Section 1"
           }
         }
       },
       "PatientInjury": {
-        "description": "Injury to patient during healthcare",
-        "attributes": ["injuryId", "eventDate", "description", "severity"],
-        "legal_basis": "Section 2",
+        "description": "Personal injury compensable under this Act",
+        "legal_basis": "Section 2(8), Section 23",
         "subclasses": {
           "TreatmentInjury": {
-            "description": "Injury caused by examination, treatment, or care",
-            "legal_basis": "Section 3",
-            "attributes": ["treatmentType", "deviation", "causation"]
-          },
-          "InfectionInjury": {
-            "description": "Healthcare-associated infection",
-            "legal_basis": "Section 3(1)",
-            "attributes": ["infectionType", "preventionMeasures"]
+            "description": "Injury from examination, treatment, or similar procedure, or omission",
+            "legal_basis": "Section 23(1)(1)",
+            "condition": "Experienced health professional would have treated differently and likely avoided injury"
           },
           "DeviceInjury": {
-            "description": "Injury caused by medical device",
-            "legal_basis": "Section 3(1)",
-            "attributes": ["deviceType", "deviceFailure"]
+            "description": "Injury from defect in medical device, instrument, or consumable",
+            "legal_basis": "Section 23(1)(2)"
+          },
+          "ImplantInjury": {
+            "description": "Injury from bodily-installed medical device not being as safe as expected",
+            "legal_basis": "Section 23(1)(3)"
+          },
+          "InfectionInjury": {
+            "description": "Infection acquired during healthcare",
+            "legal_basis": "Section 23(1)(4)",
+            "condition": "Patient should not have to tolerate infection considering predictability, severity, nature of condition"
+          },
+          "AccidentInjury": {
+            "description": "Accident during examination/treatment or patient transport",
+            "legal_basis": "Section 23(1)(5)"
+          },
+          "FacilityInjury": {
+            "description": "Injury from fire or other facility damage",
+            "legal_basis": "Section 23(1)(6)"
           },
           "MedicationInjury": {
-            "description": "Injury from medication error",
-            "legal_basis": "Section 3(1)",
-            "attributes": ["medicationType", "dosage", "errorType"]
+            "description": "Injury from medication dispensed contrary to law/regulation",
+            "legal_basis": "Section 23(1)(7)"
           },
-          "DiagnosticInjury": {
-            "description": "Injury from delayed or missed diagnosis",
-            "legal_basis": "Section 3(2)",
-            "attributes": ["delayDuration", "missedCondition"]
+          "SevereConsequenceInjury": {
+            "description": "Permanent serious illness/injury or death from treatment",
+            "legal_basis": "Section 23(1)(8)",
+            "condition": "Consequence unreasonable considering severity, nature of condition, rarity, risk level"
           }
         }
       },
       "Compensation": {
         "description": "Payment for patient injury",
-        "attributes": ["compensationId", "claimId", "amount", "currency", "paymentDate"],
-        "legal_basis": "Sections 7-9",
+        "legal_basis": "Sections 23-30",
         "subclasses": {
           "MedicalExpenseCompensation": {
-            "description": "Costs of medical care for injury",
-            "legal_basis": "Section 7(1)",
-            "subclasses": {
-              "TreatmentCost": {"description": "Cost of medical treatment"},
-              "MedicineCost": {"description": "Cost of medicines"},
-              "TravelCost": {"description": "Travel to/from treatment"},
-              "RehabilitationCost": {"description": "Rehabilitation expenses"},
-              "EquipmentCost": {"description": "Medical equipment"}
-            }
+            "description": "Costs of necessary medical care",
+            "legal_basis": "Section 24, references Tort Liability Act Chapter 5"
           },
           "LostEarningsCompensation": {
-            "description": "Loss of income due to injury",
-            "legal_basis": "Section 7(2)",
-            "attributes": ["incomeLoss", "workIncapacityDays"]
+            "description": "Loss of earnings/ livelihood",
+            "legal_basis": "Section 24"
           },
           "PermanentInjuryCompensation": {
             "description": "Compensation for permanent injury",
-            "legal_basis": "Section 8",
-            "attributes": ["injuryPercentage", "permanentDamage"]
+            "legal_basis": "Section 24"
           },
           "PainAndSuffering": {
             "description": "Compensation for pain and suffering",
-            "legal_basis": "Section 9",
-            "attributes": ["painLevel", "duration"]
+            "legal_basis": "Section 24"
           },
           "DeathCompensation": {
             "description": "Compensation in case of patient death",
-            "legal_basis": "Section 9a",
-            "subclasses": ["SurvivorPension", "FuneralCost"]
+            "legal_basis": "Section 24"
+          },
+          "VocationalRehabilitation": {
+            "description": "Vocational rehabilitation costs",
+            "legal_basis": "Sections 25-27"
+          },
+          "RehabilitationAllowance": {
+            "description": "Allowance during rehabilitation",
+            "legal_basis": "Section 27"
           }
         }
       },
       "Claim": {
         "description": "Patient injury compensation claim",
-        "attributes": ["claimId", "claimDate", "status", "claimant"],
-        "legal_basis": "Sections 16-23",
+        "legal_basis": "Sections 31-36",
         "subclasses": {
           "InitialClaim": {
-            "description": "First claim submission",
-            "legal_basis": "Section 16"
+            "description": "Initial compensation claim",
+            "legal_basis": "Section 31"
           },
           "Appeal": {
             "description": "Appeal of claim decision",
-            "legal_basis": "Section 24"
+            "legal_basis": "Section 38"
           }
         }
       },
-      "Investigation": {
-        "description": "Patient injury investigation",
-        "attributes": ["investigationId", "startDate", "findings"],
-        "legal_basis": "Sections 11-15",
+      "Institution": {
+        "description": "Organizations involved in patient insurance",
         "subclasses": {
-          "MedicalInvestigation": {
-            "description": "Medical expert assessment",
-            "legal_basis": "Section 12"
+          "PatientInsuranceCentre": {
+            "description": "Patient Insurance Centre (Potilasvakuutuskeskus)",
+            "legal_basis": "Section 5",
+            "responsibilities": [
+              "Manages compensation operations",
+              "Ensures consistent compensation practice",
+              "Acts as central body"
+            ]
           },
-          "CausationAssessment": {
-            "description": "Assessment of causation between care and injury",
-            "legal_basis": "Section 13"
+          "TrafficAndPatientInjuryBoard": {
+            "description": "Traffic and Patient Injury Board",
+            "legal_basis": "Section 37"
           }
         }
       }
     },
     "relationships": [
-      {"from": "Patient", "to": "HealthcareProvider", "type": "receives_care_from"},
-      {"from": "HealthcareProvider", "to": "MandatoryPatientInsurance", "type": "must_have"},
+      {"from": "Patient", "to": "HealthcareProviderOrganization", "type": "receives_care_from"},
+      {"from": "HealthcareProviderOrganization", "to": "Insurance", "type": "must_have"},
       {"from": "PatientInjury", "to": "Patient", "type": "suffers"},
-      {"from": "PatientInjury", "to": "HealthcareProvider", "type": "occurs_at"},
+      {"from": "PatientInjury", "to": "HealthcareProviderOrganization", "type": "occurs_at"},
       {"from": "Compensation", "to": "PatientInjury", "type": "compensates"},
       {"from": "Claim", "to": "PatientInjury", "type": "filed_for"},
-      {"from": "Investigation", "to": "PatientInjury", "type": "investigates"},
-      {"from": "Insurance", "to": "HealthcareProvider", "type": "covers"}
+      {"from": "PatientInsuranceCentre", "to": "Compensation", "type": "pays"}
     ],
     "rules": [
       {
-        "name": "HealthcareProviderInsuranceObligation",
-        "condition": "healthcareProvider.type IN [PublicHealthcare, PrivateHealthcare, SocialServices]",
-        "conclusion": "healthcareProvider.mustHave = MandatoryPatientInsurance",
-        "legal_basis": "Section 5(1)"
+        "name": "InsuranceObligation",
+        "condition": "healthcareProviderOrganization.type IN [PublicHealthcareEntity, PrivateHealthcareEntity, Employer]",
+        "conclusion": "healthcareProviderOrganization.mustHave = PatientInsurance",
+        "legal_basis": "Section 6"
       },
       {
         "name": "CompensableInjury",
-        "condition": "patientInjury.type IN [TreatmentInjury, InfectionInjury, DeviceInjury, MedicationInjury, DiagnosticInjury] AND patientInjury.causation = probable",
+        "condition": "patientInjury.type IN [TreatmentInjury, DeviceInjury, ImplantInjury, InfectionInjury, AccidentInjury, FacilityInjury, MedicationInjury, SevereConsequenceInjury] AND patientInjury.causation = probable",
         "conclusion": "patientInjury.compensable = true",
-        "legal_basis": "Section 3"
+        "legal_basis": "Section 23"
       },
       {
         "name": "ClaimTimeLimit",
-        "condition": "patientInjury.eventDate > 3 years ago",
+        "condition": "patientInjury.eventDate > 10 years ago",
         "conclusion": "claim.timeLimit = expired",
-        "legal_basis": "Section 16(2)"
+        "legal_basis": "Section 31(1)"
       },
       {
-        "name": "MaximumCompensation",
-        "condition": "compensation.type = MedicalExpense AND compensation.amount > 500000",
-        "conclusion": "compensation.requires_special_approval = true",
-        "legal_basis": "Section 7(1)"
+        "name": "ClaimKnowledgeTimeLimit",
+        "condition": "patientInjury.knowledgeDate > 3 years ago",
+        "conclusion": "claim.timeLimit = expired",
+        "legal_basis": "Section 31(1)"
       }
     ],
     "metadata": {
-      "parts": 4,
-      "sections": "~35",
-      "chapters": 8,
+      "law_name": "Potilasvakuutuslaki",
+      "law_number": "948/2019",
       "effective_date": "2021-01-01",
-      "previous_act": "Potilasvakuutuslaki (585/1986)"
+      "previous_act": "585/1986",
+      "chapters": 7,
+      "total_sections": 70
     }
   }
 }
