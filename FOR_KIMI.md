@@ -1,69 +1,45 @@
 # Hi Kimi! 👋
 
-You're the **reviewer** for this project - checking my work and suggesting improvements!
+You're the **reviewer** for this Finnish law ontology project.
 
 ---
 
 ## 📋 Your Role
 
 - **Model:** Kimi K2 (Moonshot AI)
-- **Job:** Review my ontology work and suggest improvements
-- **How:** GitHub Issues, PR comments, or direct suggestions
+- **Job:** Review my (Molt's) work and suggest improvements
+- **How:** GitHub Issues, PR comments
 
 ---
 
-## 📂 What I Own (Molt)
+## 📂 What to Review
 
-**Folder:** `liikennevakuutuslaki/`
+**Folder:** `liikennevakuutuslaki/` (Traffic/Car Insurance Act)
 
-This contains the **Traffic/Car Insurance Act** (Liikennevakuutuslaki 460/2016) ontology.
-
----
-
-## 📁 My Files
-
-```
-liikennevakuutuslaki/
-├── car_insurance_ontology.json    # Main OWL-style ontology
-├── car_insurance_ontology.md     # Human-readable version
-├── business_rules_verified.json  # 46 verified business rules
-├── business_rules_verified.md
-├── GAP_ANALYSIS_10x.md          # 10x review rounds
-├── GAP_ANALYSIS_2nd_10x.md
-├── GAP_ANALYSIS_3rd_10x.md
-└── MISSING_RULES_SUMMARY.md
-```
+**Files to check:**
+| File | Description |
+|------|-------------|
+| `car_insurance_ontology.json` | Main OWL-style ontology |
+| `car_insurance_ontology.md` | Human-readable version |
+| `business_rules_verified.json` | 46 verified business rules |
 
 ---
 
-## ✅ How to Check My Work
+## ✅ Verification Steps
 
-### 1. Verify Against Finlex Law
-- **URL:** https://www.finlex.fi/fi/laki/alkup/2016/20160460
-- **Sections:** 1-268 + amendments
+### 1. Check against Finlex Law
+- URL: https://www.finlex.fi/fi/laki/alkup/2016/20160460
+- Sections: 1-268 + amendments
 
-### 2. Check Structure
-The law has:
-- Parts (osa): 9
-- Chapters (luku): ~30  
-- Sections (§): 268 + amendments
-
-### 3. Verify Entities
-My ontology should include:
-- Vehicle (and subclasses)
-- Insurance (MandatoryTrafficInsurance, ComprehensiveInsurance)
-- Person (Driver, Owner, InjuredParty, etc.)
-- Compensation types
-- Institutions
-
-### 4. Check Business Rules
+### 2. Verify JSON is valid
 ```bash
-# Verify 46 rules exist
+jq . liikennevakuutuslaki/car_insurance_ontology.json > /dev/null && echo "Valid JSON"
+```
+
+### 3. Check rule count
+```bash
 jq '.business_rules | length' liikennevakuutuslaki/business_rules_verified.json
 # Should return: 46
-
-# Check JSON validity
-jq . liikennevakuutuslaki/car_insurance_ontology.json > /dev/null && echo "Valid JSON"
 ```
 
 ---
@@ -71,41 +47,44 @@ jq . liikennevakuutuslaki/car_insurance_ontology.json > /dev/null && echo "Valid
 ## 🔍 What to Look For
 
 1. **Missing sections** - Compare with Finlex TOC
-2. **Wrong legal basis** - Section numbers should match law
+2. **Wrong legal basis** - Section numbers match law?
 3. **Missing entities** - Any important concepts not captured?
-4. **Relationship errors** - Are the connections correct?
-5. **Format issues** - JSON valid? Markdown clean?
+4. **Relationship errors** - Are connections correct?
+5. **Format issues** - JSON valid?
 
 ---
 
-## 💬 How to Suggest Improvements
+## 💬 How to Report Issues
 
-### Option 1: GitHub Issue
-Create an issue with:
-- Title: `[car-ins] Suggestion: <your idea>`
-- Description: Explain what to change and why
+### Create GitHub Issue
+1. Go to: https://github.com/ViitasaariVille/Finnish-law/issues
+2. Click "New Issue"
+3. Use format:
+   - **Title:** `[car-ins] <issue description>`
+   - **Body:** Explain what to change and why
 
-### Option 2: Pull Request
-- Fork the repo
-- Make changes
-- Create PR with explanation
-
-### Option 3: Direct Comment
-- Comment on my commits or the FOR_KIMI.md file
+### Example Issues
+- `[car-ins] Missing entity: DrivingLicense`
+- `[car-ins] Section 45 has wrong legal basis`
+- `[car-ins] Suggestion: Add relationship between Vehicle and Owner`
 
 ---
 
-## 📞 Questions?
+## 🔄 Sync Before Reviewing
 
-- Check `CONTRIBUTING.md` for sync rules
-- Create an Issue if unclear
-
-## 🔄 Remember to Pull!
-
-Before reviewing or creating issues:
+Always pull latest before reviewing:
 ```bash
 git pull origin master
 ```
+
+---
+
+## 📞 If You Need Help
+
+- Check `CONTRIBUTING.md` for full guidelines
+- Check `README.md` for project overview
+
+---
 
 Thanks for reviewing! 🎯
 
