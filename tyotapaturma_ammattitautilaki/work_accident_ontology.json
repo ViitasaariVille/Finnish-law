@@ -35,6 +35,29 @@
           "Employer": {
             "description": "Entity with mandatory insurance obligation",
             "attributes": ["businessId", "companyName", "annualPayroll"]
+          },
+          "EUWorker": {
+            "description": "Worker covered by EU social security regulations",
+            "legal_basis": "Section 2(7)",
+            "note": "Covered by EU Regulation 883/2004"
+          },
+          "ThirdCountryWorker": {
+            "description": "Worker from non-EU country (third country)",
+            "legal_basis": "Section 2(8)",
+            "note": "Subject to bilateral agreements"
+          }
+        }
+      },
+      "Pension": {
+        "description": "Pension definitions per Section 2",
+        "subclasses": {
+          "OldAgePension": {
+            "description": "Old-age pension under TyEL (395/2006), Kela pension (568/2007), or foreign equivalent",
+            "legal_basis": "Section 2(9)"
+          },
+          "DisabilityPension": {
+            "description": "Full disability pension under TyEL or sickness pension under Kela",
+            "legal_basis": "Section 2(10)"
           }
         }
       },
@@ -69,13 +92,93 @@
               "WorkplaceAccident": "Accident at workplace during work",
               "CommuteAccident": "Accident on home-work journey",
               "BusinessTripAccident": "Accident during work-related travel",
-              "WorkRelatedActivityAccident": "Accident during employer-organized activity"
+              "WorkRelatedActivityAccident": "Accident during employer-organized activity",
+              "SportsAccident": {
+                "description": "Accident during work-sponsored sports or fitness activities",
+                "legal_basis": "Section 24(1)",
+                "condition": "At employer's premises or organized by employer"
+              },
+              "TrainingAccident": {
+                "description": "Accident during work-related training",
+                "legal_basis": "Section 24(2)"
+              },
+              "BusinessTripFreeTime": {
+                "description": "Accident during free time on business trip",
+                "legal_basis": "Section 24(3)",
+                "note": "Limited compensation - only medical expenses"
+              },
+              "FrictionInjury": {
+                "description": "Abrasion injuries from friction",
+                "legal_basis": "Section 18(1)"
+              },
+              "CorrosionInjury": {
+                "description": "Injury from contact with corrosive substances",
+                "legal_basis": "Section 18(2)"
+              },
+              "InhalationInjury": {
+                "description": "Injury from gas, steam, or mist inhalation",
+                "legal_basis": "Section 18(3)"
+              },
+              "TemperatureInjury": {
+                "description": "Cold injuries, hypothermia, burns, heat illness",
+                "legal_basis": "Section 18(4)",
+                "subclasses": ["ColdInjury", "Burn", "HeatIllness"]
+              },
+              "RadiationInjury": {
+                "description": "Injury from radiation exposure",
+                "legal_basis": "Section 18(5)"
+              },
+              "PressureInjury": {
+                "description": "Injury from pressure variation",
+                "legal_basis": "Section 18(6)"
+              }
             }
           },
           "OccupationalDisease": {
             "description": "Disease caused by occupational exposure to physical, chemical, or biological factors",
             "legal_basis": "Sections 26-32",
-            "attributes": ["diseaseCode", "exposureDuration", "latencyPeriod"]
+            "attributes": ["diseaseCode", "exposureDuration", "latencyPeriod"],
+            "subclasses": {
+              "ListedDisease": {
+                "description": "Disease listed in government decree",
+                "legal_basis": "Section 28",
+                "note": "Specific diseases with established occupational connection"
+              },
+              " Tendonitis": {
+                "description": "Tendon inflammation from repetitive work",
+                "legal_basis": "Section 28(1)"
+              },
+              "CarpalTunnelSyndrome": {
+                "description": "Median nerve compression from repetitive work",
+                "legal_basis": "Section 28(1)"
+              },
+              "Tendinosis": {
+                "description": "Chronic tendon condition from repetitive strain",
+                "legal_basis": "Section 28(1)"
+              },
+              "NoiseInducedHearingLoss": {
+                "description": "Hearing loss from occupational noise exposure",
+                "legal_basis": "Section 28(1)"
+              },
+              "DustDisease": {
+                "description": "Lung disease from dust exposure (pneumoconiosis)",
+                "legal_basis": "Section 28(2)",
+                "note": "Including asbestosis, silicosis"
+              },
+              "ChemicalPoisoning": {
+                "description": "Acute or chronic poisoning from chemical exposure",
+                "legal_basis": "Section 28(3)"
+              },
+              "SkinDisease": {
+                "description": "Occupational skin disease (dermatitis)",
+                "legal_basis": "Section 28(4)"
+              },
+              "UnlistedDisease": {
+                "description": "Disease not in official list but with occupational causation",
+                "legal_basis": "Section 29",
+                "condition": "Must prove occupational causation"
+              }
+            }
           },
           "RepetitiveStrainInjury": {
             "description": "Muscle or tendon strain from single work movement",
@@ -221,6 +324,15 @@
           "ClaimAppealBoard": {
             "description": "Board for dispute resolution",
             "legal_basis": "Sections 226-228"
+          },
+          "MedicalExpert": {
+            "description": "Authorized medical expert for injury assessment",
+            "legal_basis": "Section 121",
+            "role": "Provides medical opinions for claims"
+          },
+          "EmployerInsuranceRegister": {
+            "description": "Register of employer insurance obligations",
+            "legal_basis": "Section 231"
           }
         }
       }
@@ -257,7 +369,7 @@
       {
         "subject": "InjuredParty",
         "predicate": "must_file_claim_within",
-        "object": "5 years",
+        "object": "3 years",
         "note": "From date of accident or disease discovery"
       },
       {
