@@ -73,13 +73,13 @@
         "output_variable": "coverage_percentage",
         "legal_source": "Section 5",
         "rules": [
-          {"inputs": ["Emergency", "required", "public"], "output": "100%", "legal_basis": "Section 54", "source_text": "Ensiavun hoitokustannukset"},
-          {"inputs": ["Emergency", "required", "private"], "output": "100% (reimbursement)", "legal_basis": "Section 54", "source_text": "Yksityisen ensiavun kustannukset"},
-          {"inputs": ["Surgery", "required", "any"], "output": "100%", "legal_basis": "Section 54", "source_text": "Leikkaushoito"},
-          {"inputs": ["Medicines", "prescribed", "pharmacy"], "output": "100%", "legal_basis": "Section 54", "source_text": "Lääkkeet"},
-          {"inputs": ["Rehabilitation", "required", "any"], "output": "100%", "legal_basis": "Section 54", "source_text": "Kuntoutus"},
-          {"inputs": ["Dental", "accident_related", "any"], "output": "100%", "legal_basis": "Section 54", "source_text": "Hammasvamman hoito"},
-          {"inputs": ["Prosthesis", "required", "any"], "output": "100%", "legal_basis": "Section 54", "source_text": "Proteesi"}
+          {"inputs": ["Emergency", "required", "public"], "output": "100%", "legal_basis": "Section 5a", "source_text": "Ensiavun hoitokustannukset"},
+          {"inputs": ["Emergency", "required", "private"], "output": "100% (reimbursement)", "legal_basis": "Section 5a", "source_text": "Yksityisen ensiavun kustannukset"},
+          {"inputs": ["Surgery", "required", "any"], "output": "100%", "legal_basis": "Section 5a", "source_text": "Leikkaushoito"},
+          {"inputs": ["Medicines", "prescribed", "pharmacy"], "output": "100%", "legal_basis": "Section 5b", "source_text": "Lääkkeet"},
+          {"inputs": ["Rehabilitation", "required", "any"], "output": "100%", "legal_basis": "Section 5c", "source_text": "Kuntoutus"},
+          {"inputs": ["Dental", "accident_related", "any"], "output": "100%", "legal_basis": "Section 5e", "source_text": "Hammasvamman hoito"},
+          {"inputs": ["Prosthesis", "required", "any"], "output": "100%", "legal_basis": "Section 5f", "source_text": "Proteesi"}
         ]
       },
       {
@@ -88,12 +88,12 @@
         "hit_policy": "UNIQUE",
         "input_variables": ["income.type", "income.amount", "work_ability.lost_days"],
         "output_variable": "compensation",
-        "legal_source": "Section 34",
+        "legal_source": "Section 4",
         "rules": [
-          {"inputs": ["Employed", "net_monthly", "any"], "output": "net_monthly / 30 * days", "legal_basis": "Section 34(1)", "source_text": "Työansion menetys"},
-          {"inputs": ["SelfEmployed", "annual", "any"], "output": "annual / 365 * days", "legal_basis": "Section 34(2)", "source_text": "Yrittäjän ansionmenetys"},
-          {"inputs": ["Unemployed", "any", "any"], "output": "Minimum 36.90/day", "legal_basis": "Section 34(3)", "source_text": "Työttömän ansionmenetys"},
-          {"inputs": ["Student", "any", "any"], "output": "Student grant adjustment", "legal_basis": "Section 34(4)", "source_text": "Opiskelijan ansionmenetys"}
+          {"inputs": ["Employed", "net_monthly", "any"], "output": "net_monthly / 30 * days", "legal_basis": "Section 4(1)", "source_text": "Työansion menetys"},
+          {"inputs": ["SelfEmployed", "annual", "any"], "output": "annual / 365 * days", "legal_basis": "Section 4(2)", "source_text": "Yrittäjän ansionmenetys"},
+          {"inputs": ["Unemployed", "any", "any"], "output": "Minimum 36.90/day", "legal_basis": "Section 4(3)", "source_text": "Työttömän ansionmenetys"},
+          {"inputs": ["Student", "any", "any"], "output": "Student grant adjustment", "legal_basis": "Section 4(4)", "source_text": "Opiskelijan ansionmenetys"}
         ]
       },
       {
@@ -119,10 +119,10 @@
         "output_variable": "compensation",
         "legal_source": "Sections 7-8",
         "rules": [
-          {"inputs": ["exists", "Spouse", true], "output": "Spouse pension + lump sum", "legal_basis": "Section 34(1)", "source_text": "Leskeneläke"},
-          {"inputs": ["exists", "Child", true], "output": "Child pension", "legal_basis": "Section 34(2)", "source_text": "Lapseneläke"},
-          {"inputs": ["none", "Dependent", true], "output": "Lump sum", "legal_basis": "Section 34", "source_text": "Kertakorvaus"},
-          {"inputs": ["any", "Parent", true], "output": "Funeral expenses + compensation", "legal_basis": "Section 34", "source_text": "Vanhemmille korvaus"}
+          {"inputs": ["exists", "Spouse", true], "output": "Spouse pension + lump sum", "legal_basis": "Section 7(1)", "source_text": "Leskeneläke"},
+          {"inputs": ["exists", "Child", true], "output": "Child pension", "legal_basis": "Section 7(2)", "source_text": "Lapseneläke"},
+          {"inputs": ["none", "Dependent", true], "output": "Lump sum", "legal_basis": "Section 8", "source_text": "Kertakorvaus"},
+          {"inputs": ["any", "Parent", true], "output": "Funeral expenses + compensation", "legal_basis": "Section 8", "source_text": "Vanhemmille korvaus"}
         ]
       },
       {
@@ -145,11 +145,11 @@
         "hit_policy": "UNIQUE",
         "input_variables": ["claim.type", "accident.date"],
         "output_variable": "time_limit",
-        "legal_source": "Section 344",
+        "legal_source": "Section 74",
         "rules": [
-          {"inputs": ["PersonalInjury", "any"], "output": "3 years from injury", "legal_basis": "Section 344(1)", "source_text": "Henkilövahinko 3 vuotta"},
-          {"inputs": ["PropertyDamage", "within_1_year"], "output": "1 year from accident", "legal_basis": "Section 344(2)", "source_text": "Esinevahinko 1 vuosi"},
-          {"inputs": ["PropertyDamage", "after_1_year"], "output": "Claim barred", "legal_basis": "Section 344(2)", "source_text": "Määräaika umpeutunut"}
+          {"inputs": ["PersonalInjury", "any"], "output": "3 years from injury", "legal_basis": "Section 74(1)", "source_text": "Henkilövahinko 3 vuotta"},
+          {"inputs": ["PropertyDamage", "within_1_year"], "output": "1 year from accident", "legal_basis": "Section 74(2)", "source_text": "Esinevahinko 1 vuosi"},
+          {"inputs": ["PropertyDamage", "after_1_year"], "output": "Claim barred", "legal_basis": "Section 74(2)", "source_text": "Määräaika umpeutunut"}
         ]
       },
       {
@@ -160,7 +160,7 @@
         "output_variable": "premium",
         "legal_source": "Sections 89-92",
         "rules": [
-          {"inputs": ["PrivateCar", "over_25", "no_claims", "Private"], "output": "Base premium", "legal_basis": "Section 349", "source_text": "Perusvakuutusmaksu"},
+          {"inputs": ["PrivateCar", "over_25", "no_claims", "Private"], "output": "Base premium", "legal_basis": "Section 89", "source_text": "Perusvakuutusmaksu"},
           {"inputs": ["PrivateCar", "under_25", "no_claims", "Private"], "output": "Base premium * 1.5", "legal_basis": "Section 90", "source_text": "Nuori kuljettaja"},
           {"inputs": ["PrivateCar", "any", "with_claims", "any"], "output": "Base premium + claim loading", "legal_basis": "Section 91", "source_text": "Korotusmaksu"},
           {"inputs": ["Commercial", "any", "any", "any"], "output": "Commercial rate", "legal_basis": "Section 92", "source_text": "Kaupallinen ajoneuvo"}
@@ -186,11 +186,11 @@
         "hit_policy": "UNIQUE",
         "input_variables": ["insurer.status", "policy.active", "claim.pending"],
         "output_variable": "protection",
-        "legal_source": "Section 347",
+        "legal_source": "Section 77",
         "rules": [
-          {"inputs": ["Insolvent", true, true], "output": "Finnish Guarantee Fund pays", "legal_basis": "Section 347(1)", "source_text": "Suomen vakuutusrahasto"},
-          {"inputs": ["Insolvent", true, false], "output": "Transfer to another insurer", "legal_basis": "Section 347(2)", "source_text": "Siirto toiselle vakuuttajalle"},
-          {"inputs": ["Healthy", true, true], "output": "Normal claims process", "legal_basis": "Section 346", "source_text": "Normaali käsittely"}
+          {"inputs": ["Insolvent", true, true], "output": "Finnish Guarantee Fund pays", "legal_basis": "Section 77(1)", "source_text": "Suomen vakuutusrahasto"},
+          {"inputs": ["Insolvent", true, false], "output": "Transfer to another insurer", "legal_basis": "Section 77(2)", "source_text": "Siirto toiselle vakuuttajalle"},
+          {"inputs": ["Healthy", true, true], "output": "Normal claims process", "legal_basis": "Section 76", "source_text": "Normaali käsittely"}
         ]
       }
     ],

@@ -55,91 +55,179 @@ class RulePackage(BaseModel):
 # ============================================================================
 
 @tool
-def fetch_finlex_law(law_reference: str, section: Optional[str] = None) -> str:
+def fetch_finlex_law(law_reference: str, section: Optional[str] = None, consolidated: bool = True) -> str:
     """
-    Fetch Finnish law text from Finlex database.
+    Fetch Finnish law text from Finlex Open Data API.
     
     Args:
         law_reference: Law reference in format "460/2016" or "459/2015"
         section: Optional section number to extract (e.g., "§5" or "5")
+        consolidated: If True, fetch up-to-date consolidated version; if False, fetch original
     
     Returns:
         Full law text or specific section if provided
         
-    Note: Finlex uses dynamic JavaScript rendering. This tool attempts multiple
-    methods to retrieve the law text. If direct fetching fails, it will return
-    instructions for manual input.
+    Example:
+        fetch_finlex_law("460/2016")  # Liikennevakuutuslaki
+        fetch_finlex_law("459/2015", "§5")  # Työtapaturmalaki section 5
     """
     import requests
+    import xml.etree.ElementTree as ET
     import re
     
     try:
-        # Construct Finlex URLs to try
-        base_url = "https://www.finlex.fi/fi/laki/alkup/"
         year, number = law_reference.split("/")
         
-        urls_to_try = [
-            f"{base_url}{year}/{year}{number.zfill(5)}",
-            f"https://www.finlex.fi/fi/laki/ajantasa/{year}/{year}{number.zfill(5)}",
-        ]
+        # Use Finlex Open Data API
+        # Document type: statute-consolidated (up-to-date) or statute (original)
+        doc_type = "statute-consolidated" if consolidated else "statute"
+        url = f"https://opendata.finlex.fi/finlex/avoindata/v1/akn/fi/act/{doc_type}/{year}/{number}/fin@"
         
         headers = {
-            'User-Agent': 'Mozilla/5.0 (compatible; LawBot/1.0)',
-            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
+            'User-Agent': 'Law-to-Rules-Swarm/1.0',
+            'Accept': 'application/xml'
         }
         
-        text = None
-        for url in urls_to_try:
-            try:
-                response = requests.get(url, headers=headers, timeout=30, allow_redirects=True)
-                if response.status_code == 200:
-                    text = response.text
-                    break
-            except:
-                continue
+        response = requests.get(url, headers=headers, timeout=30)
+        response.raise_for_status()
         
-        if not text:
-            return f"""Unable to fetch law {law_reference} from Finlex.
-
-Finlex uses dynamic JavaScript rendering which requires a headless browser.
-
-RECOMMENDED WORKAROUND:
-1. Visit: https://www.finlex.fi/fi/laki/alkup/{year}/{year}{number.zfill(5)}
-2. Copy the law text manually
-3. Save to a text file
-4. Use read_local_law_file() to load it
-
-ALTERNATIVE:
-Use the read_local_law() function which reads from the repository's
-existing law files (Molt's work):
-- liikennevakuutuslaki (460/2016)
-- tyotapaturma_ammattitautilaki (459/2015)
-- potilasvakuutuslaki
-"""
+        # Parse Akoma Ntoso XML
+        root = ET.fromstring(response.content)
         
-        # Extract text from HTML (basic cleanup)
-        # Remove script and style elements
-        text = re.sub(r'<script[^>]*>.*?</script>', '', text, flags=re.DOTALL)
-        text = re.sub(r'<style[^>]*>.*?</style>', '', text, flags=re.DOTALL)
+        # Define namespace
+        ns = {'akn': 'http://docs.oasis-open.org/legaldocml/ns/akn/3.0'}
         
-        # Remove HTML tags
-        text = re.sub(r'<[^>]+>', ' ', text)
+        # Extract title
+        lines = []
+        preface = root.find('.//akn:preface', ns)
+        if preface is not None:
+            doc_num = preface.find('.//akn:docNumber', ns)
+            doc_title = preface.find('.//akn:docTitle', ns)
+            if doc_num is not None and doc_title is not None:
+                lines.append(f"{doc_num.text} {doc_title.text}")
+                lines.append("=" * 60)
+                lines.append("")
         
-        # Clean up whitespace
-        text = re.sub(r'\s+', ' ', text)
+        # Process body content
+        body = root.find('.//akn:body', ns)
+        if body is not None:
+            _parse_akn_element(body, lines, ns)
         
-        # Decode HTML entities
-        import html
-        text = html.unescape(text)
+        full_text = '\n'.join(lines)
         
+        # If section specified, extract it
         if section:
-            # Try to extract specific section
-            return extract_section(text, section)
+            return extract_section_from_text(full_text, section)
         
-        return text[:50000]  # Return first 50K chars to avoid token limits
+        return full_text
         
     except Exception as e:
-        return f"Error fetching law {law_reference}: {str(e)}"
+        return f"Error fetching law {law_reference}: {str(e)}\n\nMake sure the law reference is correct (e.g., '460/2016')"
+
+
+def _parse_akn_element(element, lines, ns, depth=0):
+    """Recursively parse Akoma Ntoso XML elements."""
+    tag = element.tag.split('}')[-1] if '}' in element.tag else element.tag
+    
+    if tag == 'chapter':
+        num = element.find('akn:num', ns)
+        heading = element.find('akn:heading', ns)
+        if num is not None:
+            lines.append("")
+            lines.append(f"{num.text}")
+            if heading is not None:
+                lines.append(f"{heading.text}")
+            lines.append("-" * 40)
+    
+    elif tag == 'section':
+        num = element.find('akn:num', ns)
+        heading = element.find('akn:heading', ns)
+        if num is not None:
+            lines.append("")
+            lines.append(f"{num.text}")
+            if heading is not None:
+                lines.append(f"{heading.text}")
+    
+    elif tag == 'subsection':
+        content = element.find('akn:content', ns)
+        if content is not None:
+            text = _extract_akn_text(content, ns)
+            if text:
+                lines.append(text)
+        
+        for para in element.findall('akn:paragraph', ns):
+            num = para.find('akn:num', ns)
+            content = para.find('akn:content', ns)
+            if content is not None:
+                text = _extract_akn_text(content, ns)
+                if text:
+                    if num is not None:
+                        lines.append(f"{num.text} {text}")
+                    else:
+                        lines.append(text)
+    
+    elif tag == 'paragraph':
+        num = element.find('akn:num', ns)
+        content = element.find('akn:content', ns)
+        if content is not None:
+            text = _extract_akn_text(content, ns)
+            if text:
+                if num is not None:
+                    lines.append(f"{num.text} {text}")
+                else:
+                    lines.append(text)
+    
+    # Recursively process children
+    if tag not in ('subsection', 'paragraph', 'content'):
+        for child in element:
+            _parse_akn_element(child, lines, ns, depth + 1)
+
+
+def _extract_akn_text(element, ns):
+    """Extract all text content from an Akoma Ntoso element."""
+    text_parts = []
+    
+    def _collect_text(elem):
+        if elem.text and elem.text.strip():
+            text_parts.append(elem.text.strip())
+        for child in elem:
+            _collect_text(child)
+            if child.tail and child.tail.strip():
+                text_parts.append(child.tail.strip())
+    
+    _collect_text(element)
+    return ' '.join(text_parts)
+
+
+def extract_section_from_text(text: str, section: str) -> str:
+    """Extract a specific section from full law text."""
+    # Normalize section format
+    section_num = section.replace('§', '').strip()
+    
+    # Patterns to match section headers
+    patterns = [
+        rf'\n{section_num} §\s*\n',  # "5 §"
+        rf'\n§\s*{section_num}\s*\n',  # "§ 5"
+        rf'\n{section_num}\s*§\s+',  # "5 § "
+    ]
+    
+    lines = text.split('\n')
+    start_idx = None
+    end_idx = None
+    
+    for i, line in enumerate(lines):
+        if re.match(rf'^\s*{section_num}\s*§', line):
+            start_idx = i
+        elif start_idx is not None and re.match(r'^\s*\d+\s*§', line):
+            end_idx = i
+            break
+    
+    if start_idx is not None:
+        if end_idx is None:
+            end_idx = len(lines)
+        return '\n'.join(lines[start_idx:end_idx])
+    
+    return f"Section {section} not found in law text."
 
 
 @tool
@@ -215,20 +303,58 @@ def read_local_law(law_name: str, law_reference: str) -> str:
 
 
 @tool
-def extract_section(text: str, section_number: str) -> str:
-    """Extract a specific section from Finnish law text by section number (e.g., '§5' or '5 §')"""
-    # Match Finnish section formats: "5 §", "§5", "5§"
-    patterns = [
-        rf"{section_number}\s*§.*?(?=\n\d+\s*§|\Z)",
-        rf"§\s*{section_number.lstrip('§').strip()}.*?(?=\n§\s*\d+|\Z)",
-    ]
+def list_finlex_laws(year: Optional[int] = None, limit: int = 10) -> str:
+    """
+    List available laws from Finlex Open Data API.
     
-    for pattern in patterns:
-        match = re.search(pattern, text, re.DOTALL | re.IGNORECASE)
-        if match:
-            return match.group(0).strip()
+    Args:
+        year: Filter by year (e.g., 2016, 2015). If None, lists recent laws.
+        limit: Maximum number of laws to return (default 10)
     
-    return f"Section {section_number} not found in text"
+    Returns:
+        List of available laws with their references
+    """
+    import requests
+    
+    try:
+        # Use the list endpoint
+        base_url = "https://opendata.finlex.fi/finlex/avoindata/v1/akn/fi/act/statute/list"
+        params = {
+            'format': 'json',
+            'page': 1,
+            'limit': limit,
+            'LangAndVersion': 'fin@'
+        }
+        
+        if year:
+            params['startYear'] = year
+            params['endYear'] = year
+        
+        headers = {
+            'User-Agent': 'Law-to-Rules-Swarm/1.0',
+            'Accept': 'application/json'
+        }
+        
+        response = requests.get(base_url, params=params, headers=headers, timeout=30)
+        response.raise_for_status()
+        
+        data = response.json()
+        
+        if isinstance(data, list):
+            result = ["Available laws from Finlex:"]
+            result.append("-" * 60)
+            for item in data[:limit]:
+                if isinstance(item, dict):
+                    doc_num = item.get('documentNumber', 'N/A')
+                    year_val = item.get('documentYear', 'N/A')
+                    title = item.get('title', 'N/A')
+                    result.append(f"{doc_num}/{year_val} - {title}")
+            return "\n".join(result)
+        else:
+            return f"Unexpected response format: {str(data)[:500]}"
+            
+    except Exception as e:
+        return f"Error listing laws: {str(e)}"
 
 
 @tool
