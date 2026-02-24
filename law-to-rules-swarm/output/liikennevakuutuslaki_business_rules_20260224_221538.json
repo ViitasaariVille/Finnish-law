@@ -1,0 +1,14 @@
+{
+  "law_name": "Liikennevakuutuslaki",
+  "law_reference": "460/2016",
+  "timestamp": "20260224_221538",
+  "total_sections": 1,
+  "sections_processed": 0,
+  "results": [
+    {
+      "section": "8 §",
+      "name": "Poikkeukset vakuuttamisvelvollisuudesta",
+      "error": "'Tool' object is not callable"
+    }
+  ]
+}

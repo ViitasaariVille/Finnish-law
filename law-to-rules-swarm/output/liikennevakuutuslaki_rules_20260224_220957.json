@@ -1,0 +1,39 @@
+{
+  "law_name": "Liikennevakuutuslaki",
+  "law_reference": "460/2016",
+  "timestamp": "20260224_220957",
+  "total_sections": 6,
+  "sections_processed": 0,
+  "results": [
+    {
+      "section": "5 §",
+      "name": "Vakuutettavat ajoneuvot",
+      "error": "'Tool' object is not callable"
+    },
+    {
+      "section": "6 §",
+      "name": "Vakuuttamisvelvolliset",
+      "error": "'Tool' object is not callable"
+    },
+    {
+      "section": "8 §",
+      "name": "Poikkeukset vakuuttamisvelvollisuudesta",
+      "error": "'Tool' object is not callable"
+    },
+    {
+      "section": "10 §",
+      "name": "Ajoneuvon yksilöinti",
+      "error": "'Tool' object is not callable"
+    },
+    {
+      "section": "12 §",
+      "name": "Vakuutuksen voimassaoloaika",
+      "error": "'Tool' object is not callable"
+    },
+    {
+      "section": "17 §",
+      "name": "Vakuutusyhtiön velvollisuus antaa vakuutus",
+      "error": "'Tool' object is not callable"
+    }
+  ]
+}

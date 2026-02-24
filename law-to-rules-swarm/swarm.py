@@ -3,7 +3,9 @@ Law-to-Rules Swarm - CrewAI Multi-Agent System
 Converts Finnish legal text into structured business rules (DMN format)
 """
 
+import os
 from crewai import Agent, Task, Crew, Process
+from crewai.llm import LLM
 from crewai.tools import tool
 from pydantic import BaseModel, Field
 from typing import List, Dict, Optional
@@ -198,18 +200,10 @@ def _extract_akn_text(element, ns):
     _collect_text(element)
     return ' '.join(text_parts)
 
-
-def extract_section_from_text(text: str, section: str) -> str:
-    """Extract a specific section from full law text."""
+def _extract_section_from_text_impl(text: str, section: str) -> str:
+    """Internal implementation to extract a specific section from full law text."""
     # Normalize section format
     section_num = section.replace('§', '').strip()
-    
-    # Patterns to match section headers
-    patterns = [
-        rf'\n{section_num} §\s*\n',  # "5 §"
-        rf'\n§\s*{section_num}\s*\n',  # "§ 5"
-        rf'\n{section_num}\s*§\s+',  # "5 § "
-    ]
     
     lines = text.split('\n')
     start_idx = None
@@ -226,6 +220,14 @@ def extract_section_from_text(text: str, section: str) -> str:
         if end_idx is None:
             end_idx = len(lines)
         return '\n'.join(lines[start_idx:end_idx])
+    
+    return f"Section {section} not found in text"
+
+
+@tool
+def extract_section_from_text(text: str, section: str) -> str:
+    """Extract a specific section from full law text by section number (e.g., '§5' or '5 §')"""
+    return _extract_section_from_text_impl(text, section)
     
     return f"Section {section} not found in law text."
 
@@ -480,7 +482,12 @@ def create_law_reader_agent() -> Agent:
         structure of Finnish laws including Eduskunnan päätös, Luku, Pykälä, and Momentti.""",
         verbose=True,
         allow_delegation=False,
-        tools=[extract_section, parse_definitions]
+        tools=[extract_section_from_text, parse_definitions],
+        llm=LLM(
+            model="openai/kimi-k2.5",
+            base_url="https://api.moonshot.cn/v1",
+            api_key=os.environ.get("MOONSHOT_API_KEY", "")
+        )
     )
 
 
@@ -497,7 +504,12 @@ def create_legal_analyst_agent() -> Agent:
         - Määritelmä (definition) - "tarkoittaa", "on"
         You understand the nuances of Finnish legal language.""",
         verbose=True,
-        allow_delegation=True
+        allow_delegation=True,
+        llm=LLM(
+            model="openai/kimi-k2.5",
+            base_url="https://api.moonshot.cn/v1",
+            api_key=os.environ.get("MOONSHOT_API_KEY", "")
+        )
     )
 
 
@@ -512,7 +524,12 @@ def create_rule_extractor_agent() -> Agent:
         implicit conditions that must be made explicit.""",
         verbose=True,
         allow_delegation=True,
-        tools=[validate_rule_completeness]
+        tools=[validate_rule_completeness],
+        llm=LLM(
+            model="openai/MiniMax-M2.5",
+            base_url="https://api.minimax.chat/v1",
+            api_key=os.environ.get("MINIMAX_API_KEY", "")
+        )
     )
 
 
@@ -529,7 +546,12 @@ def create_validator_agent() -> Agent:
         You are meticulous and thorough.""",
         verbose=True,
         allow_delegation=False,
-        tools=[validate_rule_completeness]
+        tools=[validate_rule_completeness],
+        llm=LLM(
+            model="openai/kimi-k2.5",
+            base_url="https://api.moonshot.cn/v1",
+            api_key=os.environ.get("MOONSHOT_API_KEY", "")
+        )
     )
 
 
@@ -544,7 +566,12 @@ def create_dmn_formatter_agent() -> Agent:
         DMN 1.3 specification.""",
         verbose=True,
         allow_delegation=False,
-        tools=[convert_to_dmn]
+        tools=[convert_to_dmn],
+        llm=LLM(
+            model="openai/MiniMax-M2.5",
+            base_url="https://api.minimax.chat/v1",
+            api_key=os.environ.get("MINIMAX_API_KEY", "")
+        )
     )
 
 
@@ -561,7 +588,12 @@ def create_gap_analyzer_agent() -> Agent:
         - Implicit conditions not made explicit
         You provide actionable gap reports.""",
         verbose=True,
-        allow_delegation=False
+        allow_delegation=False,
+        llm=LLM(
+            model="openai/kimi-k2.5",
+            base_url="https://api.moonshot.cn/v1",
+            api_key=os.environ.get("MOONSHOT_API_KEY", "")
+        )
     )
 
 
@@ -727,7 +759,7 @@ def create_rule_extraction_crew(law_text: str, target_section: Optional[str] = N
     
     # Create tasks
     if target_section:
-        section_text = extract_section(law_text, target_section)
+        section_text = _extract_section_from_text_impl(law_text, target_section)
         tasks = [
             create_analyze_section_task(analyst, section_text, target_section),
             create_extract_rules_task(extractor, "{{task_1.output}}", section_text),
