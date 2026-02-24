@@ -124,9 +124,21 @@
                 "legal_basis": "Section 18(4)",
                 "subclasses": ["ColdInjury", "Burn", "HeatIllness"]
               },
-              "RadiationInjury": {
-                "description": "Injury from radiation exposure",
-                "legal_basis": "Section 18(5)"
+              "WorseningInjury": {
+                "description": "Injury that worsens over time due to original injury",
+                "legal_basis": "Section 19"
+              },
+              "DiseaseWorsening": {
+                "description": "Occupational disease that worsens due to continued exposure",
+                "legal_basis": "Section 30"
+              },
+              "IndexAdjustment": {
+                "description": "Annual adjustment of compensation based on TyEL index",
+                "legal_basis": "Section 268"
+              },
+              "SubrogationRight": {
+                "description": "Insurance company's right to recover compensation from liable third party",
+                "legal_basis": "Section 270"
               },
               "PressureInjury": {
                 "description": "Injury from pressure variation",
