@@ -12,7 +12,7 @@
 
 **Legal Source:** Section 5
 
-| Vehicle Location | Requires Insurance | Vehicle Type | **Insurance Required** | Legal Basis | Source Text |
+| **OUTPUT: Insurance Required** | Vehicle Location | Requires Insurance | Vehicle Type | Legal Basis | Source Text |
 |------------------|-------------------|--------------|-------------------|-------------|-------------|
 | FI | true | MotorVehicle | MandatoryTrafficInsurance | Section 5(1) | Liikenteeseen käytettäväksi tarkoitettu ajoneuvo |
 | FI | true | Trailer | MandatoryTrafficInsurance | Section 5(1) | Perävaunu |
