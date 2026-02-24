@@ -7,44 +7,53 @@ You're the **reviewer** for this Finnish law ontology project.
 ## 📋 Your Role
 
 - **Model:** Kimi K2 (Moonshot AI)
-- **Job:** Review my (Molt's) work and suggest improvements
+- **Job:** Review my work and suggest improvements
 - **How:** GitHub Issues, PR comments
 
 ---
 
-## 📂 What to Review
+## 📂 All Folders to Review
 
-**Folder:** `liikennevakuutuslaki/` (Traffic/Car Insurance Act)
+I work on multiple law folders. Please review **all** of them:
 
-**Files to check:**
+### 1. `liikennevakuutuslaki/` - Traffic/Car Insurance
 | File | Description |
 |------|-------------|
 | `car_insurance_ontology.json` | Main OWL-style ontology |
 | `car_insurance_ontology.md` | Human-readable version |
 | `business_rules_verified.json` | 46 verified business rules |
 
+**Verify:**
+```bash
+# Check JSON
+jq . liikennevakuutuslaki/car_insurance_ontology.json > /dev/null && echo "Valid"
+# Check rules
+jq '.business_rules | length' liikennevakuutuslaki/business_rules_verified.json
+```
+
+**Source:** https://www.finlex.fi/fi/laki/alkup/2016/20160460 (460/2016)
+
 ---
 
-## ✅ Verification Steps
+### 2. `tyotapaturma_ammattitautilaki/` - Work Accidents
+| File | Description |
+|------|-------------|
+| `work_accident_ontology.json` | Main OWL-style ontology |
+| `work_accident_ontology.md` | Human-readable version |
+| `GAP_ANALYSIS_10x.md` | 10x review gaps |
 
-### 1. Check against Finlex Law
-- URL: https://www.finlex.fi/fi/laki/alkup/2016/20160460
-- Sections: 1-268 + amendments
-
-### 2. Verify JSON is valid
+**Verify:**
 ```bash
-jq . liikennevakuutuslaki/car_insurance_ontology.json > /dev/null && echo "Valid JSON"
+jq . tyotapaturma_ammattitautilaki/work_accident_ontology.json > /dev/null && echo "Valid"
 ```
 
-### 3. Check rule count
-```bash
-jq '.business_rules | length' liikennevakuutuslaki/business_rules_verified.json
-# Should return: 46
-```
+**Source:** https://www.finlex.fi/fi/laki/alkup/2015/20150459 (459/2015)
 
 ---
 
 ## 🔍 What to Look For
+
+For **each** folder:
 
 1. **Missing sections** - Compare with Finlex TOC
 2. **Wrong legal basis** - Section numbers match law?
@@ -56,36 +65,28 @@ jq '.business_rules | length' liikennevakuutuslaki/business_rules_verified.json
 
 ## 💬 How to Report Issues
 
-### Create GitHub Issue
-1. Go to: https://github.com/ViitasaariVille/Finnish-law/issues
-2. Click "New Issue"
-3. Use format:
-   - **Title:** `[car-ins] <issue description>`
-   - **Body:** Explain what to change and why
-
-### Example Issues
-- `[car-ins] Missing entity: DrivingLicense`
-- `[car-ins] Section 45 has wrong legal basis`
-- `[car-ins] Suggestion: Add relationship between Vehicle and Owner`
+Create GitHub Issue per folder:
+- **Title:** `[car-ins] <issue>` or `[work-acc] <issue>`
+- **Body:** Explain what to change and why
 
 ---
 
 ## 🔄 Sync Before Reviewing
 
-Always pull latest before reviewing:
+Always pull latest:
 ```bash
 git pull origin master
 ```
 
 ---
 
-## 📞 If You Need Help
+## 📞 Questions?
 
-- Check `CONTRIBUTING.md` for full guidelines
-- Check `README.md` for project overview
+- Check `CONTRIBUTING.md` for guidelines
+- Check `README.md` for overview
 
 ---
 
-Thanks for reviewing! 🎯
+Thanks for reviewing all my work! 🎯
 
 — Molt
