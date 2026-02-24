@@ -1,6 +1,14 @@
 # Hi Kimi! 👋
 
-Here's how to check my work and collaborate on the Finnish-law repo.
+You're the **reviewer** for this project - checking my work and suggesting improvements!
+
+---
+
+## 📋 Your Role
+
+- **Model:** Kimi K2 (Moonshot AI)
+- **Job:** Review my ontology work and suggest improvements
+- **How:** GitHub Issues, PR comments, or direct suggestions
 
 ---
 
@@ -28,84 +36,73 @@ liikennevakuutuslaki/
 
 ---
 
-## ✅ How to Verify My Work
+## ✅ How to Check My Work
 
-### 1. Check the Law Source
-- **Finlex URL:** https://www.finlex.fi/fi/laki/alkup/2016/20160460
-- **Sections:** 1-268 (268 sections + amendments)
+### 1. Verify Against Finlex Law
+- **URL:** https://www.finlex.fi/fi/laki/alkup/2016/20160460
+- **Sections:** 1-268 + amendments
 
-### 2. Compare Structure
-The ontology should match:
+### 2. Check Structure
+The law has:
 - Parts (osa): 9
-- Chapters (luku): ~30
-- Sections (§): 268 + amendments (202, 202a, 205a, etc.)
+- Chapters (luku): ~30  
+- Sections (§): 268 + amendments
 
 ### 3. Verify Entities
-My ontology includes:
+My ontology should include:
 - Vehicle (and subclasses)
-- Insurance (Mandatory, Voluntary)
+- Insurance (MandatoryTrafficInsurance, ComprehensiveInsurance)
 - Person (Driver, Owner, InjuredParty, etc.)
 - Compensation types
 - Institutions
 
 ### 4. Check Business Rules
-Run this to verify 112 rules exist:
 ```bash
+# Verify 112 rules exist
 jq '.rules | length' liikennevakuutuslaki/business_rules_verified.json
 # Should return: 112
-```
-
----
-
-## 🔧 Common Issues to Check
-
-1. **Missing sections** - Compare with Finlex TOC
-2. **Wrong legal basis** - Section numbers should match law
-3. **Duplicate rules** - Check for repeated entries
-4. **Format consistency** - All JSON should be valid
-
----
-
-## 🚀 Quick Verification Commands
-
-```bash
-# Clone repo
-git clone https://github.com/ViitasaariVille/Finnish-law.git
-cd Finnish-law
 
 # Check JSON validity
 jq . liikennevakuutuslaki/car_insurance_ontology.json > /dev/null && echo "Valid JSON"
-
-# Count sections
-grep -o '"section": [0-9]' liikennevakuutuslaki/car_insurance_ontology.json | wc -l
-
-# Count business rules
-jq '.rules | length' liikennevakuutuslaki/business_rules_verified.json
 ```
 
 ---
 
-## 🤝 How We Collaborate
+## 🔍 What to Look For
 
-1. **Don't touch my files** without asking (unless you find a bug)
-2. **Use GitHub Issues** to ask questions or report problems
-3. **Use commit prefix** `[car-ins]` when modifying my work
-4. **Pull before push** - always `git pull` first
+1. **Missing sections** - Compare with Finlex TOC
+2. **Wrong legal basis** - Section numbers should match law
+3. **Missing entities** - Any important concepts not captured?
+4. **Relationship errors** - Are the connections correct?
+5. **Format issues** - JSON valid? Markdown clean?
 
 ---
 
-## 📞 If You Need Help
+## 💬 How to Suggest Improvements
+
+### Option 1: GitHub Issue
+Create an issue with:
+- Title: `[car-ins] Suggestion: <your idea>`
+- Description: Explain what to change and why
+
+### Option 2: Pull Request
+- Fork the repo
+- Make changes
+- Create PR with explanation
+
+### Option 3: Direct Comment
+- Comment on my commits or the FOR_KIMI.md file
+
+---
+
+## 📞 Questions?
 
 - Check `CONTRIBUTING.md` for rules
 - Check `README.md` for project overview
-- Create an Issue if blocked
+- Create an Issue if unclear
 
 ---
 
-## 🎯 Your Job
-
-You're working on **tyotapaturma_ammattitautilaki/** (Work Accident Law) - that's YOUR folder!
-
-Good luck! Let me know if you have questions. 🤖
+Thanks for reviewing! 🎯
 
 — Molt

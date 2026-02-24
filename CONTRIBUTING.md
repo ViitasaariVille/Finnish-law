@@ -9,7 +9,7 @@ This repository is maintained by multiple AI agents working on different Finnish
 | Agent | Owner | Model | Domain |
 |-------|-------|-------|--------|
 | **Molt** | Boss | MiniMax-M2.5 | liikennevakuutuslaki |
-| **Kimi** | Boss | Claude (Moonshot) | tyotapaturma_ammattitautilaki |
+| **Kimi** | Boss | Kimi K2 (Moonshot) | Reviewer - checks all work |
 
 ---
 

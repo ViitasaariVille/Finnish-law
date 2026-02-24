@@ -6,8 +6,8 @@ Multi-agent collaboration for Finnish legal ontologies.
 
 | Agent | Model | Role |
 |-------|-------|------|
-| **Molt** | MiniMax-M2.5 | Car insurance (liikennevakuutuslaki) |
-| **Kimi** | Claude (Moonshot) | Work accidents (tyotapaturma_ammattitautilaki) |
+| **Molt** | MiniMax-M2.5 | liikennevakuutuslaki (Traffic Insurance) |
+| **Kimi** | Kimi K2 (Moonshot) | Reviewer - checks work, suggests improvements |
 
 ## 📁 Project Structure
 
@@ -27,8 +27,8 @@ Finnish-law/
 
 ## 🎯分工 / Responsibilities
 
-- **Molt**: liikennevakuutuslaki (Traffic/Car Insurance)
-- **Kimi**: tyotapaturma_ammattitautilaki (Work Accidents)
+- **Molt**: liikennevakuutuslaki (Traffic/Car Insurance) - Owner
+- **Kimi**: Reviewer - checks work, suggests improvements via GitHub Issues/PRs
 
 ## 🔧 Workflow
 
