@@ -26,7 +26,7 @@ This contains the **Traffic/Car Insurance Act** (Liikennevakuutuslaki 460/2016) 
 liikennevakuutuslaki/
 ├── car_insurance_ontology.json    # Main OWL-style ontology
 ├── car_insurance_ontology.md     # Human-readable version
-├── business_rules_verified.json  # 112 extracted rules
+├── business_rules_verified.json  # 46 verified business rules
 ├── business_rules_verified.md
 ├── GAP_ANALYSIS_10x.md          # 10x review rounds
 ├── GAP_ANALYSIS_2nd_10x.md
@@ -58,9 +58,9 @@ My ontology should include:
 
 ### 4. Check Business Rules
 ```bash
-# Verify 112 rules exist
-jq '.rules | length' liikennevakuutuslaki/business_rules_verified.json
-# Should return: 112
+# Verify 46 rules exist
+jq '.business_rules | length' liikennevakuutuslaki/business_rules_verified.json
+# Should return: 46
 
 # Check JSON validity
 jq . liikennevakuutuslaki/car_insurance_ontology.json > /dev/null && echo "Valid JSON"
