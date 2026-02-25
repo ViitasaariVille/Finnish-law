@@ -1,0 +1,667 @@
+# RDF Ontology for Finnish Car Insurance (Liikennevakuutuslaki 460/2016)
+# Generated from car_insurance_ontology.json
+# Format: Turtle (RDF)
+
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix liikenne: <http://example.org/liikennevakuutus/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+
+# Ontology Declaration
+<> a owl:Ontology ;
+    rdfs:label "Finnish Car Insurance Ontology (Liikennevakuutuslaki 460/2016)"@en ;
+    rdfs:label "Suomen ajoneuvovakuutusontologia"@fi ;
+    rdfs:comment "RDF representation of the Finnish Traffic Insurance Act (Liikennevakuutuslaki)"@en ;
+    owl:versionInfo "1.0" ;
+    rdfs:seeAlso <https://www.finlex.fi/fi/laki/ajantasa/2016/20160460> .
+
+# Namespace declarations
+@prefix liikenne: <http://example.org/liikennevakuutus/> .
+
+#############################################
+# CLASSES (rdfs:Class)
+#############################################
+
+# Vehicle Classes
+liikenne:Vehicle a rdfs:Class ;
+    rdfs:label "Vehicle"@en ;
+    rdfs:label "Ajoneuvo"@fi ;
+    rdfs:comment "Motor vehicle subject to insurance requirements"@en .
+
+liikenne:MotorVehicle a rdfs:Class ;
+    rdfs:subClassOf liikenne:Vehicle ;
+    rdfs:label "Motor Vehicle"@en ;
+    rdfs:label "Moottoriajoneuvo"@fi .
+
+liikenne:PassengerCar a rdfs:Class ;
+    rdfs:subClassOf liikenne:MotorVehicle ;
+    rdfs:label "Passenger Car"@en ;
+    rdfs:label "Henkilöauto"@fi .
+
+liikenne:Motorcycle a rdfs:Class ;
+    rdfs:subClassOf liikenne:MotorVehicle ;
+    rdfs:label "Motorcycle"@en ;
+    rdfs:label "Moottoripyörä"@fi .
+
+liikenne:Truck a rdfs:Class ;
+    rdfs:subClassOf liikenne:MotorVehicle ;
+    rdfs:label "Truck"@en ;
+    rdfs:label "Kuorma-auto"@fi .
+
+liikenne:Bus a rdfs:Class ;
+    rdfs:subClassOf liikenne:MotorVehicle ;
+    rdfs:label "Bus"@en ;
+    rdfs:label "Linja-auto"@fi .
+
+liikenne:Trailer a rdfs:Class ;
+    rdfs:subClassOf liikenne:Vehicle ;
+    rdfs:label "Trailer"@en ;
+    rdfs:label "Perävaunu"@fi .
+
+liikenne:AgriculturalVehicle a rdfs:Class ;
+    rdfs:subClassOf liikenne:Vehicle ;
+    rdfs:label "Agricultural Vehicle"@en ;
+    rdfs:label "Maatalouskone"@fi .
+
+# Insurance Classes
+liikenne:Insurance a rdfs:Class ;
+    rdfs:label "Insurance"@en ;
+    rdfs:label "Vakuutus"@fi ;
+    rdfs:comment "Insurance contract"@en .
+
+liikenne:MandatoryTrafficInsurance a rdfs:Class ;
+    rdfs:subClassOf liikenne:Insurance ;
+    rdfs:label "Mandatory Traffic Insurance"@en ;
+    rdfs:label "Pakollinen liikennevakuutus"@fi ;
+    rdfs:comment "Statutory motor liability insurance (Liikennevakuutus)"@en ;
+    rdfs:seeAlso <https://www.finlex.fi/fi/laki/ajantasa/2016/20160460> .
+
+liikenne:ComprehensiveInsurance a rdfs:Class ;
+    rdfs:subClassOf liikenne:Insurance ;
+    rdfs:label "Comprehensive Insurance"@en ;
+    rdfs:label "Kaskovakuutus"@fi ;
+    rdfs:comment "Voluntary full coverage"@en .
+
+liikenne:FullComprehensive a rdfs:Class ;
+    rdfs:subClassOf liikenne:ComprehensiveInsurance ;
+    rdfs:label "Full Comprehensive"@en ;
+    rdfs:label "Täyskasko"@fi .
+
+liikenne:PartialComprehensive a rdfs:Class ;
+    rdfs:subClassOf liikenne:ComprehensiveInsurance ;
+    rdfs:label "Partial Comprehensive"@en ;
+    rdfs:label "Osakasko"@fi .
+
+liikenne:FireAndTheft a rdfs:Class ;
+    rdfs:subClassOf liikenne:ComprehensiveInsurance ;
+    rdfs:label "Fire and Theft"@en ;
+    rdfs:label "Palosuojaus ja varkaus"@fi .
+
+# Person Classes
+liikenne:Person a rdfs:Class ;
+    rdfs:label "Person"@en ;
+    rdfs:label "Henkilö"@fi ;
+    rdfs:comment "Natural person involved in insurance"@en .
+
+liikenne:PolicyHolder a rdfs:Class ;
+    rdfs:subClassOf liikenne:Person ;
+    rdfs:label "Policy Holder"@en ;
+    rdfs:label "Vakuutuksenottaja"@fi .
+
+liikenne:Insured a rdfs:Class ;
+    rdfs:subClassOf liikenne:Person ;
+    rdfs:label "Insured"@en ;
+    rdfs:label "Vakuutettu"@fi .
+
+liikenne:Driver a rdfs:Class ;
+    rdfs:subClassOf liikenne:Person ;
+    rdfs:label "Driver"@en ;
+    rdfs:label "Kuljettaja"@fi .
+
+liikenne:InjuredParty a rdfs:Class ;
+    rdfs:subClassOf liikenne:Person ;
+    rdfs:label "Injured Party"@en ;
+    rdfs:label "Loukkionut osapuoli"@fi .
+
+liikenne:DamagedParty a rdfs:Class ;
+    rdfs:subClassOf liikenne:Person ;
+    rdfs:label "Damaged Party"@en ;
+    rdfs:label "Vahinkoa kärsinyt osapuoli"@fi .
+
+# Legal Entity Classes
+liikenne:LegalEntity a rdfs:Class ;
+    rdfs:label "Legal Entity"@en ;
+    rdfs:label "Oikeushenkilö"@fi ;
+    rdfs:comment "Corporations and organizations"@en .
+
+liikenne:InsuranceCompany a rdfs:Class ;
+    rdfs:subClassOf liikenne:LegalEntity ;
+    rdfs:label "Insurance Company"@en ;
+    rdfs:label "Vakuutusyhtiö"@fi .
+
+liikenne:PolicyHoldingCompany a rdfs:Class ;
+    rdfs:subClassOf liikenne:LegalEntity ;
+    rdfs:label "Policy Holding Company"@en ;
+    rdfs:label "Vakuutuksenottajayhtiö"@fi .
+
+liikenne:RepairShop a rdfs:Class ;
+    rdfs:subClassOf liikenne:LegalEntity ;
+    rdfs:label "Repair Shop"@en ;
+    rdfs:label "Korjaamo"@fi .
+
+# Event Classes
+liikenne:InsuranceEvent a rdfs:Class ;
+    rdfs:label "Insurance Event"@en ;
+    rdfs:label "Vakuutustapahtuma"@fi ;
+    rdfs:comment "Event triggering insurance coverage"@en .
+
+liikenne:TrafficAccident a rdfs:Class ;
+    rdfs:subClassOf liikenne:InsuranceEvent ;
+    rdfs:label "Traffic Accident"@en ;
+    rdfs:label "Liikenneonnettomuus"@fi .
+
+liikenne:FireIncident a rdfs:Class ;
+    rdfs:subClassOf liikenne:InsuranceEvent ;
+    rdfs:label "Fire Incident"@en ;
+    rdfs:label "Tulipalo"@fi .
+
+liikenne:TheftEvent a rdfs:Class ;
+    rdfs:subClassOf liikenne:InsuranceEvent ;
+    rdfs:label "Theft Event"@en ;
+    rdfs:label "Varkaus"@fi .
+
+liikenne:NaturalDamage a rdfs:Class ;
+    rdfs:subClassOf liikenne:InsuranceEvent ;
+    rdfs:label "Natural Damage"@en ;
+    rdfs:label "Luonnonvahinko"@fi .
+
+# Damage Classes
+liikenne:Damage a rdfs:Class ;
+    rdfs:label "Damage"@en ;
+    rdfs:label "Vahinko"@fi ;
+    rdfs:comment "Damage from insurance event"@en .
+
+liikenne:PropertyDamage a rdfs:Class ;
+    rdfs:subClassOf liikenne:Damage ;
+    rdfs:label "Property Damage"@en ;
+    rdfs:label "Omaisuusvahinko"@fi .
+
+liikenne:VehicleDamage a rdfs:Class ;
+    rdfs:subClassOf liikenne:PropertyDamage ;
+    rdfs:label "Vehicle Damage"@en ;
+    rdfs:label "Ajoneuvovahinko"@fi .
+
+liikenne:ThirdPartyPropertyDamage a rdfs:Class ;
+    rdfs:subClassOf liikenne:PropertyDamage ;
+    rdfs:label "Third Party Property Damage"@en ;
+    rdfs:label "Kolmannen osapuolen omaisuusvahinko"@fi .
+
+liikenne:PersonalInjury a rdfs:Class ;
+    rdfs:subClassOf liikenne:Damage ;
+    rdfs:label "Personal Injury"@en ;
+    rdfs:label "Henkilövahinko"@fi .
+
+liikenne:PhysicalInjury a rdfs:Class ;
+    rdfs:subClassOf liikenne:PersonalInjury ;
+    rdfs:label "Physical Injury"@en ;
+    rdfs:label "Ruumiinvamma"@fi .
+
+liikenne:Death a rdfs:Class ;
+    rdfs:subClassOf liikenne:PersonalInjury ;
+    rdfs:label "Death"@en ;
+    rdfs:label "Kuolema"@fi .
+
+# Claim Classes
+liikenne:Claim a rdfs:Class ;
+    rdfs:label "Claim"@en ;
+    rdfs:label "Korvausvaatimus"@fi ;
+    rdfs:comment "Formal request for compensation"@en .
+
+# Compensation Classes
+liikenne:Compensation a rdfs:Class ;
+    rdfs:label "Compensation"@en ;
+    rdfs:label "Korvaus"@fi ;
+    rdfs:comment "Payment or benefit from insurance"@en .
+
+liikenne:PropertyDamageCompensation a rdfs:Class ;
+    rdfs:subClassOf liikenne:Compensation ;
+    rdfs:label "Property Damage Compensation"@en ;
+    rdfs:label "Omaisuusvahinkokorvaus"@fi ;
+    rdfs:seeAlso <https://www.finlex.fi/fi/laki/ajantasa/2016/20160460#L3> .
+
+liikenne:MedicalExpenseCompensation a rdfs:Class ;
+    rdfs:subClassOf liikenne:Compensation ;
+    rdfs:label "Medical Expense Compensation"@en ;
+    rdfs:label "Sairaanhoitokorvaus"@fi ;
+    rdfs:seeAlso <https://www.finlex.fi/fi/laki/ajantasa/2016/20160460#L53-59> .
+
+liikenne:HospitalCare a rdfs:Class ;
+    rdfs:subClassOf liikenne:MedicalExpenseCompensation ;
+    rdfs:label "Hospital Care"@en ;
+    rdfs:label "Sairaanhoito"@fi ;
+    rdfs:seeAlso <https://www.finlex.fi/fi/laki/ajantasa/2016/20160460#L54> .
+
+liikenne:MedicineCost a rdfs:Class ;
+    rdfs:subClassOf liikenne:MedicalExpenseCompensation ;
+    rdfs:label "Medicine Cost"@en ;
+    rdfs:label "Lääkekustannus"@fi ;
+    rdfs:seeAlso <https://www.finlex.fi/fi/laki/ajantasa/2016/20160460#L54> .
+
+liikenne:RehabilitationCost a rdfs:Class ;
+    rdfs:subClassOf liikenne:MedicalExpenseCompensation ;
+    rdfs:label "Rehabilitation Cost"@en ;
+    rdfs:label "Kuntoutuskustannus"@fi ;
+    rdfs:seeAlso <https://www.finlex.fi/fi/laki/ajantasa/2016/20160460#L54> .
+
+liikenne:TravelCost a rdfs:Class ;
+    rdfs:subClassOf liikenne:MedicalExpenseCompensation ;
+    rdfs:label "Travel Cost"@en ;
+    rdfs:label "Matkakustannus"@fi ;
+    rdfs:seeAlso <https://www.finlex.fi/fi/laki/ajantasa/2016/20160460#L54> .
+
+liikenne:DentalTreatment a rdfs:Class ;
+    rdfs:subClassOf liikenne:MedicalExpenseCompensation ;
+    rdfs:label "Dental Treatment"@en ;
+    rdfs:label "Hammashoito"@fi ;
+    rdfs:seeAlso <https://www.finlex.fi/fi/laki/ajantasa/2016/20160460#L54> .
+
+liikenne:ProsthesisCost a rdfs:Class ;
+    rdfs:subClassOf liikenne:MedicalExpenseCompensation ;
+    rdfs:label "Prosthesis Cost"@en ;
+    rdfs:label "Proteesikustannus"@fi ;
+    rdfs:seeAlso <https://www.finlex.fi/fi/laki/ajantasa/2016/20160460#L54> .
+
+liikenne:DisabilityCompensation a rdfs:Class ;
+    rdfs:subClassOf liikenne:Compensation ;
+    rdfs:label "Disability Compensation"@en ;
+    rdfs:label "Työkyvyttömyyskorvaus"@fi ;
+    rdfs:seeAlso <https://www.finlex.fi/fi/laki/ajantasa/2016/20160460#L34> .
+
+liikenne:DeathCompensation a rdfs:Class ;
+    rdfs:subClassOf liikenne:Compensation ;
+    rdfs:label "Death Compensation"@en ;
+    rdfs:label "Kuolemakorvaus"@fi ;
+    rdfs:seeAlso <https://www.finlex.fi/fi/laki/ajantasa/2016/20160460#L34> .
+
+liikenne:PainAndSuffering a rdfs:Class ;
+    rdfs:subClassOf liikenne:Compensation ;
+    rdfs:label "Pain and Suffering"@en ;
+    rdfs:label "Kärsimyskorvaus"@fi ;
+    rdfs:seeAlso <https://www.finlex.fi/fi/laki/ajantasa/2016/20160460#L34> .
+
+liikenne:LostWagesCompensation a rdfs:Class ;
+    rdfs:subClassOf liikenne:Compensation ;
+    rdfs:label "Lost Wages Compensation"@en ;
+    rdfs:label "Ansionmenetyskorvaus"@fi ;
+    rdfs:seeAlso <https://www.finlex.fi/fi/laki/ajantasa/2016/20160460#L34> .
+
+#############################################
+# OBJECT PROPERTIES (Relationships)
+#############################################
+
+liikenne:owns a rdf:Property ;
+    rdfs:domain liikenne:Person ;
+    rdfs:range liikenne:Vehicle ;
+    rdfs:label "owns"@en ;
+    rdfs:label "omistaa"@fi .
+
+liikenne:provides a rdf:Property ;
+    rdfs:domain liikenne:InsuranceCompany ;
+    rdfs:range liikenne:Insurance ;
+    rdfs:label "provides"@en ;
+    rdfs:label "tarjoaa"@fi .
+
+liikenne:holds a rdf:Property ;
+    rdfs:domain liikenne:PolicyHolder ;
+    rdfs:range liikenne:Insurance ;
+    rdfs:label "holds"@en ;
+    rdfs:label "pitää hallussaan"@fi .
+
+liikenne:covers a rdf:Property ;
+    rdfs:domain liikenne:Insurance ;
+    rdfs:range liikenne:Vehicle ;
+    rdfs:label "covers"@en ;
+    rdfs:label "kattaa"@fi .
+
+liikenne:resultsIn a rdf:Property ;
+    rdfs:domain liikenne:InsuranceEvent ;
+    rdfs:range liikenne:Damage ;
+    rdfs:label "results in"@en ;
+    rdfs:label "aiheuttaa"@fi .
+
+liikenne:filedFor a rdf:Property ;
+    rdfs:domain liikenne:Claim ;
+    rdfs:range liikenne:InsuranceEvent ;
+    rdfs:label "filed for"@en ;
+    rdfs:label "jätetty"@fi .
+
+liikenne:paidTo a rdf:Property ;
+    rdfs:domain liikenne:Compensation ;
+    rdfs:range liikenne:Person ;
+    rdfs:label "paid to"@en ;
+    rdfs:label "maksetaan"@fi .
+
+liikenne:pays a rdf:Property ;
+    rdfs:domain liikenne:InsuranceCompany ;
+    rdfs:range liikenne:Compensation ;
+    rdfs:label "pays"@en ;
+    rdfs:label "maksaa"@fi .
+
+liikenne:involvedIn a rdf:Property ;
+    rdfs:domain liikenne:Person ;
+    rdfs:range liikenne:InsuranceEvent ;
+    rdfs:label "involved in"@en ;
+    rdfs:label "osallistunut"@fi .
+
+liikenne:coveredBy a rdf:Property ;
+    rdfs:domain liikenne:Damage ;
+    rdfs:range liikenne:Insurance ;
+    rdfs:label "covered by"@en ;
+    rdfs:label "katettu"@fi .
+
+liikenne:hasClaim a rdf:Property ;
+    rdfs:domain liikenne:Insurance ;
+    rdfs:range liikenne:Claim ;
+    rdfs:label "has claim"@en ;
+    rdfs:label "on korvausvaatimus"@fi .
+
+liikenne:drives a rdf:Property ;
+    rdfs:domain liikenne:Driver ;
+    rdfs:range liikenne:Vehicle ;
+    rdfs:label "drives"@en ;
+    rdfs:label " ajaa"@fi .
+
+#############################################
+# DATATYPE PROPERTIES (Attributes)
+#############################################
+
+# Vehicle attributes
+liikenne:vehicleId a rdf:Property ;
+    rdfs:domain liikenne:Vehicle ;
+    rdfs:range xsd:string ;
+    rdfs:label "Vehicle ID"@en ;
+    rdfs:label "Ajoneuvon tunniste"@fi .
+
+liikenne:registrationNumber a rdf:Property ;
+    rdfs:domain liikenne:Vehicle ;
+    rdfs:range xsd:string ;
+    rdfs:label "Registration Number"@en ;
+    rdfs:label "Rekisterinumero"@fi .
+
+liikenne:vehicleType a rdf:Property ;
+    rdfs:domain liikenne:Vehicle ;
+    rdfs:range xsd:string ;
+    rdfs:label "Vehicle Type"@en ;
+    rdfs:label "Ajoneuvotyyppi"@fi .
+
+liikenne:firstRegistrationDate a rdf:Property ;
+    rdfs:domain liikenne:Vehicle ;
+    rdfs:range xsd:date ;
+    rdfs:label "First Registration Date"@en ;
+    rdfs:label "Ensimmäinen rekisteröintipäivä"@fi .
+
+# Person attributes
+liikenne:personalId a rdf:Property ;
+    rdfs:domain liikenne:Person ;
+    rdfs:range xsd:string ;
+    rdfs:label "Personal ID"@en ;
+    rdfs:label "Henkilötunnus"@fi .
+
+liikenne:firstName a rdf:Property ;
+    rdfs:domain liikenne:Person ;
+    rdfs:range xsd:string ;
+    rdfs:label "First Name"@en ;
+    rdfs:label "Etunimi"@fi .
+
+liikenne:lastName a rdf:Property ;
+    rdfs:domain liikenne:Person ;
+    rdfs:range xsd:string ;
+    rdfs:label "Last Name"@en ;
+    rdfs:label "Sukunimi"@fi .
+
+liikenne:address a rdf:Property ;
+    rdfs:domain liikenne:Person ;
+    rdfs:range xsd:string ;
+    rdfs:label "Address"@en ;
+    rdfs:label "Osoite"@fi .
+
+liikenne:drivingLicense a rdf:Property ;
+    rdfs:domain liikenne:Person ;
+    rdfs:range xsd:string ;
+    rdfs:label "Driving License"@en ;
+    rdfs:label "Ajokortti"@fi .
+
+# Insurance attributes
+liikenne:policyNumber a rdf:Property ;
+    rdfs:domain liikenne:Insurance ;
+    rdfs:range xsd:string ;
+    rdfs:label "Policy Number"@en ;
+    rdfs:label "Poliisin numero"@fi .
+
+liikenne:startDate a rdf:Property ;
+    rdfs:domain liikenne:Insurance ;
+    rdfs:range xsd:date ;
+    rdfs:label "Start Date"@en ;
+    rdfs:label "Alkamispäivä"@fi .
+
+liikenne:endDate a rdf:Property ;
+    rdfs:domain liikenne:Insurance ;
+    rdfs:range xsd:date ;
+    rdfs:label "End Date"@en ;
+    rdfs:label "Päättymispäivä"@fi .
+
+liikenne:premium a rdf:Property ;
+    rdfs:domain liikenne:Insurance ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "Premium"@en ;
+    rdfs:label "Vakuutusmaksu"@fi .
+
+liikenne:deductible a rdf:Property ;
+    rdfs:domain liikenne:Insurance ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "Deductible"@en ;
+    rdfs:label "Omavastuu"@fi .
+
+# Claim attributes
+liikenne:claimId a rdf:Property ;
+    rdfs:domain liikenne:Claim ;
+    rdfs:range xsd:string ;
+    rdfs:label "Claim ID"@en ;
+    rdfs:label "Korvausvaatimuksen tunniste"@fi .
+
+liikenne:claimDate a rdf:Property ;
+    rdfs:domain liikenne:Claim ;
+    rdfs:range xsd:date ;
+    rdfs:label "Claim Date"@en ;
+    rdfs:label "Korvausvaatimuksen päivämäärä"@fi .
+
+liikenne:claimStatus a rdf:Property ;
+    rdfs:domain liikenne:Claim ;
+    rdfs:range xsd:string ;
+    rdfs:label "Claim Status"@en ;
+    rdfs:label "Korvausvaatimuksen tila"@fi .
+
+# Compensation attributes
+liikenne:compensationId a rdf:Property ;
+    rdfs:domain liikenne:Compensation ;
+    rdfs:range xsd:string ;
+    rdfs:label "Compensation ID"@en ;
+    rdfs:label "Korvauksen tunniste"@fi .
+
+liikenne:amount a rdf:Property ;
+    rdfs:domain liikenne:Compensation ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "Amount"@en ;
+    rdfs:label "Määrä"@fi .
+
+liikenne:currency a rdf:Property ;
+    rdfs:domain liikenne:Compensation ;
+    rdfs:range xsd:string ;
+    rdfs:label "Currency"@en ;
+    rdfs:label "Valuutta"@fi .
+
+liikenne:paymentDate a rdf:Property ;
+    rdfs:domain liikenne:Compensation ;
+    rdfs:range xsd:date ;
+    rdfs:label "Payment Date"@en ;
+    rdfs:label "Maksupäivä"@fi .
+
+# Damage attributes
+liikenne:damageId a rdf:Property ;
+    rdfs:domain liikenne:Damage ;
+    rdfs:range xsd:string ;
+    rdfs:label "Damage ID"@en ;
+    rdfs:label "Vahingon tunniste"@fi .
+
+liikenne:damageType a rdf:Property ;
+    rdfs:domain liikenne:Damage ;
+    rdfs:range xsd:string ;
+    rdfs:label "Damage Type"@en ;
+    rdfs:label "Vahinkotyyppi"@fi .
+
+liikenne:severity a rdf:Property ;
+    rdfs:domain liikenne:Damage ;
+    rdfs:range xsd:string ;
+    rdfs:label "Severity"@en ;
+    rdfs:label "Vakavuus"@fi .
+
+liikenne:estimatedCost a rdf:Property ;
+    rdfs:domain liikenne:Damage ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "Estimated Cost"@en ;
+    rdfs:label "Arvioitu kustannus"@fi .
+
+# Event attributes
+liikenne:eventId a rdf:Property ;
+    rdfs:domain liikenne:InsuranceEvent ;
+    rdfs:range xsd:string ;
+    rdfs:label "Event ID"@en ;
+    rdfs:label "Tapahtuman tunniste"@fi .
+
+liikenne:eventDate a rdf:Property ;
+    rdfs:domain liikenne:InsuranceEvent ;
+    rdfs:range xsd:date ;
+    rdfs:label "Event Date"@en ;
+    rdfs:label "Tapahtuman päivämäärä"@fi .
+
+liikenne:location a rdf:Property ;
+    rdfs:domain liikenne:InsuranceEvent ;
+    rdfs:range xsd:string ;
+    rdfs:label "Location"@en ;
+    rdfs:label "Sijainti"@fi .
+
+#############################################
+# LEGAL BASIS ANNOTATIONS
+#############################################
+
+# Key Sections from Liikennevakuutuslaki 460/2016
+liikenne:Section3 a rdfs:Property ;
+    rdfs:label "Section 3 - Scope of Liability"@en ;
+    rdfs:seeAlso <https://www.finlex.fi/fi/laki/ajantasa/2016/20160460#L3> .
+
+liikenne:Section5 a rdfs:Property ;
+    rdfs:label "Section 5 - Mandatory Insurance"@en ;
+    rdfs:seeAlso <https://www.finlex.fi/fi/laki/ajantasa/2016/20160460#L5> .
+
+liikenne:Section6 a rdfs:Property ;
+    rdfs:label "Section 6 - Liability"@en ;
+    rdfs:seeAlso <https://www.finlex.fi/fi/laki/ajantasa/2016/20160460#L6> .
+
+liikenne:Section12 a rdfs:Property ;
+    rdfs:label "Section 12 - Coverage"@en ;
+    rdfs:seeAlso <https://www.finlex.fi/fi/laki/ajantasa/2016/20160460#L12> .
+
+liikenne:Section34 a rdfs:Property ;
+    rdfs:label "Section 34 - Personal Injury Compensation"@en ;
+    rdfs:seeAlso <https://www.finlex.fi/fi/laki/ajantasa/2016/20160460#L34> .
+
+liikenne:Section53 a rdfs:Property ;
+    rdfs:label "Section 53 - Medical Expenses"@en ;
+    rdfs:seeAlso <https://www.finlex.fi/fi/laki/ajantasa/2016/20160460#L53> .
+
+liikenne:Section54 a rdfs:Property ;
+    rdfs:label "Section 54 - Medical Care Costs"@en ;
+    rdfs:seeAlso <https://www.finlex.fi/fi/laki/ajantasa/2016/20160460#L54> .
+
+#############################################
+# REGULATORY BODIES
+#############################################
+
+liikenne:Finanssivalvonta a rdfs:Class ;
+    rdfs:label "Finanssivalvonta (FIVA)"@en ;
+    rdfs:label "Financial Supervisory Authority of Finland"@en ;
+    rdfs:comment "Financial Supervisory Authority regulating insurance in Finland"@en .
+
+liikenne:Liikennevakuutuskeskus a rdfs:Class ;
+    rdfs:label "Finnish Motor Insurance Centre"@en ;
+    rdfs:label "Liikennevakuutuskeskus"@fi ;
+    rdfs:comment "Central body for motor insurance in Finland"@en .
+
+#############################################
+# SAMPLE INDIVIDUALS
+#############################################
+
+# Example: A passenger car
+liikenne:example-car-001 a liikenne:PassengerCar ;
+    liikenne:vehicleId "ABC-123" ;
+    liikenne:registrationNumber "ABC-123" ;
+    liikenne:vehicleType "PassengerCar" ;
+    liikenne:firstRegistrationDate "2020-01-15" .
+
+# Example: Mandatory traffic insurance
+liikenne:example-insurance-001 a liikenne:MandatoryTrafficInsurance ;
+    liikenne:policyNumber "TV-2020-001" ;
+    liikenne:startDate "2020-01-15" ;
+    liikenne:premium 350.00 ;
+    liikenne:currency "EUR" ;
+    liikenne:covers liikenne:example-car-001 .
+
+# Example: Policy holder
+liikenne:example-person-001 a liikenne:PolicyHolder ;
+    liikenne:personalId "123456-7890" ;
+    liikenne:firstName "Matti" ;
+    liikenne:lastName "Meikäläinen" ;
+    liikenne:address "Esimerkkikatu 1, 00100 Helsinki" ;
+    liikenne:drivingLicense "DL123456" ;
+    liikenne:owns liikenne:example-car-001 ;
+    liikenne:holds liikenne:example-insurance-001 .
+
+# Example: Traffic accident
+liikenne:example-accident-001 a liikenne:TrafficAccident ;
+    liikenne:eventId "ACC-2024-001" ;
+    liikenne:eventDate "2024-06-15" ;
+    liikenne:location "Mannerheimintie, Helsinki" ;
+    liikenne:involvedIn liikenne:example-person-001 .
+
+# Example: Property damage
+liikenne:example-damage-001 a liikenne:VehicleDamage ;
+    liikenne:damageId "DMG-001" ;
+    liikenne:damageType "VehicleDamage" ;
+    liikenne:severity "PartialLoss" ;
+    liikenne:estimatedCost 5000.00 ;
+    liikenne:resultsIn liikenne:example-accident-001 .
+
+# Example: Claim
+liikenne:example-claim-001 a liikenne:Claim ;
+    liikenne:claimId "CLM-001" ;
+    liikenne:claimDate "2024-06-20" ;
+    liikenne:claimStatus "submitted" ;
+    liikenne:filedFor liikenne:example-accident-001 .
+
+# Example: Compensation
+liikenne:example-compensation-001 a liikenne:PropertyDamageCompensation ;
+    liikenne:compensationId "COMP-001" ;
+    liikenne:amount 5000.00 ;
+    liikenne:currency "EUR" ;
+    liikenne:paymentDate "2024-07-15" ;
+    liikenne:paidTo liikenne:example-person-001 .
+
+# Example: Insurance company
+liikenne:example-insurance-company-001 a liikenne:InsuranceCompany ;
+    rdfs:label "示例保险公司"@fi ;
+    liikenne:pays liikenne:example-compensation-001 ;
+    liikenne:provides liikenne:example-insurance-001 .
+
+# End of RDF Ontology

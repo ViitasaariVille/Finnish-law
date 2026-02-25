@@ -1,0 +1,273 @@
+{
+  "@context": {
+    "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+    "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+    "owl": "http://www.w3.org/2002/07/owl#",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "liikenne": "http://example.org/liikennevakuutus/"
+  },
+  "@graph": [
+    {
+      "@id": "liikenne:",
+      "@type": "owl:Ontology",
+      "rdfs:label": "Finnish Car Insurance Ontology",
+      "rdfs:comment": "RDF representation of the Finnish Traffic Insurance Act (Liikennevakuutuslaki 460/2016)",
+      "owl:versionInfo": "1.0"
+    },
+    {
+      "@id": "liikenne:Vehicle",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Motor vehicle subject to insurance requirements",
+      "rdfs:label@fi": "Ajoneuvo"
+    },
+    {
+      "@id": "liikenne:MotorVehicle",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Motor vehicle",
+      "rdfs:label@fi": "Moottoriajoneuvo",
+      "rdfs:subClassOf": {
+        "@id": "liikenne:Vehicle"
+      }
+    },
+    {
+      "@id": "liikenne:PassengerCar",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Passenger car",
+      "rdfs:label@fi": "Henkil\u00f6auto",
+      "rdfs:subClassOf": {
+        "@id": "liikenne:MotorVehicle"
+      }
+    },
+    {
+      "@id": "liikenne:Motorcycle",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Motorcycle",
+      "rdfs:label@fi": "Moottoripy\u00f6r\u00e4",
+      "rdfs:subClassOf": {
+        "@id": "liikenne:MotorVehicle"
+      }
+    },
+    {
+      "@id": "liikenne:Truck",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Truck",
+      "rdfs:label@fi": "Kuorma-auto",
+      "rdfs:subClassOf": {
+        "@id": "liikenne:MotorVehicle"
+      }
+    },
+    {
+      "@id": "liikenne:Bus",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Bus",
+      "rdfs:label@fi": "Linja-auto",
+      "rdfs:subClassOf": {
+        "@id": "liikenne:MotorVehicle"
+      }
+    },
+    {
+      "@id": "liikenne:Trailer",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Trailer",
+      "rdfs:label@fi": "Per\u00e4vaunu",
+      "rdfs:subClassOf": {
+        "@id": "liikenne:Vehicle"
+      }
+    },
+    {
+      "@id": "liikenne:AgriculturalVehicle",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Agricultural vehicle",
+      "rdfs:label@fi": "Maatalouskone",
+      "rdfs:subClassOf": {
+        "@id": "liikenne:Vehicle"
+      }
+    },
+    {
+      "@id": "liikenne:Insurance",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Insurance contract",
+      "rdfs:label@fi": "Vakuutus"
+    },
+    {
+      "@id": "liikenne:MandatoryTrafficInsurance",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Statutory motor liability insurance",
+      "rdfs:label@fi": "Pakollinen liikennevakuutus",
+      "rdfs:subClassOf": {
+        "@id": "liikenne:Insurance"
+      }
+    },
+    {
+      "@id": "liikenne:ComprehensiveInsurance",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Voluntary full coverage",
+      "rdfs:label@fi": "Kaskovakuutus",
+      "rdfs:subClassOf": {
+        "@id": "liikenne:Insurance"
+      }
+    },
+    {
+      "@id": "liikenne:Person",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Natural person",
+      "rdfs:label@fi": "Henkil\u00f6"
+    },
+    {
+      "@id": "liikenne:PolicyHolder",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Policy holder",
+      "rdfs:label@fi": "Vakuutuksenottaja",
+      "rdfs:subClassOf": {
+        "@id": "liikenne:Person"
+      }
+    },
+    {
+      "@id": "liikenne:Driver",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Driver",
+      "rdfs:label@fi": "Kuljettaja",
+      "rdfs:subClassOf": {
+        "@id": "liikenne:Person"
+      }
+    },
+    {
+      "@id": "liikenne:InjuredParty",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Injured party",
+      "rdfs:label@fi": "Loukkionut osapuoli",
+      "rdfs:subClassOf": {
+        "@id": "liikenne:Person"
+      }
+    },
+    {
+      "@id": "liikenne:LegalEntity",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Legal entity",
+      "rdfs:label@fi": "Oikeushenkil\u00f6"
+    },
+    {
+      "@id": "liikenne:InsuranceCompany",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Insurance company",
+      "rdfs:label@fi": "Vakuutusyhti\u00f6",
+      "rdfs:subClassOf": {
+        "@id": "liikenne:LegalEntity"
+      }
+    },
+    {
+      "@id": "liikenne:InsuranceEvent",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Insurance event",
+      "rdfs:label@fi": "Vakuutustapahtuma"
+    },
+    {
+      "@id": "liikenne:TrafficAccident",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Traffic accident",
+      "rdfs:label@fi": "Liikenneonnettomuus",
+      "rdfs:subClassOf": {
+        "@id": "liikenne:InsuranceEvent"
+      }
+    },
+    {
+      "@id": "liikenne:Damage",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Damage",
+      "rdfs:label@fi": "Vahinko"
+    },
+    {
+      "@id": "liikenne:PropertyDamage",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Property damage",
+      "rdfs:label@fi": "Omaisuusvahinko",
+      "rdfs:subClassOf": {
+        "@id": "liikenne:Damage"
+      }
+    },
+    {
+      "@id": "liikenne:VehicleDamage",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Vehicle damage",
+      "rdfs:label@fi": "Ajoneuvovahinko",
+      "rdfs:subClassOf": {
+        "@id": "liikenne:PropertyDamage"
+      }
+    },
+    {
+      "@id": "liikenne:PersonalInjury",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Personal injury",
+      "rdfs:label@fi": "Henkil\u00f6vahinko",
+      "rdfs:subClassOf": {
+        "@id": "liikenne:Damage"
+      }
+    },
+    {
+      "@id": "liikenne:Claim",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Claim",
+      "rdfs:label@fi": "Korvausvaatimus"
+    },
+    {
+      "@id": "liikenne:Compensation",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Compensation",
+      "rdfs:label@fi": "Korvaus"
+    },
+    {
+      "@id": "liikenne:PropertyDamageCompensation",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Property damage compensation",
+      "rdfs:label@fi": "Omaisuusvahinkokorvaus",
+      "rdfs:subClassOf": {
+        "@id": "liikenne:Compensation"
+      }
+    },
+    {
+      "@id": "liikenne:MedicalExpenseCompensation",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Medical expense compensation",
+      "rdfs:label@fi": "Sairaanhoitokorvaus",
+      "rdfs:subClassOf": {
+        "@id": "liikenne:Compensation"
+      }
+    },
+    {
+      "@id": "liikenne:DisabilityCompensation",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Disability compensation",
+      "rdfs:label@fi": "Ty\u00f6kyvytt\u00f6myyskorvaus",
+      "rdfs:subClassOf": {
+        "@id": "liikenne:Compensation"
+      }
+    },
+    {
+      "@id": "liikenne:DeathCompensation",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Death compensation",
+      "rdfs:label@fi": "Kuolemakorvaus",
+      "rdfs:subClassOf": {
+        "@id": "liikenne:Compensation"
+      }
+    },
+    {
+      "@id": "liikenne:PainAndSuffering",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Pain and suffering",
+      "rdfs:label@fi": "K\u00e4rsimyskorvaus",
+      "rdfs:subClassOf": {
+        "@id": "liikenne:Compensation"
+      }
+    },
+    {
+      "@id": "liikenne:LostWagesCompensation",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Lost wages compensation",
+      "rdfs:label@fi": "Ansionmenetyskorvaus",
+      "rdfs:subClassOf": {
+        "@id": "liikenne:Compensation"
+      }
+    }
+  ]
+}
