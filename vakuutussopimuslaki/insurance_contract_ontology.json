@@ -1,0 +1,178 @@
+{
+  "ontology_name": "Insurance Contract Act",
+  "finnish_name": "Vakuutussopimuslaki",
+  "law_number": "543/1994",
+  "effective_date": "1.7.1995",
+  "last_amended": "16.1.2026",
+  "eli": "http://data.finlex.fi/eli/sd/1994/543/ajantasa/2026-01-16/fin",
+  "entities": {
+    "InsuranceContract": {
+      "finnish_name": "Vakuutussopimus",
+      "description": "Contract between insurer and policyholder",
+      "legal_basis": "Section 1",
+      "subclasses": {
+        "LifeInsurance": {
+          "finnish_name": "Henkilövakuutus",
+          "description": "Insurance with natural person as subject",
+          "legal_basis": "Section 2(1)"
+        },
+        "NonLifeInsurance": {
+          "finnish_name": "Vahinkovakuutus",
+          "description": "Insurance for property damage or liability",
+          "legal_basis": "Section 2(2)"
+        },
+        "InvestmentInsurance": {
+          "finnish_name": "Sijoitusvakuutus",
+          "description": "Life insurance with investment component",
+          "legal_basis": "Section 2(2a)"
+        },
+        "CapitalRedemptionContract": {
+          "finnish_name": "Kapitalisaatiosopimus",
+          "description": "Investment insurance without insured person",
+          "legal_basis": "Section 4a"
+        },
+        "GroupInsurance": {
+          "finnish_name": "Ryhmävakuutus",
+          "description": "Insurance for group members",
+          "legal_basis": "Section 2(6)"
+        },
+        "GroupBenefitInsurance": {
+          "finnish_name": "Ryhmäetuvakuutus",
+          "description": "Group insurance where members pay premium",
+          "legal_basis": "Section 2"
+        }
+      }
+    },
+    "Insurer": {
+      "finnish_name": "Vakuutuksenantaja",
+      "description": "Entity granting insurance",
+      "legal_basis": "Section 2(3)"
+    },
+    "Policyholder": {
+      "finnish_name": "Vakuutuksenottaja",
+      "description": "Party making insurance contract with insurer",
+      "legal_basis": "Section 2(4)"
+    },
+    "Insured": {
+      "finnish_name": "Vakuutettu",
+      "description": "Person who is subject of life insurance or beneficiary of non-life insurance",
+      "legal_basis": "Section 2(5)"
+    },
+    "Beneficiary": {
+      "finnish_name": "Edunsaaja",
+      "description": "Person entitled to insurance benefit",
+      "legal_basis": "Section 47"
+    },
+    "InsurancePremium": {
+      "finnish_name": "Vakuutusmaksu",
+      "description": "Payment for insurance",
+      "legal_basis": "Section 38"
+    },
+    "InsuranceSum": {
+      "finnish_name": "Vakuutusmäärä",
+      "description": "Maximum insurance amount",
+      "legal_basis": "Section 57"
+    },
+    "SurrenderValue": {
+      "finnish_name": "Takaisinostoarvo",
+      "description": "Cash value of life insurance",
+      "legal_basis": "Section 13"
+    },
+    "FreePolicy": {
+      "finnish_name": "Vapaakirja",
+      "description": "Paid-up insurance policy",
+      "legal_basis": "Section 13"
+    },
+    "InsurancePeriod": {
+      "finnish_name": "Vakuutuskausi",
+      "description": "Insurance contract period",
+      "legal_basis": "Section 12"
+    },
+    "PolicyDocument": {
+      "finnish_name": "Vakuutuskirja",
+      "description": "Document with key contract terms",
+      "legal_basis": "Section 6"
+    },
+    "InsuranceTerms": {
+      "finnish_name": "Vakuutusehdot",
+      "description": "Terms and conditions of insurance",
+      "legal_basis": "Section 6"
+    },
+    "Claim": {
+      "finnish_name": "Korvausvaatimus",
+      "description": "Insurance compensation claim",
+      "legal_basis": "Section 69"
+    },
+    "InsuranceEvent": {
+      "finnish_name": "Vakuutustapahtuma",
+      "description": "Event triggering insurance coverage",
+      "legal_basis": "Section 2"
+    },
+    "DutyOfDisclosure": {
+      "finnish_name": "Tiedonantovelvollisuus",
+      "description": "Duty to provide information",
+      "legal_basis": "Sections 22-24"
+    },
+    "RightToCancel": {
+      "finnish_name": "Peruutusoikeus",
+      "description": "Right to cancel insurance",
+      "legal_basis": "Section 13a"
+    },
+    "RightToTerminate": {
+      "finnish_name": "Irtisanoisoikeus",
+      "description": "Right to terminate insurance",
+      "legal_basis": "Section 12"
+    },
+    "ContinuationInsurance": {
+      "finnish_name": "Jatkovakuutus",
+      "description": "Right to continue insurance after surrender",
+      "legal_basis": "Section 14"
+    },
+    "ThirdPartyRights": {
+      "finnish_name": "Kolmannen osapuolen oikeudet",
+      "description": "Third party rights in non-life insurance",
+      "legal_basis": "Section 62"
+    },
+    "OverInsurance": {
+      "finnish_name": "Ylivakuutus",
+      "description": "Insurance exceeding actual value",
+      "legal_basis": "Section 57"
+    },
+    "UnderInsurance": {
+      "finnish_name": "Alivakuutus",
+      "description": "Insurance less than actual value",
+      "legal_basis": "Section 58"
+    },
+    "MultipleInsurance": {
+      "finnish_name": "Monivakuutus",
+      "description": "Multiple insurance for same risk",
+      "legal_basis": "Section 59"
+    },
+    "SalvageCosts": {
+      "finnish_name": "Pelastamiskustannukset",
+      "description": "Costs to prevent or reduce loss",
+      "legal_basis": "Section 61"
+    },
+    "InformationDuty": {
+      "finnish_name": "Tiedottamisvelvollisuus",
+      "description": "Duty to provide pre-contract information",
+      "legal_basis": "Section 5"
+    },
+    "AnnualNotice": {
+      "finnish_name": "Vuositiedote",
+      "description": "Annual notice to policyholder",
+      "legal_basis": "Section 7"
+    }
+  },
+  "relationships": [
+    {"from": "Policyholder", "to": "Insurer", "type": "makes_contract_with"},
+    {"from": "LifeInsurance", "to": "Insured", "type": "covers"},
+    {"from": "NonLifeInsurance", "to": "Insured", "type": "covers"},
+    {"from": "Beneficiary", "to": "LifeInsurance", "type": "entitled_to_benefit"},
+    {"from": "Policyholder", "to": "InsurancePremium", "type": "pays"},
+    {"from": "Claim", "to": "InsuranceEvent", "type": "arises_from"},
+    {"from": "Insurer", "to": "Claim", "type": "processes"},
+    {"from": "LifeInsurance", "to": "SurrenderValue", "type": "has"},
+    {"from": "LifeInsurance", "to": "FreePolicy", "type": "can_become"}
+  ]
+}

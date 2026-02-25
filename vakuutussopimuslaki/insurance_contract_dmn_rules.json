@@ -1,0 +1,349 @@
+{
+  "dmn_version": "1.3",
+  "law": "Vakuutussopimuslaki (Insurance Contract Act)",
+  "law_number": "543/1994",
+  "decisions": [
+    {
+      "name": "ScopeOfAct",
+      "description": "Determines if Act applies to insurance",
+      "legal_source": "Section 1",
+      "rules": [
+        {"inputs": ["Insurance", "statutory"], "output": "Excluded from Act", "legal_basis": "Section 1(1)", "source_text": "Lakisääteinen vakuutus"},
+        {"inputs": ["Insurance", "traffic_insurance"], "output": "Applies per special law", "legal_basis": "Section 1(2)", "source_text": "Liikennevakuutus"},
+        {"inputs": ["Insurance", "patient_insurance"], "output": "Applies per special law", "legal_basis": "Section 1(2)", "source_text": "Potilasvakuutus"},
+        {"inputs": ["Insurance", "environmental_insurance"], "output": "Applies per special law", "legal_basis": "Section 1(3)", "source_text": "Ympäristövahinkovakuutus"},
+        {"inputs": ["Insurance", "reinsurance"], "output": "Excluded from Act", "legal_basis": "Section 1(4)", "source_text": "Jälleenvakuutus"}
+      ]
+    },
+    {
+      "name": "InsuranceTypeClassification",
+      "description": "Classifies insurance type",
+      "legal_source": "Section 2",
+      "rules": [
+        {"inputs": ["Subject", "natural_person"], "output": "Life Insurance", "legal_basis": "Section 2(1)", "source_text": "Henkilövakuutus"},
+        {"inputs": ["Subject", "property_damage"], "output": "Non-Life Insurance", "legal_basis": "Section 2(2)", "source_text": "Vahinkovakuutus"},
+        {"inputs": ["Product", "investment_component"], "output": "Investment Insurance", "legal_basis": "Section 2(2a)", "source_text": "Sijoitusvakuutus"},
+        {"inputs": ["Product", "no_insured"], "output": "Capital Redemption", "legal_basis": "Section 4a", "source_text": "Kapitalisaatiosopimus"},
+        {"inputs": ["Coverage", "group_members"], "output": "Group Insurance", "legal_basis": "Section 2(6)", "source_text": "Ryhmävakuutus"}
+      ]
+    },
+    {
+      "name": "ContractualTermsMandatory",
+      "description": "Determines which terms are mandatory",
+      "legal_source": "Section 3",
+      "rules": [
+        {"inputs": ["Term", "against_insured"], "output": "Void if detrimental to insured", "legal_basis": "Section 3(1)", "source_text": "Mitätön vakuutetun vahingoksi"},
+        {"inputs": ["Term", "against_consumer"], "output": "Void if detrimental to consumer", "legal_basis": "Section 3(2)", "source_text": "Mitätön kuluttajaa kohtaan"},
+        {"inputs": ["Term", "credit_insurance"], "output": "Not mandatory for credit", "legal_basis": "Section 3(3)", "source_text": "Luottovakuutus"},
+        {"inputs": ["Term", "transport_insurance"], "output": "Not mandatory for transport", "legal_basis": "Section 3(3)", "source_text": "Kuljetusvakuutus"}
+      ]
+    },
+    {
+      "name": "PreContractInformation",
+      "description": "Pre-contractual information requirements",
+      "legal_source": "Section 5",
+      "rules": [
+        {"inputs": ["Insurer", "any"], "output": "Provide insurance forms", "legal_basis": "Section 5(1)", "source_text": "Vakuutusmuodot"},
+        {"inputs": ["Insurer", "any"], "output": "Provide premium information", "legal_basis": "Section 5(1)", "source_text": "Vakuutusmaksut"},
+        {"inputs": ["Insurer", "any"], "output": "Provide terms and conditions", "legal_basis": "Section 5(1)", "source_text": "Vakuutusehdot"},
+        {"inputs": ["Insurer", "any"], "output": "Provide information on policyholder needs", "legal_basis": "Section 5(1)", "source_text": "Vakuutustarve"},
+        {"inputs": ["Insurer", "investment_insurance"], "output": "Warn of investment risks", "legal_basis": "Section 5(2)", "source_text": "Sijoitusriskit"}
+      ]
+    },
+    {
+      "name": "InformationDeliveryMethod",
+      "description": "How information must be delivered",
+      "legal_source": "Section 5a",
+      "rules": [
+        {"inputs": ["Method", "paper"], "output": "Allowed", "legal_basis": "Section 5a(1)", "source_text": "Paperilla"},
+        {"inputs": ["Method", "durable_medium"], "output": "Allowed", "legal_basis": "Section 5a(1)", "source_text": "Pysyvällä tavalla"},
+        {"inputs": ["Method", "website"], "output": "Allowed", "legal_basis": "Section 5a(1)", "source_text": "Verkkosivustolla"},
+        {"inputs": ["Customer", "requests"], "output": "Must provide on paper", "legal_basis": "Section 5a(3)", "source_text": "Pyynnöstä paperilla"}
+      ]
+    },
+    {
+      "name": "PolicyDocumentDelivery",
+      "description": "When policy document must be delivered",
+      "legal_source": "Section 6",
+      "rules": [
+        {"inputs": ["Contract", "concluded"], "output": "Deliver without undue delay", "legal_basis": "Section 6(1)", "source_text": "Ilman aiheetonta viivytystä"},
+        {"inputs": ["Document", "contents"], "output": "Must include key terms", "legal_basis": "Section 6(1)", "source_text": "Sopimuksen keskeinen sisältö"},
+        {"inputs": ["Document", "terms"], "output": "Must include conditions", "legal_basis": "Section 6(1)", "source_text": "Vakuutusehdot"},
+        {"inputs": ["Premium", "variable"], "output": "Note in policy document", "legal_basis": "Section 6(2)", "source_text": "Maksun muuttumisoikeus"}
+      ]
+    },
+    {
+      "name": "AnnualNoticeRequirement",
+      "description": "Annual notice to policyholder",
+      "legal_source": "Section 7",
+      "rules": [
+        {"inputs": ["Insurance", "any"], "output": "Annual notice required", "legal_basis": "Section 7(1)", "source_text": "Vuositiedote"},
+        {"inputs": ["Insurance", "content"], "output": "Include insurance sum", "legal_basis": "Section 7(1)", "source_text": "Vakuutusmäärä"},
+        {"inputs": ["Insurance", "investment"], "output": "Include cost information", "legal_basis": "Section 7(2)", "source_text": "Kulut"},
+        {"inputs": ["Insurance", "suitability"], "output": "Include suitability assessment", "legal_basis": "Section 7(3)", "source_text": "Soveltuvuuden arviointi"}
+      ]
+    },
+    {
+      "name": "CoverageStart",
+      "description": "When insurer liability begins",
+      "legal_source": "Section 11",
+      "rules": [
+        {"inputs": ["Offer", "accepted"], "output": "Liability begins", "legal_basis": "Section 11(1)", "source_text": "Hyväksyvä vastaus"},
+        {"inputs": ["Application", "written"], "output": "Liability from application", "legal_basis": "Section 11(2)", "source_text": "Kirjallinen hakemus"},
+        {"inputs": ["Premium", "condition"], "output": "May require premium first", "legal_basis": "Section 11(3)", "source_text": "Vakuutusmaksu"},
+        {"inputs": ["Representative", "application"], "output": "Considered submitted to insurer", "legal_basis": "Section 11(4)", "source_text": "Edustajalle annettu"}
+      ]
+    },
+    {
+      "name": "PolicyholderTerminationRight",
+      "description": "Policyholder right to terminate",
+      "legal_source": "Section 12",
+      "rules": [
+        {"inputs": ["Policyholder", "any_time"], "output": "Can terminate anytime", "legal_basis": "Section 12(1)", "source_text": "Milloin tahansa"},
+        {"inputs": ["Termination", "form"], "output": "Must be written", "legal_basis": "Section 12(1)", "source_text": "Kirjallisesti"},
+        {"inputs": ["Termination", "timing"], "output": "Ends current period", "legal_basis": "Section 12(1)", "source_text": "Päättyy vakuutuskauden aikana"},
+        {"inputs": ["Period", "short"], "output": "No termination if <30 days", "legal_basis": "Section 12(2)", "source_text": "Alle 30 päivää"}
+      ]
+    },
+    {
+      "name": "SurrenderValueRight",
+      "description": "Right to surrender value",
+      "legal_source": "Section 13",
+      "rules": [
+        {"inputs": ["Insurance", "with_savings"], "output": "Can get free policy", "legal_basis": "Section 13(1)", "source_text": "Vapaakirja"},
+        {"inputs": ["Insurance", "with_savings"], "output": "Can get surrender value", "legal_basis": "Section 13(1)", "source_text": "Takaisinostoarvo"},
+        {"inputs": ["Insurance", "ended"], "output": "Surrender value on ending", "legal_basis": "Section 13(2)", "source_text": "Päättyessä"},
+        {"inputs": ["Insurance", "pension"], "output": "May exclude surrender value", "legal_basis": "Section 13(3)", "source_text": "Eläkevakuutus"}
+      ]
+    },
+    {
+      "name": "CancellationRight",
+      "description": "Right to cancel insurance",
+      "legal_source": "Section 13a",
+      "rules": [
+        {"inputs": ["Insurance", "pension"], "output": "30-day cancellation right", "legal_basis": "Section 13a(1)", "source_text": "30 päivää"},
+        {"inputs": ["Insurance", "savings_life"], "output": "30-day cancellation right", "legal_basis": "Section 13a(1)", "source_text": "Säästöhenkivakuutus"},
+        {"inputs": ["Cancellation", "timing"], "output": "From acceptance notification", "legal_basis": "Section 13a(1)", "source_text": "Hyväksymisestä"},
+        {"inputs": ["Refund", "premium"], "output": "Refund within 30 days", "legal_basis": "Section 13a(2)", "source_text": "Palautus 30 päivässä"}
+      ]
+    },
+    {
+      "name": "TransferRight",
+      "description": "Right to transfer pension insurance",
+      "legal_source": "Section 13b",
+      "rules": [
+        {"inputs": ["Insurance", "pension_terminated"], "output": "Can transfer surrender value", "legal_basis": "Section 13b(1)", "source_text": "Siirto-oikeus"},
+        {"inputs": ["Insurance", "pension"], "output": "To another pension insurance", "legal_basis": "Section 13b(1)", "source_text": "Toiseen eläkevakuutukseen"},
+        {"inputs": ["Insurance", "pension"], "output": "To long-term savings", "legal_basis": "Section 13b(1)", "source_text": "Pitkäaikaissäästötili"},
+        {"inputs": ["Transfer", "timing"], "output": "Within 30 days", "legal_basis": "Section 13b(2)", "source_text": "30 päivän kuluessa"}
+      ]
+    },
+    {
+      "name": "ContinuationInsuranceRight",
+      "description": "Right to continuation insurance",
+      "legal_source": "Section 14",
+      "rules": [
+        {"inputs": ["Insurance", "surrendered"], "output": "Right to continuation", "legal_basis": "Section 14(1)", "source_text": "Jatkovakuutusoikeus"},
+        {"inputs": ["Insurance", "surrendered"], "output": "No health assessment required", "legal_basis": "Section 14(1)", "source_text": "Ei terveysselvitystä"},
+        {"inputs": ["Insurance", "terms"], "output": "Adjusted for surrender value", "legal_basis": "Section 14(1)", "source_text": "Takaisinostoarvon mukaisesti"},
+        {"inputs": ["Application", "deadline"], "output": "Within 6 months", "legal_basis": "Section 14(3)", "source_text": "6 kuukauden kuluessa"}
+      ]
+    },
+    {
+      "name": "InsurerTerminationNonLife",
+      "description": "Insurer right to terminate non-life insurance",
+      "legal_source": "Section 15",
+      "rules": [
+        {"inputs": ["Insurance", "during_period"], "output": "Can terminate during period", "legal_basis": "Section 15(1)", "source_text": "Vakuutuskauden aikana"},
+        {"inputs": ["Insurance", "reason"], "output": "Requires valid reason", "legal_basis": "Section 15(1)", "source_text": "Pätevä syy"},
+        {"inputs": ["Termination", "notice"], "output": "14-day notice required", "legal_basis": "Section 15(2)", "source_text": "14 päivää"},
+        {"inputs": ["Termination", "refund"], "output": "Refund unearned premium", "legal_basis": "Section 15(3)", "source_text": "Palautus"}
+      ]
+    },
+    {
+      "name": "ContinuousInsuranceTermination",
+      "description": "Termination of continuous non-life insurance",
+      "legal_source": "Section 16",
+      "rules": [
+        {"inputs": ["Insurance", "continuous"], "output": "Can terminate at period end", "legal_basis": "Section 16(1)", "source_text": "Vakuutuskauden päättyessä"},
+        {"inputs": ["Termination", "notice_period"], "output": "One month notice", "legal_basis": "Section 16(1)", "source_text": "Kuukauden irtisanomisaika"},
+        {"inputs": ["Insurance", "no_claim"], "output": "No termination for claims-free", "legal_basis": "Section 16(2)", "source_text": "Korvaukseton"},
+        {"inputs": ["Insurance", "increase"], "output": "Can increase premium", "legal_basis": "Section 16(3)", "source_text": "Korotettu maksu"}
+      ]
+    },
+    {
+      "name": "PolicyholderDisclosureDuty",
+      "description": "Duty to provide information",
+      "legal_source": "Section 22",
+      "rules": [
+        {"inputs": ["Policyholder", "risk_factors"], "output": "Must disclose all known risk factors", "legal_basis": "Section 22(1)", "source_text": "Tunnetut riskitekijät"},
+        {"inputs": ["Policyholder", "questions"], "output": "Must answer all questions", "legal_basis": "Section 22(1)", "source_text": "Kysymyksiin vastaaminen"},
+        {"inputs": ["Insured", "information"], "output": "Same duty applies to insured", "legal_basis": "Section 22(2)", "source_text": "Vakuutettu"},
+        {"inputs": ["Policyholder", "changes"], "output": "Must notify of changes", "legal_basis": "Section 22(3)", "source_text": "Muutoksista ilmoittaminen"}
+      ]
+    },
+    {
+      "name": "NonLifeDisclosureBreach",
+      "description": "Consequences of disclosure breach in non-life",
+      "legal_source": "Section 23",
+      "rules": [
+        {"inputs": ["Breach", "intentional"], "output": "Insurer not liable", "legal_basis": "Section 23(1)", "source_text": "Tahallinen"},
+        {"inputs": ["Breach", "negligent"], "output": "May reduce compensation", "legal_basis": "Section 23(2)", "source_text": "Huolimaton"},
+        {"inputs": ["Breach", "material"], "output": "Material breach affects liability", "legal_basis": "Section 23(3)", "source_text": "Olennainen"},
+        {"inputs": ["Breach", "no_impact"], "output": "If immaterial, full liability", "legal_basis": "Section 35", "source_text": "Olennaisuus"}
+      ]
+    },
+    {
+      "name": "LifeInsuranceDisclosureBreach",
+      "description": "Consequences of disclosure breach in life insurance",
+      "legal_source": "Section 24",
+      "rules": [
+        {"inputs": ["Breach", "fraud"], "output": "Insurer not liable", "legal_basis": "Section 24(1)", "source_text": "Petollinen"},
+        {"inputs": ["Breach", "10_years"], "output": "After 10 years, full liability", "legal_basis": "Section 24(2)", "source_text": "10 vuotta"},
+        {"inputs": ["Breach", "contributory"], "output": "Proportionate liability", "legal_basis": "Section 24(3)", "source_text": "Osittainen vastuu"},
+        {"inputs": ["Death", "within_2_years"], "output": "Special rules apply", "legal_basis": "Section 24(4)", "source_text": "2 vuoden sisällä"}
+      ]
+    },
+    {
+      "name": "RiskIncrease",
+      "description": "Risk increase notification",
+      "legal_source": "Sections 26-27",
+      "rules": [
+        {"inputs": ["Risk", "increased_nonlife"], "output": "Must notify insurer", "legal_basis": "Section 26(1)", "source_text": "Vaaran lisääntyminen"},
+        {"inputs": ["Risk", "increase_effect"], "output": "Insurer may adjust terms", "legal_basis": "Section 26(2)", "source_text": "Ehtojen muuttaminen"},
+        {"inputs": ["Risk", "increase_life"], "output": "Different rules for life", "legal_basis": "Section 27", "source_text": "Henkilövakuutus"},
+        {"inputs": ["Risk", "no_increase"], "output": "No adjustment if immaterial", "legal_basis": "Section 35", "source_text": "Olennaisuus"}
+      ]
+    },
+    {
+      "name": "PremiumPayment",
+      "description": "Premium payment obligations",
+      "legal_source": "Section 38",
+      "rules": [
+        {"inputs": ["Premium", "due"], "output": "Must pay when due", "legal_basis": "Section 38(1)", "source_text": "Maksuvelvollisuus"},
+        {"inputs": ["Premium", "location"], "output": "Pay to insurer or bank", "legal_basis": "Section 38(2)", "source_text": "Pankkiin"},
+        {"inputs": ["Premium", "late"], "output": "Late fee may apply", "legal_basis": "Section 39", "source_text": "Viivästyskorko"},
+        {"inputs": ["Premium", "non_payment"], "output": "Coverage may lapse", "legal_basis": "Section 40", "source_text": "Vastuun lakkaaminen"}
+      ]
+    },
+    {
+      "name": "LatePremiumConsequences",
+      "description": "Consequences of late premium payment",
+      "legal_source": "Section 39",
+      "rules": [
+        {"inputs": ["Payment", "late"], "output": "Interest on late payment", "legal_basis": "Section 39(1)", "source_text": "Viivästyskorko"},
+        {"inputs": ["Payment", "reminder"], "output": "Reminder fee may apply", "legal_basis": "Section 39(2)", "source_text": "Muistutusmaksu"},
+        {"inputs": ["Payment", "collection"], "output": "May use debt collection", "legal_basis": "Section 39(3)", "source_text": "Perintä"},
+        {"inputs": ["Payment", "exemption"], "output": "Late payment interest exempt in some cases", "legal_basis": "Section 39(4)", "source_text": "Poikkeukset"}
+      ]
+    },
+    {
+      "name": "CoverageLapseNonPayment",
+      "description": "Coverage lapse due to non-payment",
+      "legal_source": "Section 40",
+      "rules": [
+        {"inputs": ["NonPayment", "continuous"], "output": "Coverage lapses", "legal_basis": "Section 40(1)", "source_text": "Vastuu lakkaa"},
+        {"inputs": ["NonPayment", "demand"], "output": "After written demand", "legal_basis": "Section 40(1)", "source_text": "Kirjallinen vaatimus"},
+        {"inputs": ["NonPayment", "grace"], "output": "14-day grace period", "legal_basis": "Section 40(1)", "source_text": "14 päivää"},
+        {"inputs": ["NonPayment", "reinstatement"], "output": "Can reinstate by paying", "legal_basis": "Section 40(2)", "source_text": "Jälleenvoimaansaattaminen"}
+      ]
+    },
+    {
+      "name": "BeneficiaryDesignation",
+      "description": "Rules for designating beneficiary",
+      "legal_source": "Sections 47-48",
+      "rules": [
+        {"inputs": ["Beneficiary", "can_designate"], "output": "Can designate in life insurance", "legal_basis": "Section 47(1)", "source_text": "Edunsaajan määrääminen"},
+        {"inputs": ["Beneficiary", "form"], "output": "Must be in writing", "legal_basis": "Section 48(1)", "source_text": "Kirjallinen muoto"},
+        {"inputs": ["Beneficiary", "revocation"], "output": "Can revoke", "legal_basis": "Section 49", "source_text": "Peruuttaminen"},
+        {"inputs": ["Beneficiary", "death"], "output": "Falls if beneficiary predeceases", "legal_basis": "Section 49", "source_text": "Raukeaminen"}
+      ]
+    },
+    {
+      "name": "OverInsurance",
+      "description": "Rules for over-insurance",
+      "legal_source": "Section 57",
+      "rules": [
+        {"inputs": ["Insurance", "exceeds_value"], "output": "Is over-insurance", "legal_basis": "Section 57(1)", "source_text": "Ylivakuutus"},
+        {"inputs": ["OverInsurance", "intent"], "output": "Void if intentional", "legal_basis": "Section 57(2)", "source_text": "Tahallinen"},
+        {"inputs": ["OverInsurance", "contributory"], "output": "Pay only actual loss", "legal_basis": "Section 57(3)", "source_text": "Todellinen vahinko"},
+        {"inputs": ["OverInsurance", "premium"], "output": "Premium refund for excess", "legal_basis": "Section 57(4)", "source_text": "Maksun palautus"}
+      ]
+    },
+    {
+      "name": "UnderInsurance",
+      "description": "Rules for under-insurance",
+      "legal_source": "Section 58",
+      "rules": [
+        {"inputs": ["Insurance", "less_than_value"], "output": "Is under-insurance", "legal_basis": "Section 58(1)", "source_text": "Alivakuutus"},
+        {"inputs": ["UnderInsurance", "proportionate"], "output": "Compensation proportionate", "legal_basis": "Section 58(1)", "source_text": "Suhteellinen korvaus"},
+        {"inputs": ["UnderInsurance", "full_value"], "output": "Full value can be required", "legal_basis": "Section 58(2)", "source_text": "Täysi arvo"},
+        {"inputs": ["UnderInsurance", "premium"], "output": "Premium adjustment possible", "legal_basis": "Section 58(3)", "source_text": "Maksun tarkistus"}
+      ]
+    },
+    {
+      "name": "MultipleInsurance",
+      "rules": [
+        {"inputs": ["Multiple", "same_risk"], "output": "Is multiple insurance", "legal_basis": "Section 59(1)", "source_text": "Monivakuutus"},
+        {"inputs": ["Multiple", "claim"], "output": "Can claim from any insurer", "legal_basis": "Section 59(2)", "source_text": "Vaatia keneltä tahansa"},
+        {"inputs": ["Multiple", "indemnify"], "output": "Insurers share liability", "legal_basis": "Section 60", "source_text": "Vastuun jakaminen"},
+        {"inputs": ["Multiple", "recover"], "output": "Can recover from others", "legal_basis": "Section 60(2)", "source_text": "Takautumisoikeus"}
+      ]
+    },
+    {
+      "name": "SalvageCosts",
+      "description": "Coverage for salvage costs",
+      "legal_source": "Section 61",
+      "rules": [
+        {"inputs": ["Costs", "salvage"], "output": "Covered if reasonable", "legal_basis": "Section 61(1)", "source_text": "Pelastamiskustannukset"},
+        {"inputs": ["Costs", "prevention"], "output": "Covered for prevention", "legal_basis": "Section 61(1)", "source_text": "Ehkäisykustannukset"},
+        {"inputs": ["Costs", "reasonable"], "output": "Must be reasonable", "legal_basis": "Section 61(2)", "source_text": "Kohtuulliset"},
+        {"inputs": ["Costs", "limit"], "output": "Limited to insurance sum", "legal_basis": "Section 61(3)", "source_text": "Vakuutusmäärään"}
+      ]
+    },
+    {
+      "name": "ThirdPartyRights",
+      "description": "Third party rights in non-life insurance",
+      "legal_source": "Section 62",
+      "rules": [
+        {"inputs": ["ThirdParty", "property_insured"], "output": "Has rights to compensation", "legal_basis": "Section 62(1)", "source_text": "Kolmas henkilö"},
+        {"inputs": ["Owner", "changed"], "output": "New owner covered", "legal_basis": "Section 63", "source_text": "Omistajan vaihtuminen"},
+        {"inputs": ["ThirdParty", "claim"], "output": "Can claim directly", "legal_basis": "Section 65", "source_text": "Vaatia korvausta"},
+        {"inputs": ["Liability", "third_party"], "output": "Third party liability insurance", "legal_basis": "Section 67", "source_text": "Vastuuvakuutus"}
+      ]
+    },
+    {
+      "name": "ClaimProcedure",
+      "description": "Insurance claim procedure",
+      "legal_source": "Sections 69-70",
+      "rules": [
+        {"inputs": ["Claim", "documentation"], "output": "Must provide documentation", "legal_basis": "Section 69(1)", "source_text": "Selvitykset"},
+        {"inputs": ["Claim", "time"], "output": "Without undue delay", "legal_basis": "Section 69(2)", "source_text": "Viipymättä"},
+        {"inputs": ["Claim", "payment"], "output": "Pay within 30 days", "legal_basis": "Section 70(1)", "source_text": "30 päivää"},
+        {"inputs": ["Claim", "dispute"], "output": "Provide reasons for denial", "legal_basis": "Section 70(2)", "source_text": "Hylkäyksen perusteet"}
+      ]
+    },
+    {
+      "name": "ClaimLimitationPeriod",
+      "description": "Time limits for claims",
+      "legal_source": "Section 73",
+      "rules": [
+        {"inputs": ["Claim", "limit"], "output": "3 years from claim right arose", "legal_basis": "Section 73(1)", "source_text": "3 vuotta"},
+        {"inputs": ["Claim", "knowledge"], "output": "From when learned of event", "legal_basis": "Section 73(1)", "source_text": "Tieto tapahtumasta"},
+        {"inputs": ["Claim", "max"], "output": "Max 10 years from event", "legal_basis": "Section 73(2)", "source_text": "10 vuotta"},
+        {"inputs": ["Claim", "insurance"], "output": "Life insurance 10 years", "legal_basis": "Section 73(3)", "source_text": "Henkilövakuutus 10 vuotta"}
+      ]
+    },
+    {
+      "name": "GroupInsuranceRules",
+      "description": "Special rules for group insurance",
+      "legal_source": "Section 76",
+      "rules": [
+        {"inputs": ["Group", "information"], "output": "Provide group information", "legal_basis": "Section 76(1)", "source_text": "Ryhmätiedot"},
+        {"inputs": ["Group", "termination"], "output": "Notify of termination", "legal_basis": "Section 77", "source_text": "Päättymisilmoitus"},
+        {"inputs": ["Member", "rights"], "output": "Member rights apply", "legal_basis": "Section 78", "source_text": "Jäsenen oikeudet"},
+        {"inputs": ["Member", "continuation"], "output": "Right to continue individually", "legal_basis": "Section 80", "source_text": "Jatkaminen yksilöllisenä"}
+      ]
+    }
+  ]
+}
