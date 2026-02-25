@@ -55,7 +55,9 @@ st.markdown("""
 @st.cache_data
 def load_ontology():
     """Load the ontology JSON file"""
-    with open('liikennevakuutuslaki/car_insurance_ontology.json') as f:
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    ontology_path = os.path.join(script_dir, 'car_insurance_ontology.json')
+    with open(ontology_path) as f:
         return json.load(f)
 
 @st.cache_data
