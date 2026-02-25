@@ -413,6 +413,27 @@
       "finnish_name": "Rekisteristä poistaminen",
       "description": "Removal from insurance distribution register",
       "legal_basis": "Section 73"
+    },
+    "Exemption": {
+      "finnish_name": "Poikkeus",
+      "description": "Exemptions from this Act",
+      "legal_basis": "Section 3",
+      "types": ["incidental_activities", "legal_advisers", "travel_agents", "banks"]
+    },
+    "AnnualReport": {
+      "finnish_name": "Vuosikertomus",
+      "description": "Annual activities report to FIN-FSA",
+      "legal_basis": "Section 66a"
+    },
+    "BestExecution": {
+      "finnish_name": "Paras toteutus",
+      "description": "Best execution for customer orders",
+      "legal_basis": "Section 44"
+    },
+    "CustomerClassification": {
+      "finnish_name": "Asiakkaan luokittelu",
+      "description": "Classification categories for customers",
+      "legal_basis": "Section 5(13)"
     }
   },
   "relationships": [

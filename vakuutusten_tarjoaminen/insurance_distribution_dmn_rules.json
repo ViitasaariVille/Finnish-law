@@ -435,6 +435,594 @@
         {"inputs": ["Applicant", "prior_violations"], "output": "Refuse - prior serious violations", "legal_basis": "Section 7(3)", "source_text": "Vakavia rikkomuksia"},
         {"inputs": ["Applicant", "refused"], "output": "Can reapply after 5 years", "legal_basis": "Section 7(4)", "source_text": "Uudelleenhakeminen 5 vuoden jälkeen"}
       ]
+    },
+    {
+      "name": "DirectivesFromPrincipal",
+      "description": "Insurance company instructions to agents",
+      "legal_source": "Section 39",
+      "rules": [
+        {"inputs": ["Insurer", "any"], "output": "Can give instructions", "legal_basis": "Section 39(1)", "source_text": "Antaa ohjeita"},
+        {"inputs": ["Insurer", "monitor"], "output": "Must monitor agent compliance", "legal_basis": "Section 39(2)", "source_text": "Valvonta"},
+        {"inputs": ["Agent", "violation"], "output": "Must take measures", "legal_basis": "Section 39(2)", "source_text": "Toimenpiteet"},
+        {"inputs": ["Insurer", "liability"], "output": "Liable for agent actions", "legal_basis": "Section 39(3)", "source_text": "Vastuu asiamiehen toimista"}
+      ]
+    },
+    {
+      "name": "CompensationClaimProcessing",
+      "description": "Processing customer compensation claims",
+      "legal_source": "Section 48",
+      "rules": [
+        {"inputs": ["Claim", "any"], "output": "Handle promptly and diligently", "legal_basis": "Section 48(1)", "source_text": "Huolellisesti"},
+        {"inputs": ["Claim", "incomplete"], "output": "Request missing information", "legal_basis": "Section 48(2)", "source_text": "Pyydä puuttuvat tiedot"},
+        {"inputs": ["Claim", "denied"], "output": "Provide reasons in writing", "legal_basis": "Section 48(3)", "source_text": "Kirjalliset perusteet"},
+        {"inputs": ["Claim", "insurance"], "output": "Forward to insurer without delay", "legal_basis": "Section 48(4)", "source_text": "Välittömästi vakuutuksenantajalle"}
+      ]
+    },
+    {
+      "name": "RegisterDetails",
+      "description": "Details required in distribution register",
+      "legal_source": "Section 9",
+      "rules": [
+        {"inputs": ["NaturalPerson", "register"], "output": "Name, address, principal(s)", "legal_basis": "Section 9(1)", "source_text": "Nimi, osoite, päämiesten tiedot"},
+        {"inputs": ["LegalPerson", "register"], "output": "Company details, responsible person", "legal_basis": "Section 9(2)", "source_text": "Yrityksen tiedot, vastuuhenkilö"},
+        {"inputs": ["Any", "changes"], "output": "Notify changes within 30 days", "legal_basis": "Section 10", "source_text": "Muutokset 30 päivässä"},
+        {"inputs": ["Register", "public"], "output": "Public online access", "legal_basis": "Section 11", "source_text": "Julkinen verkkopalvelu"}
+      ]
+    },
+    {
+      "name": "DeregistrationGrounds",
+      "description": "Grounds for removal from register",
+      "legal_source": "Section 12",
+      "rules": [
+        {"inputs": ["Entity", "written_request"], "output": "Deregister on request", "legal_basis": "Section 12(1)", "source_text": "Kirjallinen pyyntö"},
+        {"inputs": ["Entity", "ceased_activity"], "output": "Deregister if activity ceased", "legal_basis": "Section 12(1)", "source_text": "Toiminta lakannut"},
+        {"inputs": ["Entity", "conditions_not_met"], "output": "Deregister if conditions no longer met", "legal_basis": "Section 12(2)", "source_text": "Edellytykset eivät enää täyty"},
+        {"inputs": ["Entity", "repeated_violations"], "output": "Deregister for repeated violations", "legal_basis": "Section 12(3)", "source_text": "Toistuvat rikkomukset"}
+      ]
+    },
+    {
+      "name": "PrincipalLiability",
+      "description": "Liability of insurance company for distributor",
+      "legal_source": "Section 39",
+      "rules": [
+        {"inputs": ["Insurer", "agent"], "output": "Liable for agent conduct", "legal_basis": "Section 39(3)", "source_text": "Vastuu asiamiehen toimista"},
+        {"inputs": ["Insurer", "broker"], "output": "Not liable for broker", "legal_basis": "Section 39(3)", "source_text": "Ei vastuuta meklarista"},
+        {"inputs": ["Broker", "damage"], "output": "Directly liable to customer", "legal_basis": "Section 74", "source_text": "Suora vastuu asiakkaalle"}
+      ]
+    },
+    {
+      "name": "CooperationDuties",
+      "description": "Cooperation with supervisory authority",
+      "legal_source": "Section 66",
+      "rules": [
+        {"inputs": ["Any", "information"], "output": "Provide information to FIN-FSA", "legal_basis": "Section 66(1)", "source_text": "Tietojen antaminen"},
+        {"inputs": ["Any", "inspection"], "output": "Allow inspections", "legal_basis": "Section 66(2)", "source_text": "Tarkastukset"},
+        {"inputs": ["Any", "investigation"], "output": "Cooperate in investigations", "legal_basis": "Section 66(3)", "source_text": "Selvitykset"},
+        {"inputs": ["Any", "measures"], "output": "Take remedial measures", "legal_basis": "Section 66(4)", "source_text": "Korjaavat toimenpiteet"}
+      ]
+    },
+    {
+      "name": "ReportingDuties",
+      "description": "Reporting to supervisory authority",
+      "legal_source": "Section 66a",
+      "rules": [
+        {"inputs": ["Broker", "annual_report"], "output": "Submit annual activities report", "legal_basis": "Section 66a(1)", "source_text": "Vuosikertomus"},
+        {"inputs": ["Broker", "significant_changes"], "output": "Report significant changes", "legal_basis": "Section 66a(2)", "source_text": "Merkitsevät muutokset"},
+        {"inputs": ["Broker", "complaints"], "output": "Report customer complaints", "legal_basis": "Section 66a(3)", "source_text": "Valitukset"}
+      ]
+    },
+    {
+      "name": "RecordKeepingRequirements",
+      "description": "Comprehensive record keeping",
+      "legal_source": "Section 78",
+      "rules": [
+        {"inputs": ["All", "transactions"], "output": "Keep all transaction records", "legal_basis": "Section 78(1)", "source_text": "Kaikki liiketapahtumat"},
+        {"inputs": ["All", "communications"], "output": "Keep records of communications", "legal_basis": "Section 78(1)", "source_text": "Viestintätiedot"},
+        {"inputs": ["All", "5_years"], "output": "Retain minimum 5 years", "legal_basis": "Section 78(1)", "source_text": "Vähintään 5 vuotta"},
+        {"inputs": ["All", "format"], "output": "Keep in durable format", "legal_basis": "Section 78(2)", "source_text": "Kestävässä muodossa"}
+      ]
+    },
+    {
+      "name": "ComplaintHandling",
+      "description": "Customer complaint handling procedures",
+      "legal_source": "Section 48",
+      "rules": [
+        {"inputs": ["Complaint", "received"], "output": "Acknowledge receipt", "legal_basis": "Section 48(1)", "source_text": "Kuittaus vastaanotosta"},
+        {"inputs": ["Complaint", "investigate"], "output": "Investigate thoroughly", "legal_basis": "Section 48(1)", "source_text": "Perusteellisesti"},
+        {"inputs": ["Complaint", "respond"], "output": "Respond within reasonable time", "legal_basis": "Section 48(1)", "source_text": "Kohtuullinen aika"},
+        {"inputs": ["Complaint", "escalate"], "output": "Escalate if unresolved", "legal_basis": "Section 64", "source_text": "Vakuutusedustuslautakunta"}
+      ]
+    },
+    {
+      "name": "DisclosureToInsurer",
+      "description": "Disclosure requirements to insurance company",
+      "legal_source": "Section 36",
+      "rules": [
+        {"inputs": ["Broker", "customer_info"], "output": "Disclose customer information to insurer", "legal_basis": "Section 36(1)", "source_text": "Asiakkaan tiedot"},
+        {"inputs": ["Broker", "material_facts"], "output": "Disclose all material facts", "legal_basis": "Section 36(2)", "source_text": "Kaikki olennaiset tiedot"},
+        {"inputs": ["Broker", "changes"], "output": "Notify of changes", "legal_basis": "Section 36(3)", "source_text": "Muutoksista ilmoittaminen"}
+      ]
+    },
+    {
+      "name": "InsuranceDistributionBoard",
+      "description": "Insurance Distribution Board procedures",
+      "legal_source": "Section 64",
+      "rules": [
+        {"inputs": ["Complaint", "any"], "output": "Board can issue recommendations", "legal_basis": "Section 64(1)", "source_text": "Suositukset"},
+        {"inputs": ["Complaint", "unresolved"], "output": "Board mediates disputes", "legal_basis": "Section 64(2)", "source_text": "Riitojen sovittelu"},
+        {"inputs": ["Board", "opinion"], "output": "Opinion not binding", "legal_basis": "Section 64(3)", "source_text": "Sitova ei ole"},
+        {"inputs": ["Board", "annual_report"], "output": "Board publishes annual report", "legal_basis": "Section 64(4)", "source_text": "Vuosikertomus"}
+      ]
+    },
+    {
+      "name": "Exemptions",
+      "description": "Exemptions from this Act",
+      "legal_source": "Section 3",
+      "rules": [
+        {"inputs": ["Activity", "incidental"], "output": "Incidental activities exempt", "legal_basis": "Section 3(1)", "source_text": "Satunnaiset toimet"},
+        {"inputs": ["Activity", "legal_adviser"], "output": "Legal advisers exempt if insurance secondary", "legal_basis": "Section 3(2)", "source_text": "Asianajajat"},
+        {"inputs": ["Activity", "travel_agent"], "output": "Travel agents limited exemption", "legal_basis": "Section 3(3)", "source_text": "Matkatoimistot"},
+        {"inputs": ["Activity", "bank"], "output": "Banks exempt for certain activities", "legal_basis": "Section 3(4)", "source_text": "Pankit"}
+      ]
+    },
+    {
+      "name": "FeeDisclosure",
+      "description": "Fee disclosure requirements",
+      "legal_source": "Section 38",
+      "rules": [
+        {"inputs": ["Broker", "any"], "output": "Disclose all fees paid by customer", "legal_basis": "Section 38(1)", "source_text": "Asiakkaan maksamat maksut"},
+        {"inputs": ["Broker", "any"], "output": "Disclose all commissions received", "legal_basis": "Section 38(2)", "source_text": "Saadut palkkiot"},
+        {"inputs": ["Basis", "detailed"], "output": "Explain calculation basis", "legal_basis": "Section 38(3)", "source_text": "Laskentaperusteet"},
+        {"inputs": ["Total", "disclose"], "output": "Disclose total remuneration", "legal_basis": "Section 38(4)", "source_text": "Kokonaispalkkio"}
+      ]
+    },
+    {
+      "name": "BestExecution",
+      "description": "Best execution for customer orders",
+      "legal_source": "Section 44",
+      "rules": [
+        {"inputs": ["Order", "any"], "output": "Execute on best terms", "legal_basis": "Section 44(1)", "source_text": "Parhaat ehdot"},
+        {"inputs": ["Order", "instructions"], "output": "Follow customer instructions", "legal_basis": "Section 44(2)", "source_text": "Asiakkaan ohjeet"},
+        {"inputs": ["Order", "monitor"], "output": "Monitor execution quality", "legal_basis": "Section 44(3)", "source_text": "Laadun seuranta"},
+        {"inputs": ["Order", "disclose"], "output": "Disclose execution policy", "legal_basis": "Section 44(4)", "source_text": "Toimeenpanokäytäntö"}
+      ]
+    },
+    {
+      "name": "ConflictOfInterestPolicy",
+      "description": "Conflict of interest identification and management",
+      "legal_source": "Section 45",
+      "rules": [
+        {"inputs": ["Company", "any"], "output": "Identify conflicts", "legal_basis": "Section 45(1)", "source_text": "Tunnistaa eturistiriidat"},
+        {"inputs": ["Company", "prevent"], "output": "Prevent conflicts damaging customers", "legal_basis": "Section 45(2)", "source_text": "Estää vahingot"},
+        {"inputs": ["Company", "disclose"], "output": "Disclose conflicts not avoidable", "legal_basis": "Section 45(3)", "source_text": "Ilmoittaa eturistiriidoista"},
+        {"inputs": ["Company", "policy"], "output": "Maintain written policy", "legal_basis": "Section 45(4)", "source_text": "Kirjallinen politiikka"}
+      ]
+    },
+    {
+      "name": "ProductOversight",
+      "description": "Product oversight and governance requirements",
+      "legal_source": "Section 42",
+      "rules": [
+        {"inputs": ["Insurer", "products"], "output": "Define target market", "legal_basis": "Section 42(2)", "source_text": "Kohdemarkkinat"},
+        {"inputs": ["Insurer", "products"], "output": "Test products before launch", "legal_basis": "Section 42(3)", "source_text": "Testaaminen"},
+        {"inputs": ["Insurer", "distribution"], "output": "Monitor distribution", "legal_basis": "Section 42(4)", "source_text": "Jakelun seuranta"},
+        {"inputs": ["Insurer", "review"], "output": "Regular product reviews", "legal_basis": "Section 42(5)", "source_text": "Säännöllinen tarkistaminen"}
+      ]
+    },
+    {
+      "name": "CustomerClassification",
+      "description": "Classification of customers",
+      "legal_source": "Section 5",
+      "rules": [
+        {"inputs": ["Customer", "natural_person"], "output": "Consumer if non-business", "legal_basis": "Section 5(13)", "source_text": "Kuluttaja"},
+        {"inputs": ["Customer", "professional"], "output": "Professional if meets criteria", "legal_basis": "Section 5(13)", "source_text": "Ammattimainen"},
+        {"inputs": ["Customer", "eligible_counterparty"], "output": "Eligible counterparty if large", "legal_basis": "Section 5(13)", "source_text": "Kelpaava sopijapuoli"},
+        {"inputs": ["Customer", "default"], "output": "Default to consumer", "legal_basis": "Section 5(13)", "source_text": "Oletuksena kuluttaja"}
+      ]
+    },
+    {
+      "name": "InformationToPublic",
+      "description": "Information made public by FIN-FSA",
+      "legal_source": "Section 66",
+      "rules": [
+        {"inputs": ["FIN-FSA", "register"], "output": "Maintain public register", "legal_basis": "Section 66(1)", "source_text": "Julkinen rekisteri"},
+        {"inputs": ["FIN-FSA", "sanctions"], "output": "Publish sanctions decisions", "legal_basis": "Section 66(2)", "source_text": "Seuraamuspäätökset"},
+        {"inputs": ["FIN-FSA", "warnings"], "output": "Publish warnings", "legal_basis": "Section 66(3)", "source_text": "Varoitukset"},
+        {"inputs": ["FIN-FSA", "statistics"], "output": "Publish statistics", "legal_basis": "Section 66(4)", "source_text": "Tilastot"}
+      ]
+    },
+    {
+      "name": "InternationalCooperation",
+      "description": "International cooperation in supervision",
+      "legal_source": "Section 69",
+      "rules": [
+        {"inputs": ["FIN-FSA", "EEA"], "output": "Cooperate with EEA authorities", "legal_basis": "Section 69(1)", "source_text": "ETA-valvontaviranomaiset"},
+        {"inputs": ["FIN-FSA", "EIOPA"], "output": "Cooperate with EIOPA", "legal_basis": "Section 69(2)", "source_text": "EIOPA"},
+        {"inputs": ["FIN-FSA", "exchange"], "output": "Exchange information", "legal_basis": "Section 69(3)", "source_text": "Tietojen vaihto"},
+        {"inputs": ["FIN-FSA", "joint"], "output": "Joint inspections possible", "legal_basis": "Section 69(4)", "source_text": "Yhteistarkastukset"}
+      ]
+    },
+    {
+      "name": "CriminalPenalties",
+      "description": "Criminal penalties for violations",
+      "legal_source": "Section 83",
+      "rules": [
+        {"inputs": ["Violation", "operating_without_registration"], "output": "Fine or imprisonment up to 1 year", "legal_basis": "Section 83(1)", "source_text": "Rekisteröimätön toiminta"},
+        {"inputs": ["Violation", "false_information"], "output": "Fine for false information", "legal_basis": "Section 83(2)", "source_text": "Väärät tiedot"},
+        {"inputs": ["Violation", "confidentiality"], "output": "Fine for breach of confidentiality", "legal_basis": "Section 83(3)", "source_text": "Salassapitomääräysten rikkominen"},
+        {"inputs": ["Violation", "obstruction"], "output": "Fine for obstructing supervision", "legal_basis": "Section 83(4)", "source_text": "Valvonnan estäminen"}
+      ]
+    },
+    {
+      "name": "TransitionalProvisions",
+      "description": "Transitional provisions for existing operators",
+      "legal_source": "Section 84",
+      "rules": [
+        {"inputs": ["Existing", "registered"], "output": "Can continue operating", "legal_basis": "Section 84(1)", "source_text": "Jatkaa toimintaa"},
+        {"inputs": ["Existing", "deadline"], "output": "Meet requirements by deadline", "legal_basis": "Section 84(2)", "source_text": "Määräaika"},
+        {"inputs": ["Existing", "exam"], "output": "Broker exam deadline", "legal_basis": "Section 84(3)", "source_text": "Tutkinto"},
+        {"inputs": ["Existing", "insurance"], "output": "Insurance deadline", "legal_basis": "Section 84(4)", "source_text": "Vakuutus"}
+      ]
+    },
+    {
+      "name": "EntryIntoForce",
+      "description": "Entry into force and implementation",
+      "legal_source": "Section 85",
+      "rules": [
+        {"inputs": ["Law", "effective"], "output": "Effective from 1 January 2019", "legal_basis": "Section 85", "source_text": "Voimaan 1.1.2019"},
+        {"inputs": ["Law", "applications"], "output": "Applications from 1 January 2019", "legal_basis": "Section 85(1)", "source_text": "Hakemukset"},
+        {"inputs": ["Law", "existing"], "output": "Existing operators transition period", "legal_basis": "Section 85(2)", "source_text": "Siirtymäaika"}
+      ]
+    },
+    {
+      "name": "TravelInsuranceExemption",
+      "description": "Special rules for travel insurance",
+      "legal_source": "Section 3",
+      "rules": [
+        {"inputs": ["TravelAgent", "ancillary"], "output": "Exempt if ancillary to main business", "legal_basis": "Section 3(3)", "source_text": "Sivutoiminen"},
+        {"inputs": ["TravelAgent", "cover_note"], "output": "Can issue cover notes", "legal_basis": "Section 3(3)", "source_text": "Vakuutuskirja"},
+        {"inputs": ["TravelAgent", "premium_limit"], "output": "Premium limit applies", "legal_basis": "Section 3(3)", "source_text": "Vakuutusmaksun raja"},
+        {"inputs": ["TravelAgent", "disclose"], "output": "Must disclose insurer", "legal_basis": "Section 3(3)", "source_text": "Ilmoitettava vakuutuksenantaja"}
+      ]
+    },
+    {
+      "name": "BankExemption",
+      "description": "Exemptions for banks and credit institutions",
+      "legal_source": "Section 3(4)",
+      "rules": [
+        {"inputs": ["Bank", "travel_cover"], "output": "Travel insurance exempt", "legal_basis": "Section 3(4)", "source_text": "Matkustajavakuutus"},
+        {"inputs": ["Bank", "collateral"], "output": "Collateral insurance exempt", "legal_basis": "Section 3(4)", "source_text": "Vakuusvakuutus"},
+        {"inputs": ["Bank", "payment"], "output": "Payment protection exempt", "legal_basis": "Section 3(4)", "source_text": "Maksusuojavakuutus"}
+      ]
+    },
+    {
+      "name": "LegalAdviserExemption",
+      "description": "Exemptions for legal practitioners",
+      "legal_source": "Section 3(2)",
+      "rules": [
+        {"inputs": ["Lawyer", "insurance_ancillary"], "output": "Exempt if insurance is ancillary", "legal_basis": "Section 3(2)", "source_text": "Sivutoiminen"},
+        {"inputs": ["Lawyer", "not_hold_self_out"], "output": "Must not hold self out as insurer", "legal_basis": "Section 3(2)", "source_text": "Ei pitäytyä vakuuttajana"},
+        {"inputs": ["Lawyer", "professional_rules"], "output": "Subject to professional rules", "legal_basis": "Section 3(2)", "source_text": "Ammattisäännöt"}
+      ]
+    },
+    {
+      "name": "NotificationContent",
+      "description": "Content requirements for notifications",
+      "legal_source": "Section 22",
+      "rules": [
+        {"inputs": ["Notification", "insurer"], "output": "Insurer details", "legal_basis": "Section 22(1)", "source_text": "Vakuutuksenantajan tiedot"},
+        {"inputs": ["Notification", "member_state"], "output": "Member state details", "legal_basis": "Section 22(1)", "source_text": "Jäsenvaltion tiedot"},
+        {"inputs": ["Notification", "insurance_type"], "output": "Insurance types", "legal_basis": "Section 22(1)", "source_text": "Vakuutuslajit"},
+        {"inputs": ["Notification", "establishment"], "output": "If establishment, address and manager", "legal_basis": "Section 22(2)", "source_text": "Toimipiste ja vastaava"}
+      ]
+    },
+    {
+      "name": "ProfessionalQualificationEvidence",
+      "description": "Evidence of professional qualification",
+      "legal_source": "Section 18",
+      "rules": [
+        {"inputs": ["Exam", "broker_exam"], "output": "Certificate from Finnish exam", "legal_basis": "Section 18(1)", "source_text": "Suomalainen tutkinto"},
+        {"inputs": ["Exam", "EU_equivalent"], "output": "EU recognized qualification", "legal_basis": "Section 18(2)", "source_text": "EU-tunnustaminen"},
+        {"inputs": ["Exam", "practical_experience"], "output": "3 years practical experience accepted", "legal_basis": "Section 18(3)", "source_text": "Käytännön kokemus"},
+        {"inputs": ["Exam", "assessment"], "content": "FIN-FSA may assess equivalence", "legal_basis": "Section 18(4)", "source_text": "Finanssivalvonnan arviointi"}
+      ]
+    },
+    {
+      "name": "GoodReputationEvidence",
+      "description": "Evidence requirements for good reputation",
+      "legal_source": "Section 16",
+      "rules": [
+        {"inputs": ["Evidence", "criminal_record"], "output": "Criminal record certificate", "legal_basis": "Section 16", "source_text": "Rikosrekisteriote"},
+        {"inputs": ["Evidence", "bankruptcy"], "output": "Bankruptcy status certificate", "legal_basis": "Section 16", "source_text": "Konkurssitodistus"},
+        {"inputs": ["Evidence", "business_ban"], "output": "Business ban certificate", "legal_basis": "Section 16", "source_text": "Liiketoimintakieltotodistus"},
+        {"inputs": ["Evidence", "recent"], "output": "Must be recent (3 months)", "source_text": "Tuore (3 kk)", "legal_basis": "Section 16"}
+      ]
+    },
+    {
+      "name": "SupervisionFee",
+      "description": "Supervision fee requirements",
+      "legal_source": "Section 66b",
+      "rules": [
+        {"inputs": ["Entity", "registered"], "output": "Annual supervision fee", "legal_basis": "Section 66b(1)", "source_text": "Vuosimaksu"},
+        {"inputs": ["Entity", "fee_based_on"], "output": "Fee based on operations", "legal_basis": "Section 66b(2)", "source_text": "Toiminnan mukaan"},
+        {"inputs": ["Entity", "payment"], "output": "Payment deadline 30 days", "legal_basis": "Section 66b(3)", "source_text": "Maksuaika 30 päivää"},
+        {"inputs": ["Entity", "default"], "output": "Late payment interest", "legal_basis": "Section 66b(4)", "source_text": "Viivästyskorko"}
+      ]
+    },
+    {
+      "name": "DistanceMarketing",
+      "description": "Distance marketing requirements",
+      "legal_source": "Section 13",
+      "rules": [
+        {"inputs": ["Marketing", "distance"], "output": "Prior information required", "legal_basis": "Section 13(1)", "source_text": "Ennakkotiedot"},
+        {"inputs": ["Marketing", "written"], "output": "Written confirmation", "legal_basis": "Section 13(2)", "source_text": "Kirjallinen vahvistus"},
+        {"inputs": ["Marketing", "easy_access"], "output": "Information easily accessible", "legal_basis": "Section 13(3)", "source_text": " helposti saatavilla"},
+        {"inputs": ["Marketing", "language"], "output": "In customer's language", "legal_basis": "Section 13(4)", "source_text": "Asiakkaan kielellä"}
+      ]
+    },
+    {
+      "name": "DataProtection",
+      "description": "Data protection requirements",
+      "legal_source": "Section 79",
+      "rules": [
+        {"inputs": ["Data", "customer"], "output": "Customer data protected", "legal_basis": "Section 79(1)", "source_text": "Asiakastiedot"},
+        {"inputs": ["Data", "processing"], "output": "Lawful processing only", "legal_basis": "Section 79(2)", "source_text": "Käsittely lain mukaan"},
+        {"inputs": ["Data", "retention"], "output": "Retention period 5 years minimum", "legal_basis": "Section 79(3)", "source_text": "Säilytys 5 vuotta"},
+        {"inputs": ["Data", "breach"], "output": "Report breaches to authority", "legal_basis": "Section 79(4)", "source_text": "Ilmoita viranomaiselle"}
+      ]
+    },
+    {
+      "name": "ProhibitionOnInducements",
+      "description": "Prohibition on improper inducements",
+      "legal_source": "Section 46",
+      "rules": [
+        {"inputs": ["Inducement", "improper"], "output": "Prohibited if impairs judgment", "legal_basis": "Section 46(1)", "source_text": "Kiellettyä jos heikentää"},
+        {"inputs": ["Inducement", "disclosure"], "output": "Must disclose all inducements", "legal_basis": "Section 46(2)", "source_text": "Ilmoitettava"},
+        {"inputs": ["Inducement", "reasonable"], "output": "Must be reasonable value", "legal_basis": "Section 46(3)", "source_text": "Kohtuullinen arvo"},
+        {"inputs": ["Inducement", "proportionate"], "output": "Must be proportionate", "legal_basis": "Section 46(4)", "source_text": "Oikeassa suhteessa"}
+      ]
+    },
+    {
+      "name": "InsuranceIntermediaryRegister",
+      "description": "Insurance intermediary register requirements",
+      "legal_source": "Section 9",
+      "rules": [
+        {"inputs": ["Register", "contents"], "output": "Contains all required details", "legal_basis": "Section 9(1-2)", "source_text": "Sisältö"},
+        {"inputs": ["Register", "update"], "output": "Updated within 30 days", "legal_basis": "Section 10", "source_text": "Päivitys 30 päivää"},
+        {"inputs": ["Register", "public"], "output": "Publicly accessible online", "legal_basis": "Section 11", "source_text": "Julkisesti saatavilla"},
+        {"inputs": ["Register", "extract"], "output": "Extract available to customers", "legal_basis": "Section 26", "source_text": "Ote asiakkaalle"}
+      ]
+    },
+    {
+      "name": "InsuranceProductClassification",
+      "description": "Classification of insurance products",
+      "legal_source": "Section 5",
+      "rules": [
+        {"inputs": ["Product", "life"], "output": "Life insurance", "legal_basis": "Section 5(4-5)", "source_text": "Henkivakuutus"},
+        {"inputs": ["Product", "non_life"], "output": "Non-life insurance", "legal_basis": "Section 5(6-7)", "source_text": "Vahinkovakuutus"},
+        {"inputs": ["Product", "investment"], "output": "Investment insurance", "legal_basis": "Section 5(12)", "source_text": "Sijoitusvakuutus"},
+        {"inputs": ["Product", "pension"], "output": "Pension product", "legal_basis": "Section 5(14)", "source_text": "Eläketuote"}
+      ]
+    },
+    {
+      "name": "AgentRepresentativeRequirements",
+      "description": "Requirements for agent representatives",
+      "legal_source": "Section 21",
+      "rules": [
+        {"inputs": ["Agent", "natural_person"], "output": "Registered as natural person", "legal_basis": "Section 21(1)", "source_text": "Luonnollinen henkilö"},
+        {"inputs": ["Agent", "legal_person"], "output": "Legal entity with responsible person", "legal_basis": "Section 21(2)", "source_text": "Oikeushenkilö"},
+        {"inputs": ["Agent", "multiple_principals"], "output": "Can represent multiple insurers", "legal_basis": "Section 21(3)", "source_text": "Useita päämiesten"},
+        {"inputs": ["Agent", "identity"], "output": "Must disclose identity to customers", "legal_basis": "Section 21(4)", "source_text": "Ilmoitettava identiteetti"}
+      ]
+    },
+    {
+      "name": "EEAInsuranceCompanyPassport",
+      "description": "EEA insurance company passport rights",
+      "legal_source": "Sections 24-25",
+      "rules": [
+        {"inputs": ["EEA_Company", "home_state"], "output": "Can operate in Finland", "legal_basis": "Section 24(1)", "source_text": "Suomessa toimiminen"},
+        {"inputs": ["EEA_Company", "services"], "output": "Can provide services cross-border", "legal_basis": "Section 24(1)", "source_text": "Rajat ylittävä palvelu"},
+        {"inputs": ["EEA_Company", "establishment"], "output": "Can establish branch", "legal_basis": "Section 25(1)", "source_text": "Toimipisteen perustaminen"},
+        {"inputs": ["EEA_Company", "notify"], "output": "Home state notifies Finland", "legal_basis": "Section 24(2)", "source_text": "Kotivaltio ilmoittaa"}
+      ]
+    },
+    {
+      "name": "InsuranceDistributionServiceTypes",
+      "description": "Types of insurance distribution services",
+      "legal_source": "Section 2",
+      "rules": [
+        {"inputs": ["Service", "advice"], "output": "Advice on insurance", "legal_basis": "Section 2(1)", "source_text": "Neuvonta"},
+        {"inputs": ["Service", "presentation"], "output": "Presentation of insurance products", "legal_basis": "Section 2(1)", "source_text": "Tuotteiden esittely"},
+        {"inputs": ["Service", "preparation"], "description": "Preparation of insurance contracts", "legal_basis": "Section 2(1)", "source_text": "Sopimuksen valmistelu"},
+        {"inputs": ["Service", "conclusion"], "output": "Concluding insurance contracts", "legal_basis": "Section 2(1)", "source_text": "Sopimuksen päättäminen"}
+      ]
+    },
+    {
+      "name": "ProfessionalIndemnityRequirements",
+      "description": "Professional indemnity insurance requirements",
+      "legal_source": "Section 58",
+      "rules": [
+        {"inputs": ["Broker", "registered"], "output": "Must have professional indemnity", "legal_basis": "Section 58(1)", "source_text": "Vastuuvakuutus"},
+        {"inputs": ["Broker", "minimum_per_claim"], "output": "Minimum 1,564,610 EUR per claim", "legal_basis": "Section 58(1)", "source_text": "1 564 610 euroa"},
+        {"inputs": ["Broker", "minimum_annual"], "output": "Minimum 2,315,610 EUR annual", "legal_basis": "Section 58(1)", "source_text": "2 315 610 euroa"},
+        {"inputs": ["Broker", "EEA_coverage"], "output": "Coverage in all EEA countries", "legal_basis": "Section 58(2)", "source_text": "Koko EEA-alue"}
+      ]
+    },
+    {
+      "name": "CompensationProcedure",
+      "description": "Compensation claim procedure",
+      "legal_source": "Section 74",
+      "rules": [
+        {"inputs": ["Customer", "damage"], "output": "Can claim compensation from broker", "legal_basis": "Section 74(1)", "source_text": "Korvausmeklarilta"},
+        {"inputs": ["Customer", "procedure"], "output": "Must follow claims procedure", "legal_basis": "Section 74(2)", "source_text": "Korvausmenettely"},
+        {"inputs": ["Customer", "time_limit"], "output": "Claim within 3 years", "legal_basis": "Section 74(3)", "source_text": "3 vuoden määräaika"},
+        {"inputs": ["Customer", "court"], "output": "Can take to court", "legal_basis": "Section 74(4)", "source_text": "Oikeuteen"}
+      ]
+    },
+    {
+      "name": "RightToInformation",
+      "description": "Customer right to information",
+      "legal_source": "Section 32",
+      "rules": [
+        {"inputs": ["Customer", "any"], "output": "Right to information about insurer", "legal_basis": "Section 32(1)", "source_text": "Vakuutuksenantaja"},
+        {"inputs": ["Customer", "any"], "output": "Right to information about distributor", "legal_basis": "Section 33(1)", "source_text": "Välittäjä"},
+        {"inputs": ["Customer", "advice"], "output": "Right to basis of advice", "legal_basis": "Section 37", "source_text": "Neuvon perusteet"},
+        {"inputs": ["Customer", "fees"], "output": "Right to fee information", "legal_basis": "Section 38", "source_text": "Maksutiedot"}
+      ]
+    },
+    {
+      "name": "CancellationRightsDetails",
+      "description": "Detailed cancellation rights",
+      "legal_source": "Section 61",
+      "rules": [
+        {"inputs": ["Cancellation", "14_days"], "output": "14 days from contract", "legal_basis": "Section 61(1)", "source_text": "14 päivää"},
+        {"inputs": ["Cancellation", "30_days"], "output": "30 days if not informed", "legal_basis": "Section 61(2)", "source_text": "30 päivää"},
+        {"inputs": ["Cancellation", "notice"], "output": "Written notice required", "legal_basis": "Section 61(3)", "source_text": "Kirjallinen ilmoitus"},
+        {"inputs": ["Cancellation", "refund"], "output": "Premium refunded within 30 days", "legal_basis": "Section 61(4)", "source_text": "Premium 30 päivässä"}
+      ]
+    },
+    {
+      "name": "InsuranceDistributionBoardPowers",
+      "description": "Powers of Insurance Distribution Board",
+      "legal_source": "Section 64",
+      "rules": [
+        {"inputs": ["Board", "complaints"], "output": "Can examine complaints", "legal_basis": "Section 64(1)", "source_text": "Valitusten käsittely"},
+        {"inputs": ["Board", "recommendations"], "output": "Can issue recommendations", "legal_basis": "Section 64(2)", "source_text": "Suositukset"},
+        {"inputs": ["Board", "mediation"], "output": "Can mediate disputes", "legal_basis": "Section 64(2)", "source_text": "Sovittelu"},
+        {"inputs": ["Board", "publication"], "output": "Can publish opinions", "legal_basis": "Section 64(4)", "source_text": "Julkaiseminen"}
+      ]
+    },
+    {
+      "name": "AdministrativeFineCalculation",
+      "description": "Calculation of administrative fines",
+      "legal_source": "Section 71",
+      "rules": [
+        {"inputs": ["Fine", "severity"], "output": "Based on violation severity", "legal_basis": "Section 71(1)", "source_text": "Rikkomuksen vakavuus"},
+        {"inputs": ["Fine", "benefit"], "output": "Based on benefit gained", "legal_basis": "Section 71(2)", "source_text": "Saatu etu"},
+        {"inputs": ["Fine", "financial"], "output": "Based on financial position", "legal_basis": "Section 71(3)", "source_text": "Taloudellinen tilanne"},
+        {"inputs": ["Fine", "maximum"], "output": "Maximum 5000 EUR per day", "legal_basis": "Section 71(4)", "source_text": "5000 euroa/päivä"}
+      ]
+    },
+    {
+      "name": "WrittenAgreementRequirements",
+      "description": "Requirements for written agreements",
+      "legal_source": "Section 56",
+      "rules": [
+        {"inputs": ["Agreement", "broker_client"], "output": "Broker must have written agreement", "legal_basis": "Section 56(1)", "source_text": "Kirjallinen sopimus"},
+        {"inputs": ["Agreement", "content"], "output": "Must specify duration and fees", "legal_basis": "Section 56(2)", "source_text": "Kesto ja palkkio"},
+        {"inputs": ["Agreement", "copy"], "output": "Copy to client required", "legal_basis": "Section 56(3)", "source_text": "Kappale asiakkaalle"},
+        {"inputs": ["Agreement", "changes"], "output": "Changes require agreement", "legal_basis": "Section 56(4)", "source_text": "Muutokset"}
+      ]
+    },
+    {
+      "name": "ProfessionalDevelopment",
+      "description": "Professional development requirements",
+      "legal_source": "Section 20",
+      "rules": [
+        {"inputs": ["Professional", "15_hours"], "output": "Minimum 15 hours per year", "legal_basis": "Section 20(1)", "source_text": "15 tuntia/vuosi"},
+        {"inputs": ["Professional", "relevant"], "output": "Must be relevant to insurance", "legal_basis": "Section 20(2)", "source_text": "Vakuutustoimintaan liittyvä"},
+        {"inputs": ["Professional", "document"], "output": "Must document training", "legal_basis": "Section 20(3)", "source_text": "Dokumentointi"},
+        {"inputs": ["Professional", "provide"], "output": "Must provide records to FIN-FSA", "legal_basis": "Section 20(4)", "source_text": "Finanssivalvonnalle"}
+      ]
+    },
+    {
+      "name": "ProductInformationRequirements",
+      "description": "Requirements for product information",
+      "legal_source": "Section 43",
+      "rules": [
+        {"inputs": ["Product", "pre_contract"], "output": "Provide before contract", "legal_basis": "Section 43(1)", "source_text": "Ennen sopimusta"},
+        {"inputs": ["Product", "content"], "output": "Insurance terms and conditions", "legal_basis": "Section 43(2)", "source_text": "Vakuutusehdot"},
+        {"inputs": ["Product", "language"], "output": "In official language", "legal_basis": "Section 43(3)", "source_text": "Virallisella kielellä"},
+        {"inputs": ["Product", "durable"], "output": "In durable form", "legal_basis": "Section 43(4)", "source_text": "Kestävässä muodossa"}
+      ]
+    },
+    {
+      "name": "CrossBorderNotificationProcess",
+      "description": "Cross-border notification process",
+      "legal_source": "Section 23",
+      "rules": [
+        {"inputs": ["Notification", "Finland_origin"], "output": "Notify FIN-FSA before cross-border", "legal_basis": "Section 23(1)", "source_text": "Ilmoitus Finanssivalvonnalle"},
+        {"inputs": ["Notification", "content"], "output": "Provide required information", "legal_basis": "Section 23(2)", "source_text": "Tarvittavat tiedot"},
+        {"inputs": ["Notification", "host_state"], "output": "FIN-FSA notifies host state", "legal_basis": "Section 23(3)", "source_text": "Kohdemaalle ilmoitus"},
+        {"inputs": ["Notification", "changes"], "output": "Notify changes 30 days before", "legal_basis": "Section 23(4)", "source_text": "Muutokset 30 päivää ennen"}
+      ]
+    },
+    {
+      "name": "SupervisoryAuthorityPowers",
+      "description": "Supervisory authority powers detailed",
+      "legal_source": "Section 66",
+      "rules": [
+        {"inputs": ["Authority", "register"], "output": "Can maintain register", "legal_basis": "Section 66(1)", "source_text": "Rekisterin pitäminen"},
+        {"inputs": ["Authority", "inspect"], "output": "Can conduct inspections", "legal_basis": "Section 66(2)", "source_text": "Tarkastukset"},
+        {"inputs": ["Authority", "sanction"], "output": "Can impose sanctions", "legal_basis": "Section 66(3)", "source_text": "Seuraamukset"},
+        {"inputs": ["Authority", "publish"], "output": "Can publish decisions", "legal_basis": "Section 66(4)", "source_text": "Päätösten julkaiseminen"}
+      ]
+    },
+    {
+      "name": "InsuranceDistributionAgreementContent",
+      "description": "Content of insurance distribution agreement",
+      "legal_source": "Section 56",
+      "rules": [
+        {"inputs": ["Agreement", "parties"], "output": "Identify parties", "legal_basis": "Section 56(2)", "source_text": "Osapuolten tunnistaminen"},
+        {"inputs": ["Agreement", "services"], "output": "Describe services", "legal_basis": "Section 56(2)", "source_text": "Palveluiden kuvaus"},
+        {"inputs": ["Agreement", "fees"], "output": "Specify fees and calculation", "legal_basis": "Section 56(2)", "source_text": "Palkkiot ja laskenta"},
+        {"inputs": ["Agreement", "duration"], "output": "Specify duration", "legal_basis": "Section 56(2)", "source_text": "Sopimuksen kesto"}
+      ]
+    },
+    {
+      "name": "CustomerDueDiligence",
+      "description": "Customer due diligence requirements",
+      "legal_source": "Section 35",
+      "rules": [
+        {"inputs": ["Customer", "identify"], "output": "Identify customer", "legal_basis": "Section 35(1)", "source_text": "Asiakkaan tunnistaminen"},
+        {"inputs": ["Customer", "verify"], "output": "Verify identity", "legal_basis": "Section 35(1)", "source_text": "Henkilöllisyyden vahvistaminen"},
+        {"inputs": ["Customer", "needs"], "output": "Assess needs", "legal_basis": "Section 35(2)", "source_text": "Tarpeiden arviointi"},
+        {"inputs": ["Customer", "suitability"], "output": "Assess suitability", "legal_basis": "Section 35(2)", "source_text": "Soveltuvuuden arviointi"}
+      ]
+    },
+    {
+      "name": "ThirdCountryRestrictions",
+      "description": "Third country operation restrictions",
+      "legal_source": "Section 28",
+      "rules": [
+        {"inputs": ["ThirdCountry", "no_passport"], "output": "No passport rights", "legal_basis": "Section 28(1)", "source_text": "Ei vapautta"},
+        {"inputs": ["ThirdCountry", "representative"], "output": "Can open representative office", "legal_basis": "Section 28(2)", "source_text": "Edustusto"},
+        {"inputs": ["ThirdCountry", "equivalence"], "output": "Equivalence decision required", "legal_basis": "Section 28(3)", "source_text": "Vastaavuuspäätös"},
+        {"inputs": ["ThirdCountry", "conditions"], "output": "FIN-FSA sets conditions", "legal_basis": "Section 28(4)", "source_text": "Finanssivalvonnan ehdot"}
+      ]
+    },
+    {
+      "name": "InsuranceIntermediaryTitle",
+      "description": "Use of professional title",
+      "legal_source": "Section 55",
+      "rules": [
+        {"inputs": ["Title", "registered"], "output": "Can use broker/agent title if registered", "legal_basis": "Section 55(1)", "source_text": "Rekisteröitynä"},
+        {"inputs": ["Title", "not_registered"], "output": "Cannot use title if not registered", "legal_basis": "Section 55(2)", "source_text": "Ei rekisteröitynä"},
+        {"inputs": ["Title", "misleading"], "output": "Cannot give misleading impression", "legal_basis": "Section 55(3)", "source_text": "Harhaanjohtava"},
+        {"inputs": ["Title", "EEA"], "output": "EEA registered can use title", "legal_basis": "Section 55(4)", "source_text": "ETA-rekisteröity"}
+      ]
+    },
+    {
+      "name": "ComplaintToBoard",
+      "description": "Complaint procedure to Insurance Distribution Board",
+      "legal_source": "Section 64",
+      "rules": [
+        {"inputs": ["Complaint", "who"], "output": "Any customer can complain", "legal_basis": "Section 64(1)", "source_text": "Asiakas voi valittaa"},
+        {"inputs": ["Complaint", "what"], "output": "About distributor conduct", "legal_basis": "Section 64(1)", "source_text": "Välittäjän toiminta"},
+        {"inputs": ["Complaint", "how"], "output": "In writing", "legal_basis": "Section 64(2)", "source_text": "Kirjallisesti"},
+        {"inputs": ["Complaint", "when"], "output": "Within reasonable time", "legal_basis": "Section 64(2)", "source_text": "Kohtuullisessa ajassa"}
+      ]
+    },
+    {
+      "name": "NotificationOfChanges",
+      "description": "Notification requirements for changes",
+      "legal_source": "Section 10",
+      "rules": [
+        {"inputs": ["Change", "any"], "output": "Notify FIN-FSA", "legal_basis": "Section 10(1)", "source_text": "Ilmoitus Finanssivalvonnalle"},
+        {"inputs": ["Change", "deadline"], "output": "Within 30 days", "legal_basis": "Section 10(1)", "source_text": "30 päivän kuluessa"},
+        {"inputs": ["Change", "significant"], "output": "Significant changes immediately", "legal_basis": "Section 10(2)", "source_text": "Merkittävät välittömästi"},
+        {"inputs": ["Change", "register"], "output": "Update register", "legal_basis": "Section 10(3)", "source_text": "Rekisterin päivitys"}
+      ]
     }
   ]
 }
