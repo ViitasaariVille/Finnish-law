@@ -216,6 +216,78 @@
       ]
     },
     {
+      "name": "CausedInsuranceEvent",
+      "description": "Causing insurance event",
+      "legal_source": "Sections 28-30",
+      "rules": [
+        {"inputs": ["Insured", "caused_death"], "output": "No compensation if intentional", "legal_basis": "Section 28", "source_text": "Tahallinen kuolema"},
+        {"inputs": ["Beneficiary", "caused_death"], "output": "No compensation if intentional", "legal_basis": "Section 29", "source_text": "Edunsaajan aiheuttama"},
+        {"inputs": ["ThirdParty", "caused_loss"], "output": "Third party liability", "legal_basis": "Section 30", "source_text": "Kolmannen aiheuttama"},
+        {"inputs": ["Policyholder", "intent"], "output": "Intent affects liability", "legal_basis": "Section 30", "source_text": "Tahallisuus"}
+      ]
+    },
+    {
+      "name": "SafetyInstructions",
+      "description": "Following safety instructions",
+      "legal_source": "Section 31",
+      "rules": [
+        {"inputs": ["Instructions", "not_followed"], "output": "May reduce compensation", "legal_basis": "Section 31(1)", "source_text": "Suojeluohjeiden noudattaminen"},
+        {"inputs": ["Instructions", "violation"], "output": "Insurance may be void", "legal_basis": "Section 31(2)", "source_text": "Noudattamatta jättäminen"},
+        {"inputs": ["Instructions", "reasonable"], "output": "Must be reasonable", "legal_basis": "Section 31(3)", "source_text": "Kohtuulliset ohjeet"}
+      ]
+    },
+    {
+      "name": "SalvageDuty",
+      "description": "Duty to salvage",
+      "legal_source": "Section 32",
+      "rules": [
+        {"inputs": ["Loss", "imminent"], "output": "Must attempt to prevent", "legal_basis": "Section 32(1)", "source_text": "Pelastamisvelvollisuus"},
+        {"inputs": ["Costs", "reasonable"], "output": "Covered if reasonable", "legal_basis": "Section 32(2)", "source_text": "Kohtuulliset kustannukset"},
+        {"inputs": ["Costs", "exceed_loss"], "output": "Covered even if exceeding loss", "legal_basis": "Section 32(3)", "source_text": "Ylittää vahingon"}
+      ]
+    },
+    {
+      "name": "ImmaterialBreach",
+      "description": "When breach is immaterial",
+      "legal_source": "Section 35",
+      "rules": [
+        {"inputs": ["Breach", "immaterial"], "output": "Full liability remains", "legal_basis": "Section 35(1)", "source_text": "Olennaisuus"},
+        {"inputs": ["Risk", "immaterial"], "output": "No adjustment", "legal_basis": "Section 35(2)", "source_text": "Ei vaikutusta"},
+        {"inputs": ["Information", "immaterial"], "output": "No liability reduction", "legal_basis": "Section 35(3)", "source_text": "Tiedonannolla ei ole merkitystä"}
+      ]
+    },
+    {
+      "name": "UnawarenessAndCompulsion",
+      "description": "Unawareness and compulsion defenses",
+      "legal_source": "Section 36",
+      "rules": [
+        {"inputs": ["Person", "unaware"], "output": "No liability if unaware", "legal_basis": "Section 36(1)", "source_text": "Syyntakeettomuus"},
+        {"inputs": ["Person", "compelled"], "output": "No liability if compelled", "legal_basis": "Section 36(2)", "source_text": "Pakkotila"},
+        {"inputs": ["Person", "emergency"], "output": "Emergency situation", "legal_basis": "Section 36(2)", "source_text": "Hätätila"}
+      ]
+    },
+    {
+      "name": "WarRisk",
+      "description": "War risk exclusion in life insurance",
+      "legal_source": "Section 37a",
+      "rules": [
+        {"inputs": ["Event", "war"], "output": "May limit liability", "legal_basis": "Section 37a(1)", "source_text": "Sotariski"},
+        {"inputs": ["Event", "military_service"], "output": "May limit during service", "legal_basis": "Section 37a(2)", "source_text": "Armeijapalvelus"},
+        {"inputs": ["Event", "international"], "output": "International conflict", "legal_basis": "Section 37a(3)", "source_text": "Kansainvälinen konflikti"}
+      ]
+    },
+    {
+      "name": "PremiumPayment",
+      "description": "Risk increase notification",
+      "legal_source": "Sections 26-27",
+      "rules": [
+        {"inputs": ["Risk", "increased_nonlife"], "output": "Must notify insurer", "legal_basis": "Section 26(1)", "source_text": "Vaaran lisääntyminen"},
+        {"inputs": ["Risk", "increase_effect"], "output": "Insurer may adjust terms", "legal_basis": "Section 26(2)", "source_text": "Ehtojen muuttaminen"},
+        {"inputs": ["Risk", "increase_life"], "output": "Different rules for life", "legal_basis": "Section 27", "source_text": "Henkilövakuutus"},
+        {"inputs": ["Risk", "no_increase"], "output": "No adjustment if immaterial", "legal_basis": "Section 35", "source_text": "Olennaisuus"}
+      ]
+    },
+    {
       "name": "PremiumPayment",
       "description": "Premium payment obligations",
       "legal_source": "Section 38",
@@ -343,6 +415,94 @@
         {"inputs": ["Group", "termination"], "output": "Notify of termination", "legal_basis": "Section 77", "source_text": "Päättymisilmoitus"},
         {"inputs": ["Member", "rights"], "output": "Member rights apply", "legal_basis": "Section 78", "source_text": "Jäsenen oikeudet"},
         {"inputs": ["Member", "continuation"], "output": "Right to continue individually", "legal_basis": "Section 80", "source_text": "Jatkaminen yksilöllisenä"}
+      ]
+    },
+    {
+      "name": "ReinsuranceExclusion",
+      "description": "Reinsurance is excluded from this Act",
+      "legal_source": "Section 1(4)",
+      "rules": [
+        {"inputs": ["Insurance", "reinsurance"], "output": "Excluded from Act", "legal_basis": "Section 1(4)", "source_text": "Jälleenvakuutus"}
+      ]
+    },
+    {
+      "name": "PremiumRefundOnTermination",
+      "description": "Premium refund when insurance terminates",
+      "legal_source": "Section 45",
+      "rules": [
+        {"inputs": ["Termination", "mid_period"], "output": "Refund unearned premium", "legal_basis": "Section 45(1)", "source_text": "Palautus"},
+        {"inputs": ["Termination", "insured_death"], "output": "Refund to estate", "legal_basis": "Section 45(2)", "source_text": "Kuolleen jäkeen"},
+        {"inputs": ["Termination", "calculation"], "output": "Calculate pro-rata", "legal_basis": "Section 45(3)", "source_text": "Suhteutettuna"}
+      ]
+    },
+    {
+      "name": "PremiumDebtLimitation",
+      "description": "Limitation of premium debt",
+      "legal_source": "Section 46",
+      "rules": [
+        {"inputs": ["Debt", "limitation"], "output": "5 years from due date", "legal_basis": "Section 46(1)", "source_text": "5 vuotta"},
+        {"inputs": ["Debt", "acknowledged"], "output": "Acknowledged debt 10 years", "legal_basis": "Section 46(2)", "source_text": "Tunnustettu"},
+        {"inputs": ["Debt", "judgment"], "output": "Judgment resets limitation", "legal_basis": "Section 46(3)", "source_text": "Tuomio"}
+      ]
+    },
+    {
+      "name": "DistraintLifeInsurance",
+      "description": "Distraint of life insurance",
+      "legal_source": "Section 54",
+      "rules": [
+        {"inputs": ["Distraint", "life_insurance"], "output": "Generally exempt", "legal_basis": "Section 54(1)", "source_text": "Yleensä vapautettu"},
+        {"inputs": ["Distraint", "surrender_value"], "output": "Surrender value can be distrained", "legal_basis": "Section 54(2)", "source_text": "Takaisinostoarvo"},
+        {"inputs": ["Distraint", "exemption"], "output": "Basic exemption applies", "legal_basis": "Section 54(3)", "source_text": "Perusvapaus"}
+      ]
+    },
+    {
+      "name": "DistraintAccidentInsurance",
+      "description": "Distraint of accident and health insurance",
+      "legal_source": "Section 55",
+      "rules": [
+        {"inputs": ["Distraint", "accident_insurance"], "output": "Limited distraint", "legal_basis": "Section 55(1)", "source_text": "Rajoitettu ulosmittaus"},
+        {"inputs": ["Distraint", "health_insurance"], "output": "Limited distraint", "legal_basis": "Section 55(1)", "source_text": "Sairausvakuutus"},
+        {"inputs": ["Distraint", "exception"], "output": "Exception for own debt", "legal_basis": "Section 55(2)", "source_text": "Oma velka"}
+      ]
+    },
+    {
+      "name": "BankruptcyRecovery",
+      "description": "Recovery in bankruptcy",
+      "legal_source": "Section 56",
+      "rules": [
+        {"inputs": ["Bankruptcy", "life_insurance"], "output": "Recovery limited", "legal_basis": "Section 56(1)", "source_text": "Rajoitettu takaisinsaanti"},
+        {"inputs": ["Bankruptcy", "premiums"], "output": "Recent premiums recoverable", "legal_basis": "Section 56(2)", "source_text": "Maksut"},
+        {"inputs": ["Bankruptcy", "exception"], "output": "Exception for good faith", "legal_basis": "Section 56(3)", "source_text": "Hyvä tahti"}
+      ]
+    },
+    {
+      "name": "PolicyholderInsuredRelation",
+      "description": "When policyholder and insured are same/different",
+      "legal_source": "Section 33",
+      "rules": [
+        {"inputs": ["Same_person", "yes"], "output": "Same rights and duties", "legal_basis": "Section 33(1)", "source_text": "Sama henkilö"},
+        {"inputs": ["Different_person", "yes"], "output": "Both have duties", "legal_basis": "Section 33(2)", "source_text": "Eri henkilöt"},
+        {"inputs": ["Knowledge", "shared"], "output": "Knowledge shared", "legal_basis": "Section 33(3)", "source_text": "Tieto"}
+      ]
+    },
+    {
+      "name": "CompensationReduction",
+      "description": "When compensation can be reduced",
+      "legal_source": "Section 34",
+      "rules": [
+        {"inputs": ["Violation", "material"], "output": "May reduce proportionally", "legal_basis": "Section 34(1)", "source_text": "Olennainen rikkominen"},
+        {"inputs": ["Violation", "intent"], "output": "May refuse entirely", "legal_basis": "Section 34(2)", "source_text": "Tahallinen"},
+        {"inputs": ["Violation", "none"], "output": "Full compensation if immaterial", "legal_basis": "Section 34(3)", "source_text": "Olennaton"}
+      ]
+    },
+    {
+      "name": "LiabilityLimitation",
+      "description": "Limitation of liability in certain cases",
+      "legal_source": "Section 37",
+      "rules": [
+        {"inputs": ["Cause", "war"], "output": "War or military service", "legal_basis": "Section 37(1)", "source_text": "Sota"},
+        {"inputs": ["Cause", "earthquake"], "output": "Earthquake", "legal_basis": "Section 37(1)", "source_text": "Maanjäristys"},
+        {"inputs": ["Cause", "nuclear"], "output": "Nuclear damage", "legal_basis": "Section 37(2)", "source_text": "Ydinvaurio"}
       ]
     }
   ]

@@ -111,7 +111,20 @@
     "DutyOfDisclosure": {
       "finnish_name": "Tiedonantovelvollisuus",
       "description": "Duty to provide information",
-      "legal_basis": "Sections 22-24"
+      "legal_basis": "Sections 22-24",
+      "subclasses": {
+        "NonLifeDisclosure": {"description": "Non-life insurance disclosure", "legal_basis": "Section 23"},
+        "LifeDisclosure": {"description": "Life insurance disclosure", "legal_basis": "Section 24"}
+      }
+    },
+    "RiskIncrease": {
+      "finnish_name": "Vaaran lisääntyminen",
+      "description": "Increase in risk",
+      "legal_basis": "Sections 26-27",
+      "subclasses": {
+        "NonLifeRiskIncrease": {"description": "Risk increase in non-life", "legal_basis": "Section 26"},
+        "LifeRiskIncrease": {"description": "Risk increase in life", "legal_basis": "Section 27"}
+      }
     },
     "RightToCancel": {
       "finnish_name": "Peruutusoikeus",
@@ -162,6 +175,36 @@
       "finnish_name": "Vuositiedote",
       "description": "Annual notice to policyholder",
       "legal_basis": "Section 7"
+    },
+    "SafetyInstructions": {
+      "finnish_name": "Suojeluohjeet",
+      "description": "Safety instructions to follow",
+      "legal_basis": "Section 31"
+    },
+    "SalvageDuty": {
+      "finnish_name": "Pelastamisvelvollisuus",
+      "description": "Duty to prevent or reduce loss",
+      "legal_basis": "Section 32"
+    },
+    "Distraint": {
+      "finnish_name": "Ulosmittaus",
+      "description": "Distraint of insurance benefits",
+      "legal_basis": "Sections 54-55"
+    },
+    "BankruptcyRecovery": {
+      "finnish_name": "Takaisinsaanti konkurssissa",
+      "description": "Recovery in bankruptcy",
+      "legal_basis": "Section 56"
+    },
+    "ThirdPartyClaim": {
+      "finnish_name": "Kolmannen osapuolen korvausvaatimus",
+      "description": "Third party right to compensation",
+      "legal_basis": "Section 67"
+    },
+    "RightToAppeal": {
+      "finnish_name": "Muutoksenhaku",
+      "description": "Right to appeal compensation decision",
+      "legal_basis": "Section 68"
     }
   },
   "relationships": [
