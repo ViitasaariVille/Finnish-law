@@ -1023,6 +1023,182 @@
         {"inputs": ["Change", "significant"], "output": "Significant changes immediately", "legal_basis": "Section 10(2)", "source_text": "Merkittävät välittömästi"},
         {"inputs": ["Change", "register"], "output": "Update register", "legal_basis": "Section 10(3)", "source_text": "Rekisterin päivitys"}
       ]
+    },
+    {
+      "name": "RegisterPublicAccess",
+      "description": "Public access to insurance distribution register",
+      "legal_source": "Section 11",
+      "rules": [
+        {"inputs": ["Register", "online"], "output": "Available online 24/7", "legal_basis": "Section 11(1)", "source_text": "Saatavilla verkossa"},
+        {"inputs": ["Register", "free"], "output": "Free access", "legal_basis": "Section 11(1)", "source_text": "Maksuton"},
+        {"inputs": ["Register", "extract"], "output": "Can request extracts", "legal_basis": "Section 11(2)", "source_text": "Otteiden pyyntö"},
+        {"inputs": ["Register", "updates"], "output": "Updated in real-time", "legal_basis": "Section 11(3)", "source_text": "Reaaliaikainen"}
+      ]
+    },
+    {
+      "name": "InsuranceDistributionBoardAppeal",
+      "description": "Appeal against Insurance Distribution Board decisions",
+      "legal_source": "Section 65",
+      "rules": [
+        {"inputs": ["Appeal", "Board_decision"], "output": "Appeal to Administrative Court", "legal_basis": "Section 65(1)", "source_text": "Hallinto-oikeuteen"},
+        {"inputs": ["Appeal", "time_limit"], "output": "30 days to appeal", "legal_basis": "Section 65(2)", "source_text": "30 päivää"},
+        {"inputs": ["Appeal", "fee"], "output": "Appeal fee may apply", "legal_basis": "Section 65(3)", "source_text": "Maksu"},
+        {"inputs": ["Appeal", "stay"], "output": "Does not automatically stay decision", "legal_basis": "Section 65(4)", "source_text": "Ei automaattista jäädytystä"}
+      ]
+    },
+    {
+      "name": "FINFSADecisionAppeal",
+      "description": "Appeal against FIN-FSA decisions",
+      "legal_source": "Section 82",
+      "rules": [
+        {"inputs": ["Appeal", "FIN-FSA"], "output": "Appeal to Administrative Court", "legal_basis": "Section 82(1)", "source_text": "Hallinto-oikeuteen"},
+        {"inputs": ["Appeal", "procedure"], "source_text": "Administrative Court procedure", "output": "Follows Administrative Court rules", "legal_basis": "Section 82(2)"},
+        {"inputs": ["Appeal", "cost"], "output": "Cost rules apply", "legal_basis": "Section 82(3)", "source_text": "Kustannukset"},
+        {"inputs": ["Appeal", "prejudice"], "output": "Can request prejudice prevention", "legal_basis": "Section 82(4)", "source_text": "Ennaltaehkäisy"}
+      ]
+    },
+    {
+      "name": "InsuranceCompanyExemption",
+      "description": "Exemption for insurance companies",
+      "legal_source": "Section 6(3)",
+      "rules": [
+        {"inputs": ["Company", "insurance_license"], "output": "Exempt from registration", "legal_basis": "Section 6(3)", "source_text": "Vakuutusyhtiö"},
+        {"inputs": ["Company", "supervised"], "output": "FIN-FSA supervised", "legal_basis": "Section 6(3)", "source_text": "Finanssivalvonnan valvoma"},
+        {"inputs": ["Company", "act_as_agent"], "output": "Can act as agent if registered", "legal_basis": "Section 6(3)", "source_text": "Voi toimia asiamiehenä"},
+        {"inputs": ["Company", "disclosure"], "output": "Still must disclose status", "legal_basis": "Section 6(3)", "source_text": "Ilmoitusvelvollisuus"}
+      ]
+    },
+    {
+      "name": "PartTimeAgentLimits",
+      "description": "Limits for part-time insurance agents",
+      "legal_source": "Section 4",
+      "rules": [
+        {"inputs": ["Agent", "ancillary"], "output": "Activity must be ancillary", "legal_basis": "Section 4(1)", "source_text": "Sivutoiminen"},
+        {"inputs": ["Agent", "premium_limit"], "output": "Premium max 600 EUR/year", "legal_basis": "Section 4(1)", "source_text": "600 euroa/vuosi"},
+        {"inputs": ["Agent", "trip_limit"], "output": "Trip insurance max 200 EUR", "legal_basis": "Section 4(2)", "source_text": "200 euroa/matka"},
+        {"inputs": ["Agent", "goods_service"], "output": "Complementary to goods/service", "legal_basis": "Section 4(1)", "source_text": "Tavaran/palvelun yhteydessä"}
+      ]
+    },
+    {
+      "name": "InvestmentInsuranceExclusions",
+      "description": "Products excluded from investment insurance rules",
+      "legal_source": "Section 5(12)",
+      "rules": [
+        {"inputs": ["Product", "pure_life"], "output": "Excluded if pure life", "legal_basis": "Section 5(12)", "source_text": "Puhdas henkivakuutus"},
+        {"inputs": ["Product", "occupational_pension"], "output": "Excluded if occupational pension", "legal_basis": "Section 5(12)", "source_text": "Työeläke"},
+        {"inputs": ["Product", "state_pension"], "output": "Excluded if state pension", "legal_basis": "Section 5(12)", "source_text": "Kansaneläke"},
+        {"inputs": ["Product", "capital_redemption"], "output": "Included if capital redemption life", "legal_basis": "Section 5(12)", "source_text": "Kapitalisaatiosopimus"}
+      ]
+    },
+    {
+      "name": "AdviceWithoutRecommendation",
+      "description": "Information provision without personal recommendation",
+      "legal_source": "Section 2",
+      "rules": [
+        {"inputs": ["Information", "general"], "output": "General information allowed", "legal_basis": "Section 2(1)", "source_text": "Yleistä tietoa"},
+        {"inputs": ["Information", "not_advice"], "output": "Not personal recommendation", "legal_basis": "Section 2(1)", "source_text": "Ei henkilökohtainen suositus"},
+        {"inputs": ["Information", "product_comparison"], "output": "Can provide product comparison", "legal_basis": "Section 2(1)", "source_text": "Tuotevertailu"},
+        {"inputs": ["Information", "distinguish"], "output": "Must distinguish from advice", "legal_basis": "Section 2(1)", "source_text": "Eroteltava neuvonnasta"}
+      ]
+    },
+    {
+      "name": "Multi jurisdictionalRules",
+      "description": "Rules when multiple jurisdictions involved",
+      "legal_source": "Section 24",
+      "rules": [
+        {"inputs": ["Operation", "home_state"], "output": "Home state rules apply", "legal_basis": "Section 24(3)", "source_text": "Kotivaltion säännöt"},
+        {"inputs": ["Operation", "host_state"], "output": "Host state consumer rules apply", "legal_basis": "Section 24(3)", "source_text": "Kuluttajasuojat"},
+        {"inputs": ["Operation", "complaint"], "output": "Can complain to both states", "legal_basis": "Section 24(4)", "source_text": "Valitus molempiin"},
+        {"inputs": ["Operation", "language"], "output": "Use customer's language", "legal_basis": "Section 24(5)", "source_text": "Asiakkaan kieli"}
+      ]
+    },
+    {
+      "name": "ClaimsHandlingExclusion",
+      "description": "Activities excluded from insurance distribution",
+      "legal_source": "Section 2(2)",
+      "rules": [
+        {"inputs": ["Activity", "claims"], "output": "Claims handling excluded", "legal_basis": "Section 2(2)", "source_text": "Korvauskäsittely"},
+        {"inputs": ["Activity", "administration"], "output": "Policy administration excluded", "legal_basis": "Section 2(2)", "source_text": "Hallinnointi"},
+        {"inputs": ["Activity", "loss_adjustment"], "output": "Loss adjustment excluded", "legal_basis": "Section 2(2)", "source_text": "Tappioiden sovitus"},
+        {"inputs": ["Activity", "assistance"], "output": "Assistance services excluded", "legal_basis": "Section 2(2)", "source_text": "Avustuspalvelut"}
+      ]
+    },
+    {
+      "name": "PremiumCollectionRules",
+      "description": "Rules for premium collection",
+      "legal_source": "Section 60",
+      "rules": [
+        {"inputs": ["Premium", "collected_Finland"], "output": "Collect in Finland", "legal_basis": "Section 60(1)", "source_text": "Peritään Suomessa"},
+        {"inputs": ["Premium", "document"], "output": "Document collection", "legal_basis": "Section 60(2)", "source_text": "Asiakirjoitettava"},
+        {"inputs": ["Premium", "prompt"], "output": "Transfer to insurer promptly", "legal_basis": "Section 60(3)", "source_text": "Siirrettävä välittömästi"},
+        {"inputs": ["Premium", "uncollected"], "output": "Return uncollected premiums", "legal_basis": "Section 60(4)", "source_text": "Palautetaan perimättä jäänyt"}
+      ]
+    },
+    {
+      "name": "ProductGovernanceTimeline",
+      "description": "Product governance timeline requirements",
+      "legal_source": "Section 42",
+      "rules": [
+        {"inputs": ["Product", "launch"], "output": "Define governance before launch", "legal_basis": "Section 42(1)", "source_text": "Ennen lanseerausta"},
+        {"inputs": ["Product", "review"], "output": "Review at least annually", "legal_basis": "Section 42(5)", "source_text": "Vuosittain"},
+        {"inputs": ["Product", "monitor"], "output": "Monitor distribution", "legal_basis": "Section 42(4)", "source_text": "Jakelun seuranta"},
+        {"inputs": ["Product", "withdraw"], "output": "Can withdraw if issues", "legal_basis": "Section 42(6)", "source_text": "Voi vetää pois"}
+      ]
+    },
+    {
+      "name": "ProfessionalQualificationRenewal",
+      "description": "Professional qualification maintenance",
+      "legal_source": "Section 18",
+      "rules": [
+        {"inputs": ["Qualification", "exam"], "output": "One-time exam", "legal_basis": "Section 18(1)", "source_text": "Kertakoe"},
+        {"inputs": ["Qualification", "maintain"], "output": "Maintain through training", "legal_basis": "Section 20", "source_text": "Koulutuksella"},
+        {"inputs": ["Qualification", "equivalent"], "output": "Equivalent recognized", "legal_basis": "Section 18(2)", "source_text": "Tunnustaminen"},
+        {"inputs": ["Qualification", "revoke"], "output": "Can revoke if violations", "legal_basis": "Section 18(4)", "source_text": "Voidaan peruuttaa"}
+      ]
+    },
+    {
+      "name": "InsuranceDistributionServiceExclusions",
+      "description": "Activities not considered insurance distribution",
+      "legal_source": "Section 2(3)",
+      "rules": [
+        {"inputs": ["Activity", "incidental_info"], "output": "Incidental information excluded", "legal_basis": "Section 2(3)", "source_text": "Satunnainen tieto"},
+        {"inputs": ["Activity", "consumer_help"], "output": "Consumer agency help excluded", "legal_basis": "Section 2(3)", "source_text": "Kuluttajaneuvonta"},
+        {"inputs": ["Activity", "professional_advice"], "output": "Professional advice on assets excluded", "legal_basis": "Section 2(3)", "source_text": "Ammattimainen varallisuusneuvonta"},
+        {"inputs": ["Activity", "no_insurance"], "output": "Cannot be insurance distribution", "legal_basis": "Section 2(4)", "source_text": "Ei vakuutusten välittämistä"}
+      ]
+    },
+    {
+      "name": "InsuranceTypesClassification",
+      "description": "Classification of insurance types",
+      "legal_source": "Section 5",
+      "rules": [
+        {"inputs": ["Insurance", "life_1"], "output": "Life insurance class I", "legal_basis": "Section 5(4)", "source_text": "Henkivakuutusluokka I"},
+        {"inputs": ["Insurance", "life_2"], "output": "Life insurance class II", "legal_basis": "Section 5(5)", "source_text": "Henkivakuutusluokka II"},
+        {"inputs": ["Insurance", "non_life_a"], "output": "Non-life class A", "legal_basis": "Section 5(6)", "source_text": "Vahinkovakuutusryhmä A"},
+        {"inputs": ["Insurance", "non_life_b"], "output": "Non-life class B", "legal_basis": "Section 5(7)", "source_text": "Vahinkovakuutusryhmä B"}
+      ]
+    },
+    {
+      "name": "ContinuingEducationDocumentation",
+      "description": "Continuing education documentation requirements",
+      "legal_source": "Section 20",
+      "rules": [
+        {"inputs": ["Training", "hours"], "output": "Minimum 15 hours", "legal_basis": "Section 20(1)", "source_text": "15 tuntia"},
+        {"inputs": ["Training", "content"], "output": "Relevant to insurance", "legal_basis": "Section 20(2)", "source_text": "Vakuutustoimintaan liittyvä"},
+        {"inputs": ["Training", "provider"], "output": "Approved provider", "legal_basis": "Section 20(3)", "source_text": "Hyväksytty kouluttaja"},
+        {"inputs": ["Training", "records"], "output": "Keep records 5 years", "legal_basis": "Section 20(4)", "source_text": "5 vuoden säilytys"}
+      ]
+    },
+    {
+      "name": "InformationLanguageRequirements",
+      "description": "Language requirements for information",
+      "legal_source": "Section 14",
+      "rules": [
+        {"inputs": ["Information", "Finnish"], "output": "In Finnish", "legal_basis": "Section 14(1)", "source_text": "Suomeksi"},
+        {"inputs": ["Information", "Swedish"], "output": "In Swedish", "legal_basis": "Section 14(1)", "source_text": "Ruotsiksi"},
+        {"inputs": ["Information", "customer_choice"], "output": "Customer can choose", "legal_basis": "Section 14(1)", "source_text": "Asiakas valitsee"},
+        {"inputs": ["Information", "other"], "output": "Other language allowed if customer understands", "legal_basis": "Section 14(2)", "source_text": "Muu kieli"}
+      ]
     }
   ]
 }
