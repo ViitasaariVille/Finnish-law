@@ -222,6 +222,46 @@
       "finnish_name": "Kuntoutus",
       "description": "Vocational rehabilitation",
       "legal_basis": "Section 10"
+    },
+    "WorkTrial": {
+      "finnish_name": "Työkokeilu",
+      "description": "Work trial period",
+      "legal_basis": "Section 2a.8"
+    },
+    "JobSearchPlan": {
+      "finnish_name": "Työnhakusuunnitelma",
+      "description": "Job search plan",
+      "legal_basis": "Section 2a.12"
+    },
+    "PartialUnemployment": {
+      "finnish_name": "Osittainen työttömyys",
+      "description": "Partial unemployment / short-time work",
+      "legal_basis": "Section 4.2"
+    },
+    "PublicWorks": {
+      "finnish_name": "Työllistämistyö",
+      "description": "Public subsidized work",
+      "legal_basis": "Section 10.2"
+    },
+    "JobClub": {
+      "finnish_name": "Työklubi",
+      "description": "Job club programme",
+      "legal_basis": "Section 10.2a"
+    },
+    "EmployerInsolvency": {
+      "finnish_name": "Työnantajan maksukyvyttömyys",
+      "description": "Employer insolvency protection",
+      "legal_basis": "Section 9a"
+    },
+    "NoticePeriod": {
+      "finnish_name": "Irtisanomisaika",
+      "description": "Notice period employment",
+      "legal_basis": "Section 2.1"
+    },
+    "ServiceAbroad": {
+      "finnish_name": "Palvelus ulkomailla",
+      "description": "Military or civil service",
+      "legal_basis": "Section 3.5"
     }
   },
   "relationships": [
