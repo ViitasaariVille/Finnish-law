@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 800px;
+                 background-color: #1a1a2e;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#3498db", "description": "Insurance contract", "font": {"color": "white"}, "id": "Insurance", "label": "Insurance", "shape": "dot", "size": 25}, {"color": "#e74c3c", "description": "Motor vehicle subject to insurance requirements", "font": {"color": "white"}, "id": "Vehicle", "label": "Vehicle", "shape": "dot", "size": 25}, {"color": "#2ecc71", "description": "Natural person involved in insurance", "font": {"color": "white"}, "id": "Person", "label": "Person", "shape": "dot", "size": 25}, {"color": "#3498db", "description": "Event triggering insurance coverage", "font": {"color": "white"}, "id": "InsuranceEvent", "label": "InsuranceEvent", "shape": "dot", "size": 25}, {"color": "#e67e22", "description": "Damage from insurance event", "font": {"color": "white"}, "id": "Damage", "label": "Damage", "shape": "dot", "size": 25}, {"color": "#1abc9c", "description": "Formal request for compensation", "font": {"color": "white"}, "id": "Claim", "label": "Claim", "shape": "dot", "size": 15}, {"color": "#ff6b6b", "description": "Payment or benefit from insurance", "font": {"color": "white"}, "id": "Compensation", "label": "Compensation", "shape": "dot", "size": 25}, {"color": "#e74c3c", "font": {"color": "white"}, "id": "MotorVehicle", "label": "MotorVehicle", "shape": "dot", "size": 15}, {"color": "#95a5a6", "font": {"color": "white"}, "id": "Trailer", "label": "Trailer", "shape": "dot", "size": 15}, {"color": "#e74c3c", "font": {"color": "white"}, "id": "AgriculturalVehicle", "label": "AgriculturalVehicle", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": "MandatoryTrafficInsurance", "label": "MandatoryTrafficInsurance", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": "ComprehensiveInsurance", "label": "ComprehensiveInsurance", "shape": "dot", "size": 15}, {"color": "#95a5a6", "font": {"color": "white"}, "id": "PolicyHolder", "label": "PolicyHolder", "shape": "dot", "size": 15}, {"color": "#95a5a6", "font": {"color": "white"}, "id": "Insured", "label": "Insured", "shape": "dot", "size": 15}, {"color": "#95a5a6", "font": {"color": "white"}, "id": "Driver", "label": "Driver", "shape": "dot", "size": 15}, {"color": "#95a5a6", "font": {"color": "white"}, "id": "InjuredParty", "label": "InjuredParty", "shape": "dot", "size": 15}, {"color": "#e67e22", "font": {"color": "white"}, "id": "DamagedParty", "label": "DamagedParty", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": "InsuranceCompany", "label": "InsuranceCompany", "shape": "dot", "size": 25}, {"color": "#9b59b6", "description": "Corporations and organizations", "font": {"color": "white"}, "id": "LegalEntity", "label": "LegalEntity", "shape": "dot", "size": 25}, {"color": "#95a5a6", "font": {"color": "white"}, "id": "PolicyHoldingCompany", "label": "PolicyHoldingCompany", "shape": "dot", "size": 15}, {"color": "#95a5a6", "font": {"color": "white"}, "id": "RepairShop", "label": "RepairShop", "shape": "dot", "size": 15}, {"color": "#95a5a6", "font": {"color": "white"}, "id": "TrafficAccident", "label": "TrafficAccident", "shape": "dot", "size": 15}, {"color": "#95a5a6", "font": {"color": "white"}, "id": "FireIncident", "label": "FireIncident", "shape": "dot", "size": 15}, {"color": "#95a5a6", "font": {"color": "white"}, "id": "TheftEvent", "label": "TheftEvent", "shape": "dot", "size": 15}, {"color": "#e67e22", "font": {"color": "white"}, "id": "NaturalDamage", "label": "NaturalDamage", "shape": "dot", "size": 15}, {"color": "#e67e22", "font": {"color": "white"}, "id": "PropertyDamage", "label": "PropertyDamage", "shape": "dot", "size": 15}, {"color": "#2ecc71", "font": {"color": "white"}, "id": "PersonalInjury", "label": "PersonalInjury", "shape": "dot", "size": 15}, {"color": "#e67e22", "font": {"color": "white"}, "id": "PropertyDamageCompensation", "label": "PropertyDamageCompensation", "shape": "dot", "size": 15}, {"color": "#ff6b6b", "font": {"color": "white"}, "id": "MedicalExpenseCompensation", "label": "MedicalExpenseCompensation", "shape": "dot", "size": 15}, {"color": "#ff6b6b", "font": {"color": "white"}, "id": "DisabilityCompensation", "label": "DisabilityCompensation", "shape": "dot", "size": 15}, {"color": "#ff6b6b", "font": {"color": "white"}, "id": "DeathCompensation", "label": "DeathCompensation", "shape": "dot", "size": 15}, {"color": "#95a5a6", "font": {"color": "white"}, "id": "PainAndSuffering", "label": "PainAndSuffering", "shape": "dot", "size": 15}, {"color": "#ff6b6b", "font": {"color": "white"}, "id": "LostWagesCompensation", "label": "LostWagesCompensation", "shape": "dot", "size": 15}]);
+                  edges = new vis.DataSet([{"from": "Insurance", "label": "covers", "to": "Vehicle", "width": 1}, {"from": "Person", "label": "owns", "to": "Vehicle", "width": 1}, {"from": "InsuranceEvent", "label": "results_in", "to": "Damage", "width": 1}, {"from": "Claim", "label": "filed_for", "to": "InsuranceEvent", "width": 1}, {"from": "Compensation", "label": "paid_to", "to": "Person", "width": 1}, {"from": "MotorVehicle", "label": "rdfs:subClassOf", "to": "Vehicle", "width": 1}, {"from": "Trailer", "label": "rdfs:subClassOf", "to": "Vehicle", "width": 1}, {"from": "AgriculturalVehicle", "label": "rdfs:subClassOf", "to": "Vehicle", "width": 1}, {"from": "MandatoryTrafficInsurance", "label": "rdfs:subClassOf", "to": "Insurance", "width": 1}, {"from": "ComprehensiveInsurance", "label": "rdfs:subClassOf", "to": "Insurance", "width": 1}, {"from": "PolicyHolder", "label": "rdfs:subClassOf", "to": "Person", "width": 1}, {"from": "PolicyHolder", "label": "holds", "to": "Insurance", "width": 1}, {"from": "Insured", "label": "rdfs:subClassOf", "to": "Person", "width": 1}, {"from": "Driver", "label": "rdfs:subClassOf", "to": "Person", "width": 1}, {"from": "InjuredParty", "label": "rdfs:subClassOf", "to": "Person", "width": 1}, {"from": "DamagedParty", "label": "rdfs:subClassOf", "to": "Person", "width": 1}, {"from": "InsuranceCompany", "label": "rdfs:subClassOf", "to": "LegalEntity", "width": 1}, {"from": "InsuranceCompany", "label": "provides", "to": "Insurance", "width": 1}, {"from": "InsuranceCompany", "label": "pays", "to": "Compensation", "width": 1}, {"from": "PolicyHoldingCompany", "label": "rdfs:subClassOf", "to": "LegalEntity", "width": 1}, {"from": "RepairShop", "label": "rdfs:subClassOf", "to": "LegalEntity", "width": 1}, {"from": "TrafficAccident", "label": "rdfs:subClassOf", "to": "InsuranceEvent", "width": 1}, {"from": "FireIncident", "label": "rdfs:subClassOf", "to": "InsuranceEvent", "width": 1}, {"from": "TheftEvent", "label": "rdfs:subClassOf", "to": "InsuranceEvent", "width": 1}, {"from": "NaturalDamage", "label": "rdfs:subClassOf", "to": "InsuranceEvent", "width": 1}, {"from": "PropertyDamage", "label": "rdfs:subClassOf", "to": "Damage", "width": 1}, {"from": "PersonalInjury", "label": "rdfs:subClassOf", "to": "Damage", "width": 1}, {"from": "PropertyDamageCompensation", "label": "rdfs:subClassOf", "to": "Compensation", "width": 1}, {"from": "MedicalExpenseCompensation", "label": "rdfs:subClassOf", "to": "Compensation", "width": 1}, {"from": "DisabilityCompensation", "label": "rdfs:subClassOf", "to": "Compensation", "width": 1}, {"from": "DeathCompensation", "label": "rdfs:subClassOf", "to": "Compensation", "width": 1}, {"from": "PainAndSuffering", "label": "rdfs:subClassOf", "to": "Compensation", "width": 1}, {"from": "LostWagesCompensation", "label": "rdfs:subClassOf", "to": "Compensation", "width": 1}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>
