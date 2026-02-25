@@ -1,0 +1,4497 @@
+// Drools Business Rules for Tyottomysturvalaki
+// Law: 1290/2002
+// Generated from DMN rules
+// Total decisions: 116
+
+package fi.law.tyottomysturvalaki
+
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
+import java.util.ArrayList;
+
+// Context fact for rule evaluation
+declare Context
+    result : Object
+    legalBasis : String
+    sourceText : String
+    // Dynamic fields
+end
+
+// ========== DECISION TABLES ==========
+
+// Decision: UnemploymentBenefitTypes
+// Description: Types of unemployment benefits
+// Legal Source: Sections 1-2
+// Inputs: 
+// Output: result
+
+rule "UnemploymentBenefitTypes_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Earnings-related allowance or basic allowance");
+    $ctx.setLegalBasis("Section 1");
+    $ctx.setSourceText("Palkansaaja");
+end
+
+rule "UnemploymentBenefitTypes_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Earnings-related allowance");
+    $ctx.setLegalBasis("Section 1");
+    $ctx.setSourceText("Yrittäjä");
+end
+
+rule "UnemploymentBenefitTypes_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Labour market support");
+    $ctx.setLegalBasis("Section 7");
+    $ctx.setSourceText("Työmarkkinatuki");
+end
+
+rule "UnemploymentBenefitTypes_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Earnings-related allowance from fund");
+    $ctx.setLegalBasis("Section 5");
+    $ctx.setSourceText("Työttömyyskassan jäsen");
+end
+
+// Decision: EmploymentConditionEmployee
+// Description: Employment condition for employees
+// Legal Source: Section 5.3
+// Inputs: 
+// Output: result
+
+rule "EmploymentConditionEmployee_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("At least 12 months in last 24 months");
+    $ctx.setLegalBasis("Section 5.3");
+    $ctx.setSourceText("12 kuukautta");
+end
+
+rule "EmploymentConditionEmployee_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("At least 18 hours per week");
+    $ctx.setLegalBasis("Section 5.3");
+    $ctx.setSourceText("18 tuntia viikossa");
+end
+
+rule "EmploymentConditionEmployee_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Employment ended not by own choice");
+    $ctx.setLegalBasis("Section 5.3");
+    $ctx.setSourceText("Työsuhde päättynyt");
+end
+
+// Decision: EmploymentConditionEntrepreneur
+// Description: Employment condition for entrepreneurs
+// Legal Source: Section 5.7
+// Inputs: 
+// Output: result
+
+rule "EmploymentConditionEntrepreneur_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("At least 24 months in last 48 months");
+    $ctx.setLegalBasis("Section 5.7");
+    $ctx.setSourceText("24 kuukautta");
+end
+
+rule "EmploymentConditionEntrepreneur_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("At least 13,457 EUR annual income");
+    $ctx.setLegalBasis("Section 5.7");
+    $ctx.setSourceText("Tuloraja");
+end
+
+rule "EmploymentConditionEntrepreneur_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Business actively conducted");
+    $ctx.setLegalBasis("Section 5.7");
+    $ctx.setSourceText("Aktiivinen toiminta");
+end
+
+// Decision: BenefitAmountCalculation
+// Description: Calculation of benefit amount
+// Legal Source: Section 6
+// Inputs: 
+// Output: result
+
+rule "BenefitAmountCalculation_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("45% of difference between wages and base");
+    $ctx.setLegalBasis("Section 6.2");
+    $ctx.setSourceText("Ansio-osa");
+end
+
+rule "BenefitAmountCalculation_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("33.66 EUR per day");
+    $ctx.setLegalBasis("Section 6.1");
+    $ctx.setSourceText("Perusosa");
+end
+
+rule "BenefitAmountCalculation_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Additional for dependent children");
+    $ctx.setLegalBasis("Section 6.3");
+    $ctx.setSourceText("Lapsikorotus");
+end
+
+rule "BenefitAmountCalculation_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Higher rate for older workers");
+    $ctx.setLegalBasis("Section 6.9");
+    $ctx.setSourceText("Yli 58-vuotias");
+end
+
+// Decision: BenefitDuration
+// Description: Maximum duration of benefit
+// Legal Source: Section 6.7
+// Inputs: 
+// Output: result
+
+rule "BenefitDuration_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("300 days maximum");
+    $ctx.setLegalBasis("Section 6.7");
+    $ctx.setSourceText("300 päivää");
+end
+
+rule "BenefitDuration_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("New period after employment");
+    $ctx.setLegalBasis("Section 6.7");
+    $ctx.setSourceText("Uusi jakso");
+end
+
+rule "BenefitDuration_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Additional days available");
+    $ctx.setLegalBasis("Section 6.9");
+    $ctx.setSourceText("Lisäpäivät");
+end
+
+rule "BenefitDuration_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Duration proportional to work");
+    $ctx.setLegalBasis("Section 6.7");
+    $ctx.setSourceText("Suhteutettu");
+end
+
+// Decision: AdjustedBenefit
+// Description: Adjusted benefit when working part-time
+// Legal Source: Chapter 4
+// Inputs: 
+// Output: result
+
+rule "AdjustedBenefit_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Benefit reduced by earnings");
+    $ctx.setLegalBasis("Section 4.1");
+    $ctx.setSourceText("Osittainen työ");
+end
+
+rule "AdjustedBenefit_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Full benefit if earnings low");
+    $ctx.setLegalBasis("Section 4.4");
+    $ctx.setSourceText("Tuloraja");
+end
+
+rule "AdjustedBenefit_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("No benefit if working full-time");
+    $ctx.setLegalBasis("Section 4.1");
+    $ctx.setSourceText("Kokoaikatyö");
+end
+
+rule "AdjustedBenefit_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Adjusted daily");
+    $ctx.setLegalBasis("Section 4.5");
+    $ctx.setSourceText("Päivittäin");
+end
+
+// Decision: LabourMarketPolicyConditions
+// Description: Labour market policy conditions for benefit
+// Legal Source: Chapter 2
+// Inputs: 
+// Output: result
+
+rule "LabourMarketPolicyConditions_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must be registered job seeker");
+    $ctx.setLegalBasis("Section 2.1");
+    $ctx.setSourceText("Rekisteröity työnhakija");
+end
+
+rule "LabourMarketPolicyConditions_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must be available for work");
+    $ctx.setLegalBasis("Section 2.1");
+    $ctx.setSourceText("Työmarkkinoiden käytettävissä");
+end
+
+rule "LabourMarketPolicyConditions_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must actively seek work");
+    $ctx.setLegalBasis("Section 2.1");
+    $ctx.setSourceText("Aktiivisesti etsittävä työtä");
+end
+
+rule "LabourMarketPolicyConditions_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must attend interview");
+    $ctx.setLegalBasis("Section 2.1");
+    $ctx.setSourceText("Haastatteluun osallistuttava");
+end
+
+// Decision: JobRefusalConsequences
+// Description: Consequences of refusing suitable work
+// Legal Source: Section 2a.4
+// Inputs: 
+// Output: result
+
+rule "JobRefusalConsequences_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Benefit reduced 50% for 60 days");
+    $ctx.setLegalBasis("Section 2a.4");
+    $ctx.setSourceText("50% 60 päivää");
+end
+
+rule "JobRefusalConsequences_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Benefit cut off for 90 days");
+    $ctx.setLegalBasis("Section 2a.10");
+    $ctx.setSourceText("Korvauskatko 90 päivää");
+end
+
+rule "JobRefusalConsequences_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("No consequence if acceptable reason");
+    $ctx.setLegalBasis("Section 2a.2");
+    $ctx.setSourceText("Pätevä syy");
+end
+
+rule "JobRefusalConsequences_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("May affect benefit");
+    $ctx.setLegalBasis("Section 2a.14");
+    $ctx.setSourceText("Koulutuksesta kieltäytyminen");
+end
+
+// Decision: AcceptableReasonsForRefusal
+// Description: Acceptable reasons for refusing work
+// Legal Source: Section 2a.2-7
+// Inputs: 
+// Output: result
+
+rule "AcceptableReasonsForRefusal_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Health reasons");
+    $ctx.setLegalBasis("Section 2a.5");
+    $ctx.setSourceText("Terveydelliset syyt");
+end
+
+rule "AcceptableReasonsForRefusal_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Family reasons");
+    $ctx.setLegalBasis("Section 2a.5");
+    $ctx.setSourceText("Perhesyyt");
+end
+
+rule "AcceptableReasonsForRefusal_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Starting education");
+    $ctx.setLegalBasis("Section 2a.5");
+    $ctx.setSourceText("Koulutus");
+end
+
+rule "AcceptableReasonsForRefusal_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Excessive travel distance");
+    $ctx.setLegalBasis("Section 2a.7");
+    $ctx.setSourceText("Matka-aika");
+end
+
+// Decision: SelfEmploymentConditions
+// Description: Conditions for entrepreneur benefits
+// Legal Source: Sections 2.5, 5.6
+// Inputs: 
+// Output: result
+
+rule "SelfEmploymentConditions_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Business ended or substantially reduced");
+    $ctx.setLegalBasis("Section 2.5");
+    $ctx.setSourceText("Yritystoiminta päättynyt");
+end
+
+rule "SelfEmploymentConditions_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Family member stopped working");
+    $ctx.setLegalBasis("Section 2.7");
+    $ctx.setSourceText("Perheenjäsenen työ");
+end
+
+rule "SelfEmploymentConditions_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Starting new business");
+    $ctx.setLegalBasis("Section 5a");
+    $ctx.setSourceText("Alkava yritystoiminta");
+end
+
+rule "SelfEmploymentConditions_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Income verified");
+    $ctx.setLegalBasis("Section 5.7");
+    $ctx.setSourceText("Tulo todennettu");
+end
+
+// Decision: StudyAndBenefit
+// Description: Effect of studies on benefit
+// Legal Source: Section 2.10
+// Inputs: 
+// Output: result
+
+rule "StudyAndBenefit_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("No benefit during full-time study");
+    $ctx.setLegalBasis("Section 2.10");
+    $ctx.setSourceText("Päätoiminen opiskelu");
+end
+
+rule "StudyAndBenefit_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("May receive benefit if part-time");
+    $ctx.setLegalBasis("Section 2.10");
+    $ctx.setSourceText("Sivutoiminen");
+end
+
+rule "StudyAndBenefit_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Vocational training qualifies");
+    $ctx.setLegalBasis("Section 2.13");
+    $ctx.setSourceText("Ammatillinen koulutus");
+end
+
+rule "StudyAndBenefit_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Benefit after studies end");
+    $ctx.setLegalBasis("Section 2.11");
+    $ctx.setSourceText("Opintojen päättyminen");
+end
+
+// Decision: RestrictionsOnBenefit
+// Description: General restrictions on benefit
+// Legal Source: Chapter 3
+// Inputs: 
+// Output: result
+
+rule "RestrictionsOnBenefit_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("No benefit during imprisonment");
+    $ctx.setLegalBasis("Section 3.1");
+    $ctx.setSourceText("Vankeusrangaistus");
+end
+
+rule "RestrictionsOnBenefit_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Limited benefit abroad");
+    $ctx.setLegalBasis("Section 3.1");
+    $ctx.setSourceText("Ulkomailla");
+end
+
+rule "RestrictionsOnBenefit_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("No benefit during strike");
+    $ctx.setLegalBasis("Section 3.1");
+    $ctx.setSourceText("Lakko");
+end
+
+rule "RestrictionsOnBenefit_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Benefit reduced or denied");
+    $ctx.setLegalBasis("Section 3.7");
+    $ctx.setSourceText("Tulot");
+end
+
+// Decision: WaitingPeriod
+// Description: Waiting period before benefit starts
+// Legal Source: Section 5.13
+// Inputs: 
+// Output: result
+
+rule "WaitingPeriod_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("7-day waiting period");
+    $ctx.setLegalBasis("Section 5.13");
+    $ctx.setSourceText("7 päivää");
+end
+
+rule "WaitingPeriod_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("New waiting period if short work");
+    $ctx.setLegalBasis("Section 5.13");
+    $ctx.setSourceText("Uusi omavastuu");
+end
+
+rule "WaitingPeriod_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Waiting period extended by illness");
+    $ctx.setLegalBasis("Section 5.13");
+    $ctx.setSourceText("Sairaus");
+end
+
+rule "WaitingPeriod_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("No waiting during activation");
+    $ctx.setLegalBasis("Section 5.13");
+    $ctx.setSourceText("Aktivoinnin aikana");
+end
+
+// Decision: LabourMarketSupport
+// Description: Labour market support conditions
+// Legal Source: Chapter 7
+// Inputs: 
+// Output: result
+
+rule "LabourMarketSupport_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must have no earnings-related benefit");
+    $ctx.setLegalBasis("Section 7.1");
+    $ctx.setSourceText("Ei ansiopäivärahaa");
+end
+
+rule "LabourMarketSupport_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Income test applies");
+    $ctx.setLegalBasis("Section 7.6");
+    $ctx.setSourceText("Tuloharkinta");
+end
+
+rule "LabourMarketSupport_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must meet employment condition");
+    $ctx.setLegalBasis("Section 7.1");
+    $ctx.setSourceText("Työssäoloehto");
+end
+
+rule "LabourMarketSupport_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Under 65 years old");
+    $ctx.setLegalBasis("Section 7.1");
+    $ctx.setSourceText("Alle 65-vuotias");
+end
+
+// Decision: MobilitySupport
+// Description: Mobility support for moving for work
+// Legal Source: Chapter 8
+// Inputs: 
+// Output: result
+
+rule "MobilitySupport_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Moving for suitable job");
+    $ctx.setLegalBasis("Section 8.1");
+    $ctx.setSourceText("Työn perusteella muutto");
+end
+
+rule "MobilitySupport_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Over 150 km from previous residence");
+    $ctx.setLegalBasis("Section 8.1");
+    $ctx.setSourceText("150 km");
+end
+
+rule "MobilitySupport_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Permanent or fixed-term over 2 years");
+    $ctx.setLegalBasis("Section 8.1");
+    $ctx.setSourceText("Vakituinen työ");
+end
+
+rule "MobilitySupport_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("500 EUR one-time payment");
+    $ctx.setLegalBasis("Section 8.2");
+    $ctx.setSourceText("500 euroa");
+end
+
+// Decision: RedundancyPayment
+// Description: Redundancy payment conditions
+// Legal Source: Chapter 9
+// Inputs: 
+// Output: result
+
+rule "RedundancyPayment_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Due to employer bankruptcy or layoff");
+    $ctx.setLegalBasis("Section 9.1");
+    $ctx.setSourceText("Lomautus tai työnantajan konkurssi");
+end
+
+rule "RedundancyPayment_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("At least 5 years with employer");
+    $ctx.setLegalBasis("Section 9.1");
+    $ctx.setSourceText("5 vuotta");
+end
+
+rule "RedundancyPayment_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Not refused re-employment");
+    $ctx.setLegalBasis("Section 9.3");
+    $ctx.setSourceText("Ei ole kieltäytynyt");
+end
+
+rule "RedundancyPayment_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Based on tenure and wages");
+    $ctx.setLegalBasis("Section 9.2");
+    $ctx.setSourceText("Laskenta");
+end
+
+// Decision: EmploymentServicesBenefit
+// Description: Benefit during employment services
+// Legal Source: Chapter 10
+// Inputs: 
+// Output: result
+
+rule "EmploymentServicesBenefit_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Benefit during training");
+    $ctx.setLegalBasis("Section 10.1");
+    $ctx.setSourceText("Koulutus");
+end
+
+rule "EmploymentServicesBenefit_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Benefit during rehabilitation");
+    $ctx.setLegalBasis("Section 10.1");
+    $ctx.setSourceText("Kuntoutus");
+end
+
+rule "EmploymentServicesBenefit_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Benefit during work placement");
+    $ctx.setLegalBasis("Section 10.1");
+    $ctx.setSourceText("Työpaikalla");
+end
+
+rule "EmploymentServicesBenefit_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Acceptable reason prevents penalty");
+    $ctx.setLegalBasis("Section 10.3");
+    $ctx.setSourceText("Pätevä syy");
+end
+
+// Decision: ApplicationAndPayment
+// Description: Application and payment procedures
+// Legal Source: Chapter 11
+// Inputs: 
+// Output: result
+
+rule "ApplicationAndPayment_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Unemployment fund or Kela");
+    $ctx.setLegalBasis("Section 11.1");
+    $ctx.setSourceText("Hakemus");
+end
+
+rule "ApplicationAndPayment_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Decision within 30 days");
+    $ctx.setLegalBasis("Section 11.1a");
+    $ctx.setSourceText("30 päivää");
+end
+
+rule "ApplicationAndPayment_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Paid every two weeks");
+    $ctx.setLegalBasis("Section 11.5");
+    $ctx.setSourceText("Kahden viikon välein");
+end
+
+rule "ApplicationAndPayment_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must be paid to account");
+    $ctx.setLegalBasis("Section 11.5");
+    $ctx.setSourceText("Tilisiirtona");
+end
+
+// Decision: RecoveryOfOverpayment
+// Description: Recovery of incorrectly paid benefit
+// Legal Source: Section 11.10
+// Inputs: 
+// Output: result
+
+rule "RecoveryOfOverpayment_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Full recovery");
+    $ctx.setLegalBasis("Section 11.10");
+    $ctx.setSourceText("Tahallinen");
+end
+
+rule "RecoveryOfOverpayment_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("May recover part");
+    $ctx.setLegalBasis("Section 11.10");
+    $ctx.setSourceText("Huolimaton");
+end
+
+rule "RecoveryOfOverpayment_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("May pay in installments");
+    $ctx.setLegalBasis("Section 11.10");
+    $ctx.setSourceText("Erissä");
+end
+
+rule "RecoveryOfOverpayment_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("May deduct from future benefits");
+    $ctx.setLegalBasis("Section 11.13");
+    $ctx.setSourceText("Kuittaus");
+end
+
+// Decision: AppealProcedure
+// Description: Right to appeal benefit decisions
+// Legal Source: Chapter 12
+// Inputs: 
+// Output: result
+
+rule "AppealProcedure_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("To unemployment security board appeal committee");
+    $ctx.setLegalBasis("Section 12.1");
+    $ctx.setSourceText("Työttömyysturvalautakunta");
+end
+
+rule "AppealProcedure_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Within 30 days of decision");
+    $ctx.setLegalBasis("Section 12.1");
+    $ctx.setSourceText("30 päivää");
+end
+
+rule "AppealProcedure_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Can request correction");
+    $ctx.setLegalBasis("Section 12.4");
+    $ctx.setSourceText("Itseoikaisu");
+end
+
+rule "AppealProcedure_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Can appeal to court");
+    $ctx.setLegalBasis("Section 12.1");
+    $ctx.setSourceText("Hallinto-oikeus");
+end
+
+// Decision: InternationalCoordination
+// Description: EU and international coordination
+// Legal Source: Section 8a
+// Inputs: 
+// Output: result
+
+rule "InternationalCoordination_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Export benefit to EU/EEA");
+    $ctx.setLegalBasis("Section 8a");
+    $ctx.setSourceText("EU/ETA-maat");
+end
+
+rule "InternationalCoordination_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Periods from other countries count");
+    $ctx.setLegalBasis("Section 5.9");
+    $ctx.setSourceText("Vakuutuskaudet");
+end
+
+rule "InternationalCoordination_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Can search for job in EU");
+    $ctx.setLegalBasis("Section 8b");
+    $ctx.setSourceText("Työnhaku toisessa valtiossa");
+end
+
+rule "InternationalCoordination_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Return to Finland maintains rights");
+    $ctx.setLegalBasis("Section 8b");
+    $ctx.setSourceText("Paluu Suomeen");
+end
+
+// Decision: YouthUnemploymentBenefit
+// Description: Youth additional benefit
+// Legal Source: Section 6.5
+// Inputs: 
+// Output: result
+
+rule "YouthUnemploymentBenefit_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Youth addition available");
+    $ctx.setLegalBasis("Section 6.5");
+    $ctx.setSourceText("Alle 25-vuotias");
+end
+
+rule "YouthUnemploymentBenefit_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Youth addition if short employment");
+    $ctx.setLegalBasis("Section 6.5");
+    $ctx.setSourceText("Lyhyt työhistoria");
+end
+
+rule "YouthUnemploymentBenefit_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Additional percentage");
+    $ctx.setLegalBasis("Section 6.5");
+    $ctx.setSourceText("Lisäprosentti");
+end
+
+// Decision: EmploymentInsuranceAccumulation
+// Description: How employment insurance period accumulates
+// Legal Source: Section 5.4
+// Inputs: 
+// Output: result
+
+rule "EmploymentInsuranceAccumulation_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("18+ hours = 1 month");
+    $ctx.setLegalBasis("Section 5.4");
+    $ctx.setSourceText("18 tuntia viikossa");
+end
+
+rule "EmploymentInsuranceAccumulation_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("80+ hours = 1 month");
+    $ctx.setLegalBasis("Section 5.4");
+    $ctx.setSourceText("80 tuntia kuukaudessa");
+end
+
+rule "EmploymentInsuranceAccumulation_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Full month counts fully");
+    $ctx.setLegalBasis("Section 5.4");
+    $ctx.setSourceText("Täysi kuukausi");
+end
+
+rule "EmploymentInsuranceAccumulation_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Can combine multiple jobs");
+    $ctx.setLegalBasis("Section 5.4");
+    $ctx.setSourceText("Yhdistellä");
+end
+
+// Decision: WorkDisabilityEffect
+// Description: Effect of work disability on benefit
+// Legal Source: Section 3.3
+// Inputs: 
+// Output: result
+
+rule "WorkDisabilityEffect_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("No unemployment benefit");
+    $ctx.setLegalBasis("Section 3.3");
+    $ctx.setSourceText("Täysi työkyvyttömyys");
+end
+
+rule "WorkDisabilityEffect_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("May receive adjusted benefit");
+    $ctx.setLegalBasis("Section 3.3");
+    $ctx.setSourceText("Osittainen");
+end
+
+rule "WorkDisabilityEffect_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Can return to unemployment benefit");
+    $ctx.setLegalBasis("Section 3.3");
+    $ctx.setSourceText("Toipuminen");
+end
+
+rule "WorkDisabilityEffect_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Excludes unemployment benefit");
+    $ctx.setLegalBasis("Section 3.3");
+    $ctx.setSourceText("Työkyvyttömyyseläke");
+end
+
+// Decision: LeaveAndBenefit
+// Description: Parental leave and unemployment benefit
+// Legal Source: Section 3.4
+// Inputs: 
+// Output: result
+
+rule "LeaveAndBenefit_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("No unemployment benefit during leave");
+    $ctx.setLegalBasis("Section 3.4");
+    $ctx.setSourceText("Van parental leave");
+end
+
+rule "LeaveAndBenefit_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Care leave affects benefit");
+    $ctx.setLegalBasis("Section 3.4");
+    $ctx.setSourceText("Hoitovapaa");
+end
+
+rule "LeaveAndBenefit_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Study leave");
+    $ctx.setLegalBasis("Section 3.4");
+    $ctx.setSourceText("Opintovapaa");
+end
+
+// Decision: EarnedIncomeEffect
+// Description: Effect of earned income on benefit
+// Legal Source: Section 3.7
+// Inputs: 
+// Output: result
+
+rule "EarnedIncomeEffect_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Full benefit");
+    $ctx.setLegalBasis("Section 3.7");
+    $ctx.setSourceText("Alle 300 euroa");
+end
+
+rule "EarnedIncomeEffect_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Benefit reduced 50%");
+    $ctx.setLegalBasis("Section 3.7");
+    $ctx.setSourceText("300-850 euroa");
+end
+
+rule "EarnedIncomeEffect_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("No benefit");
+    $ctx.setLegalBasis("Section 3.7");
+    $ctx.setSourceText("Yli 850 euroa");
+end
+
+rule "EarnedIncomeEffect_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Net income counted");
+    $ctx.setLegalBasis("Section 3.7");
+    $ctx.setSourceText("Netto tulo");
+end
+
+// Decision: TerminationByEmployee
+// Description: Termination by employee (quitting)
+// Legal Source: Section 2a.1
+// Inputs: 
+// Output: result
+
+rule "TerminationByEmployee_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Benefit cut off 90 days");
+    $ctx.setLegalBasis("Section 2a.1");
+    $ctx.setSourceText("Eroaminen ilman syytä");
+end
+
+rule "TerminationByEmployee_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("No penalty if acceptable reason");
+    $ctx.setLegalBasis("Section 2a.2");
+    $ctx.setSourceText("Pätevä syy");
+end
+
+rule "TerminationByEmployee_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Changed circumstances");
+    $ctx.setLegalBasis("Section 2a.2");
+    $ctx.setSourceText("Muuttuneet olosuhteet");
+end
+
+rule "TerminationByEmployee_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("3 month penalty period");
+    $ctx.setLegalBasis("Section 2a.1");
+    $ctx.setSourceText("3 kuukauden korvauskatko");
+end
+
+// Decision: LayoffAndBenefit
+// Description: Layoff (lomautus) and benefit
+// Legal Source: Section 2.1
+// Inputs: 
+// Output: result
+
+rule "LayoffAndBenefit_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Full benefit available");
+    $ctx.setLegalBasis("Section 2.1");
+    $ctx.setSourceText("Täysi lomautus");
+end
+
+rule "LayoffAndBenefit_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Partial benefit");
+    $ctx.setLegalBasis("Section 2.1");
+    $ctx.setSourceText("Osittainen lomautus");
+end
+
+rule "LayoffAndBenefit_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Return to work ends benefit");
+    $ctx.setLegalBasis("Section 2.1");
+    $ctx.setSourceText("Paluu työhön");
+end
+
+rule "LayoffAndBenefit_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("New application after layoff ends");
+    $ctx.setLegalBasis("Section 2.1");
+    $ctx.setSourceText("Uusi hakemus");
+end
+
+// Decision: SeasonalWorkEffect
+// Description: Seasonal work and benefit
+// Legal Source: Section 2.4
+// Inputs: 
+// Output: result
+
+rule "SeasonalWorkEffect_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Seasonal work counted");
+    $ctx.setLegalBasis("Section 2.4");
+    $ctx.setSourceText("Kausityö");
+end
+
+rule "SeasonalWorkEffect_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Can claim after seasonal ends");
+    $ctx.setLegalBasis("Section 2.4");
+    $ctx.setSourceText("Kauden päättyminen");
+end
+
+rule "SeasonalWorkEffect_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Same employer next season");
+    $ctx.setLegalBasis("Section 2.4");
+    $ctx.setSourceText("Sama työnantaja");
+end
+
+// Decision: EntrepreneurStartPeriod
+// Description: Starting entrepreneurship and benefit
+// Legal Source: Section 5a
+// Inputs: 
+// Output: result
+
+rule "EntrepreneurStartPeriod_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Business start period");
+    $ctx.setLegalBasis("Section 5a(1)");
+    $ctx.setSourceText("Aloittava yrittäjä");
+end
+
+rule "EntrepreneurStartPeriod_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Start grant can affect benefit");
+    $ctx.setLegalBasis("Section 5a(2)");
+    $ctx.setSourceText("Starttiraha");
+end
+
+rule "EntrepreneurStartPeriod_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must be full-time");
+    $ctx.setLegalBasis("Section 5a(1)");
+    $ctx.setSourceText("Kokopäiväinen");
+end
+
+rule "EntrepreneurStartPeriod_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Business plan required");
+    $ctx.setLegalBasis("Section 5a(1)");
+    $ctx.setSourceText("Liiketoimintasuunnitelma");
+end
+
+// Decision: OldWorkerAdditionalDays
+// Description: Additional days for older workers
+// Legal Source: Section 6.9
+// Inputs: 
+// Output: result
+
+rule "OldWorkerAdditionalDays_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Additional 150 days available");
+    $ctx.setLegalBasis("Section 6.9(1)");
+    $ctx.setSourceText("150 lisäpäivää");
+end
+
+rule "OldWorkerAdditionalDays_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Additional 100 days at 59");
+    $ctx.setLegalBasis("Section 6.9(1)");
+    $ctx.setSourceText("100 lisäpäivää");
+end
+
+rule "OldWorkerAdditionalDays_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("At least 5 years employment");
+    $ctx.setLegalBasis("Section 6.9(1)");
+    $ctx.setSourceText("5 vuotta");
+end
+
+rule "OldWorkerAdditionalDays_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("After regular benefit ends");
+    $ctx.setLegalBasis("Section 6.9(2)");
+    $ctx.setSourceText("Jakson jälkeen");
+end
+
+// Decision: LabourMarketSupportAmount
+// Description: Labour market support amount
+// Legal Source: Section 7.4
+// Inputs: 
+// Output: result
+
+rule "LabourMarketSupportAmount_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("33.66 EUR per day");
+    $ctx.setLegalBasis("Section 7.4");
+    $ctx.setSourceText("Perusmäärä");
+end
+
+rule "LabourMarketSupportAmount_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Increased with children");
+    $ctx.setLegalBasis("Section 7.4");
+    $ctx.setSourceText("Lapsikorotuksella");
+end
+
+rule "LabourMarketSupportAmount_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Income test reduces");
+    $ctx.setLegalBasis("Section 7.6");
+    $ctx.setSourceText("Tuloharkinta");
+end
+
+rule "LabourMarketSupportAmount_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Without income test at start");
+    $ctx.setLegalBasis("Section 7.8");
+    $ctx.setSourceText("Alussa ilman tulotestiä");
+end
+
+// Decision: SolidarityAllowance
+// Description: Solidarity allowance for certain groups
+// Legal Source: Section 7.4a
+// Inputs: 
+// Output: result
+
+rule "SolidarityAllowance_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Long-term unemployed");
+    $ctx.setLegalBasis("Section 7.4a");
+    $ctx.setSourceText("Pitkäaikaistyötön");
+end
+
+rule "SolidarityAllowance_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Over 50 years old");
+    $ctx.setLegalBasis("Section 7.4a");
+    $ctx.setSourceText("Yli 50-vuotias");
+end
+
+rule "SolidarityAllowance_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Higher than basic");
+    $ctx.setLegalBasis("Section 7.4a");
+    $ctx.setSourceText("Korotettu määrä");
+end
+
+// Decision: WorkingWhileUnemployed
+// Description: Working while registered unemployed
+// Legal Source: Section 4.1a
+// Inputs: 
+// Output: result
+
+rule "WorkingWhileUnemployed_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Trial work period allowed");
+    $ctx.setLegalBasis("Section 4.1a");
+    $ctx.setSourceText("Koeaika");
+end
+
+rule "WorkingWhileUnemployed_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Maximum 5 days per week credit");
+    $ctx.setLegalBasis("Section 4.1a");
+    $ctx.setSourceText("Enintään 5 päivää");
+end
+
+rule "WorkingWhileUnemployed_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must report earnings");
+    $ctx.setLegalBasis("Section 4.1a");
+    $ctx.setSourceText("Ilmoitettava");
+end
+
+rule "WorkingWhileUnemployed_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Benefit adjusted next period");
+    $ctx.setLegalBasis("Section 4.1a");
+    $ctx.setSourceText("Sovitellaan");
+end
+
+// Decision: EmployeeQualifyingPeriod
+// Description: Qualifying period calculation for employees
+// Legal Source: Section 5.4
+// Inputs: 
+// Output: result
+
+rule "EmployeeQualifyingPeriod_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("12 months employment in last 24 months");
+    $ctx.setLegalBasis("Section 5.3");
+    $ctx.setSourceText("12 kuukautta");
+end
+
+rule "EmployeeQualifyingPeriod_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Minimum 18 hours per week");
+    $ctx.setLegalBasis("Section 5.3");
+    $ctx.setSourceText("18 tuntia");
+end
+
+rule "EmployeeQualifyingPeriod_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Employment calculated in calendar weeks");
+    $ctx.setLegalBasis("Section 5.4");
+    $ctx.setSourceText("Kalenteriviikko");
+end
+
+rule "EmployeeQualifyingPeriod_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Can combine multiple employers");
+    $ctx.setLegalBasis("Section 5.4");
+    $ctx.setSourceText("Yhdistelmätyö");
+end
+
+// Decision: EntrepreneurQualifyingPeriod
+// Description: Qualifying period for entrepreneurs
+// Legal Source: Section 5.7-5.8
+// Inputs: 
+// Output: result
+
+rule "EntrepreneurQualifyingPeriod_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("24 months in last 48 months");
+    $ctx.setLegalBasis("Section 5.7");
+    $ctx.setSourceText("24 kuukautta");
+end
+
+rule "EntrepreneurQualifyingPeriod_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Annual income at least 13,457 EUR");
+    $ctx.setLegalBasis("Section 5.7");
+    $ctx.setSourceText("Tulo 13 457 euroa");
+end
+
+rule "EntrepreneurQualifyingPeriod_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must have TYEL insurance");
+    $ctx.setLegalBasis("Section 5.7");
+    $ctx.setSourceText("TYEL-vakuutus");
+end
+
+rule "EntrepreneurQualifyingPeriod_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Business actively conducted");
+    $ctx.setLegalBasis("Section 5.7");
+    $ctx.setSourceText("Aktiivinen");
+end
+
+// Decision: ForeignWorkRecognition
+// Description: Recognition of foreign work periods
+// Legal Source: Section 5.9
+// Inputs: 
+// Output: result
+
+rule "ForeignWorkRecognition_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("EU/EEA work periods count");
+    $ctx.setLegalBasis("Section 5.9");
+    $ctx.setSourceText("EU/ETA-työ");
+end
+
+rule "ForeignWorkRecognition_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Countries with agreement");
+    $ctx.setLegalBasis("Section 5.9");
+    $ctx.setSourceText("Sopimusmaat");
+end
+
+rule "ForeignWorkRecognition_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Need certificate from country");
+    $ctx.setLegalBasis("Section 5.9");
+    $ctx.setSourceText("Todistus");
+end
+
+rule "ForeignWorkRecognition_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Partial periods combined");
+    $ctx.setLegalBasis("Section 5.9");
+    $ctx.setSourceText("Osittaiset jaksot");
+end
+
+// Decision: PostProtection
+// Description: Post-protection after employment ends
+// Legal Source: Section 5.10a
+// Inputs: 
+// Output: result
+
+rule "PostProtection_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Post-protection available");
+    $ctx.setLegalBasis("Section 5.10a");
+    $ctx.setSourceText("Jälkisuoja");
+end
+
+rule "PostProtection_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("At least 3 years of employment");
+    $ctx.setLegalBasis("Section 5.10a");
+    $ctx.setSourceText("3 vuotta");
+end
+
+rule "PostProtection_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Apply within 12 months");
+    $ctx.setLegalBasis("Section 5.10a");
+    $ctx.setSourceText("12 kuukauden sisällä");
+end
+
+rule "PostProtection_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Not due to own quitting");
+    $ctx.setLegalBasis("Section 5.10a");
+    $ctx.setSourceText("Ei omaa syytä");
+end
+
+// Decision: MarineInsurance
+// Description: Special rules for maritime workers
+// Legal Source: Section 5.12
+// Inputs: 
+// Output: result
+
+rule "MarineInsurance_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Sea work counts double");
+    $ctx.setLegalBasis("Section 5.12");
+    $ctx.setSourceText("Merityö");
+end
+
+rule "MarineInsurance_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Additional insurance possible");
+    $ctx.setLegalBasis("Section 5.12");
+    $ctx.setSourceText("Lisävakuutus");
+end
+
+rule "MarineInsurance_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Days at sea requirement");
+    $ctx.setLegalBasis("Section 5.12");
+    $ctx.setSourceText("Meripäivät");
+end
+
+rule "MarineInsurance_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must be certified seaman");
+    $ctx.setLegalBasis("Section 5.12");
+    $ctx.setSourceText("Merimies");
+end
+
+// Decision: OwnRiskPeriod
+// Description: Own risk period (waiting period)
+// Legal Source: Section 5.13
+// Inputs: 
+// Output: result
+
+rule "OwnRiskPeriod_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("7 calendar days waiting period");
+    $ctx.setLegalBasis("Section 5.13");
+    $ctx.setSourceText("7 päivää");
+end
+
+rule "OwnRiskPeriod_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("New waiting for short employment");
+    $ctx.setLegalBasis("Section 5.13");
+    $ctx.setSourceText("Uusi omavastuu");
+end
+
+rule "OwnRiskPeriod_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("No waiting during activation");
+    $ctx.setLegalBasis("Section 5.13");
+    $ctx.setSourceText("Aktivoinnin aikana");
+end
+
+rule "OwnRiskPeriod_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Illness extends waiting");
+    $ctx.setLegalBasis("Section 5.13");
+    $ctx.setSourceText("Sairaus");
+end
+
+// Decision: DailyAllowanceCalculation
+// Description: Daily allowance amount calculation
+// Legal Source: Section 6.1-6.3
+// Inputs: 
+// Output: result
+
+rule "DailyAllowanceCalculation_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Based on wages from 12 months");
+    $ctx.setLegalBasis("Section 6.1");
+    $ctx.setSourceText("Palkka 12 kuukaudelta");
+end
+
+rule "DailyAllowanceCalculation_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("45% of wage exceeding base");
+    $ctx.setLegalBasis("Section 6.2");
+    $ctx.setSourceText("45%");
+end
+
+rule "DailyAllowanceCalculation_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("20% of wage below base");
+    $ctx.setLegalBasis("Section 6.2");
+    $ctx.setSourceText("20%");
+end
+
+rule "DailyAllowanceCalculation_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Supplement for dependent children");
+    $ctx.setLegalBasis("Section 6.3");
+    $ctx.setSourceText("Lapsilisä");
+end
+
+// Decision: MaximumPeriod
+// Description: Maximum benefit period
+// Legal Source: Section 6.7
+// Inputs: 
+// Output: result
+
+rule "MaximumPeriod_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Maximum 300 days");
+    $ctx.setLegalBasis("Section 6.7");
+    $ctx.setSourceText("300 päivää");
+end
+
+rule "MaximumPeriod_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("500 days for those over 58");
+    $ctx.setLegalBasis("Section 6.9");
+    $ctx.setSourceText("500 päivää");
+end
+
+rule "MaximumPeriod_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("New 300-day period after work");
+    $ctx.setLegalBasis("Section 6.7");
+    $ctx.setSourceText("Uusi jakso");
+end
+
+rule "MaximumPeriod_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Additional days for older workers");
+    $ctx.setLegalBasis("Section 6.9");
+    $ctx.setSourceText("Lisäpäivät");
+end
+
+// Decision: ReducedBenefit60Days
+// Description: 60-day reduced benefit period
+// Legal Source: Section 6.3a
+// Inputs: 
+// Output: result
+
+rule "ReducedBenefit60Days_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("First 60 days at reduced rate");
+    $ctx.setLegalBasis("Section 6.3a");
+    $ctx.setSourceText("Ensimmäiset 60 päivää");
+end
+
+rule "ReducedBenefit60Days_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("80% of full benefit");
+    $ctx.setLegalBasis("Section 6.3a");
+    $ctx.setSourceText("80%");
+end
+
+rule "ReducedBenefit60Days_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Without children supplement");
+    $ctx.setLegalBasis("Section 6.3a");
+    $ctx.setSourceText("Ilman lapsilisää");
+end
+
+rule "ReducedBenefit60Days_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Full benefit after 60 days");
+    $ctx.setLegalBasis("Section 6.3a");
+    $ctx.setSourceText("60 päivän jälkeen");
+end
+
+// Decision: ReemploymentBonus
+// Description: Re-employment bonus
+// Legal Source: Section 6.3b
+// Inputs: 
+// Output: result
+
+rule "ReemploymentBonus_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Bonus for quick re-employment");
+    $ctx.setLegalBasis("Section 6.3b");
+    $ctx.setSourceText("Uudelleen työllistymisbonus");
+end
+
+rule "ReemploymentBonus_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("50% of daily benefit for 100 days");
+    $ctx.setLegalBasis("Section 6.3b");
+    $ctx.setSourceText("50% 100 päivältä");
+end
+
+rule "ReemploymentBonus_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Within 65 days of application");
+    $ctx.setLegalBasis("Section 6.3b");
+    $ctx.setSourceText("65 päivän sisällä");
+end
+
+rule "ReemploymentBonus_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Minimum 12 months employment");
+    $ctx.setLegalBasis("Section 6.3b");
+    $ctx.setSourceText("12 kuukautta");
+end
+
+// Decision: LabourMarketSupportWaiting
+// Description: Waiting period for labour market support
+// Legal Source: Section 7.2
+// Inputs: 
+// Output: result
+
+rule "LabourMarketSupportWaiting_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("5-day waiting period");
+    $ctx.setLegalBasis("Section 7.2");
+    $ctx.setSourceText("5 päivää");
+end
+
+rule "LabourMarketSupportWaiting_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("One waiting period per 12 months");
+    $ctx.setLegalBasis("Section 7.2");
+    $ctx.setSourceText("Kerran 12 kuukaudessa");
+end
+
+rule "LabourMarketSupportWaiting_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("No waiting during activation");
+    $ctx.setLegalBasis("Section 7.2");
+    $ctx.setSourceText("Aktivoinnin aikana");
+end
+
+rule "LabourMarketSupportWaiting_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("New waiting if renewed");
+    $ctx.setLegalBasis("Section 7.2");
+    $ctx.setSourceText("Uusittu tuki");
+end
+
+// Decision: IncomeSupportDetermination
+// Description: Income test for labour market support
+// Legal Source: Section 7.6-7.7
+// Inputs: 
+// Output: result
+
+rule "IncomeSupportDetermination_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Household income considered");
+    $ctx.setLegalBasis("Section 7.6");
+    $ctx.setSourceText("Kotitalouden tulot");
+end
+
+rule "IncomeSupportDetermination_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Spouse income affects");
+    $ctx.setLegalBasis("Section 7.6");
+    $ctx.setSourceText("Puolison tulot");
+end
+
+rule "IncomeSupportDetermination_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Deduction for children");
+    $ctx.setLegalBasis("Section 7.6");
+    $ctx.setSourceText("Lasten vähennys");
+end
+
+rule "IncomeSupportDetermination_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Monthly income calculation");
+    $ctx.setLegalBasis("Section 7.7");
+    $ctx.setSourceText("Kuukausitulo");
+end
+
+// Decision: MobilitySupportConditions
+// Description: Conditions for mobility support
+// Legal Source: Section 8.1-8.4
+// Inputs: 
+// Output: result
+
+rule "MobilitySupportConditions_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Minimum 150 km");
+    $ctx.setLegalBasis("Section 8.1");
+    $ctx.setSourceText("150 kilometriä");
+end
+
+rule "MobilitySupportConditions_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Permanent or 2-year contract");
+    $ctx.setLegalBasis("Section 8.1");
+    $ctx.setSourceText("Vakituinen");
+end
+
+rule "MobilitySupportConditions_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Over 3 hours daily commute saved");
+    $ctx.setLegalBasis("Section 8.1");
+    $ctx.setSourceText("3 tuntia");
+end
+
+rule "MobilitySupportConditions_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("500-1000 EUR one-time");
+    $ctx.setLegalBasis("Section 8.2");
+    $ctx.setSourceText("500-1000 euroa");
+end
+
+// Decision: RedundancyConditions
+// Description: Conditions for redundancy payment
+// Legal Source: Section 9.1-9.3
+// Inputs: 
+// Output: result
+
+rule "RedundancyConditions_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Employer bankruptcy");
+    $ctx.setLegalBasis("Section 9.1");
+    $ctx.setSourceText("Työnantajan konkurssi");
+end
+
+rule "RedundancyConditions_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Employer layoff over 200 days");
+    $ctx.setLegalBasis("Section 9.1");
+    $ctx.setSourceText("Lomautus 200 päivää");
+end
+
+rule "RedundancyConditions_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("At least 5 years employment");
+    $ctx.setLegalBasis("Section 9.1");
+    $ctx.setSourceText("5 vuotta");
+end
+
+rule "RedundancyConditions_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Not refused re-employment");
+    $ctx.setLegalBasis("Section 9.3");
+    $ctx.setSourceText("Ei kieltäytynyt");
+end
+
+// Decision: ActivationServicesBenefit
+// Description: Benefit during activation services
+// Legal Source: Section 10.1-10.5
+// Inputs: 
+// Output: result
+
+rule "ActivationServicesBenefit_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Full benefit during training");
+    $ctx.setLegalBasis("Section 10.1");
+    $ctx.setSourceText("Koulutus");
+end
+
+rule "ActivationServicesBenefit_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Full benefit during rehabilitation");
+    $ctx.setLegalBasis("Section 10.1");
+    $ctx.setSourceText("Kuntoutus");
+end
+
+rule "ActivationServicesBenefit_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("During work trial");
+    $ctx.setLegalBasis("Section 10.1");
+    $ctx.setSourceText("Työkokeilu");
+end
+
+rule "ActivationServicesBenefit_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Travel costs reimbursed");
+    $ctx.setLegalBasis("Section 10.6");
+    $ctx.setSourceText("Matkakulut");
+end
+
+// Decision: ApplicationProcess
+// Description: Application process details
+// Legal Source: Section 11.1-11.1a
+// Inputs: 
+// Output: result
+
+rule "ApplicationProcess_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Apply to unemployment fund");
+    $ctx.setLegalBasis("Section 11.1");
+    $ctx.setSourceText("Työttömyyskassaan");
+end
+
+rule "ApplicationProcess_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Or to Kela");
+    $ctx.setLegalBasis("Section 11.1");
+    $ctx.setSourceText("Kelaan");
+end
+
+rule "ApplicationProcess_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Decision within 30 days");
+    $ctx.setLegalBasis("Section 11.1a");
+    $ctx.setSourceText("30 päivää");
+end
+
+rule "ApplicationProcess_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Can request additional info");
+    $ctx.setLegalBasis("Section 11.1a");
+    $ctx.setSourceText("Lisätiedot");
+end
+
+// Decision: PaymentMethod
+// Description: Payment method and frequency
+// Legal Source: Section 11.5
+// Inputs: 
+// Output: result
+
+rule "PaymentMethod_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("To Finnish bank account");
+    $ctx.setLegalBasis("Section 11.5");
+    $ctx.setSourceText("Suomalaiselle tilille");
+end
+
+rule "PaymentMethod_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Every two weeks");
+    $ctx.setLegalBasis("Section 11.5");
+    $ctx.setSourceText("Kahden viikon välein");
+end
+
+rule "PaymentMethod_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Can pay to EU account");
+    $ctx.setLegalBasis("Section 11.5");
+    $ctx.setSourceText("EU-tili");
+end
+
+rule "PaymentMethod_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Paid in euros");
+    $ctx.setLegalBasis("Section 11.5");
+    $ctx.setSourceText("Euroina");
+end
+
+// Decision: SuspensionOfPayment
+// Description: Suspension of benefit payment
+// Legal Source: Section 11.6
+// Inputs: 
+// Output: result
+
+rule "SuspensionOfPayment_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Missing required information");
+    $ctx.setLegalBasis("Section 11.6");
+    $ctx.setSourceText("Puuttuvat tiedot");
+end
+
+rule "SuspensionOfPayment_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("During investigation");
+    $ctx.setLegalBasis("Section 11.6");
+    $ctx.setSourceText("Selvityksen aikana");
+end
+
+rule "SuspensionOfPayment_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("If abroad too long");
+    $ctx.setLegalBasis("Section 11.6");
+    $ctx.setSourceText("Ulkomailla");
+end
+
+rule "SuspensionOfPayment_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Resume when correct");
+    $ctx.setLegalBasis("Section 11.6");
+    $ctx.setSourceText("Korjauksen jälkeen");
+end
+
+// Decision: RecoveryConditions
+// Description: Conditions for recovery of overpayment
+// Legal Source: Section 11.10
+// Inputs: 
+// Output: result
+
+rule "RecoveryConditions_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Full if intentional");
+    $ctx.setLegalBasis("Section 11.10");
+    $ctx.setSourceText("Tahallinen");
+end
+
+rule "RecoveryConditions_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("May recover if negligent");
+    $ctx.setLegalBasis("Section 11.10");
+    $ctx.setSourceText("Huolimaton");
+end
+
+rule "RecoveryConditions_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Interest may be charged");
+    $ctx.setLegalBasis("Section 11.10");
+    $ctx.setSourceText("Korko");
+end
+
+rule "RecoveryConditions_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Can waive if small");
+    $ctx.setLegalBasis("Section 11.10");
+    $ctx.setSourceText("Voi luopua");
+end
+
+// Decision: DeductionFromBenefit
+// Description: Deduction from future benefits
+// Legal Source: Section 11.13
+// Inputs: 
+// Output: result
+
+rule "DeductionFromBenefit_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Can deduct overpayment");
+    $ctx.setLegalBasis("Section 11.13");
+    $ctx.setSourceText("Ylipayta");
+end
+
+rule "DeductionFromBenefit_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Maximum 15% of benefit");
+    $ctx.setLegalBasis("Section 11.13");
+    $ctx.setSourceText("15%");
+end
+
+rule "DeductionFromBenefit_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Can deduct debt to fund");
+    $ctx.setLegalBasis("Section 11.13");
+    $ctx.setSourceText("Velka kassalle");
+end
+
+rule "DeductionFromBenefit_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must give written notice");
+    $ctx.setLegalBasis("Section 11.13");
+    $ctx.setSourceText("Kirjallinen ilmoitus");
+end
+
+// Decision: AppealProcess
+// Description: Appeal process details
+// Legal Source: Section 12.1-12.9
+// Inputs: 
+// Output: result
+
+rule "AppealProcess_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Appeal to unemployment security board");
+    $ctx.setLegalBasis("Section 12.1");
+    $ctx.setSourceText("Työttömyysturvalautakunta");
+end
+
+rule "AppealProcess_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("30 days to appeal");
+    $ctx.setLegalBasis("Section 12.1");
+    $ctx.setSourceText("30 päivää");
+end
+
+rule "AppealProcess_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("No fee for appeal");
+    $ctx.setLegalBasis("Section 12.1");
+    $ctx.setSourceText("Maksuton");
+end
+
+rule "AppealProcess_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Then to Administrative Court");
+    $ctx.setLegalBasis("Section 12.1");
+    $ctx.setSourceText("Hallinto-oikeus");
+end
+
+// Decision: SelfCorrection
+// Description: Self-correction of decision
+// Legal Source: Section 12.4
+// Inputs: 
+// Output: result
+
+rule "SelfCorrection_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Can correct obvious error");
+    $ctx.setLegalBasis("Section 12.4");
+    $ctx.setSourceText("Näkyvä virhe");
+end
+
+rule "SelfCorrection_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("New information received");
+    $ctx.setLegalBasis("Section 12.4");
+    $ctx.setSourceText("Uudet tiedot");
+end
+
+rule "SelfCorrection_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Party can request correction");
+    $ctx.setLegalBasis("Section 12.4");
+    $ctx.setSourceText("Pyyntö");
+end
+
+rule "SelfCorrection_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Within one year");
+    $ctx.setLegalBasis("Section 12.4");
+    $ctx.setSourceText("Vuoden sisällä");
+end
+
+// Decision: DataExchange
+// Description: Data exchange between authorities
+// Legal Source: Section 13.1-13.10
+// Inputs: 
+// Output: result
+
+rule "DataExchange_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Tax authority data");
+    $ctx.setLegalBasis("Section 13.1");
+    $ctx.setSourceText("Veroviranomaisen tiedot");
+end
+
+rule "DataExchange_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Employer information");
+    $ctx.setLegalBasis("Section 13.1");
+    $ctx.setSourceText("Työnantajan tiedot");
+end
+
+rule "DataExchange_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Kela registers");
+    $ctx.setLegalBasis("Section 13.4");
+    $ctx.setSourceText("Kelan rekisterit");
+end
+
+rule "DataExchange_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Unemployment fund data");
+    $ctx.setLegalBasis("Section 13.1");
+    $ctx.setSourceText("Työttömyyskassan tiedot");
+end
+
+// Decision: IndexAdjustment
+// Description: Index adjustment of benefits
+// Legal Source: Section 14.1a-14.1c
+// Inputs: 
+// Output: result
+
+rule "IndexAdjustment_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Wage coefficient adjustment");
+    $ctx.setLegalBasis("Section 14.1a");
+    $ctx.setSourceText("Palkkakerroin");
+end
+
+rule "IndexAdjustment_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Pension index");
+    $ctx.setLegalBasis("Section 14.1b");
+    $ctx.setSourceText("Eläkeindeksi");
+end
+
+rule "IndexAdjustment_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Adjusted annually");
+    $ctx.setLegalBasis("Section 14.1");
+    $ctx.setSourceText("Vuosittain");
+end
+
+rule "IndexAdjustment_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Effective from January 1");
+    $ctx.setLegalBasis("Section 14.1");
+    $ctx.setSourceText("Tammikuusta");
+end
+
+// Decision: Financing
+// Description: Financing of benefits
+// Legal Source: Section 14.3-14.3e
+// Inputs: 
+// Output: result
+
+rule "Financing_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Funded by contributions");
+    $ctx.setLegalBasis("Section 14.3");
+    $ctx.setSourceText("Ansiosidonnaiset");
+end
+
+rule "Financing_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("State funds basic");
+    $ctx.setLegalBasis("Section 14.3a");
+    $ctx.setSourceText("Valtion varoista");
+end
+
+rule "Financing_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Employer contribution");
+    $ctx.setLegalBasis("Section 14.3");
+    $ctx.setSourceText("Työnantajan maksu");
+end
+
+rule "Financing_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Employee contribution");
+    $ctx.setLegalBasis("Section 14.3");
+    $ctx.setSourceText("Työntekijän maksu");
+end
+
+// Decision: RegionalMobility
+// Description: Regional mobility support
+// Legal Source: Section 8.1-8.5
+// Inputs: 
+// Output: result
+
+rule "RegionalMobility_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Moving to another region");
+    $ctx.setLegalBasis("Section 8.1");
+    $ctx.setSourceText("Toiseen maakuntaan");
+end
+
+rule "RegionalMobility_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Suitable job in new region");
+    $ctx.setLegalBasis("Section 8.1");
+    $ctx.setSourceText("Soveltuva työ");
+end
+
+rule "RegionalMobility_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Up to 5000 EUR");
+    $ctx.setLegalBasis("Section 8.2");
+    $ctx.setSourceText("5000 euroa asti");
+end
+
+rule "RegionalMobility_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Work minimum 6 months");
+    $ctx.setLegalBasis("Section 8.3");
+    $ctx.setSourceText("6 kuukautta");
+end
+
+// Decision: CommutingSupport
+// Description: Commuting support
+// Legal Source: Section 8.4a
+// Inputs: 
+// Output: result
+
+rule "CommutingSupport_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Long commuting distance");
+    $ctx.setLegalBasis("Section 8.4a");
+    $ctx.setSourceText("Pitkä työmatka");
+end
+
+rule "CommutingSupport_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Minimum 3 hours daily");
+    $ctx.setLegalBasis("Section 8.4a");
+    $ctx.setSourceText("3 tuntia");
+end
+
+rule "CommutingSupport_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Monthly payment");
+    $ctx.setLegalBasis("Section 8.4a");
+    $ctx.setSourceText("Kuukausittain");
+end
+
+rule "CommutingSupport_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Employer does not pay");
+    $ctx.setLegalBasis("Section 8.4a");
+    $ctx.setSourceText("Ei työnantaja");
+end
+
+// Decision: StartUpGrantEffect
+// Description: Start-up grant effect on benefit
+// Legal Source: Section 5a.2
+// Inputs: 
+// Output: result
+
+rule "StartUpGrantEffect_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Start-up grant affects benefit");
+    $ctx.setLegalBasis("Section 5a.2");
+    $ctx.setSourceText("Starttiraha");
+end
+
+rule "StartUpGrantEffect_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Benefit reduced during grant");
+    $ctx.setLegalBasis("Section 5a.2");
+    $ctx.setSourceText("Pienennetty");
+end
+
+rule "StartUpGrantEffect_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Grant period excluded");
+    $ctx.setLegalBasis("Section 5a.2");
+    $ctx.setSourceText("Ei huomioida");
+end
+
+rule "StartUpGrantEffect_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Benefit after grant ends");
+    $ctx.setLegalBasis("Section 5a.2");
+    $ctx.setSourceText("Avustuksen jälkeen");
+end
+
+// Decision: FamilyPensionEffect
+// Description: Family pension effect on benefit
+// Legal Source: Section 3.4
+// Inputs: 
+// Output: result
+
+rule "FamilyPensionEffect_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Survivors pension affects");
+    $ctx.setLegalBasis("Section 3.4");
+    $ctx.setSourceText("Leskeneläke");
+end
+
+rule "FamilyPensionEffect_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Orphans pension");
+    $ctx.setLegalBasis("Section 3.4");
+    $ctx.setSourceText("Lapseneläke");
+end
+
+rule "FamilyPensionEffect_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Full pension excludes benefit");
+    $ctx.setLegalBasis("Section 3.4");
+    $ctx.setSourceText("Täysi eläke");
+end
+
+rule "FamilyPensionEffect_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Partial pension partial benefit");
+    $ctx.setLegalBasis("Section 3.4");
+    $ctx.setSourceText("Osittainen eläke");
+end
+
+// Decision: AccidentInsuranceEffect
+// Description: Accident insurance effect
+// Legal Source: Section 3.4a
+// Inputs: 
+// Output: result
+
+rule "AccidentInsuranceEffect_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Work accident insurance");
+    $ctx.setLegalBasis("Section 3.4a");
+    $ctx.setSourceText("Tapaturmavakuutus");
+end
+
+rule "AccidentInsuranceEffect_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("If compensation received");
+    $ctx.setLegalBasis("Section 3.4a");
+    $ctx.setSourceText("Korvaus");
+end
+
+rule "AccidentInsuranceEffect_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("May be deducted from benefit");
+    $ctx.setLegalBasis("Section 3.4a");
+    $ctx.setSourceText("Vähennetään");
+end
+
+rule "AccidentInsuranceEffect_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("No duplicate compensation");
+    $ctx.setLegalBasis("Section 3.4a");
+    $ctx.setSourceText("Ei kaksinkertaisesti");
+end
+
+// Decision: CriminalSanctionEffect
+// Description: Criminal sanction effect on benefit
+// Legal Source: Section 3.1
+// Inputs: 
+// Output: result
+
+rule "CriminalSanctionEffect_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("No benefit during imprisonment");
+    $ctx.setLegalBasis("Section 3.1");
+    $ctx.setSourceText("Vankeus");
+end
+
+rule "CriminalSanctionEffect_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Community service affects");
+    $ctx.setLegalBasis("Section 3.1");
+    $ctx.setSourceText("Yhdyskuntapalvelu");
+end
+
+rule "CriminalSanctionEffect_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Benefit after release");
+    $ctx.setLegalBasis("Section 3.1");
+    $ctx.setSourceText("Vapauden jälkeen");
+end
+
+rule "CriminalSanctionEffect_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Travel restriction affects");
+    $ctx.setLegalBasis("Section 3.1");
+    $ctx.setSourceText("Matkustuskielto");
+end
+
+// Decision: CooperationWithAuthorities
+// Description: Cooperation with authorities requirement
+// Legal Source: Section 11.2
+// Inputs: 
+// Output: result
+
+rule "CooperationWithAuthorities_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must provide required information");
+    $ctx.setLegalBasis("Section 11.2");
+    $ctx.setSourceText("Tiedot");
+end
+
+rule "CooperationWithAuthorities_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must attend interviews");
+    $ctx.setLegalBasis("Section 11.2");
+    $ctx.setSourceText("Haastattelu");
+end
+
+rule "CooperationWithAuthorities_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must meet requirements");
+    $ctx.setLegalBasis("Section 11.2");
+    $ctx.setSourceText("Edellytykset");
+end
+
+rule "CooperationWithAuthorities_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Penalty for non-cooperation");
+    $ctx.setLegalBasis("Section 11.2");
+    $ctx.setSourceText("Seuraamus");
+end
+
+// Decision: LabourMarketPolicyStatement
+// Description: Labour market policy statement
+// Legal Source: Section 11.4
+// Inputs: 
+// Output: result
+
+rule "LabourMarketPolicyStatement_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("TE services statement required");
+    $ctx.setLegalBasis("Section 11.4");
+    $ctx.setSourceText("Työvoimapoliittinen lausunto");
+end
+
+rule "LabourMarketPolicyStatement_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Statement on availability");
+    $ctx.setLegalBasis("Section 11.4");
+    $ctx.setSourceText("Käytettävyys");
+end
+
+rule "LabourMarketPolicyStatement_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Statement on job seeking");
+    $ctx.setLegalBasis("Section 11.4");
+    $ctx.setSourceText("Aktiivisuus");
+end
+
+rule "LabourMarketPolicyStatement_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Affects benefit decision");
+    $ctx.setLegalBasis("Section 11.4");
+    $ctx.setSourceText("Vaikuttaa päätökseen");
+end
+
+// Decision: EUCoordinationRules
+// Description: EU coordination rules
+// Legal Source: Section 8a-8b
+// Inputs: 
+// Output: result
+
+rule "EUCoordinationRules_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Can export to EU country");
+    $ctx.setLegalBasis("Section 8a");
+    $ctx.setSourceText("Viedä EU-maahan");
+end
+
+rule "EUCoordinationRules_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Up to 3 months");
+    $ctx.setLegalBasis("Section 8a");
+    $ctx.setSourceText("3 kuukautta");
+end
+
+rule "EUCoordinationRules_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Can seek job in EU");
+    $ctx.setLegalBasis("Section 8b");
+    $ctx.setSourceText("Etsiä työtä EU:sta");
+end
+
+rule "EUCoordinationRules_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Return within 4 weeks");
+    $ctx.setLegalBasis("Section 8b");
+    $ctx.setSourceText("Paluu 4 viikon sisällä");
+end
+
+// Decision: RegisteredUnemploymentRate
+// Description: Registered unemployment rate effect
+// Legal Source: Section 2.2
+// Inputs: 
+// Output: result
+
+rule "RegisteredUnemploymentRate_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("High unemployment area");
+    $ctx.setLegalBasis("Section 2.2");
+    $ctx.setSourceText("Korkea työttömyys");
+end
+
+rule "RegisteredUnemploymentRate_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Over 15% in region");
+    $ctx.setLegalBasis("Section 2.2");
+    $ctx.setSourceText("Yli 15%");
+end
+
+rule "RegisteredUnemploymentRate_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Relaxed availability");
+    $ctx.setLegalBasis("Section 2.2");
+    $ctx.setSourceText("Kevennetyt edellytykset");
+end
+
+rule "RegisteredUnemploymentRate_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Government decides");
+    $ctx.setLegalBasis("Section 2.2");
+    $ctx.setSourceText("Valtioneuvosto");
+end
+
+// Decision: WorkAbilityAssessment
+// Description: Work ability assessment
+// Legal Source: Section 2a.11
+// Inputs: 
+// Output: result
+
+rule "WorkAbilityAssessment_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Work ability may be assessed");
+    $ctx.setLegalBasis("Section 2a.11");
+    $ctx.setSourceText("Työkyvyn arviointi");
+end
+
+rule "WorkAbilityAssessment_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Kela or TE services");
+    $ctx.setLegalBasis("Section 2a.11");
+    $ctx.setSourceText("Kela tai TE-palvelut");
+end
+
+rule "WorkAbilityAssessment_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Affects benefit eligibility");
+    $ctx.setLegalBasis("Section 2a.11");
+    $ctx.setSourceText("Vaikuttaa etuuteen");
+end
+
+rule "WorkAbilityAssessment_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Can be reassessed");
+    $ctx.setLegalBasis("Section 2a.11");
+    $ctx.setSourceText("Uudelleenarviointi");
+end
+
+// Decision: NotificationDuties
+// Description: Notification duties of beneficiary
+// Legal Source: Section 11.2a
+// Inputs: 
+// Output: result
+
+rule "NotificationDuties_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must notify if starts working");
+    $ctx.setLegalBasis("Section 11.2a");
+    $ctx.setSourceText("Työn alkamisesta");
+end
+
+rule "NotificationDuties_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must notify if going abroad");
+    $ctx.setLegalBasis("Section 11.2a");
+    $ctx.setSourceText("Ulkomaille lähtemisestä");
+end
+
+rule "NotificationDuties_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must notify address change");
+    $ctx.setLegalBasis("Section 11.2a");
+    $ctx.setSourceText("Osoitemuutoksesta");
+end
+
+rule "NotificationDuties_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Notify employer bankruptcy");
+    $ctx.setLegalBasis("Section 11.2a");
+    $ctx.setSourceText("Työnantajan konkurssista");
+end
+
+// Decision: ReducedEarningsCapacity
+// Description: Reduced earning capacity
+// Legal Source: Section 3.3a
+// Inputs: 
+// Output: result
+
+rule "ReducedEarningsCapacity_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Reduced earning capacity");
+    $ctx.setLegalBasis("Section 3.3a");
+    $ctx.setSourceText("Alentunut ansiokyky");
+end
+
+rule "ReducedEarningsCapacity_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Medical assessment required");
+    $ctx.setLegalBasis("Section 3.3a");
+    $ctx.setSourceText("Lääketieteellinen arvio");
+end
+
+rule "ReducedEarningsCapacity_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("May receive adjusted benefit");
+    $ctx.setLegalBasis("Section 3.3a");
+    $ctx.setSourceText("Soviteltu etuus");
+end
+
+rule "ReducedEarningsCapacity_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Rehabilitation offered");
+    $ctx.setLegalBasis("Section 3.3a");
+    $ctx.setSourceText("Kuntoutus");
+end
+
+// Decision: OlderWorkerProtection
+// Description: Special protection for older workers
+// Legal Source: Section 6.9-6.10
+// Inputs: 
+// Output: result
+
+rule "OlderWorkerProtection_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Extended benefit period");
+    $ctx.setLegalBasis("Section 6.9");
+    $ctx.setSourceText("Yli 58-vuotias");
+end
+
+rule "OlderWorkerProtection_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Additional 150 days");
+    $ctx.setLegalBasis("Section 6.9");
+    $ctx.setSourceText("Yli 61-vuotias");
+end
+
+rule "OlderWorkerProtection_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Long employment history");
+    $ctx.setLegalBasis("Section 6.9");
+    $ctx.setSourceText("Pitkä työhistoria");
+end
+
+rule "OlderWorkerProtection_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Increased benefit amount");
+    $ctx.setLegalBasis("Section 6.10");
+    $ctx.setSourceText("Korotettu etuus");
+end
+
+// Decision: PartialUnemployment
+// Description: Partial unemployment (short-time work)
+// Legal Source: Section 4.2
+// Inputs: 
+// Output: result
+
+rule "PartialUnemployment_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Short-time work arrangement");
+    $ctx.setLegalBasis("Section 4.2");
+    $ctx.setSourceText("Lomautus");
+end
+
+rule "PartialUnemployment_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("20-90% reduction in hours");
+    $ctx.setLegalBasis("Section 4.2");
+    $ctx.setSourceText("20-90%");
+end
+
+rule "PartialUnemployment_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Proportional benefit");
+    $ctx.setLegalBasis("Section 4.2");
+    $ctx.setSourceText("Suhteutettu");
+end
+
+rule "PartialUnemployment_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Employer must agree");
+    $ctx.setLegalBasis("Section 4.2");
+    $ctx.setSourceText("Työnantajan suostumus");
+end
+
+// Decision: EmployerInsolvency
+// Description: Benefit during employer insolvency
+// Legal Source: Section 9a
+// Inputs: 
+// Output: result
+
+rule "EmployerInsolvency_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Employer bankruptcy");
+    $ctx.setLegalBasis("Section 9a");
+    $ctx.setSourceText("Työnantajan konkurssi");
+end
+
+rule "EmployerInsolvency_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Unable to pay wages");
+    $ctx.setLegalBasis("Section 9a");
+    $ctx.setSourceText("Maksukyvyttömyys");
+end
+
+rule "EmployerInsolvency_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Income guarantee from guarantee institution");
+    $ctx.setLegalBasis("Section 9a");
+    $ctx.setSourceText("Tulotakuu");
+end
+
+rule "EmployerInsolvency_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Unemployment due to insolvency");
+    $ctx.setLegalBasis("Section 9a");
+    $ctx.setSourceText("Maksukyvyttömyyden vuoksi");
+end
+
+// Decision: PublicWorksBenefit
+// Description: Public works (työllistämistö) benefit
+// Legal Source: Section 10.2
+// Inputs: 
+// Output: result
+
+rule "PublicWorksBenefit_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Publicly subsidized work");
+    $ctx.setLegalBasis("Section 10.2");
+    $ctx.setSourceText("Työllistämistyö");
+end
+
+rule "PublicWorksBenefit_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Employer subsidy applies");
+    $ctx.setLegalBasis("Section 10.2");
+    $ctx.setSourceText("Työnantajan tuki");
+end
+
+rule "PublicWorksBenefit_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Full unemployment benefit");
+    $ctx.setLegalBasis("Section 10.2");
+    $ctx.setSourceText("Täysi etuus");
+end
+
+rule "PublicWorksBenefit_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Maximum duration applies");
+    $ctx.setLegalBasis("Section 10.2");
+    $ctx.setSourceText("Kesto rajoitettu");
+end
+
+// Decision: JobClubBenefit
+// Description: Job club (työklubi) benefit
+// Legal Source: Section 10.2a
+// Inputs: 
+// Output: result
+
+rule "JobClubBenefit_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Job club programme");
+    $ctx.setLegalBasis("Section 10.2a");
+    $ctx.setSourceText("Työklubi");
+end
+
+rule "JobClubBenefit_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Group activities");
+    $ctx.setLegalBasis("Section 10.2a");
+    $ctx.setSourceText("Ryhmätoiminta");
+end
+
+rule "JobClubBenefit_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Benefit maintained");
+    $ctx.setLegalBasis("Section 10.2a");
+    $ctx.setSourceText("Etuus säilyy");
+end
+
+rule "JobClubBenefit_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Attendance required");
+    $ctx.setLegalBasis("Section 10.2a");
+    $ctx.setSourceText("Osallistuminen");
+end
+
+// Decision: VocationalRehabilitation
+// Description: Vocational rehabilitation
+// Legal Source: Section 10.3
+// Inputs: 
+// Output: result
+
+rule "VocationalRehabilitation_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Vocational rehabilitation");
+    $ctx.setLegalBasis("Section 10.3");
+    $ctx.setSourceText("Ammatillinen kuntoutus");
+end
+
+rule "VocationalRehabilitation_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Rehabilitation plan");
+    $ctx.setLegalBasis("Section 10.3");
+    $ctx.setSourceText("Kuntoutussuunnitelma");
+end
+
+rule "VocationalRehabilitation_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Benefit during rehabilitation");
+    $ctx.setLegalBasis("Section 10.3");
+    $ctx.setSourceText("Etuus kuntoutuksen aikana");
+end
+
+rule "VocationalRehabilitation_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Kela or insurance provider");
+    $ctx.setLegalBasis("Section 10.3");
+    $ctx.setSourceText("Kela tai vakuutusyhtiö");
+end
+
+// Decision: WorkTrialPeriod
+// Description: Work trial period
+// Legal Source: Section 2a.8
+// Inputs: 
+// Output: result
+
+rule "WorkTrialPeriod_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Work trial allowed");
+    $ctx.setLegalBasis("Section 2a.8");
+    $ctx.setSourceText("Työkokeilu");
+end
+
+rule "WorkTrialPeriod_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Maximum 3 months");
+    $ctx.setLegalBasis("Section 2a.8");
+    $ctx.setSourceText("Enintään 3 kuukautta");
+end
+
+rule "WorkTrialPeriod_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Benefit not affected");
+    $ctx.setLegalBasis("Section 2a.8");
+    $ctx.setSourceText("Etuus ei muutu");
+end
+
+rule "WorkTrialPeriod_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Not considered employment");
+    $ctx.setLegalBasis("Section 2a.8");
+    $ctx.setSourceText("Ei työsuhde");
+end
+
+// Decision: JobSearchPlan
+// Description: Job search plan
+// Legal Source: Section 2a.12
+// Inputs: 
+// Output: result
+
+rule "JobSearchPlan_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Job search plan created");
+    $ctx.setLegalBasis("Section 2a.12");
+    $ctx.setSourceText("Työnhakusuunnitelma");
+end
+
+rule "JobSearchPlan_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Contains job search activities");
+    $ctx.setLegalBasis("Section 2a.12");
+    $ctx.setSourceText("Toimenpiteet");
+end
+
+rule "JobSearchPlan_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Follow-up meetings");
+    $ctx.setLegalBasis("Section 2a.12");
+    $ctx.setSourceText("Seurantakokoukset");
+end
+
+rule "JobSearchPlan_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Updated regularly");
+    $ctx.setLegalBasis("Section 2a.12");
+    $ctx.setSourceText("Päivitetään");
+end
+
+// Decision: EmploymentPenaltyPeriods
+// Description: Employment penalty periods
+// Legal Source: Section 2a.9-2a.10
+// Inputs: 
+// Output: result
+
+rule "EmploymentPenaltyPeriods_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("First refusal 30 days");
+    $ctx.setLegalBasis("Section 2a.9");
+    $ctx.setSourceText("Ensimmäinen kieltäytyminen 30 päivää");
+end
+
+rule "EmploymentPenaltyPeriods_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Second refusal 60 days");
+    $ctx.setLegalBasis("Section 2a.9");
+    $ctx.setSourceText("Toinen 60 päivää");
+end
+
+rule "EmploymentPenaltyPeriods_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Third refusal 90 days");
+    $ctx.setLegalBasis("Section 2a.10");
+    $ctx.setSourceText("Kolmas 90 päivää");
+end
+
+rule "EmploymentPenaltyPeriods_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("180 days without penalty resets");
+    $ctx.setLegalBasis("Section 2a.9");
+    $ctx.setSourceText("180 päivää");
+end
+
+// Decision: IncomeCalculationPeriod
+// Description: Income calculation period
+// Legal Source: Section 6.1
+// Inputs: 
+// Output: result
+
+rule "IncomeCalculationPeriod_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Based on 12 months");
+    $ctx.setLegalBasis("Section 6.1");
+    $ctx.setSourceText("12 kuukauden ajanjakso");
+end
+
+rule "IncomeCalculationPeriod_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Excludes illness periods");
+    $ctx.setLegalBasis("Section 6.1");
+    $ctx.setSourceText("Sairauspoissaolot");
+end
+
+rule "IncomeCalculationPeriod_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Excludes leave periods");
+    $ctx.setLegalBasis("Section 6.1");
+    $ctx.setSourceText("Poissaolot");
+end
+
+rule "IncomeCalculationPeriod_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Calculated as daily average");
+    $ctx.setLegalBasis("Section 6.1");
+    $ctx.setSourceText("Päivittäinen keskiarvo");
+end
+
+// Decision: MaximumDailyAllowance
+// Description: Maximum daily allowance
+// Legal Source: Section 6.1b
+// Inputs: 
+// Output: result
+
+rule "MaximumDailyAllowance_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Maximum 100.25 EUR/day (2024)");
+    $ctx.setLegalBasis("Section 6.1b");
+    $ctx.setSourceText("Enimmäis 100,25 euroa");
+end
+
+rule "MaximumDailyAllowance_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Annual maximum applies");
+    $ctx.setLegalBasis("Section 6.1b");
+    $ctx.setSourceText("Vuosimaximi");
+end
+
+rule "MaximumDailyAllowance_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Increased annually");
+    $ctx.setLegalBasis("Section 6.1b");
+    $ctx.setSourceText("Vuosittain korotetaan");
+end
+
+rule "MaximumDailyAllowance_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("If exceeded no increase");
+    $ctx.setLegalBasis("Section 6.1b");
+    $ctx.setSourceText("Ylittyessä ei korotusta");
+end
+
+// Decision: MinimumDailyAllowance
+// Description: Minimum daily allowance
+// Legal Source: Section 6.1a
+// Inputs: 
+// Output: result
+
+rule "MinimumDailyAllowance_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Minimum guaranteed");
+    $ctx.setLegalBasis("Section 6.1a");
+    $ctx.setSourceText("Takuu");
+end
+
+rule "MinimumDailyAllowance_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Minimum 7.62 EUR/day");
+    $ctx.setLegalBasis("Section 6.1a");
+    $ctx.setSourceText("7,62 euroa");
+end
+
+rule "MinimumDailyAllowance_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("If calculated below minimum");
+    $ctx.setLegalBasis("Section 6.1a");
+    $ctx.setSourceText("Laskettu alle");
+end
+
+rule "MinimumDailyAllowance_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Adjusted annually");
+    $ctx.setLegalBasis("Section 6.1a");
+    $ctx.setSourceText("Vuosittain");
+end
+
+// Decision: EarningsRelatedIncrease
+// Description: Earnings-related increase
+// Legal Source: Section 6.4
+// Inputs: 
+// Output: result
+
+rule "EarningsRelatedIncrease_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Increase for long employment");
+    $ctx.setLegalBasis("Section 6.4");
+    $ctx.setSourceText("Pitkästä työhistoriasta");
+end
+
+rule "EarningsRelatedIncrease_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("20+ years employment");
+    $ctx.setLegalBasis("Section 6.4");
+    $ctx.setSourceText("20 vuotta");
+end
+
+rule "EarningsRelatedIncrease_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Additional percentage");
+    $ctx.setLegalBasis("Section 6.4");
+    $ctx.setSourceText("Lisäprosentti");
+end
+
+rule "EarningsRelatedIncrease_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Maximum increase limit");
+    $ctx.setLegalBasis("Section 6.4");
+    $ctx.setSourceText("Enimmäiskorotus");
+end
+
+// Decision: ChildSupplement
+// Description: Child supplement
+// Legal Source: Section 6.3
+// Inputs: 
+// Output: result
+
+rule "ChildSupplement_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("One child 5 EUR/day");
+    $ctx.setLegalBasis("Section 6.3");
+    $ctx.setSourceText("Yksi lapsi 5 euroa");
+end
+
+rule "ChildSupplement_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Two children 10 EUR/day");
+    $ctx.setLegalBasis("Section 6.3");
+    $ctx.setSourceText("Kaksi lasta 10 euroa");
+end
+
+rule "ChildSupplement_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Three+ children 15 EUR/day");
+    $ctx.setLegalBasis("Section 6.3");
+    $ctx.setSourceText("Kolme+ lasta 15 euroa");
+end
+
+rule "ChildSupplement_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Until child turns 18");
+    $ctx.setLegalBasis("Section 6.3");
+    $ctx.setSourceText("18-vuotiaaksi");
+end
+
+// Decision: ReducedBenefitFirst60
+// Description: Reduced benefit first 60 days
+// Legal Source: Section 6.3a
+// Inputs: 
+// Output: result
+
+rule "ReducedBenefitFirst60_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("First 60 days reduced");
+    $ctx.setLegalBasis("Section 6.3a");
+    $ctx.setSourceText("Ensimmäiset 60 päivää");
+end
+
+rule "ReducedBenefitFirst60_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("80% of full rate");
+    $ctx.setLegalBasis("Section 6.3a");
+    $ctx.setSourceText("80 prosenttia");
+end
+
+rule "ReducedBenefitFirst60_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Without children supplement");
+    $ctx.setLegalBasis("Section 6.3a");
+    $ctx.setSourceText("Ilman lapsilisää");
+end
+
+rule "ReducedBenefitFirst60_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Full rate after 60 days");
+    $ctx.setLegalBasis("Section 6.3a");
+    $ctx.setSourceText("60 päivän jälkeen");
+end
+
+// Decision: UnemploymentFundMembership
+// Description: Unemployment fund membership
+// Legal Source: Section 5.1-5.2
+// Inputs: 
+// Output: result
+
+rule "UnemploymentFundMembership_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must be fund member");
+    $ctx.setLegalBasis("Section 5.1");
+    $ctx.setSourceText("Kassan jäsen");
+end
+
+rule "UnemploymentFundMembership_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Member for benefit period");
+    $ctx.setLegalBasis("Section 5.1");
+    $ctx.setSourceText("Jäsen jakson ajan");
+end
+
+rule "UnemploymentFundMembership_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Contributions paid");
+    $ctx.setLegalBasis("Section 5.1");
+    $ctx.setSourceText("Maksut maksettu");
+end
+
+rule "UnemploymentFundMembership_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Can exit fund freely");
+    $ctx.setLegalBasis("Section 5.2");
+    $ctx.setSourceText("Vapaa liittyä ja erota");
+end
+
+// Decision: BusinessStartUpAllowance
+// Description: Business start-up allowance
+// Legal Source: Section 5a
+// Inputs: 
+// Output: result
+
+rule "BusinessStartUpAllowance_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Starting new business");
+    $ctx.setLegalBasis("Section 5a");
+    $ctx.setSourceText("Aloittava yrittäjä");
+end
+
+rule "BusinessStartUpAllowance_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Business plan required");
+    $ctx.setLegalBasis("Section 5a");
+    $ctx.setSourceText("Liiketoimintasuunnitelma");
+end
+
+rule "BusinessStartUpAllowance_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must be full-time");
+    $ctx.setLegalBasis("Section 5a");
+    $ctx.setSourceText("Kokopäiväinen");
+end
+
+rule "BusinessStartUpAllowance_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Start-up grant available");
+    $ctx.setLegalBasis("Section 5a");
+    $ctx.setSourceText("Starttiraha");
+end
+
+// Decision: SeasonalWorkException
+// Description: Seasonal work exception
+// Legal Source: Section 2.4
+// Inputs: 
+// Output: result
+
+rule "SeasonalWorkException_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Seasonal work counted");
+    $ctx.setLegalBasis("Section 2.4");
+    $ctx.setSourceText("Kausityö");
+end
+
+rule "SeasonalWorkException_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Same employer next season");
+    $ctx.setLegalBasis("Section 2.4");
+    $ctx.setSourceText("Sama työnantaja");
+end
+
+rule "SeasonalWorkException_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Benefit after season ends");
+    $ctx.setLegalBasis("Section 2.4");
+    $ctx.setSourceText("Kauden jälkeen");
+end
+
+rule "SeasonalWorkException_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("May be exempt from waiting");
+    $ctx.setLegalBasis("Section 2.4");
+    $ctx.setSourceText("Vapaa omavastuusta");
+end
+
+// Decision: ExceptionFromAvailability
+// Description: Exceptions from availability requirement
+// Legal Source: Section 2.3
+// Inputs: 
+// Output: result
+
+rule "ExceptionFromAvailability_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Family care responsibilities");
+    $ctx.setLegalBasis("Section 2.3");
+    $ctx.setSourceText("Hoitovastuu");
+end
+
+rule "ExceptionFromAvailability_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Studying");
+    $ctx.setLegalBasis("Section 2.3");
+    $ctx.setSourceText("Opiskelu");
+end
+
+rule "ExceptionFromAvailability_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Part-time availability");
+    $ctx.setLegalBasis("Section 2.3");
+    $ctx.setSourceText("Osittainen");
+end
+
+rule "ExceptionFromAvailability_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("TE services approval");
+    $ctx.setLegalBasis("Section 2.3");
+    $ctx.setSourceText("TE-palveluiden hyväksyntä");
+end
+
+// Decision: NoticePeriodEmployment
+// Description: Notice period employment
+// Legal Source: Section 2.1
+// Inputs: 
+// Output: result
+
+rule "NoticePeriodEmployment_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Given notice by employer");
+    $ctx.setLegalBasis("Section 2.1");
+    $ctx.setSourceText("Irtisanottu");
+end
+
+rule "NoticePeriodEmployment_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("During notice period");
+    $ctx.setLegalBasis("Section 2.1");
+    $ctx.setSourceText("Irtisanomisaikana");
+end
+
+rule "NoticePeriodEmployment_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Working during notice");
+    $ctx.setLegalBasis("Section 2.1");
+    $ctx.setSourceText("Työskentelee irtisanomisaikana");
+end
+
+rule "NoticePeriodEmployment_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Benefit after notice ends");
+    $ctx.setLegalBasis("Section 2.1");
+    $ctx.setSourceText("Irtisanomisen jälkeen");
+end
+
+// Decision: WorkAbroadEffect
+// Description: Work abroad effect on benefit
+// Legal Source: Section 3.2
+// Inputs: 
+// Output: result
+
+rule "WorkAbroadEffect_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Work in EU/EEA");
+    $ctx.setLegalBasis("Section 3.2");
+    $ctx.setSourceText("EU/ETA-maissa");
+end
+
+rule "WorkAbroadEffect_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Work outside EU");
+    $ctx.setLegalBasis("Section 3.2");
+    $ctx.setSourceText("EU:n ulkopuolella");
+end
+
+rule "WorkAbroadEffect_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Return to Finland");
+    $ctx.setLegalBasis("Section 3.2");
+    $ctx.setSourceText("Paluu Suomeen");
+end
+
+rule "WorkAbroadEffect_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Benefit may be restricted");
+    $ctx.setLegalBasis("Section 3.2");
+    $ctx.setSourceText("Etuus rajoitettu");
+end
+
+// Decision: ServiceAbroad
+// Description: Service abroad
+// Legal Source: Section 3.5
+// Inputs: 
+// Output: result
+
+rule "ServiceAbroad_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Military service");
+    $ctx.setLegalBasis("Section 3.5");
+    $ctx.setSourceText("Asevelvollisuus");
+end
+
+rule "ServiceAbroad_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Civil service");
+    $ctx.setLegalBasis("Section 3.5");
+    $ctx.setSourceText("Siviilipalvelus");
+end
+
+rule "ServiceAbroad_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Benefit after service");
+    $ctx.setLegalBasis("Section 3.5");
+    $ctx.setSourceText("Palveluksen jälkeen");
+end
+
+rule "ServiceAbroad_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Employment condition met");
+    $ctx.setLegalBasis("Section 3.5");
+    $ctx.setSourceText("Työssäoloehto täyttynyt");
+end
+
+// Decision: CompanyTransaction
+// Description: Company transaction effect
+// Legal Source: Section 2.6
+// Inputs: 
+// Output: result
+
+rule "CompanyTransaction_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Company sold");
+    $ctx.setLegalBasis("Section 2.6");
+    $ctx.setSourceText("Yrityksen myynti");
+end
+
+rule "CompanyTransaction_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Inheritance");
+    $ctx.setLegalBasis("Section 2.6");
+    $ctx.setSourceText("Perintö");
+end
+
+rule "CompanyTransaction_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Work continued");
+    $ctx.setLegalBasis("Section 2.6");
+    $ctx.setSourceText("Työ jatkunut");
+end
+
+rule "CompanyTransaction_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("May be entitled");
+    $ctx.setLegalBasis("Section 2.6");
+    $ctx.setSourceText("Oikeutettu");
+end
+
+// Decision: OldAgePensionEffect
+// Description: Old age pension effect on benefit
+// Legal Source: Section 3.2a
+// Inputs: 
+// Output: result
+
+rule "OldAgePensionEffect_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Old age pension");
+    $ctx.setLegalBasis("Section 3.2a");
+    $ctx.setSourceText("Vanhuuseläke");
+end
+
+rule "OldAgePensionEffect_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Flexible retirement age");
+    $ctx.setLegalBasis("Section 3.2a");
+    $ctx.setSourceText("Joustava eläkeikä");
+end
+
+rule "OldAgePensionEffect_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Work while on pension");
+    $ctx.setLegalBasis("Section 3.2a");
+    $ctx.setSourceText("Työ eläkkeellä");
+end
+
+rule "OldAgePensionEffect_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Unemployment benefit ceases");
+    $ctx.setLegalBasis("Section 3.2a");
+    $ctx.setSourceText("Etuus päättyy");
+end
+
+// Decision: IndividualizedService
+// Description: Individualized service
+// Legal Source: Section 2.9
+// Inputs: 
+// Output: result
+
+rule "IndividualizedService_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Individualized service");
+    $ctx.setLegalBasis("Section 2.9");
+    $ctx.setSourceText("Yksilöllinen palvelu");
+end
+
+rule "IndividualizedService_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Service plan");
+    $ctx.setLegalBasis("Section 2.9");
+    $ctx.setSourceText("Palvelusuunnitelma");
+end
+
+rule "IndividualizedService_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Intensive support");
+    $ctx.setLegalBasis("Section 2.9");
+    $ctx.setSourceText("Tehostettu tuki");
+end
+
+rule "IndividualizedService_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Regular follow-up");
+    $ctx.setLegalBasis("Section 2.9");
+    $ctx.setSourceText("Säännöllinen seuranta");
+end
+
+// Decision: CommutingExpenses
+// Description: Reimbursement of commuting expenses under Section 8.3
+// Legal Source: 
+// Inputs: 
+// Output: result
+
+rule "CommutingExpenses_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("['commute.monthly_max', 'commute.daily_travel_expense']");
+    $ctx.setLegalBasis("Section TBD");
+    $ctx.setSourceText("");
+end
+
+rule "CommutingExpenses_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("['commute.monthly_max', 'commute.daily_travel_expense']");
+    $ctx.setLegalBasis("Section TBD");
+    $ctx.setSourceText("");
+end
+
+rule "CommutingExpenses_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("['commute.monthly_max', 'commute.daily_travel_expense']");
+    $ctx.setLegalBasis("Section TBD");
+    $ctx.setSourceText("");
+end
+
+// Decision: TrainingAndRehabilitation
+// Description: Benefit eligibility during training or rehabilitation
+// Legal Source: 
+// Inputs: 
+// Output: result
+
+rule "TrainingAndRehabilitation_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("['benefit.during_training', 'service.type']");
+    $ctx.setLegalBasis("Section TBD");
+    $ctx.setSourceText("");
+end
+
+rule "TrainingAndRehabilitation_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("['benefit.during_training', 'service.type']");
+    $ctx.setLegalBasis("Section TBD");
+    $ctx.setSourceText("");
+end
+
+rule "TrainingAndRehabilitation_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("['benefit.during_training', 'service.type']");
+    $ctx.setLegalBasis("Section TBD");
+    $ctx.setSourceText("");
+end
+
+// Decision: IncomeVerification2026
+// Description: Income verification for new 2026 system
+// Legal Source: 
+// Inputs: 
+// Output: result
+
+rule "IncomeVerification2026_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("['income.insurable_earnings', 'benefit.earnings_related_eligible']");
+    $ctx.setLegalBasis("Section TBD");
+    $ctx.setSourceText("");
+end
+
+rule "IncomeVerification2026_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("['income.insurable_earnings', 'benefit.earnings_related_eligible']");
+    $ctx.setLegalBasis("Section TBD");
+    $ctx.setSourceText("");
+end
+
+rule "IncomeVerification2026_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("['income.insurable_earnings', 'benefit.earnings_related_eligible']");
+    $ctx.setLegalBasis("Section TBD");
+    $ctx.setSourceText("");
+end
+
+// Decision: HousingCosts
+// Description: Housing cost support under Section 7.6
+// Legal Source: 
+// Inputs: 
+// Output: result
+
+rule "HousingCosts_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("['housing.support_amount', 'housing.support_eligible']");
+    $ctx.setLegalBasis("Section TBD");
+    $ctx.setSourceText("");
+end
+
+rule "HousingCosts_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("['housing.support_amount', 'housing.support_eligible']");
+    $ctx.setLegalBasis("Section TBD");
+    $ctx.setSourceText("");
+end
+
+rule "HousingCosts_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("['housing.support_amount', 'housing.support_eligible']");
+    $ctx.setLegalBasis("Section TBD");
+    $ctx.setSourceText("");
+end
+
+// Decision: YouthJobSeekerRules
+// Description: Special rules for job seekers under 25
+// Legal Source: 
+// Inputs: 
+// Output: result
+
+rule "YouthJobSeekerRules_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("['youth.bonus_eligible', 'youth.addition_amount']");
+    $ctx.setLegalBasis("Section TBD");
+    $ctx.setSourceText("");
+end
+
+rule "YouthJobSeekerRules_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("['youth.bonus_eligible', 'youth.addition_amount']");
+    $ctx.setLegalBasis("Section TBD");
+    $ctx.setSourceText("");
+end
+
+rule "YouthJobSeekerRules_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("['youth.bonus_eligible', 'youth.addition_amount']");
+    $ctx.setLegalBasis("Section TBD");
+    $ctx.setSourceText("");
+end
+
+// Decision: DisabilityPensionInteraction
+// Description: Interaction between unemployment benefit and disability pension
+// Legal Source: 
+// Inputs: 
+// Output: result
+
+rule "DisabilityPensionInteraction_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("['benefit.adjusted_for_disability', 'benefit.reduction_percentage']");
+    $ctx.setLegalBasis("Section TBD");
+    $ctx.setSourceText("");
+end
+
+rule "DisabilityPensionInteraction_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("['benefit.adjusted_for_disability', 'benefit.reduction_percentage']");
+    $ctx.setLegalBasis("Section TBD");
+    $ctx.setSourceText("");
+end
+
+rule "DisabilityPensionInteraction_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("['benefit.adjusted_for_disability', 'benefit.reduction_percentage']");
+    $ctx.setLegalBasis("Section TBD");
+    $ctx.setSourceText("");
+end
+
+// Decision: SocialBenefitIntegration
+// Description: Integration of unemployment benefit with social benefits
+// Legal Source: 
+// Inputs: 
+// Output: result
+
+rule "SocialBenefitIntegration_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("['benefit.integrated_amount', 'benefit.social_reduction']");
+    $ctx.setLegalBasis("Section TBD");
+    $ctx.setSourceText("");
+end
+
+rule "SocialBenefitIntegration_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("['benefit.integrated_amount', 'benefit.social_reduction']");
+    $ctx.setLegalBasis("Section TBD");
+    $ctx.setSourceText("");
+end
+
+rule "SocialBenefitIntegration_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("['benefit.integrated_amount', 'benefit.social_reduction']");
+    $ctx.setLegalBasis("Section TBD");
+    $ctx.setSourceText("");
+end
+
+// Decision: TrainingVoucherEligibility
+// Description: Eligibility for training voucher
+// Legal Source: 
+// Inputs: 
+// Output: result
+
+rule "TrainingVoucherEligibility_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("['training.voucher_eligible', 'training.voucher_amount']");
+    $ctx.setLegalBasis("Section TBD");
+    $ctx.setSourceText("");
+end
+
+rule "TrainingVoucherEligibility_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("['training.voucher_eligible', 'training.voucher_amount']");
+    $ctx.setLegalBasis("Section TBD");
+    $ctx.setSourceText("");
+end
+
+rule "TrainingVoucherEligibility_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("['training.voucher_eligible', 'training.voucher_amount']");
+    $ctx.setLegalBasis("Section TBD");
+    $ctx.setSourceText("");
+end
+
+// Decision: TransitionalRules2026
+// Description: Transitional rules for 2026 system change
+// Legal Source: 
+// Inputs: 
+// Output: result
+
+rule "TransitionalRules2026_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("['benefit.transitional_arrangement', 'benefit.transitional_type']");
+    $ctx.setLegalBasis("Section TBD");
+    $ctx.setSourceText("");
+end
+
+rule "TransitionalRules2026_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("['benefit.transitional_arrangement', 'benefit.transitional_type']");
+    $ctx.setLegalBasis("Section TBD");
+    $ctx.setSourceText("");
+end
+
+rule "TransitionalRules2026_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("['benefit.transitional_arrangement', 'benefit.transitional_type']");
+    $ctx.setLegalBasis("Section TBD");
+    $ctx.setSourceText("");
+end
+
+// Decision: RedundancyLayoff
+// Description: Redundancy and layoff procedures
+// Legal Source: Section 9.1
+// Inputs: 
+// Output: result
+
+rule "RedundancyLayoff_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Redundancy eligible");
+    $ctx.setLegalBasis("Section 9.1");
+    $ctx.setSourceText("");
+end
+
+rule "RedundancyLayoff_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Bankruptcy protection");
+    $ctx.setLegalBasis("Section 9a");
+    $ctx.setSourceText("");
+end
+
+// Decision: RedundancyCompensation
+// Description: Redundancy compensation calculation
+// Legal Source: Section 9.2
+// Inputs: 
+// Output: result
+
+rule "RedundancyCompensation_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Compensation amount");
+    $ctx.setLegalBasis("Section 9.2");
+    $ctx.setSourceText("");
+end
+
+// Decision: LabourMarketSupportHousing
+// Description: Housing supplements for labour market support
+// Legal Source: Section 7.6
+// Inputs: 
+// Output: result
+
+rule "LabourMarketSupportHousing_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Housing supplement");
+    $ctx.setLegalBasis("Section 7.6");
+    $ctx.setSourceText("");
+end
+
+// Decision: LabourMarketSupportDuration
+// Description: Duration of labour market support
+// Legal Source: Section 7.4
+// Inputs: 
+// Output: result
+
+rule "LabourMarketSupportDuration_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Maximum duration");
+    $ctx.setLegalBasis("Section 7.4");
+    $ctx.setSourceText("");
+end
+
+// Decision: AppealToInsuranceCourt
+// Description: Appeal to insurance court
+// Legal Source: Section 12.2
+// Inputs: 
+// Output: result
+
+rule "AppealToInsuranceCourt_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Court appeal eligible");
+    $ctx.setLegalBasis("Section 12.2");
+    $ctx.setSourceText("");
+end
+
+// Decision: AppealTimeLimits
+// Description: Time limits for appeals
+// Legal Source: Section 12.1
+// Inputs: 
+// Output: result
+
+rule "AppealTimeLimits_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Appeal within time limit");
+    $ctx.setLegalBasis("Section 12.1");
+    $ctx.setSourceText("");
+end
+
+// Decision: JobSeekers500Days
+// Description: Extended unemployment benefit for job seekers over 500 days
+// Legal Source: Section 6.7
+// Inputs: 
+// Output: result
+
+rule "JobSeekers500Days_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Extended benefit eligible");
+    $ctx.setLegalBasis("Section 6.7");
+    $ctx.setSourceText("");
+end
+
+// Decision: IncreaseEarningsRelated
+// Description: Increase to earnings-related allowance
+// Legal Source: Section 6.4
+// Inputs: 
+// Output: result
+
+rule "IncreaseEarningsRelated_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Increase percentage");
+    $ctx.setLegalBasis("Section 6.4");
+    $ctx.setSourceText("");
+end
+
+// Decision: ReducedEarningsCapacityWork
+// Description: Work with reduced earnings capacity
+// Legal Source: Section 6.2
+// Inputs: 
+// Output: result
+
+rule "ReducedEarningsCapacityWork_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Reduced capacity benefit");
+    $ctx.setLegalBasis("Section 6.2");
+    $ctx.setSourceText("");
+end
+
+// Decision: CorporationTaxCard
+// Description: Tax card requirements for corporations
+// Legal Source: Section 11.7
+// Inputs: 
+// Output: result
+
+rule "CorporationTaxCard_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Tax card valid");
+    $ctx.setLegalBasis("Section 11.7");
+    $ctx.setSourceText("");
+end

@@ -1,0 +1,603 @@
+// Drools Business Rules for Liikennevakuutuslaki
+// Law: 460/2016
+// Generated from DMN rules
+// Total decisions: 13
+
+package fi.law.liikennevakuutuslaki
+
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
+import java.util.ArrayList;
+
+// Context fact for rule evaluation
+declare Context
+    result : Object
+    legalBasis : String
+    sourceText : String
+    // Dynamic fields
+end
+
+// ========== DECISION TABLES ==========
+
+// Decision: MandatoryInsuranceRequirement
+// Description: Determine if vehicle requires mandatory traffic insurance
+// Legal Source: Section 5
+// Inputs: vehicle.permanent_location, vehicle.requires_insurance, vehicle.type
+// Output: insurance_required
+
+rule "MandatoryInsuranceRequirement_1"
+    when
+    $ctx : Context(vehicle_permanent_location == "FI", vehicle_requires_insurance == true, vehicle_type == "MotorVehicle")
+    then
+    $ctx.setResult("MandatoryTrafficInsurance");
+    $ctx.setLegalBasis("Section 5(1)");
+    $ctx.setSourceText("Liikenteeseen käytettäväksi tarkoitettu ajoneuvo");
+end
+
+rule "MandatoryInsuranceRequirement_2"
+    when
+    $ctx : Context(vehicle_permanent_location == "FI", vehicle_requires_insurance == true, vehicle_type == "Trailer")
+    then
+    $ctx.setResult("MandatoryTrafficInsurance");
+    $ctx.setLegalBasis("Section 5(1)");
+    $ctx.setSourceText("Perävaunu");
+end
+
+rule "MandatoryInsuranceRequirement_3"
+    when
+    $ctx : Context(vehicle_permanent_location == "EEA", vehicle_requires_insurance == true, vehicle_type != null)
+    then
+    $ctx.setResult("Check registration country");
+    $ctx.setLegalBasis("Section 6a");
+    $ctx.setSourceText("EEA-maasta tuotu ajoneuvo");
+end
+
+rule "MandatoryInsuranceRequirement_4"
+    when
+    $ctx : Context(vehicle_permanent_location == "Non-EEA", vehicle_requires_insurance == true, vehicle_type != null)
+    then
+    $ctx.setResult("MandatoryTrafficInsurance");
+    $ctx.setLegalBasis("Section 5(1)");
+    $ctx.setSourceText("Kolmannesta maasta tuotu");
+end
+
+// Decision: InsuranceObligationLiableParty
+// Description: Determine who is liable for insurance obligation
+// Legal Source: Section 6
+// Inputs: vehicle.owner, vehicle.holder, vehicle.ownership_transferred
+// Output: liable_party
+
+rule "InsuranceObligationLiableParty_1"
+    when
+    $ctx : Context(vehicle_owner != null, vehicle_holder != null, vehicle_ownership_transferred == true)
+    then
+    $ctx.setResult("Owner and Holder jointly liable");
+    $ctx.setLegalBasis("Section 6(1)");
+    $ctx.setSourceText("Omistaja ja haltija yhteisvastuussa");
+end
+
+rule "InsuranceObligationLiableParty_2"
+    when
+    $ctx : Context(vehicle_owner != null, vehicle_holder == null, vehicle_ownership_transferred == true)
+    then
+    $ctx.setResult("Owner liable");
+    $ctx.setLegalBasis("Section 6(1)");
+    $ctx.setSourceText("Omistaja vastaa");
+end
+
+rule "InsuranceObligationLiableParty_3"
+    when
+    $ctx : Context(vehicle_owner == null, vehicle_holder != null, vehicle_ownership_transferred == true)
+    then
+    $ctx.setResult("Holder liable");
+    $ctx.setLegalBasis("Section 6(1)");
+    $ctx.setSourceText("Haltija vastaa");
+end
+
+rule "InsuranceObligationLiableParty_4"
+    when
+    $ctx : Context(vehicle_owner != null, vehicle_holder == null, vehicle_ownership_transferred == false)
+    then
+    $ctx.setResult("Owner liable from ownership");
+    $ctx.setLegalBasis("Section 6(2)");
+    $ctx.setSourceText("Omistus siirtyy");
+end
+
+// Decision: CoverageCompensation
+// Description: Determine what is covered by traffic insurance
+// Legal Source: Sections 12-16
+// Inputs: damage.type, damage.person, damage.property
+// Output: coverage
+
+rule "CoverageCompensation_1"
+    when
+    $ctx : Context(damage_type == "PersonalInjury", damage_person == true, damage_property == false)
+    then
+    $ctx.setResult("100% covered");
+    $ctx.setLegalBasis("Section 12(1)");
+    $ctx.setSourceText("Henkilövahinko");
+end
+
+rule "CoverageCompensation_2"
+    when
+    $ctx : Context(damage_type == "PersonalInjury", damage_person == true, damage_property == true)
+    then
+    $ctx.setResult("100% covered");
+    $ctx.setLegalBasis("Section 12(1)");
+    $ctx.setSourceText("Henkilö- ja esinevahinko");
+end
+
+rule "CoverageCompensation_3"
+    when
+    $ctx : Context(damage_type == "PropertyDamage", damage_person == false, damage_property == true)
+    then
+    $ctx.setResult("100% covered");
+    $ctx.setLegalBasis("Section 12(1)");
+    $ctx.setSourceText("Esinevahinko");
+end
+
+rule "CoverageCompensation_4"
+    when
+    $ctx : Context(damage_type == "VehicleDamage", damage_person == false, damage_property == true)
+    then
+    $ctx.setResult("100% covered");
+    $ctx.setLegalBasis("Section 12(1)");
+    $ctx.setSourceText("Ajoneuvovahinko");
+end
+
+rule "CoverageCompensation_5"
+    when
+    $ctx : Context(damage_type == "EnvironmentalDamage", damage_person == false, damage_property == true)
+    then
+    $ctx.setResult("100% covered");
+    $ctx.setLegalBasis("Section 12(2)");
+    $ctx.setSourceText("Ympäristövahinko");
+end
+
+// Decision: Exclusions
+// Description: Determine what is NOT covered by traffic insurance
+// Legal Source: Sections 17-21
+// Inputs: driver.intent, driver.drunkenness, vehicle.purpose, accident.location
+// Output: excluded
+
+rule "Exclusions_1"
+    when
+    $ctx : Context(driver_intent == "Intentional", driver_drunkenness != null, vehicle_purpose != null, accident_location != null)
+    then
+    $ctx.setResult("Excluded - Intentional damage");
+    $ctx.setLegalBasis("Section 17(1)");
+    $ctx.setSourceText("Tahallinen vahinko");
+end
+
+rule "Exclusions_2"
+    when
+    $ctx : Context(driver_intent != null, driver_drunkenness == " intoxicated", vehicle_purpose != null, accident_location != null)
+    then
+    $ctx.setResult("Excluded - Drunken driving");
+    $ctx.setLegalBasis("Section 18(1)");
+    $ctx.setSourceText("Humalassa ajaminen");
+end
+
+rule "Exclusions_3"
+    when
+    $ctx : Context(driver_intent != null, driver_drunkenness != null, vehicle_purpose == "Race", accident_location != null)
+    then
+    $ctx.setResult("Excluded - Racing");
+    $ctx.setLegalBasis("Section 19(1)");
+    $ctx.setSourceText("Kilpaileminen");
+end
+
+rule "Exclusions_4"
+    when
+    $ctx : Context(driver_intent != null, driver_drunkenness != null, vehicle_purpose == "Stunt", accident_location != null)
+    then
+    $ctx.setResult("Excluded - Stunt driving");
+    $ctx.setLegalBasis("Section 19(2)");
+    $ctx.setSourceText("Temppujen ajaminen");
+end
+
+rule "Exclusions_5"
+    when
+    $ctx : Context(driver_intent != null, driver_drunkenness != null, vehicle_purpose != null, accident_location == "PrivateArea")
+    then
+    $ctx.setResult("May be excluded");
+    $ctx.setLegalBasis("Section 20");
+    $ctx.setSourceText("Yksityisalue");
+end
+
+// Decision: MedicalExpenseCoverage
+// Description: Determine medical expense compensation
+// Legal Source: Section 5
+// Inputs: injury.type, treatment.necessity, treatment.provider
+// Output: coverage_percentage
+
+rule "MedicalExpenseCoverage_1"
+    when
+    $ctx : Context(injury_type == "Emergency", treatment_necessity == "required", treatment_provider == "public")
+    then
+    $ctx.setResult("100%");
+    $ctx.setLegalBasis("Section 5a");
+    $ctx.setSourceText("Ensiavun hoitokustannukset");
+end
+
+rule "MedicalExpenseCoverage_2"
+    when
+    $ctx : Context(injury_type == "Emergency", treatment_necessity == "required", treatment_provider == "private")
+    then
+    $ctx.setResult("100% (reimbursement)");
+    $ctx.setLegalBasis("Section 5a");
+    $ctx.setSourceText("Yksityisen ensiavun kustannukset");
+end
+
+rule "MedicalExpenseCoverage_3"
+    when
+    $ctx : Context(injury_type == "Surgery", treatment_necessity == "required", treatment_provider != null)
+    then
+    $ctx.setResult("100%");
+    $ctx.setLegalBasis("Section 5a");
+    $ctx.setSourceText("Leikkaushoito");
+end
+
+rule "MedicalExpenseCoverage_4"
+    when
+    $ctx : Context(injury_type == "Medicines", treatment_necessity == "prescribed", treatment_provider == "pharmacy")
+    then
+    $ctx.setResult("100%");
+    $ctx.setLegalBasis("Section 5b");
+    $ctx.setSourceText("Lääkkeet");
+end
+
+rule "MedicalExpenseCoverage_5"
+    when
+    $ctx : Context(injury_type == "Rehabilitation", treatment_necessity == "required", treatment_provider != null)
+    then
+    $ctx.setResult("100%");
+    $ctx.setLegalBasis("Section 5c");
+    $ctx.setSourceText("Kuntoutus");
+end
+
+rule "MedicalExpenseCoverage_6"
+    when
+    $ctx : Context(injury_type == "Dental", treatment_necessity == "accident_related", treatment_provider != null)
+    then
+    $ctx.setResult("100%");
+    $ctx.setLegalBasis("Section 5e");
+    $ctx.setSourceText("Hammasvamman hoito");
+end
+
+rule "MedicalExpenseCoverage_7"
+    when
+    $ctx : Context(injury_type == "Prosthesis", treatment_necessity == "required", treatment_provider != null)
+    then
+    $ctx.setResult("100%");
+    $ctx.setLegalBasis("Section 5f");
+    $ctx.setSourceText("Proteesi");
+end
+
+// Decision: LostWagesCompensation
+// Description: Calculate lost wages compensation
+// Legal Source: Section 4
+// Inputs: income.type, income.amount, work_ability.lost_days
+// Output: compensation
+
+rule "LostWagesCompensation_1"
+    when
+    $ctx : Context(income_type == "Employed", income_amount == "net_monthly", work_ability_lost_days != null)
+    then
+    $ctx.setResult("net_monthly / 30 * days");
+    $ctx.setLegalBasis("Section 4(1)");
+    $ctx.setSourceText("Työansion menetys");
+end
+
+rule "LostWagesCompensation_2"
+    when
+    $ctx : Context(income_type == "SelfEmployed", income_amount == "annual", work_ability_lost_days != null)
+    then
+    $ctx.setResult("annual / 365 * days");
+    $ctx.setLegalBasis("Section 4(2)");
+    $ctx.setSourceText("Yrittäjän ansionmenetys");
+end
+
+rule "LostWagesCompensation_3"
+    when
+    $ctx : Context(income_type == "Unemployed", income_amount != null, work_ability_lost_days != null)
+    then
+    $ctx.setResult("Minimum 36.90/day");
+    $ctx.setLegalBasis("Section 4(3)");
+    $ctx.setSourceText("Työttömän ansionmenetys");
+end
+
+rule "LostWagesCompensation_4"
+    when
+    $ctx : Context(income_type == "Student", income_amount != null, work_ability_lost_days != null)
+    then
+    $ctx.setResult("Student grant adjustment");
+    $ctx.setLegalBasis("Section 4(4)");
+    $ctx.setSourceText("Opiskelijan ansionmenetys");
+end
+
+// Decision: PainAndSufferingCompensation
+// Description: Calculate pain and suffering compensation
+// Legal Source: Section 5
+// Inputs: injury.permanent, injury.percentage, pain.level
+// Output: compensation
+
+rule "PainAndSufferingCompensation_1"
+    when
+    $ctx : Context(injury_permanent == true, injury_percentage == "1-10%", pain_level == "moderate")
+    then
+    $ctx.setResult("Section 5(2) scale");
+    $ctx.setLegalBasis("Section 5(2)");
+    $ctx.setSourceText("Pysyvä haitta 1-10%");
+end
+
+rule "PainAndSufferingCompensation_2"
+    when
+    $ctx : Context(injury_permanent == true, injury_percentage == "11-20%", pain_level == "moderate")
+    then
+    $ctx.setResult("Section 5(2) scale");
+    $ctx.setLegalBasis("Section 5(2)");
+    $ctx.setSourceText("Pysyvä haitta 11-20%");
+end
+
+rule "PainAndSufferingCompensation_3"
+    when
+    $ctx : Context(injury_permanent == true, injury_percentage == "21-50%", pain_level == "significant")
+    then
+    $ctx.setResult("Section 5(2) scale");
+    $ctx.setLegalBasis("Section 5(2)");
+    $ctx.setSourceText("Pysyvä haitta 21-50%");
+end
+
+rule "PainAndSufferingCompensation_4"
+    when
+    $ctx : Context(injury_permanent == true, injury_percentage == "51-100%", pain_level == "severe")
+    then
+    $ctx.setResult("Section 5(2) scale");
+    $ctx.setLegalBasis("Section 5(2)");
+    $ctx.setSourceText("Pysyvä haitta 51-100%");
+end
+
+rule "PainAndSufferingCompensation_5"
+    when
+    $ctx : Context(injury_permanent == false, injury_percentage != null, pain_level != null)
+    then
+    $ctx.setResult("Temporary pain - scale");
+    $ctx.setLegalBasis("Section 5(1)");
+    $ctx.setSourceText("Tilapäinen kipu");
+end
+
+// Decision: DeathCompensation
+// Description: Calculate death compensation
+// Legal Source: Sections 7-8
+// Inputs: deceased.income, survivors.relationship, survivors.dependent
+// Output: compensation
+
+rule "DeathCompensation_1"
+    when
+    $ctx : Context(deceased_income != null, survivors_relationship == "Spouse", survivors_dependent == true)
+    then
+    $ctx.setResult("Spouse pension + lump sum");
+    $ctx.setLegalBasis("Section 7(1)");
+    $ctx.setSourceText("Leskeneläke");
+end
+
+rule "DeathCompensation_2"
+    when
+    $ctx : Context(deceased_income != null, survivors_relationship == "Child", survivors_dependent == true)
+    then
+    $ctx.setResult("Child pension");
+    $ctx.setLegalBasis("Section 7(2)");
+    $ctx.setSourceText("Lapseneläke");
+end
+
+rule "DeathCompensation_3"
+    when
+    $ctx : Context(deceased_income == "none", survivors_relationship == "Dependent", survivors_dependent == true)
+    then
+    $ctx.setResult("Lump sum");
+    $ctx.setLegalBasis("Section 8");
+    $ctx.setSourceText("Kertakorvaus");
+end
+
+rule "DeathCompensation_4"
+    when
+    $ctx : Context(deceased_income != null, survivors_relationship == "Parent", survivors_dependent == true)
+    then
+    $ctx.setResult("Funeral expenses + compensation");
+    $ctx.setLegalBasis("Section 8");
+    $ctx.setSourceText("Vanhemmille korvaus");
+end
+
+// Decision: PropertyDamageCompensation
+// Description: Calculate property damage compensation
+// Legal Source: Section 3
+// Inputs: property.type, property.value, damage.severity
+// Output: compensation
+
+rule "PropertyDamageCompensation_1"
+    when
+    $ctx : Context(property_type == "Vehicle", property_value == "market_value", damage_severity == "TotalLoss")
+    then
+    $ctx.setResult("Market value");
+    $ctx.setLegalBasis("Section 3(1)");
+    $ctx.setSourceText("Ajoneuvon täysarvo");
+end
+
+rule "PropertyDamageCompensation_2"
+    when
+    $ctx : Context(property_type == "Vehicle", property_value == "market_value", damage_severity == "Partial")
+    then
+    $ctx.setResult("Repair cost");
+    $ctx.setLegalBasis("Section 3(1)");
+    $ctx.setSourceText("Korjauskustannukset");
+end
+
+rule "PropertyDamageCompensation_3"
+    when
+    $ctx : Context(property_type == "Property", property_value != null, damage_severity != null)
+    then
+    $ctx.setResult("Actual value");
+    $ctx.setLegalBasis("Section 3(1)");
+    $ctx.setSourceText("Esinevahinko");
+end
+
+rule "PropertyDamageCompensation_4"
+    when
+    $ctx : Context(property_type == "Clothing", property_value != null, damage_severity != null)
+    then
+    $ctx.setResult("Replacement value");
+    $ctx.setLegalBasis("Section 3(2)");
+    $ctx.setSourceText("Vaatevahinko");
+end
+
+// Decision: ClaimTimeLimit
+// Description: Determine claim submission time limit
+// Legal Source: Section 74
+// Inputs: claim.type, accident.date
+// Output: time_limit
+
+rule "ClaimTimeLimit_1"
+    when
+    $ctx : Context(claim_type == "PersonalInjury", accident_date != null)
+    then
+    $ctx.setResult("3 years from injury");
+    $ctx.setLegalBasis("Section 74(1)");
+    $ctx.setSourceText("Henkilövahinko 3 vuotta");
+end
+
+rule "ClaimTimeLimit_2"
+    when
+    $ctx : Context(claim_type == "PropertyDamage", accident_date == "within_1_year")
+    then
+    $ctx.setResult("1 year from accident");
+    $ctx.setLegalBasis("Section 74(2)");
+    $ctx.setSourceText("Esinevahinko 1 vuosi");
+end
+
+rule "ClaimTimeLimit_3"
+    when
+    $ctx : Context(claim_type == "PropertyDamage", accident_date == "after_1_year")
+    then
+    $ctx.setResult("Claim barred");
+    $ctx.setLegalBasis("Section 74(2)");
+    $ctx.setSourceText("Määräaika umpeutunut");
+end
+
+// Decision: PremiumCalculation
+// Description: Calculate insurance premium
+// Legal Source: Sections 89-92
+// Inputs: vehicle.type, driver.age, claims.history, usage.purpose
+// Output: premium
+
+rule "PremiumCalculation_1"
+    when
+    $ctx : Context(vehicle_type == "PrivateCar", driver_age == "over_25", claims_history == "no_claims", usage_purpose == "Private")
+    then
+    $ctx.setResult("Base premium");
+    $ctx.setLegalBasis("Section 89");
+    $ctx.setSourceText("Perusvakuutusmaksu");
+end
+
+rule "PremiumCalculation_2"
+    when
+    $ctx : Context(vehicle_type == "PrivateCar", driver_age == "under_25", claims_history == "no_claims", usage_purpose == "Private")
+    then
+    $ctx.setResult("Base premium * 1.5");
+    $ctx.setLegalBasis("Section 90");
+    $ctx.setSourceText("Nuori kuljettaja");
+end
+
+rule "PremiumCalculation_3"
+    when
+    $ctx : Context(vehicle_type == "PrivateCar", driver_age != null, claims_history == "with_claims", usage_purpose != null)
+    then
+    $ctx.setResult("Base premium + claim loading");
+    $ctx.setLegalBasis("Section 91");
+    $ctx.setSourceText("Korotusmaksu");
+end
+
+rule "PremiumCalculation_4"
+    when
+    $ctx : Context(vehicle_type == "Commercial", driver_age != null, claims_history != null, usage_purpose != null)
+    then
+    $ctx.setResult("Commercial rate");
+    $ctx.setLegalBasis("Section 92");
+    $ctx.setSourceText("Kaupallinen ajoneuvo");
+end
+
+// Decision: InternationalCoverage
+// Description: Determine international coverage
+// Legal Source: Sections 10-11
+// Inputs: accident.country, green_card.valid, vehicle.registered
+// Output: coverage
+
+rule "InternationalCoverage_1"
+    when
+    $ctx : Context(accident_country == "Finland", green_card_valid != null, vehicle_registered == "FI")
+    then
+    $ctx.setResult("Full coverage");
+    $ctx.setLegalBasis("Section 10(1)");
+    $ctx.setSourceText("Suomessa");
+end
+
+rule "InternationalCoverage_2"
+    when
+    $ctx : Context(accident_country == "EEA", green_card_valid == true, vehicle_registered != null)
+    then
+    $ctx.setResult("Full coverage - Green Card");
+    $ctx.setLegalBasis("Section 10(2)");
+    $ctx.setSourceText("Eta-maassa vihreällä kortilla");
+end
+
+rule "InternationalCoverage_3"
+    when
+    $ctx : Context(accident_country == "EEA", green_card_valid == false, vehicle_registered != null)
+    then
+    $ctx.setResult("Limited - Bureau guarantee");
+    $ctx.setLegalBasis("Section 10(3)");
+    $ctx.setSourceText("Kansainvälinen sopimus");
+end
+
+rule "InternationalCoverage_4"
+    when
+    $ctx : Context(accident_country == "Non-EEA", green_card_valid != null, vehicle_registered != null)
+    then
+    $ctx.setResult("Check bilateral agreement");
+    $ctx.setLegalBasis("Section 11");
+    $ctx.setSourceText("Kolmannet maat");
+end
+
+// Decision: InsolvencyProtection
+// Description: Protection when insurer becomes insolvent
+// Legal Source: Section 77
+// Inputs: insurer.status, policy.active, claim.pending
+// Output: protection
+
+rule "InsolvencyProtection_1"
+    when
+    $ctx : Context(insurer_status == "Insolvent", policy_active == true, claim_pending == true)
+    then
+    $ctx.setResult("Finnish Guarantee Fund pays");
+    $ctx.setLegalBasis("Section 77(1)");
+    $ctx.setSourceText("Suomen vakuutusrahasto");
+end
+
+rule "InsolvencyProtection_2"
+    when
+    $ctx : Context(insurer_status == "Insolvent", policy_active == true, claim_pending == false)
+    then
+    $ctx.setResult("Transfer to another insurer");
+    $ctx.setLegalBasis("Section 77(2)");
+    $ctx.setSourceText("Siirto toiselle vakuuttajalle");
+end
+
+rule "InsolvencyProtection_3"
+    when
+    $ctx : Context(insurer_status == "Healthy", policy_active == true, claim_pending == true)
+    then
+    $ctx.setResult("Normal claims process");
+    $ctx.setLegalBasis("Section 76");
+    $ctx.setSourceText("Normaali käsittely");
+end

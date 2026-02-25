@@ -1,0 +1,459 @@
+// Drools Business Rules for Potilasvakuutuslaki
+// Law: 948/2019
+// Generated from DMN rules
+// Total decisions: 10
+
+package fi.law.potilasvakuutuslaki
+
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
+import java.util.ArrayList;
+
+// Context fact for rule evaluation
+declare Context
+    result : Object
+    legalBasis : String
+    sourceText : String
+    // Dynamic fields
+end
+
+// ========== DECISION TABLES ==========
+
+// Decision: InsuranceObligation
+// Description: Determine if organization has patient insurance obligation
+// Legal Source: Section 6
+// Inputs: organization.type, organization.is_free, organization.has_employer
+// Output: insurance_required
+
+rule "InsuranceObligation_1"
+    when
+    $ctx : Context(organization_type == "PublicHealthcareEntity", organization_is_free != null, organization_has_employer != null)
+    then
+    $ctx.setResult("PatientInsurance");
+    $ctx.setLegalBasis("Section 6(1)");
+    $ctx.setSourceText("Yhteisö tai säätiö");
+end
+
+rule "InsuranceObligation_2"
+    when
+    $ctx : Context(organization_type == "PrivateHealthcareEntity", organization_is_free != null, organization_has_employer != null)
+    then
+    $ctx.setResult("PatientInsurance");
+    $ctx.setLegalBasis("Section 6(1)");
+    $ctx.setSourceText("Yksityinen terveydenhuolto");
+end
+
+rule "InsuranceObligation_3"
+    when
+    $ctx : Context(organization_type == "SelfEmployedProfessional", organization_is_free != null, organization_has_employer != null)
+    then
+    $ctx.setResult("PatientInsurance");
+    $ctx.setLegalBasis("Section 6(1)");
+    $ctx.setSourceText("Itsenäinen ammatinharjoittaja");
+end
+
+rule "InsuranceObligation_4"
+    when
+    $ctx : Context(organization_type == "HealthcareProfessional", organization_is_free == true, organization_has_employer == false)
+    then
+    $ctx.setResult("PatientInsurance (personal)");
+    $ctx.setLegalBasis("Section 6(2)");
+    $ctx.setSourceText("Vastikkeetta annettu hoito");
+end
+
+rule "InsuranceObligation_5"
+    when
+    $ctx : Context(organization_type == "HealthcareProfessional", organization_is_free == true, organization_has_employer == true)
+    then
+    $ctx.setResult("Employer liable");
+    $ctx.setLegalBasis("Section 6(2)");
+    $ctx.setSourceText("Yhteisön lukuun");
+end
+
+// Decision: CompensableInjury
+// Description: Determine if patient injury is compensable
+// Legal Source: Section 23
+// Inputs: injury.type, injury.condition_met
+// Output: compensable
+
+rule "CompensableInjury_1"
+    when
+    $ctx : Context(injury_type == "TreatmentInjury", injury_condition_met == true)
+    then
+    $ctx.setResult("Compensable");
+    $ctx.setLegalBasis("Section 23(1)(1)");
+    $ctx.setSourceText("Poikkeama hyvästä hoitokäytännöstä");
+end
+
+rule "CompensableInjury_2"
+    when
+    $ctx : Context(injury_type == "DeviceInjury", injury_condition_met == true)
+    then
+    $ctx.setResult("Compensable");
+    $ctx.setLegalBasis("Section 23(1)(2)");
+    $ctx.setSourceText("Laitteen vika");
+end
+
+rule "CompensableInjury_3"
+    when
+    $ctx : Context(injury_type == "ImplantInjury", injury_condition_met == true)
+    then
+    $ctx.setResult("Compensable");
+    $ctx.setLegalBasis("Section 23(1)(3)");
+    $ctx.setSourceText("Laite ei niin turvallinen");
+end
+
+rule "CompensableInjury_4"
+    when
+    $ctx : Context(injury_type == "InfectionInjury", injury_condition_met == true)
+    then
+    $ctx.setResult("Compensable");
+    $ctx.setLegalBasis("Section 23(1)(4)");
+    $ctx.setSourceText("Infektio hoidon yhteydessä");
+end
+
+rule "CompensableInjury_5"
+    when
+    $ctx : Context(injury_type == "AccidentInjury", injury_condition_met == true)
+    then
+    $ctx.setResult("Compensable");
+    $ctx.setLegalBasis("Section 23(1)(5)");
+    $ctx.setSourceText("Tapaturma tutkimuksen aikana");
+end
+
+rule "CompensableInjury_6"
+    when
+    $ctx : Context(injury_type == "FacilityInjury", injury_condition_met == true)
+    then
+    $ctx.setResult("Compensable");
+    $ctx.setLegalBasis("Section 23(1)(6)");
+    $ctx.setSourceText("Hoitohuoneiston palo");
+end
+
+rule "CompensableInjury_7"
+    when
+    $ctx : Context(injury_type == "MedicationInjury", injury_condition_met == true)
+    then
+    $ctx.setResult("Compensable");
+    $ctx.setLegalBasis("Section 23(1)(7)");
+    $ctx.setSourceText("Lääkkeen toimittaminen vastoin asetusta");
+end
+
+rule "CompensableInjury_8"
+    when
+    $ctx : Context(injury_type == "SevereConsequenceInjury", injury_condition_met == true)
+    then
+    $ctx.setResult("Compensable");
+    $ctx.setLegalBasis("Section 23(1)(8)");
+    $ctx.setSourceText("Kohtuuttoman vaikea seuraus");
+end
+
+rule "CompensableInjury_9"
+    when
+    $ctx : Context(injury_type != null, injury_condition_met == false)
+    then
+    $ctx.setResult("Not compensable");
+    $ctx.setLegalBasis("Section 23");
+    $ctx.setSourceText("Ei täytä edellytyksiä");
+end
+
+// Decision: ClaimTimeLimit
+// Description: Determine claim time limit
+// Legal Source: Section 31
+// Inputs: claim.knowledge_date, claim.event_date
+// Output: time_limit
+
+rule "ClaimTimeLimit_1"
+    when
+    $ctx : Context(claim_knowledge_date == "within_3_years", claim_event_date != null)
+    then
+    $ctx.setResult("3 years from knowledge");
+    $ctx.setLegalBasis("Section 31(1)");
+    $ctx.setSourceText("3 vuotta tiedon saamisesta");
+end
+
+rule "ClaimTimeLimit_2"
+    when
+    $ctx : Context(claim_knowledge_date != null, claim_event_date == "within_10_years")
+    then
+    $ctx.setResult("10 years from event");
+    $ctx.setLegalBasis("Section 31(1)");
+    $ctx.setSourceText("10 vuotta tapahtumasta");
+end
+
+rule "ClaimTimeLimit_3"
+    when
+    $ctx : Context(claim_knowledge_date == "after_3_years", claim_event_date == "over_10_years")
+    then
+    $ctx.setResult("Claim barred");
+    $ctx.setLegalBasis("Section 31(1)");
+    $ctx.setSourceText("Määräaika umpeutunut");
+end
+
+// Decision: CompensationType
+// Description: Determine type of compensation
+// Legal Source: Section 24
+// Inputs: injury.result, patient.status
+// Output: compensation_type
+
+rule "CompensationType_1"
+    when
+    $ctx : Context(injury_result == "medical_costs", patient_status == "alive")
+    then
+    $ctx.setResult("MedicalExpenseCompensation");
+    $ctx.setLegalBasis("Section 24");
+    $ctx.setSourceText("Sairaanhoidon kustannukset");
+end
+
+rule "CompensationType_2"
+    when
+    $ctx : Context(injury_result == "income_loss", patient_status == "alive")
+    then
+    $ctx.setResult("LostEarningsCompensation");
+    $ctx.setLegalBasis("Section 24");
+    $ctx.setSourceText("Ansiomenetys");
+end
+
+rule "CompensationType_3"
+    when
+    $ctx : Context(injury_result == "permanent_damage", patient_status == "alive")
+    then
+    $ctx.setResult("PermanentInjuryCompensation");
+    $ctx.setLegalBasis("Section 24");
+    $ctx.setSourceText("Pysyvä haitta");
+end
+
+rule "CompensationType_4"
+    when
+    $ctx : Context(injury_result == "pain", patient_status == "alive")
+    then
+    $ctx.setResult("PainAndSuffering");
+    $ctx.setLegalBasis("Section 24");
+    $ctx.setSourceText("Kipu ja kärsimys");
+end
+
+rule "CompensationType_5"
+    when
+    $ctx : Context(injury_result == "death", patient_status == "deceased")
+    then
+    $ctx.setResult("DeathCompensation");
+    $ctx.setLegalBasis("Section 24");
+    $ctx.setSourceText("Kuoleman korvaus");
+end
+
+rule "CompensationType_6"
+    when
+    $ctx : Context(injury_result == "work_ability_affected", patient_status == "alive")
+    then
+    $ctx.setResult("VocationalRehabilitation");
+    $ctx.setLegalBasis("Section 25");
+    $ctx.setSourceText("Ammatillinen kuntoutus");
+end
+
+// Decision: ProcessingDeadline
+// Description: Determine processing deadline
+// Legal Source: Section 33
+// Inputs: claim.stage
+// Output: deadline
+
+rule "ProcessingDeadline_1"
+    when
+    $ctx : Context(claim_stage == "filing")
+    then
+    $ctx.setResult("7 days to start");
+    $ctx.setLegalBasis("Section 33(1)");
+    $ctx.setSourceText("7 arkipäivän kuluessa");
+end
+
+rule "ProcessingDeadline_2"
+    when
+    $ctx : Context(claim_stage == "complete")
+    then
+    $ctx.setResult("3 months to decision");
+    $ctx.setLegalBasis("Section 33(2)");
+    $ctx.setSourceText("3 kuukauden kuluessa");
+end
+
+rule "ProcessingDeadline_3"
+    when
+    $ctx : Context(claim_stage == "undisputed")
+    then
+    $ctx.setResult("Immediate payment");
+    $ctx.setLegalBasis("Section 33(3)");
+    $ctx.setSourceText("Riidaton osa heti");
+end
+
+// Decision: LatePaymentInterest
+// Description: Determine late payment interest
+// Legal Source: Section 42
+// Inputs: payment.status, payment.amount
+// Output: interest
+
+rule "LatePaymentInterest_1"
+    when
+    $ctx : Context(payment_status == "late", payment_amount == "over_8_euros")
+    then
+    $ctx.setResult("Interest Act 4a§ rate");
+    $ctx.setLegalBasis("Section 42(1)");
+    $ctx.setSourceText("Viivästyskorko");
+end
+
+rule "LatePaymentInterest_2"
+    when
+    $ctx : Context(payment_status == "late", payment_amount == "under_8_euros")
+    then
+    $ctx.setResult("Not paid");
+    $ctx.setLegalBasis("Section 42(3)");
+    $ctx.setSourceText("Alle 8 euroa ei makseta");
+end
+
+rule "LatePaymentInterest_3"
+    when
+    $ctx : Context(payment_status == "on_time", payment_amount != null)
+    then
+    $ctx.setResult("No interest");
+    $ctx.setLegalBasis("Section 42");
+    $ctx.setSourceText("Maksu ajallaan");
+end
+
+// Decision: RehabilitationEligibility
+// Description: Determine rehabilitation eligibility
+// Legal Source: Section 25
+// Inputs: work_ability.affected, future.affect_probable
+// Output: eligible
+
+rule "RehabilitationEligibility_1"
+    when
+    $ctx : Context(work_ability_affected == true, future_affect_probable != null)
+    then
+    $ctx.setResult("Vocational rehabilitation");
+    $ctx.setLegalBasis("Section 25(1)");
+    $ctx.setSourceText("Työkyky heikentynyt");
+end
+
+rule "RehabilitationEligibility_2"
+    when
+    $ctx : Context(work_ability_affected == false, future_affect_probable == true)
+    then
+    $ctx.setResult("May become eligible");
+    $ctx.setLegalBasis("Section 25(1)");
+    $ctx.setSourceText("Voi myöhemmin heikentyä");
+end
+
+rule "RehabilitationEligibility_3"
+    when
+    $ctx : Context(work_ability_affected == false, future_affect_probable == false)
+    then
+    $ctx.setResult("Not eligible");
+    $ctx.setLegalBasis("Section 25");
+    $ctx.setSourceText("Ei oikeutta kuntoutukseen");
+end
+
+// Decision: SubrogationRight
+// Description: Determine subrogation rights
+// Legal Source: Sections 45-47
+// Inputs: claimant.type, injury.causation
+// Output: subrogation
+
+rule "SubrogationRight_1"
+    when
+    $ctx : Context(claimant_type == "PatientInsuranceCentre", injury_causation != null)
+    then
+    $ctx.setResult("Can recover from wrongdoer");
+    $ctx.setLegalBasis("Section 45");
+    $ctx.setSourceText("Takautumisoikeus vahingonaiheuttajalta");
+end
+
+rule "SubrogationRight_2"
+    when
+    $ctx : Context(claimant_type == "OtherInsurer", injury_causation == "coordinate")
+    then
+    $ctx.setResult("Coordination required");
+    $ctx.setLegalBasis("Section 46");
+    $ctx.setSourceText("Yhteensovitus");
+end
+
+rule "SubrogationRight_3"
+    when
+    $ctx : Context(claimant_type == "WorkAccidentInsurer", injury_causation == "duplicate")
+    then
+    $ctx.setResult("Can recover from Centre");
+    $ctx.setLegalBasis("Section 47");
+    $ctx.setSourceText("Takautumisoikeus Potilasvakuutuskeskukselta");
+end
+
+// Decision: AppealProcess
+// Description: Determine appeal path
+// Legal Source: Sections 38-40
+// Inputs: decision.type, timeline
+// Output: appeal_path
+
+rule "AppealProcess_1"
+    when
+    $ctx : Context(decision_type == "rejection", timeline == "within_1_year")
+    then
+    $ctx.setResult("Request Board recommendation");
+    $ctx.setLegalBasis("Section 38");
+    $ctx.setSourceText("Ratkaisusuositus 1 vuoden sisällä");
+end
+
+rule "AppealProcess_2"
+    when
+    $ctx : Context(decision_type == "amount_dispute", timeline != null)
+    then
+    $ctx.setResult("Request Board recommendation");
+    $ctx.setLegalBasis("Section 38");
+    $ctx.setSourceText("Korvausmäärä");
+end
+
+rule "AppealProcess_3"
+    when
+    $ctx : Context(decision_type == "permanent_disability", timeline != null)
+    then
+    $ctx.setResult("Mandatory Board consultation");
+    $ctx.setLegalBasis("Section 40");
+    $ctx.setSourceText("Pakollinen kuuleminen");
+end
+
+rule "AppealProcess_4"
+    when
+    $ctx : Context(decision_type == "death_benefit", timeline != null)
+    then
+    $ctx.setResult("Mandatory Board consultation");
+    $ctx.setLegalBasis("Section 40");
+    $ctx.setSourceText("Kuoleman perusteella");
+end
+
+// Decision: IndexAdjustment
+// Description: Determine if compensation is index-adjusted
+// Legal Source: Section 28
+// Inputs: compensation.type
+// Output: index_adjusted
+
+rule "IndexAdjustment_1"
+    when
+    $ctx : Context(compensation_type == "continuous")
+    then
+    $ctx.setResult("Annual adjustment (TyEL index)");
+    $ctx.setLegalBasis("Section 28");
+    $ctx.setSourceText("Työeläkeindeksi");
+end
+
+rule "IndexAdjustment_2"
+    when
+    $ctx : Context(compensation_type == "lump_sum")
+    then
+    $ctx.setResult("No adjustment");
+    $ctx.setLegalBasis("Section 28");
+    $ctx.setSourceText("Kertakorvaus");
+end
+
+rule "IndexAdjustment_3"
+    when
+    $ctx : Context(compensation_type == "medical_expenses")
+    then
+    $ctx.setResult("As incurred");
+    $ctx.setLegalBasis("Section 24");
+    $ctx.setSourceText("Kulloinkin aiheutuneet");
+end

@@ -1,0 +1,4467 @@
+// Drools Business Rules for Vakuutusten tarjoaminen
+// Law: 234/2018
+// Generated from DMN rules
+// Total decisions: 111
+
+package fi.law.vakuutusten_tarjoaminen
+
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
+import java.util.ArrayList;
+
+// Context fact for rule evaluation
+declare Context
+    result : Object
+    legalBasis : String
+    sourceText : String
+    // Dynamic fields
+end
+
+// ========== DECISION TABLES ==========
+
+// Decision: RegistrationRequirement
+// Description: Determines if entity must register as insurance intermediary
+// Legal Source: Section 6
+// Inputs: 
+// Output: result
+
+rule "RegistrationRequirement_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Registration required");
+    $ctx.setLegalBasis("Section 6(1)");
+    $ctx.setSourceText("Vakuutusmeklari rekisteröitävä");
+end
+
+rule "RegistrationRequirement_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Registration required");
+    $ctx.setLegalBasis("Section 6(1)");
+    $ctx.setSourceText("Asiamies rekisteröitävä");
+end
+
+rule "RegistrationRequirement_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Not required (exempt)");
+    $ctx.setLegalBasis("Section 6(3)");
+    $ctx.setSourceText("Vakuutuksenantajat");
+end
+
+rule "RegistrationRequirement_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Limited registration");
+    $ctx.setLegalBasis("Section 4");
+    $ctx.setSourceText("Sivutoiminen vakuutusedustaja");
+end
+
+// Decision: BrokerRegistrationConditions
+// Description: Conditions required for broker registration under Section 8
+// Legal Source: Section 8
+// Inputs: 
+// Output: result
+
+rule "BrokerRegistrationConditions_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Condition met");
+    $ctx.setLegalBasis("Section 8(1)");
+    $ctx.setSourceText("Ei yhden vakuutuksenantajan palveluksessa");
+end
+
+rule "BrokerRegistrationConditions_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Condition met");
+    $ctx.setLegalBasis("Section 8(2)");
+    $ctx.setSourceText("Rekisteröity Suomessa");
+end
+
+rule "BrokerRegistrationConditions_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Condition met");
+    $ctx.setLegalBasis("Section 8(3)");
+    $ctx.setSourceText("Ei konkurssissa");
+end
+
+rule "BrokerRegistrationConditions_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Condition met");
+    $ctx.setLegalBasis("Section 8(4)");
+    $ctx.setSourceText("Hyvä maine");
+end
+
+rule "BrokerRegistrationConditions_5"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Condition met");
+    $ctx.setLegalBasis("Section 8(5)");
+    $ctx.setSourceText("Ammattipätevyys");
+end
+
+rule "BrokerRegistrationConditions_6"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Condition met");
+    $ctx.setLegalBasis("Section 8(6)");
+    $ctx.setSourceText("Vastuuvakuutus");
+end
+
+rule "BrokerRegistrationConditions_7"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Condition met");
+    $ctx.setLegalBasis("Section 8(7)");
+    $ctx.setSourceText("Asiakasvarajärjestelmä");
+end
+
+rule "BrokerRegistrationConditions_8"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Condition met");
+    $ctx.setLegalBasis("Section 8(8)");
+    $ctx.setSourceText("30% henkilökunnasta");
+end
+
+// Decision: GoodReputation
+// Description: Determines if person meets good reputation requirement
+// Legal Source: Section 16
+// Inputs: 
+// Output: result
+
+rule "GoodReputation_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Good reputation");
+    $ctx.setLegalBasis("Section 16");
+    $ctx.setSourceText("Ei tuomio 5 vuoteen");
+end
+
+rule "GoodReputation_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("No good reputation");
+    $ctx.setLegalBasis("Section 16");
+    $ctx.setSourceText("Vankeusrangaistus 5 vuoden aikana");
+end
+
+rule "GoodReputation_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("No good reputation");
+    $ctx.setLegalBasis("Section 16");
+    $ctx.setSourceText("Sakkorangaistus 3 vuoden aikana");
+end
+
+rule "GoodReputation_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("No good reputation");
+    $ctx.setLegalBasis("Section 16");
+    $ctx.setSourceText("Konkurssissa");
+end
+
+rule "GoodReputation_5"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("No good reputation");
+    $ctx.setLegalBasis("Section 16 ref");
+    $ctx.setSourceText("Liiketoimintakielto");
+end
+
+// Decision: ProfessionalQualification
+// Description: Determines if person has required professional qualification
+// Legal Source: Section 18
+// Inputs: 
+// Output: result
+
+rule "ProfessionalQualification_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Qualified");
+    $ctx.setLegalBasis("Section 18");
+    $ctx.setSourceText("Vakuutusmeklaritutkinto");
+end
+
+rule "ProfessionalQualification_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Qualified");
+    $ctx.setLegalBasis("Section 18");
+    $ctx.setSourceText("Vastaava pätevyys");
+end
+
+rule "ProfessionalQualification_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Not qualified");
+    $ctx.setLegalBasis("Section 18");
+    $ctx.setSourceText("Ei pätevyysvaatimuksia");
+end
+
+rule "ProfessionalQualification_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Exempt from exam");
+    $ctx.setLegalBasis("Section 84");
+    $ctx.setSourceText("Siirtymäsäännös");
+end
+
+// Decision: ContinuingEducation
+// Description: Minimum continuing education requirements
+// Legal Source: Section 20
+// Inputs: 
+// Output: result
+
+rule "ContinuingEducation_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Compliant");
+    $ctx.setLegalBasis("Section 20");
+    $ctx.setSourceText("15 tuntia vuodessa");
+end
+
+rule "ContinuingEducation_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Non-compliant");
+    $ctx.setLegalBasis("Section 20");
+    $ctx.setSourceText("Alle 15 tuntia");
+end
+
+// Decision: DisclosureObligations
+// Description: Information disclosure requirements before contract
+// Legal Source: Sections 32-38
+// Inputs: 
+// Output: result
+
+rule "DisclosureObligations_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must disclose: name, contact, licensing");
+    $ctx.setLegalBasis("Section 32");
+    $ctx.setSourceText("Vakuutuksenantajan tiedot");
+end
+
+rule "DisclosureObligations_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must disclose: name, register check, principal(s)");
+    $ctx.setLegalBasis("Section 33");
+    $ctx.setSourceText("Asiamiehen tiedot");
+end
+
+rule "DisclosureObligations_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must disclose: commission, analysis basis, conflicts");
+    $ctx.setLegalBasis("Section 33");
+    $ctx.setSourceText("Vakuutusmeklarin tiedot");
+end
+
+rule "DisclosureObligations_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must explain why recommended");
+    $ctx.setLegalBasis("Section 37");
+    $ctx.setSourceText("Henkilökohtainen suositus");
+end
+
+rule "DisclosureObligations_5"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must disclose commission/fees");
+    $ctx.setLegalBasis("Section 38");
+    $ctx.setSourceText("Vastikkeen ilmoittaminen");
+end
+
+// Decision: ProductGovernance
+// Description: Product governance requirements for insurers
+// Legal Source: Section 42
+// Inputs: 
+// Output: result
+
+rule "ProductGovernance_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must have product governance");
+    $ctx.setLegalBasis("Section 42(1)");
+    $ctx.setSourceText("Tuotehallintajärjestelmä");
+end
+
+rule "ProductGovernance_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Target market defined");
+    $ctx.setLegalBasis("Section 42(2)");
+    $ctx.setSourceText("Kohdemarkkinat");
+end
+
+rule "ProductGovernance_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Risk assessment done");
+    $ctx.setLegalBasis("Section 42(3)");
+    $ctx.setSourceText("Riskien arviointi");
+end
+
+rule "ProductGovernance_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Distribution plan in place");
+    $ctx.setLegalBasis("Section 42(4)");
+    $ctx.setSourceText("Tarjoamissuunnitelma");
+end
+
+// Decision: InvestmentInsuranceRequirements
+// Description: Additional requirements for investment insurance
+// Legal Source: Sections 44-54
+// Inputs: 
+// Output: result
+
+rule "InvestmentInsuranceRequirements_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must disclose to customer");
+    $ctx.setLegalBasis("Section 45");
+    $ctx.setSourceText("Eturistiriita");
+end
+
+rule "InvestmentInsuranceRequirements_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must not impair service quality");
+    $ctx.setLegalBasis("Section 46");
+    $ctx.setSourceText("Kannustimet");
+end
+
+rule "InvestmentInsuranceRequirements_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Suitability assessment required");
+    $ctx.setLegalBasis("Section 49");
+    $ctx.setSourceText("Asianmukaisuuden arviointi");
+end
+
+rule "InvestmentInsuranceRequirements_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Exempt from suitability");
+    $ctx.setLegalBasis("Section 54");
+    $ctx.setSourceText("Ammattimainen asiakas");
+end
+
+// Decision: ProfessionalLiabilityInsurance
+// Description: Mandatory liability insurance for brokers
+// Legal Source: Section 58
+// Inputs: 
+// Output: result
+
+rule "ProfessionalLiabilityInsurance_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Liability insurance mandatory");
+    $ctx.setLegalBasis("Section 58(1)");
+    $ctx.setSourceText("Vastuuvakuutus pakollinen");
+end
+
+rule "ProfessionalLiabilityInsurance_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("1,564,610 EUR minimum");
+    $ctx.setLegalBasis("Section 58(1)");
+    $ctx.setSourceText("Vähimmäiskate");
+end
+
+rule "ProfessionalLiabilityInsurance_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("2,315,610 EUR minimum");
+    $ctx.setLegalBasis("Section 58(1)");
+    $ctx.setSourceText("Vuosi aggregate");
+end
+
+rule "ProfessionalLiabilityInsurance_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must cover entire EEA");
+    $ctx.setLegalBasis("Section 58(2)");
+    $ctx.setSourceText("Koko ETA-alue");
+end
+
+// Decision: ClientAssetSegregation
+// Description: Requirements for segregating client assets
+// Legal Source: Section 59
+// Inputs: 
+// Output: result
+
+rule "ClientAssetSegregation_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must segregate in bank account");
+    $ctx.setLegalBasis("Section 59");
+    $ctx.setSourceText("Asiakasvarat erikseen");
+end
+
+rule "ClientAssetSegregation_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Cannot hold consumer funds");
+    $ctx.setLegalBasis("Section 59(2)");
+    $ctx.setSourceText("Kuluttajan varat");
+end
+
+rule "ClientAssetSegregation_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must keep proper records");
+    $ctx.setLegalBasis("Section 59");
+    $ctx.setSourceText("Kirjanpito");
+end
+
+// Decision: CrossBorderOperations
+// Description: Requirements for operating in other EEA states
+// Legal Source: Sections 22-29
+// Inputs: 
+// Output: result
+
+rule "CrossBorderOperations_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Notify home state authority");
+    $ctx.setLegalBasis("Section 22");
+    $ctx.setSourceText("Ilmoitusvelvollisuus");
+end
+
+rule "CrossBorderOperations_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Provide additional information");
+    $ctx.setLegalBasis("Section 22(2)");
+    $ctx.setSourceText("Sivuliikkeen tiedot");
+end
+
+rule "CrossBorderOperations_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Can start operations");
+    $ctx.setLegalBasis("Section 24");
+    $ctx.setSourceText("Oikeus aloittaa");
+end
+
+rule "CrossBorderOperations_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must comply with host state rules");
+    $ctx.setLegalBasis("Section 24(2)");
+    $ctx.setSourceText("Vastaanottavan valtion säännöt");
+end
+
+// Decision: SupervisorySanctions
+// Description: Available sanctions for violations
+// Legal Source: Sections 70-71
+// Inputs: 
+// Output: result
+
+rule "SupervisorySanctions_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Prohibition to operate");
+    $ctx.setLegalBasis("Section 70");
+    $ctx.setSourceText("Toiminnan kieltäminen");
+end
+
+rule "SupervisorySanctions_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Administrative fine possible");
+    $ctx.setLegalBasis("Section 71");
+    $ctx.setSourceText("Seuraamusmaksu");
+end
+
+rule "SupervisorySanctions_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Deregistration possible");
+    $ctx.setLegalBasis("Section 73");
+    $ctx.setSourceText("Rekisteristä poistaminen");
+end
+
+rule "SupervisorySanctions_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Compensation liability");
+    $ctx.setLegalBasis("Sections 74-75");
+    $ctx.setSourceText("Vahingonkorvausvastuu");
+end
+
+// Decision: CompensationLiability
+// Description: Liability for damages to customers
+// Legal Source: Sections 74-75
+// Inputs: 
+// Output: result
+
+rule "CompensationLiability_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Broker liable to compensate");
+    $ctx.setLegalBasis("Section 74(1)");
+    $ctx.setSourceText("Vakuutusmeklarin korvausvastuu");
+end
+
+rule "CompensationLiability_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Compensate for losses");
+    $ctx.setLegalBasis("Section 74(2)");
+    $ctx.setSourceText("Tietojen antamatta jättäminen");
+end
+
+rule "CompensationLiability_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Insurer liable");
+    $ctx.setLegalBasis("Section 75");
+    $ctx.setSourceText("Vakuutuksenantajan vastuu");
+end
+
+rule "CompensationLiability_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Exempt from liability");
+    $ctx.setLegalBasis("Section 74");
+    $ctx.setSourceText("Ammattitaitoisesti toiminut");
+end
+
+// Decision: DataProtection
+// Description: Confidentiality and data protection requirements
+// Legal Source: Sections 79-81
+// Inputs: 
+// Output: result
+
+rule "DataProtection_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must maintain confidentiality");
+    $ctx.setLegalBasis("Section 79");
+    $ctx.setSourceText("Vaitiolovelvollisuus");
+end
+
+rule "DataProtection_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Can disclose to FIN-FSA");
+    $ctx.setLegalBasis("Section 80(1)");
+    $ctx.setSourceText("Finanssivalvonnalle");
+end
+
+rule "DataProtection_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Can disclose for investigations");
+    $ctx.setLegalBasis("Section 80(5)");
+    $ctx.setSourceText("Rikoksen estämiseksi");
+end
+
+rule "DataProtection_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Criminal liability");
+    $ctx.setLegalBasis("Section 81");
+    $ctx.setSourceText("Rikosoikeudellinen vastuu");
+end
+
+// Decision: DocumentRetention
+// Description: Requirements for document retention
+// Legal Source: Section 78
+// Inputs: 
+// Output: result
+
+rule "DocumentRetention_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Retain for 5 years minimum");
+    $ctx.setLegalBasis("Section 78");
+    $ctx.setSourceText("Pätevyysasiakirjat");
+end
+
+rule "DocumentRetention_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Retain for 5 years minimum");
+    $ctx.setLegalBasis("Section 78(2)");
+    $ctx.setSourceText("Sopimukset");
+end
+
+rule "DocumentRetention_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Retain records of training");
+    $ctx.setLegalBasis("Section 78");
+    $ctx.setSourceText("Koulutustiedot");
+end
+
+// Decision: ClientAgreementRequirement
+// Description: Requirements for broker-client agreement
+// Legal Source: Section 56
+// Inputs: 
+// Output: result
+
+rule "ClientAgreementRequirement_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must have written agreement");
+    $ctx.setLegalBasis("Section 56(1)");
+    $ctx.setSourceText("Kirjallinen sopimus");
+end
+
+rule "ClientAgreementRequirement_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Copy to client required");
+    $ctx.setLegalBasis("Section 56(1)");
+    $ctx.setSourceText("Asiakkaalle kappale");
+end
+
+rule "ClientAgreementRequirement_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must specify: duration, fees, basis");
+    $ctx.setLegalBasis("Section 56(2)");
+    $ctx.setSourceText("Sisältövaatimukset");
+end
+
+// Decision: WhistleblowingRequirement
+// Description: Whistleblowing procedure requirements
+// Legal Source: Section 72
+// Inputs: 
+// Output: result
+
+rule "WhistleblowingRequirement_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must have reporting procedure");
+    $ctx.setLegalBasis("Section 72(1)");
+    $ctx.setSourceText("Ilmoitusmenettely");
+end
+
+rule "WhistleblowingRequirement_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must protect reporter identity");
+    $ctx.setLegalBasis("Section 72");
+    $ctx.setSourceText("Suojaa ilmoittaja");
+end
+
+rule "WhistleblowingRequirement_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Retain records 5 years");
+    $ctx.setLegalBasis("Section 72(2)");
+    $ctx.setSourceText("Säilytys 5 vuotta");
+end
+
+// Decision: MarketingRequirements
+// Description: Marketing practice requirements
+// Legal Source: Section 34
+// Inputs: 
+// Output: result
+
+rule "MarketingRequirements_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must be clearly identifiable as marketing");
+    $ctx.setLegalBasis("Section 34");
+    $ctx.setSourceText("Tunnistettava markkinoinniksi");
+end
+
+rule "MarketingRequirements_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must be accurate and clear");
+    $ctx.setLegalBasis("Section 34");
+    $ctx.setSourceText("Täsmälliset tiedot");
+end
+
+rule "MarketingRequirements_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Prohibited");
+    $ctx.setLegalBasis("Section 34");
+    $ctx.setSourceText("Ei harhaanjohtavaa");
+end
+
+// Decision: TyingAndBundling
+// Description: Tying and bundling rules
+// Legal Source: Sections 40-41
+// Inputs: 
+// Output: result
+
+rule "TyingAndBundling_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Prohibited - must offer separately");
+    $ctx.setLegalBasis("Section 40");
+    $ctx.setSourceText("Kielletty kuluttajalle");
+end
+
+rule "TyingAndBundling_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must disclose if can buy separately");
+    $ctx.setLegalBasis("Section 41");
+    $ctx.setSourceText("Ilmoitettava erikseen ostosta");
+end
+
+// Decision: InvestmentInsuranceRequirements
+// Description: Requirements for investment insurance distribution
+// Legal Source: Sections 44-54
+// Inputs: 
+// Output: result
+
+rule "InvestmentInsuranceRequirements_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must disclose to customer");
+    $ctx.setLegalBasis("Section 45");
+    $ctx.setSourceText("Eturistiriita");
+end
+
+rule "InvestmentInsuranceRequirements_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must not impair service quality");
+    $ctx.setLegalBasis("Section 46");
+    $ctx.setSourceText("Ei saa heikentää laatua");
+end
+
+rule "InvestmentInsuranceRequirements_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must assess suitability");
+    $ctx.setLegalBasis("Section 50");
+    $ctx.setSourceText("Soveltuvuuden arviointi");
+end
+
+rule "InvestmentInsuranceRequirements_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must assess appropriateness");
+    $ctx.setLegalBasis("Section 49");
+    $ctx.setSourceText("Asianmukaisuuden arviointi");
+end
+
+rule "InvestmentInsuranceRequirements_5"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Exempt from suitability");
+    $ctx.setLegalBasis("Section 54");
+    $ctx.setSourceText("Ammattimainen asiakas");
+end
+
+// Decision: RegularServiceSummary
+// Description: Regular summary of services requirement
+// Legal Source: Section 52
+// Inputs: 
+// Output: result
+
+rule "RegularServiceSummary_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Provide regular summary");
+    $ctx.setLegalBasis("Section 52");
+    $ctx.setSourceText("Palveluiden yhteenveto");
+end
+
+// Decision: SustainabilityDisclosure
+// Description: Sustainability information disclosure
+// Legal Source: Section 54a
+// Inputs: 
+// Output: result
+
+rule "SustainabilityDisclosure_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Disclose sustainability risks");
+    $ctx.setLegalBasis("Section 54a");
+    $ctx.setSourceText("Kestävyysriskit");
+end
+
+rule "SustainabilityDisclosure_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("ESG disclosure required");
+    $ctx.setLegalBasis("Section 54a");
+    $ctx.setSourceText("yli 3 työntekijää");
+end
+
+// Decision: SupervisionPowers
+// Description: FIN-FSA supervisory powers
+// Legal Source: Section 66
+// Inputs: 
+// Output: result
+
+rule "SupervisionPowers_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Supervises this Act");
+    $ctx.setLegalBasis("Section 66");
+    $ctx.setSourceText("Valvoo tätä lakia");
+end
+
+rule "SupervisionPowers_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Supervises Finnish operations");
+    $ctx.setLegalBasis("Section 66(2)");
+    $ctx.setSourceText("Valvoo Suomen toimintaa");
+end
+
+rule "SupervisionPowers_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must provide information");
+    $ctx.setLegalBasis("Section 76");
+    $ctx.setSourceText("Tietojenantovelvollisuus");
+end
+
+// Decision: CrossBorderSupervision
+// Description: Supervision of cross-border activities
+// Legal Source: Sections 67-69
+// Inputs: 
+// Output: result
+
+rule "CrossBorderSupervision_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Take measures per §67");
+    $ctx.setLegalBasis("Section 67");
+    $ctx.setSourceText("Toimenpiteet");
+end
+
+rule "CrossBorderSupervision_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Cooperate with foreign authority");
+    $ctx.setLegalBasis("Section 69");
+    $ctx.setSourceText("Yhteistyö");
+end
+
+// Decision: SanctionPowers
+// Description: Administrative sanctions available
+// Legal Source: Sections 70-73
+// Inputs: 
+// Output: result
+
+rule "SanctionPowers_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Prohibition to operate");
+    $ctx.setLegalBasis("Section 70");
+    $ctx.setSourceText("Toiminnan kieltäminen");
+end
+
+rule "SanctionPowers_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Administrative fine");
+    $ctx.setLegalBasis("Section 71");
+    $ctx.setSourceText("Seuraamusmaksu");
+end
+
+rule "SanctionPowers_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Deregistration");
+    $ctx.setLegalBasis("Section 73");
+    $ctx.setSourceText("Poistaminen rekisteristä");
+end
+
+rule "SanctionPowers_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Warning published");
+    $ctx.setLegalBasis("Section 71");
+    $ctx.setSourceText("Julkinen varoitus");
+end
+
+// Decision: RightToAppeal
+// Description: Appeal rights against administrative decisions
+// Legal Source: Sections 65, 82
+// Inputs: 
+// Output: result
+
+rule "RightToAppeal_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Appeal to Administrative Court");
+    $ctx.setLegalBasis("Section 65");
+    $ctx.setSourceText("Hallinto-oikeus");
+end
+
+rule "RightToAppeal_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Appeal to Administrative Court");
+    $ctx.setLegalBasis("Section 82");
+    $ctx.setSourceText("Hallinto-oikeus");
+end
+
+// Decision: CodeOfConduct
+// Description: General code of conduct requirements
+// Legal Source: Section 30
+// Inputs: 
+// Output: result
+
+rule "CodeOfConduct_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Act honestly and professionally");
+    $ctx.setLegalBasis("Section 30(1)");
+    $ctx.setSourceText("Rehellisesti ja ammattitaitoisesti");
+end
+
+rule "CodeOfConduct_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Prioritize customer interests");
+    $ctx.setLegalBasis("Section 30(1)");
+    $ctx.setSourceText("Asiakkaan etu edelle");
+end
+
+rule "CodeOfConduct_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Provide sufficient information");
+    $ctx.setLegalBasis("Section 30(2)");
+    $ctx.setSourceText("Riittävät tiedot");
+end
+
+rule "CodeOfConduct_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must not mislead");
+    $ctx.setLegalBasis("Section 30(2)");
+    $ctx.setSourceText("Ei harhaanjohtavaa");
+end
+
+rule "CodeOfConduct_5"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Sufficient resources required");
+    $ctx.setLegalBasis("Section 30(3)");
+    $ctx.setSourceText("Riittävät voimavarat");
+end
+
+// Decision: PreContractDisclosure
+// Description: Pre-contractual information disclosure
+// Legal Source: Section 14
+// Inputs: 
+// Output: result
+
+rule "PreContractDisclosure_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Disclose in official language(s)");
+    $ctx.setLegalBasis("Section 14(1)");
+    $ctx.setSourceText("Virallisella kielellä");
+end
+
+rule "PreContractDisclosure_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Provide info before commitment");
+    $ctx.setLegalBasis("Section 14(2)");
+    $ctx.setSourceText("Ennen sitoutumista");
+end
+
+rule "PreContractDisclosure_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Additional explanation required");
+    $ctx.setLegalBasis("Section 14(3)");
+    $ctx.setSourceText("Lisäselvitys");
+end
+
+rule "PreContractDisclosure_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Information in durable medium");
+    $ctx.setLegalBasis("Section 14(4)");
+    $ctx.setSourceText("Kestävällä tavalla");
+end
+
+// Decision: RemunerationTransparency
+// Description: Remuneration and fee disclosure
+// Legal Source: Section 47
+// Inputs: 
+// Output: result
+
+rule "RemunerationTransparency_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Disclose fees to customer");
+    $ctx.setLegalBasis("Section 47(1)");
+    $ctx.setSourceText("Palkkion ilmoittaminen");
+end
+
+rule "RemunerationTransparency_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Disclose fee amount");
+    $ctx.setLegalBasis("Section 47(1)");
+    $ctx.setSourceText("Maksetun palkkion määrä");
+end
+
+rule "RemunerationTransparency_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Disclose commission received");
+    $ctx.setLegalBasis("Section 47(2)");
+    $ctx.setSourceText("Saadut palkkiot");
+end
+
+rule "RemunerationTransparency_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Explain impact on service");
+    $ctx.setLegalBasis("Section 47(3)");
+    $ctx.setSourceText("Vaikutus palveluun");
+end
+
+// Decision: AdviceRecords
+// Description: Documentation of advice given
+// Legal Source: Section 53
+// Inputs: 
+// Output: result
+
+rule "AdviceRecords_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Record the advice");
+    $ctx.setLegalBasis("Section 53(1)");
+    $ctx.setSourceText("Kirjataan annettu neuvo");
+end
+
+rule "AdviceRecords_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Record basis for recommendation");
+    $ctx.setLegalBasis("Section 53(2)");
+    $ctx.setSourceText("Suosituksen perusteet");
+end
+
+rule "AdviceRecords_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Retain records 5 years");
+    $ctx.setLegalBasis("Section 53(3)");
+    $ctx.setSourceText("Säilytys 5 vuotta");
+end
+
+rule "AdviceRecords_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Provide copy to customer");
+    $ctx.setLegalBasis("Section 53(4)");
+    $ctx.setSourceText("Asiakkaalle kappale");
+end
+
+// Decision: CancellationRight
+// Description: Customer cancellation rights
+// Legal Source: Section 61
+// Inputs: 
+// Output: result
+
+rule "CancellationRight_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("14-day cancellation right");
+    $ctx.setLegalBasis("Section 61(1)");
+    $ctx.setSourceText("14 päivän perumisoikeus");
+end
+
+rule "CancellationRight_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("30-day if not informed");
+    $ctx.setLegalBasis("Section 61(2)");
+    $ctx.setSourceText("30 päivää jos tietoja ei annettu");
+end
+
+rule "CancellationRight_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Premium refund within 30 days");
+    $ctx.setLegalBasis("Section 61(4)");
+    $ctx.setSourceText("Premium palautetaan 30 päivässä");
+end
+
+// Decision: EmployeeInformation
+// Description: Information to employees about insurance distribution
+// Legal Source: Section 55
+// Inputs: 
+// Output: result
+
+rule "EmployeeInformation_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Provide employee information");
+    $ctx.setLegalBasis("Section 55(1)");
+    $ctx.setSourceText("Henkilöstön tiedot");
+end
+
+rule "EmployeeInformation_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Disclose registration status");
+    $ctx.setLegalBasis("Section 55(2)");
+    $ctx.setSourceText("Rekisteröintitiedot");
+end
+
+rule "EmployeeInformation_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Inform of duties and rules");
+    $ctx.setLegalBasis("Section 55(3)");
+    $ctx.setSourceText("Velvollisuudet");
+end
+
+// Decision: Outsourcing
+// Description: Outsourcing requirements
+// Legal Source: Section 57
+// Inputs: 
+// Output: result
+
+rule "Outsourcing_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Written agreement required");
+    $ctx.setLegalBasis("Section 57(1)");
+    $ctx.setSourceText("Kirjallinen sopimus");
+end
+
+rule "Outsourcing_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Supervision remains with company");
+    $ctx.setLegalBasis("Section 57(2)");
+    $ctx.setSourceText("Valvonta säilyy");
+end
+
+rule "Outsourcing_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must meet same standards");
+    $ctx.setLegalBasis("Section 57(3)");
+    $ctx.setSourceText("Samat vaatimukset");
+end
+
+// Decision: ProductInformationDocument
+// Description: Pre-contractual product information document
+// Legal Source: Section 43
+// Inputs: 
+// Output: result
+
+rule "ProductInformationDocument_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Provide standardized document");
+    $ctx.setLegalBasis("Section 43(1)");
+    $ctx.setSourceText("Vakioasiakirja");
+end
+
+rule "ProductInformationDocument_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Include: insurer, cover, exclusions");
+    $ctx.setLegalBasis("Section 43(2)");
+    $ctx.setSourceText("Sisältövaatimukset");
+end
+
+rule "ProductInformationDocument_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Before contract conclusion");
+    $ctx.setLegalBasis("Section 43(3)");
+    $ctx.setSourceText("Ennen sopimusta");
+end
+
+// Decision: PremiumPayment
+// Description: Premium payment and collection rules
+// Legal Source: Section 60
+// Inputs: 
+// Output: result
+
+rule "PremiumPayment_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Collect in Finland");
+    $ctx.setLegalBasis("Section 60(1)");
+    $ctx.setSourceText("Peritään Suomessa");
+end
+
+rule "PremiumPayment_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Document collection properly");
+    $ctx.setLegalBasis("Section 60(2)");
+    $ctx.setSourceText("Asiakirjoitettava");
+end
+
+rule "PremiumPayment_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Return to insurer promptly");
+    $ctx.setLegalBasis("Section 60(3)");
+    $ctx.setSourceText("Palautetaan vakuutuksenantajalle");
+end
+
+// Decision: AncillaryInsuranceDistributor
+// Description: Ancillary insurance distributor rules
+// Legal Source: Section 5(11)
+// Inputs: 
+// Output: result
+
+rule "AncillaryInsuranceDistributor_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Insurance is ancillary");
+    $ctx.setLegalBasis("Section 5(11)");
+    $ctx.setSourceText("Sivutoiminen vakuutusedustaja");
+end
+
+rule "AncillaryInsuranceDistributor_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Main business is goods/services");
+    $ctx.setLegalBasis("Section 5(11)");
+    $ctx.setSourceText("Tavarat/palvelut");
+end
+
+rule "AncillaryInsuranceDistributor_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Complements main business");
+    $ctx.setLegalBasis("Section 5(11)");
+    $ctx.setSourceText("Täydentää päätoimintaa");
+end
+
+rule "AncillaryInsuranceDistributor_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must register if conditions met");
+    $ctx.setLegalBasis("Section 5(11)");
+    $ctx.setSourceText("Rekisteröinti");
+end
+
+// Decision: EEAOperations
+// Description: Cross-border operations within EEA
+// Legal Source: Sections 24-25
+// Inputs: 
+// Output: result
+
+rule "EEAOperations_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Freedom to provide services");
+    $ctx.setLegalBasis("Section 24");
+    $ctx.setSourceText("Palvelun vapaus");
+end
+
+rule "EEAOperations_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Freedom of establishment");
+    $ctx.setLegalBasis("Section 25");
+    $ctx.setSourceText("Sijainnin vapaus");
+end
+
+rule "EEAOperations_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Notify FIN-FSA");
+    $ctx.setLegalBasis("Section 24(2)");
+    $ctx.setSourceText("Ilmoitus Finanssivalvonnalle");
+end
+
+rule "EEAOperations_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Host state rules apply");
+    $ctx.setLegalBasis("Section 24(3)");
+    $ctx.setSourceText("Kohdemaan säännöt");
+end
+
+// Decision: AgentRegistration
+// Description: Insurance agent registration requirements
+// Legal Source: Section 21
+// Inputs: 
+// Output: result
+
+rule "AgentRegistration_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Register as natural person");
+    $ctx.setLegalBasis("Section 21(1)");
+    $ctx.setSourceText("Luonnollinen henkilö");
+end
+
+rule "AgentRegistration_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Register legal entity and responsible person");
+    $ctx.setLegalBasis("Section 21(2)");
+    $ctx.setSourceText("Oikeushenkilö ja vastuuhenkilö");
+end
+
+rule "AgentRegistration_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Can represent multiple insurers");
+    $ctx.setLegalBasis("Section 21(3)");
+    $ctx.setSourceText("Useita päämiesten");
+end
+
+rule "AgentRegistration_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Registration publicly verifiable");
+    $ctx.setLegalBasis("Section 21(4)");
+    $ctx.setSourceText("Julkisesti tarkistettavissa");
+end
+
+// Decision: ThirdCountryOperations
+// Description: Operations from third countries
+// Legal Source: Section 28
+// Inputs: 
+// Output: result
+
+rule "ThirdCountryOperations_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("No freedom to provide services");
+    $ctx.setLegalBasis("Section 28");
+    $ctx.setSourceText("Ei palvelun vapautta");
+end
+
+rule "ThirdCountryOperations_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Representative office possible");
+    $ctx.setLegalBasis("Section 28");
+    $ctx.setSourceText("Edustusto");
+end
+
+rule "ThirdCountryOperations_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Equivalence decision required");
+    $ctx.setLegalBasis("Section 28");
+    $ctx.setSourceText("Vastaavuuspäätös");
+end
+
+// Decision: RegistrationVerification
+// Description: Verification of registration status
+// Legal Source: Section 26
+// Inputs: 
+// Output: result
+
+rule "RegistrationVerification_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Right to verify registration");
+    $ctx.setLegalBasis("Section 26(1)");
+    $ctx.setSourceText("Oikeus tarkistaa");
+end
+
+rule "RegistrationVerification_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Public online register");
+    $ctx.setLegalBasis("Section 26(2)");
+    $ctx.setSourceText("Julkinen rekisteri");
+end
+
+rule "RegistrationVerification_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Provide extracts to customers");
+    $ctx.setLegalBasis("Section 26(3)");
+    $ctx.setSourceText("Ote asiakkaalle");
+end
+
+// Decision: RegistrationRefusal
+// Description: Grounds for registration refusal
+// Legal Source: Section 7
+// Inputs: 
+// Output: result
+
+rule "RegistrationRefusal_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Refuse - false information");
+    $ctx.setLegalBasis("Section 7(1)");
+    $ctx.setSourceText("Väärät tiedot");
+end
+
+rule "RegistrationRefusal_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Refuse - conditions not met");
+    $ctx.setLegalBasis("Section 7(2)");
+    $ctx.setSourceText("Edellytykset puuttuvat");
+end
+
+rule "RegistrationRefusal_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Refuse - prior serious violations");
+    $ctx.setLegalBasis("Section 7(3)");
+    $ctx.setSourceText("Vakavia rikkomuksia");
+end
+
+rule "RegistrationRefusal_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Can reapply after 5 years");
+    $ctx.setLegalBasis("Section 7(4)");
+    $ctx.setSourceText("Uudelleenhakeminen 5 vuoden jälkeen");
+end
+
+// Decision: DirectivesFromPrincipal
+// Description: Insurance company instructions to agents
+// Legal Source: Section 39
+// Inputs: 
+// Output: result
+
+rule "DirectivesFromPrincipal_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Can give instructions");
+    $ctx.setLegalBasis("Section 39(1)");
+    $ctx.setSourceText("Antaa ohjeita");
+end
+
+rule "DirectivesFromPrincipal_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must monitor agent compliance");
+    $ctx.setLegalBasis("Section 39(2)");
+    $ctx.setSourceText("Valvonta");
+end
+
+rule "DirectivesFromPrincipal_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must take measures");
+    $ctx.setLegalBasis("Section 39(2)");
+    $ctx.setSourceText("Toimenpiteet");
+end
+
+rule "DirectivesFromPrincipal_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Liable for agent actions");
+    $ctx.setLegalBasis("Section 39(3)");
+    $ctx.setSourceText("Vastuu asiamiehen toimista");
+end
+
+// Decision: CompensationClaimProcessing
+// Description: Processing customer compensation claims
+// Legal Source: Section 48
+// Inputs: 
+// Output: result
+
+rule "CompensationClaimProcessing_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Handle promptly and diligently");
+    $ctx.setLegalBasis("Section 48(1)");
+    $ctx.setSourceText("Huolellisesti");
+end
+
+rule "CompensationClaimProcessing_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Request missing information");
+    $ctx.setLegalBasis("Section 48(2)");
+    $ctx.setSourceText("Pyydä puuttuvat tiedot");
+end
+
+rule "CompensationClaimProcessing_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Provide reasons in writing");
+    $ctx.setLegalBasis("Section 48(3)");
+    $ctx.setSourceText("Kirjalliset perusteet");
+end
+
+rule "CompensationClaimProcessing_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Forward to insurer without delay");
+    $ctx.setLegalBasis("Section 48(4)");
+    $ctx.setSourceText("Välittömästi vakuutuksenantajalle");
+end
+
+// Decision: RegisterDetails
+// Description: Details required in distribution register
+// Legal Source: Section 9
+// Inputs: 
+// Output: result
+
+rule "RegisterDetails_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Name, address, principal(s)");
+    $ctx.setLegalBasis("Section 9(1)");
+    $ctx.setSourceText("Nimi, osoite, päämiesten tiedot");
+end
+
+rule "RegisterDetails_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Company details, responsible person");
+    $ctx.setLegalBasis("Section 9(2)");
+    $ctx.setSourceText("Yrityksen tiedot, vastuuhenkilö");
+end
+
+rule "RegisterDetails_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Notify changes within 30 days");
+    $ctx.setLegalBasis("Section 10");
+    $ctx.setSourceText("Muutokset 30 päivässä");
+end
+
+rule "RegisterDetails_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Public online access");
+    $ctx.setLegalBasis("Section 11");
+    $ctx.setSourceText("Julkinen verkkopalvelu");
+end
+
+// Decision: DeregistrationGrounds
+// Description: Grounds for removal from register
+// Legal Source: Section 12
+// Inputs: 
+// Output: result
+
+rule "DeregistrationGrounds_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Deregister on request");
+    $ctx.setLegalBasis("Section 12(1)");
+    $ctx.setSourceText("Kirjallinen pyyntö");
+end
+
+rule "DeregistrationGrounds_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Deregister if activity ceased");
+    $ctx.setLegalBasis("Section 12(1)");
+    $ctx.setSourceText("Toiminta lakannut");
+end
+
+rule "DeregistrationGrounds_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Deregister if conditions no longer met");
+    $ctx.setLegalBasis("Section 12(2)");
+    $ctx.setSourceText("Edellytykset eivät enää täyty");
+end
+
+rule "DeregistrationGrounds_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Deregister for repeated violations");
+    $ctx.setLegalBasis("Section 12(3)");
+    $ctx.setSourceText("Toistuvat rikkomukset");
+end
+
+// Decision: PrincipalLiability
+// Description: Liability of insurance company for distributor
+// Legal Source: Section 39
+// Inputs: 
+// Output: result
+
+rule "PrincipalLiability_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Liable for agent conduct");
+    $ctx.setLegalBasis("Section 39(3)");
+    $ctx.setSourceText("Vastuu asiamiehen toimista");
+end
+
+rule "PrincipalLiability_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Not liable for broker");
+    $ctx.setLegalBasis("Section 39(3)");
+    $ctx.setSourceText("Ei vastuuta meklarista");
+end
+
+rule "PrincipalLiability_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Directly liable to customer");
+    $ctx.setLegalBasis("Section 74");
+    $ctx.setSourceText("Suora vastuu asiakkaalle");
+end
+
+// Decision: CooperationDuties
+// Description: Cooperation with supervisory authority
+// Legal Source: Section 66
+// Inputs: 
+// Output: result
+
+rule "CooperationDuties_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Provide information to FIN-FSA");
+    $ctx.setLegalBasis("Section 66(1)");
+    $ctx.setSourceText("Tietojen antaminen");
+end
+
+rule "CooperationDuties_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Allow inspections");
+    $ctx.setLegalBasis("Section 66(2)");
+    $ctx.setSourceText("Tarkastukset");
+end
+
+rule "CooperationDuties_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Cooperate in investigations");
+    $ctx.setLegalBasis("Section 66(3)");
+    $ctx.setSourceText("Selvitykset");
+end
+
+rule "CooperationDuties_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Take remedial measures");
+    $ctx.setLegalBasis("Section 66(4)");
+    $ctx.setSourceText("Korjaavat toimenpiteet");
+end
+
+// Decision: ReportingDuties
+// Description: Reporting to supervisory authority
+// Legal Source: Section 66a
+// Inputs: 
+// Output: result
+
+rule "ReportingDuties_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Submit annual activities report");
+    $ctx.setLegalBasis("Section 66a(1)");
+    $ctx.setSourceText("Vuosikertomus");
+end
+
+rule "ReportingDuties_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Report significant changes");
+    $ctx.setLegalBasis("Section 66a(2)");
+    $ctx.setSourceText("Merkitsevät muutokset");
+end
+
+rule "ReportingDuties_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Report customer complaints");
+    $ctx.setLegalBasis("Section 66a(3)");
+    $ctx.setSourceText("Valitukset");
+end
+
+// Decision: RecordKeepingRequirements
+// Description: Comprehensive record keeping
+// Legal Source: Section 78
+// Inputs: 
+// Output: result
+
+rule "RecordKeepingRequirements_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Keep all transaction records");
+    $ctx.setLegalBasis("Section 78(1)");
+    $ctx.setSourceText("Kaikki liiketapahtumat");
+end
+
+rule "RecordKeepingRequirements_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Keep records of communications");
+    $ctx.setLegalBasis("Section 78(1)");
+    $ctx.setSourceText("Viestintätiedot");
+end
+
+rule "RecordKeepingRequirements_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Retain minimum 5 years");
+    $ctx.setLegalBasis("Section 78(1)");
+    $ctx.setSourceText("Vähintään 5 vuotta");
+end
+
+rule "RecordKeepingRequirements_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Keep in durable format");
+    $ctx.setLegalBasis("Section 78(2)");
+    $ctx.setSourceText("Kestävässä muodossa");
+end
+
+// Decision: ComplaintHandling
+// Description: Customer complaint handling procedures
+// Legal Source: Section 48
+// Inputs: 
+// Output: result
+
+rule "ComplaintHandling_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Acknowledge receipt");
+    $ctx.setLegalBasis("Section 48(1)");
+    $ctx.setSourceText("Kuittaus vastaanotosta");
+end
+
+rule "ComplaintHandling_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Investigate thoroughly");
+    $ctx.setLegalBasis("Section 48(1)");
+    $ctx.setSourceText("Perusteellisesti");
+end
+
+rule "ComplaintHandling_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Respond within reasonable time");
+    $ctx.setLegalBasis("Section 48(1)");
+    $ctx.setSourceText("Kohtuullinen aika");
+end
+
+rule "ComplaintHandling_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Escalate if unresolved");
+    $ctx.setLegalBasis("Section 64");
+    $ctx.setSourceText("Vakuutusedustuslautakunta");
+end
+
+// Decision: DisclosureToInsurer
+// Description: Disclosure requirements to insurance company
+// Legal Source: Section 36
+// Inputs: 
+// Output: result
+
+rule "DisclosureToInsurer_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Disclose customer information to insurer");
+    $ctx.setLegalBasis("Section 36(1)");
+    $ctx.setSourceText("Asiakkaan tiedot");
+end
+
+rule "DisclosureToInsurer_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Disclose all material facts");
+    $ctx.setLegalBasis("Section 36(2)");
+    $ctx.setSourceText("Kaikki olennaiset tiedot");
+end
+
+rule "DisclosureToInsurer_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Notify of changes");
+    $ctx.setLegalBasis("Section 36(3)");
+    $ctx.setSourceText("Muutoksista ilmoittaminen");
+end
+
+// Decision: InsuranceDistributionBoard
+// Description: Insurance Distribution Board procedures
+// Legal Source: Section 64
+// Inputs: 
+// Output: result
+
+rule "InsuranceDistributionBoard_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Board can issue recommendations");
+    $ctx.setLegalBasis("Section 64(1)");
+    $ctx.setSourceText("Suositukset");
+end
+
+rule "InsuranceDistributionBoard_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Board mediates disputes");
+    $ctx.setLegalBasis("Section 64(2)");
+    $ctx.setSourceText("Riitojen sovittelu");
+end
+
+rule "InsuranceDistributionBoard_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Opinion not binding");
+    $ctx.setLegalBasis("Section 64(3)");
+    $ctx.setSourceText("Sitova ei ole");
+end
+
+rule "InsuranceDistributionBoard_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Board publishes annual report");
+    $ctx.setLegalBasis("Section 64(4)");
+    $ctx.setSourceText("Vuosikertomus");
+end
+
+// Decision: Exemptions
+// Description: Exemptions from this Act
+// Legal Source: Section 3
+// Inputs: 
+// Output: result
+
+rule "Exemptions_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Incidental activities exempt");
+    $ctx.setLegalBasis("Section 3(1)");
+    $ctx.setSourceText("Satunnaiset toimet");
+end
+
+rule "Exemptions_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Legal advisers exempt if insurance secondary");
+    $ctx.setLegalBasis("Section 3(2)");
+    $ctx.setSourceText("Asianajajat");
+end
+
+rule "Exemptions_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Travel agents limited exemption");
+    $ctx.setLegalBasis("Section 3(3)");
+    $ctx.setSourceText("Matkatoimistot");
+end
+
+rule "Exemptions_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Banks exempt for certain activities");
+    $ctx.setLegalBasis("Section 3(4)");
+    $ctx.setSourceText("Pankit");
+end
+
+// Decision: FeeDisclosure
+// Description: Fee disclosure requirements
+// Legal Source: Section 38
+// Inputs: 
+// Output: result
+
+rule "FeeDisclosure_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Disclose all fees paid by customer");
+    $ctx.setLegalBasis("Section 38(1)");
+    $ctx.setSourceText("Asiakkaan maksamat maksut");
+end
+
+rule "FeeDisclosure_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Disclose all commissions received");
+    $ctx.setLegalBasis("Section 38(2)");
+    $ctx.setSourceText("Saadut palkkiot");
+end
+
+rule "FeeDisclosure_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Explain calculation basis");
+    $ctx.setLegalBasis("Section 38(3)");
+    $ctx.setSourceText("Laskentaperusteet");
+end
+
+rule "FeeDisclosure_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Disclose total remuneration");
+    $ctx.setLegalBasis("Section 38(4)");
+    $ctx.setSourceText("Kokonaispalkkio");
+end
+
+// Decision: BestExecution
+// Description: Best execution for customer orders
+// Legal Source: Section 44
+// Inputs: 
+// Output: result
+
+rule "BestExecution_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Execute on best terms");
+    $ctx.setLegalBasis("Section 44(1)");
+    $ctx.setSourceText("Parhaat ehdot");
+end
+
+rule "BestExecution_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Follow customer instructions");
+    $ctx.setLegalBasis("Section 44(2)");
+    $ctx.setSourceText("Asiakkaan ohjeet");
+end
+
+rule "BestExecution_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Monitor execution quality");
+    $ctx.setLegalBasis("Section 44(3)");
+    $ctx.setSourceText("Laadun seuranta");
+end
+
+rule "BestExecution_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Disclose execution policy");
+    $ctx.setLegalBasis("Section 44(4)");
+    $ctx.setSourceText("Toimeenpanokäytäntö");
+end
+
+// Decision: ConflictOfInterestPolicy
+// Description: Conflict of interest identification and management
+// Legal Source: Section 45
+// Inputs: 
+// Output: result
+
+rule "ConflictOfInterestPolicy_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Identify conflicts");
+    $ctx.setLegalBasis("Section 45(1)");
+    $ctx.setSourceText("Tunnistaa eturistiriidat");
+end
+
+rule "ConflictOfInterestPolicy_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Prevent conflicts damaging customers");
+    $ctx.setLegalBasis("Section 45(2)");
+    $ctx.setSourceText("Estää vahingot");
+end
+
+rule "ConflictOfInterestPolicy_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Disclose conflicts not avoidable");
+    $ctx.setLegalBasis("Section 45(3)");
+    $ctx.setSourceText("Ilmoittaa eturistiriidoista");
+end
+
+rule "ConflictOfInterestPolicy_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Maintain written policy");
+    $ctx.setLegalBasis("Section 45(4)");
+    $ctx.setSourceText("Kirjallinen politiikka");
+end
+
+// Decision: ProductOversight
+// Description: Product oversight and governance requirements
+// Legal Source: Section 42
+// Inputs: 
+// Output: result
+
+rule "ProductOversight_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Define target market");
+    $ctx.setLegalBasis("Section 42(2)");
+    $ctx.setSourceText("Kohdemarkkinat");
+end
+
+rule "ProductOversight_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Test products before launch");
+    $ctx.setLegalBasis("Section 42(3)");
+    $ctx.setSourceText("Testaaminen");
+end
+
+rule "ProductOversight_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Monitor distribution");
+    $ctx.setLegalBasis("Section 42(4)");
+    $ctx.setSourceText("Jakelun seuranta");
+end
+
+rule "ProductOversight_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Regular product reviews");
+    $ctx.setLegalBasis("Section 42(5)");
+    $ctx.setSourceText("Säännöllinen tarkistaminen");
+end
+
+// Decision: CustomerClassification
+// Description: Classification of customers
+// Legal Source: Section 5
+// Inputs: 
+// Output: result
+
+rule "CustomerClassification_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Consumer if non-business");
+    $ctx.setLegalBasis("Section 5(13)");
+    $ctx.setSourceText("Kuluttaja");
+end
+
+rule "CustomerClassification_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Professional if meets criteria");
+    $ctx.setLegalBasis("Section 5(13)");
+    $ctx.setSourceText("Ammattimainen");
+end
+
+rule "CustomerClassification_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Eligible counterparty if large");
+    $ctx.setLegalBasis("Section 5(13)");
+    $ctx.setSourceText("Kelpaava sopijapuoli");
+end
+
+rule "CustomerClassification_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Default to consumer");
+    $ctx.setLegalBasis("Section 5(13)");
+    $ctx.setSourceText("Oletuksena kuluttaja");
+end
+
+// Decision: InformationToPublic
+// Description: Information made public by FIN-FSA
+// Legal Source: Section 66
+// Inputs: 
+// Output: result
+
+rule "InformationToPublic_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Maintain public register");
+    $ctx.setLegalBasis("Section 66(1)");
+    $ctx.setSourceText("Julkinen rekisteri");
+end
+
+rule "InformationToPublic_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Publish sanctions decisions");
+    $ctx.setLegalBasis("Section 66(2)");
+    $ctx.setSourceText("Seuraamuspäätökset");
+end
+
+rule "InformationToPublic_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Publish warnings");
+    $ctx.setLegalBasis("Section 66(3)");
+    $ctx.setSourceText("Varoitukset");
+end
+
+rule "InformationToPublic_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Publish statistics");
+    $ctx.setLegalBasis("Section 66(4)");
+    $ctx.setSourceText("Tilastot");
+end
+
+// Decision: InternationalCooperation
+// Description: International cooperation in supervision
+// Legal Source: Section 69
+// Inputs: 
+// Output: result
+
+rule "InternationalCooperation_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Cooperate with EEA authorities");
+    $ctx.setLegalBasis("Section 69(1)");
+    $ctx.setSourceText("ETA-valvontaviranomaiset");
+end
+
+rule "InternationalCooperation_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Cooperate with EIOPA");
+    $ctx.setLegalBasis("Section 69(2)");
+    $ctx.setSourceText("EIOPA");
+end
+
+rule "InternationalCooperation_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Exchange information");
+    $ctx.setLegalBasis("Section 69(3)");
+    $ctx.setSourceText("Tietojen vaihto");
+end
+
+rule "InternationalCooperation_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Joint inspections possible");
+    $ctx.setLegalBasis("Section 69(4)");
+    $ctx.setSourceText("Yhteistarkastukset");
+end
+
+// Decision: CriminalPenalties
+// Description: Criminal penalties for violations
+// Legal Source: Section 83
+// Inputs: 
+// Output: result
+
+rule "CriminalPenalties_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Fine or imprisonment up to 1 year");
+    $ctx.setLegalBasis("Section 83(1)");
+    $ctx.setSourceText("Rekisteröimätön toiminta");
+end
+
+rule "CriminalPenalties_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Fine for false information");
+    $ctx.setLegalBasis("Section 83(2)");
+    $ctx.setSourceText("Väärät tiedot");
+end
+
+rule "CriminalPenalties_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Fine for breach of confidentiality");
+    $ctx.setLegalBasis("Section 83(3)");
+    $ctx.setSourceText("Salassapitomääräysten rikkominen");
+end
+
+rule "CriminalPenalties_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Fine for obstructing supervision");
+    $ctx.setLegalBasis("Section 83(4)");
+    $ctx.setSourceText("Valvonnan estäminen");
+end
+
+// Decision: TransitionalProvisions
+// Description: Transitional provisions for existing operators
+// Legal Source: Section 84
+// Inputs: 
+// Output: result
+
+rule "TransitionalProvisions_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Can continue operating");
+    $ctx.setLegalBasis("Section 84(1)");
+    $ctx.setSourceText("Jatkaa toimintaa");
+end
+
+rule "TransitionalProvisions_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Meet requirements by deadline");
+    $ctx.setLegalBasis("Section 84(2)");
+    $ctx.setSourceText("Määräaika");
+end
+
+rule "TransitionalProvisions_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Broker exam deadline");
+    $ctx.setLegalBasis("Section 84(3)");
+    $ctx.setSourceText("Tutkinto");
+end
+
+rule "TransitionalProvisions_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Insurance deadline");
+    $ctx.setLegalBasis("Section 84(4)");
+    $ctx.setSourceText("Vakuutus");
+end
+
+// Decision: EntryIntoForce
+// Description: Entry into force and implementation
+// Legal Source: Section 85
+// Inputs: 
+// Output: result
+
+rule "EntryIntoForce_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Effective from 1 January 2019");
+    $ctx.setLegalBasis("Section 85");
+    $ctx.setSourceText("Voimaan 1.1.2019");
+end
+
+rule "EntryIntoForce_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Applications from 1 January 2019");
+    $ctx.setLegalBasis("Section 85(1)");
+    $ctx.setSourceText("Hakemukset");
+end
+
+rule "EntryIntoForce_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Existing operators transition period");
+    $ctx.setLegalBasis("Section 85(2)");
+    $ctx.setSourceText("Siirtymäaika");
+end
+
+// Decision: TravelInsuranceExemption
+// Description: Special rules for travel insurance
+// Legal Source: Section 3
+// Inputs: 
+// Output: result
+
+rule "TravelInsuranceExemption_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Exempt if ancillary to main business");
+    $ctx.setLegalBasis("Section 3(3)");
+    $ctx.setSourceText("Sivutoiminen");
+end
+
+rule "TravelInsuranceExemption_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Can issue cover notes");
+    $ctx.setLegalBasis("Section 3(3)");
+    $ctx.setSourceText("Vakuutuskirja");
+end
+
+rule "TravelInsuranceExemption_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Premium limit applies");
+    $ctx.setLegalBasis("Section 3(3)");
+    $ctx.setSourceText("Vakuutusmaksun raja");
+end
+
+rule "TravelInsuranceExemption_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must disclose insurer");
+    $ctx.setLegalBasis("Section 3(3)");
+    $ctx.setSourceText("Ilmoitettava vakuutuksenantaja");
+end
+
+// Decision: BankExemption
+// Description: Exemptions for banks and credit institutions
+// Legal Source: Section 3(4)
+// Inputs: 
+// Output: result
+
+rule "BankExemption_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Travel insurance exempt");
+    $ctx.setLegalBasis("Section 3(4)");
+    $ctx.setSourceText("Matkustajavakuutus");
+end
+
+rule "BankExemption_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Collateral insurance exempt");
+    $ctx.setLegalBasis("Section 3(4)");
+    $ctx.setSourceText("Vakuusvakuutus");
+end
+
+rule "BankExemption_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Payment protection exempt");
+    $ctx.setLegalBasis("Section 3(4)");
+    $ctx.setSourceText("Maksusuojavakuutus");
+end
+
+// Decision: LegalAdviserExemption
+// Description: Exemptions for legal practitioners
+// Legal Source: Section 3(2)
+// Inputs: 
+// Output: result
+
+rule "LegalAdviserExemption_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Exempt if insurance is ancillary");
+    $ctx.setLegalBasis("Section 3(2)");
+    $ctx.setSourceText("Sivutoiminen");
+end
+
+rule "LegalAdviserExemption_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must not hold self out as insurer");
+    $ctx.setLegalBasis("Section 3(2)");
+    $ctx.setSourceText("Ei pitäytyä vakuuttajana");
+end
+
+rule "LegalAdviserExemption_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Subject to professional rules");
+    $ctx.setLegalBasis("Section 3(2)");
+    $ctx.setSourceText("Ammattisäännöt");
+end
+
+// Decision: NotificationContent
+// Description: Content requirements for notifications
+// Legal Source: Section 22
+// Inputs: 
+// Output: result
+
+rule "NotificationContent_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Insurer details");
+    $ctx.setLegalBasis("Section 22(1)");
+    $ctx.setSourceText("Vakuutuksenantajan tiedot");
+end
+
+rule "NotificationContent_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Member state details");
+    $ctx.setLegalBasis("Section 22(1)");
+    $ctx.setSourceText("Jäsenvaltion tiedot");
+end
+
+rule "NotificationContent_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Insurance types");
+    $ctx.setLegalBasis("Section 22(1)");
+    $ctx.setSourceText("Vakuutuslajit");
+end
+
+rule "NotificationContent_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("If establishment, address and manager");
+    $ctx.setLegalBasis("Section 22(2)");
+    $ctx.setSourceText("Toimipiste ja vastaava");
+end
+
+// Decision: ProfessionalQualificationEvidence
+// Description: Evidence of professional qualification
+// Legal Source: Section 18
+// Inputs: 
+// Output: result
+
+rule "ProfessionalQualificationEvidence_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Certificate from Finnish exam");
+    $ctx.setLegalBasis("Section 18(1)");
+    $ctx.setSourceText("Suomalainen tutkinto");
+end
+
+rule "ProfessionalQualificationEvidence_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("EU recognized qualification");
+    $ctx.setLegalBasis("Section 18(2)");
+    $ctx.setSourceText("EU-tunnustaminen");
+end
+
+rule "ProfessionalQualificationEvidence_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("3 years practical experience accepted");
+    $ctx.setLegalBasis("Section 18(3)");
+    $ctx.setSourceText("Käytännön kokemus");
+end
+
+rule "ProfessionalQualificationEvidence_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("UNKNOWN");
+    $ctx.setLegalBasis("Section 18(4)");
+    $ctx.setSourceText("Finanssivalvonnan arviointi");
+end
+
+// Decision: GoodReputationEvidence
+// Description: Evidence requirements for good reputation
+// Legal Source: Section 16
+// Inputs: 
+// Output: result
+
+rule "GoodReputationEvidence_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Criminal record certificate");
+    $ctx.setLegalBasis("Section 16");
+    $ctx.setSourceText("Rikosrekisteriote");
+end
+
+rule "GoodReputationEvidence_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Bankruptcy status certificate");
+    $ctx.setLegalBasis("Section 16");
+    $ctx.setSourceText("Konkurssitodistus");
+end
+
+rule "GoodReputationEvidence_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Business ban certificate");
+    $ctx.setLegalBasis("Section 16");
+    $ctx.setSourceText("Liiketoimintakieltotodistus");
+end
+
+rule "GoodReputationEvidence_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must be recent (3 months)");
+    $ctx.setLegalBasis("Section 16");
+    $ctx.setSourceText("Tuore (3 kk)");
+end
+
+// Decision: SupervisionFee
+// Description: Supervision fee requirements
+// Legal Source: Section 66b
+// Inputs: 
+// Output: result
+
+rule "SupervisionFee_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Annual supervision fee");
+    $ctx.setLegalBasis("Section 66b(1)");
+    $ctx.setSourceText("Vuosimaksu");
+end
+
+rule "SupervisionFee_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Fee based on operations");
+    $ctx.setLegalBasis("Section 66b(2)");
+    $ctx.setSourceText("Toiminnan mukaan");
+end
+
+rule "SupervisionFee_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Payment deadline 30 days");
+    $ctx.setLegalBasis("Section 66b(3)");
+    $ctx.setSourceText("Maksuaika 30 päivää");
+end
+
+rule "SupervisionFee_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Late payment interest");
+    $ctx.setLegalBasis("Section 66b(4)");
+    $ctx.setSourceText("Viivästyskorko");
+end
+
+// Decision: DistanceMarketing
+// Description: Distance marketing requirements
+// Legal Source: Section 13
+// Inputs: 
+// Output: result
+
+rule "DistanceMarketing_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Prior information required");
+    $ctx.setLegalBasis("Section 13(1)");
+    $ctx.setSourceText("Ennakkotiedot");
+end
+
+rule "DistanceMarketing_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Written confirmation");
+    $ctx.setLegalBasis("Section 13(2)");
+    $ctx.setSourceText("Kirjallinen vahvistus");
+end
+
+rule "DistanceMarketing_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Information easily accessible");
+    $ctx.setLegalBasis("Section 13(3)");
+    $ctx.setSourceText(" helposti saatavilla");
+end
+
+rule "DistanceMarketing_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("In customer's language");
+    $ctx.setLegalBasis("Section 13(4)");
+    $ctx.setSourceText("Asiakkaan kielellä");
+end
+
+// Decision: DataProtection
+// Description: Data protection requirements
+// Legal Source: Section 79
+// Inputs: 
+// Output: result
+
+rule "DataProtection_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Customer data protected");
+    $ctx.setLegalBasis("Section 79(1)");
+    $ctx.setSourceText("Asiakastiedot");
+end
+
+rule "DataProtection_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Lawful processing only");
+    $ctx.setLegalBasis("Section 79(2)");
+    $ctx.setSourceText("Käsittely lain mukaan");
+end
+
+rule "DataProtection_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Retention period 5 years minimum");
+    $ctx.setLegalBasis("Section 79(3)");
+    $ctx.setSourceText("Säilytys 5 vuotta");
+end
+
+rule "DataProtection_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Report breaches to authority");
+    $ctx.setLegalBasis("Section 79(4)");
+    $ctx.setSourceText("Ilmoita viranomaiselle");
+end
+
+// Decision: ProhibitionOnInducements
+// Description: Prohibition on improper inducements
+// Legal Source: Section 46
+// Inputs: 
+// Output: result
+
+rule "ProhibitionOnInducements_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Prohibited if impairs judgment");
+    $ctx.setLegalBasis("Section 46(1)");
+    $ctx.setSourceText("Kiellettyä jos heikentää");
+end
+
+rule "ProhibitionOnInducements_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must disclose all inducements");
+    $ctx.setLegalBasis("Section 46(2)");
+    $ctx.setSourceText("Ilmoitettava");
+end
+
+rule "ProhibitionOnInducements_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must be reasonable value");
+    $ctx.setLegalBasis("Section 46(3)");
+    $ctx.setSourceText("Kohtuullinen arvo");
+end
+
+rule "ProhibitionOnInducements_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must be proportionate");
+    $ctx.setLegalBasis("Section 46(4)");
+    $ctx.setSourceText("Oikeassa suhteessa");
+end
+
+// Decision: InsuranceIntermediaryRegister
+// Description: Insurance intermediary register requirements
+// Legal Source: Section 9
+// Inputs: 
+// Output: result
+
+rule "InsuranceIntermediaryRegister_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Contains all required details");
+    $ctx.setLegalBasis("Section 9(1-2)");
+    $ctx.setSourceText("Sisältö");
+end
+
+rule "InsuranceIntermediaryRegister_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Updated within 30 days");
+    $ctx.setLegalBasis("Section 10");
+    $ctx.setSourceText("Päivitys 30 päivää");
+end
+
+rule "InsuranceIntermediaryRegister_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Publicly accessible online");
+    $ctx.setLegalBasis("Section 11");
+    $ctx.setSourceText("Julkisesti saatavilla");
+end
+
+rule "InsuranceIntermediaryRegister_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Extract available to customers");
+    $ctx.setLegalBasis("Section 26");
+    $ctx.setSourceText("Ote asiakkaalle");
+end
+
+// Decision: InsuranceProductClassification
+// Description: Classification of insurance products
+// Legal Source: Section 5
+// Inputs: 
+// Output: result
+
+rule "InsuranceProductClassification_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Life insurance");
+    $ctx.setLegalBasis("Section 5(4-5)");
+    $ctx.setSourceText("Henkivakuutus");
+end
+
+rule "InsuranceProductClassification_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Non-life insurance");
+    $ctx.setLegalBasis("Section 5(6-7)");
+    $ctx.setSourceText("Vahinkovakuutus");
+end
+
+rule "InsuranceProductClassification_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Investment insurance");
+    $ctx.setLegalBasis("Section 5(12)");
+    $ctx.setSourceText("Sijoitusvakuutus");
+end
+
+rule "InsuranceProductClassification_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Pension product");
+    $ctx.setLegalBasis("Section 5(14)");
+    $ctx.setSourceText("Eläketuote");
+end
+
+// Decision: AgentRepresentativeRequirements
+// Description: Requirements for agent representatives
+// Legal Source: Section 21
+// Inputs: 
+// Output: result
+
+rule "AgentRepresentativeRequirements_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Registered as natural person");
+    $ctx.setLegalBasis("Section 21(1)");
+    $ctx.setSourceText("Luonnollinen henkilö");
+end
+
+rule "AgentRepresentativeRequirements_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Legal entity with responsible person");
+    $ctx.setLegalBasis("Section 21(2)");
+    $ctx.setSourceText("Oikeushenkilö");
+end
+
+rule "AgentRepresentativeRequirements_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Can represent multiple insurers");
+    $ctx.setLegalBasis("Section 21(3)");
+    $ctx.setSourceText("Useita päämiesten");
+end
+
+rule "AgentRepresentativeRequirements_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must disclose identity to customers");
+    $ctx.setLegalBasis("Section 21(4)");
+    $ctx.setSourceText("Ilmoitettava identiteetti");
+end
+
+// Decision: EEAInsuranceCompanyPassport
+// Description: EEA insurance company passport rights
+// Legal Source: Sections 24-25
+// Inputs: 
+// Output: result
+
+rule "EEAInsuranceCompanyPassport_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Can operate in Finland");
+    $ctx.setLegalBasis("Section 24(1)");
+    $ctx.setSourceText("Suomessa toimiminen");
+end
+
+rule "EEAInsuranceCompanyPassport_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Can provide services cross-border");
+    $ctx.setLegalBasis("Section 24(1)");
+    $ctx.setSourceText("Rajat ylittävä palvelu");
+end
+
+rule "EEAInsuranceCompanyPassport_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Can establish branch");
+    $ctx.setLegalBasis("Section 25(1)");
+    $ctx.setSourceText("Toimipisteen perustaminen");
+end
+
+rule "EEAInsuranceCompanyPassport_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Home state notifies Finland");
+    $ctx.setLegalBasis("Section 24(2)");
+    $ctx.setSourceText("Kotivaltio ilmoittaa");
+end
+
+// Decision: InsuranceDistributionServiceTypes
+// Description: Types of insurance distribution services
+// Legal Source: Section 2
+// Inputs: 
+// Output: result
+
+rule "InsuranceDistributionServiceTypes_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Advice on insurance");
+    $ctx.setLegalBasis("Section 2(1)");
+    $ctx.setSourceText("Neuvonta");
+end
+
+rule "InsuranceDistributionServiceTypes_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Presentation of insurance products");
+    $ctx.setLegalBasis("Section 2(1)");
+    $ctx.setSourceText("Tuotteiden esittely");
+end
+
+rule "InsuranceDistributionServiceTypes_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("UNKNOWN");
+    $ctx.setLegalBasis("Section 2(1)");
+    $ctx.setSourceText("Sopimuksen valmistelu");
+end
+
+rule "InsuranceDistributionServiceTypes_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Concluding insurance contracts");
+    $ctx.setLegalBasis("Section 2(1)");
+    $ctx.setSourceText("Sopimuksen päättäminen");
+end
+
+// Decision: ProfessionalIndemnityRequirements
+// Description: Professional indemnity insurance requirements
+// Legal Source: Section 58
+// Inputs: 
+// Output: result
+
+rule "ProfessionalIndemnityRequirements_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must have professional indemnity");
+    $ctx.setLegalBasis("Section 58(1)");
+    $ctx.setSourceText("Vastuuvakuutus");
+end
+
+rule "ProfessionalIndemnityRequirements_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Minimum 1,564,610 EUR per claim");
+    $ctx.setLegalBasis("Section 58(1)");
+    $ctx.setSourceText("1 564 610 euroa");
+end
+
+rule "ProfessionalIndemnityRequirements_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Minimum 2,315,610 EUR annual");
+    $ctx.setLegalBasis("Section 58(1)");
+    $ctx.setSourceText("2 315 610 euroa");
+end
+
+rule "ProfessionalIndemnityRequirements_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Coverage in all EEA countries");
+    $ctx.setLegalBasis("Section 58(2)");
+    $ctx.setSourceText("Koko EEA-alue");
+end
+
+// Decision: CompensationProcedure
+// Description: Compensation claim procedure
+// Legal Source: Section 74
+// Inputs: 
+// Output: result
+
+rule "CompensationProcedure_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Can claim compensation from broker");
+    $ctx.setLegalBasis("Section 74(1)");
+    $ctx.setSourceText("Korvausmeklarilta");
+end
+
+rule "CompensationProcedure_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must follow claims procedure");
+    $ctx.setLegalBasis("Section 74(2)");
+    $ctx.setSourceText("Korvausmenettely");
+end
+
+rule "CompensationProcedure_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Claim within 3 years");
+    $ctx.setLegalBasis("Section 74(3)");
+    $ctx.setSourceText("3 vuoden määräaika");
+end
+
+rule "CompensationProcedure_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Can take to court");
+    $ctx.setLegalBasis("Section 74(4)");
+    $ctx.setSourceText("Oikeuteen");
+end
+
+// Decision: RightToInformation
+// Description: Customer right to information
+// Legal Source: Section 32
+// Inputs: 
+// Output: result
+
+rule "RightToInformation_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Right to information about insurer");
+    $ctx.setLegalBasis("Section 32(1)");
+    $ctx.setSourceText("Vakuutuksenantaja");
+end
+
+rule "RightToInformation_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Right to information about distributor");
+    $ctx.setLegalBasis("Section 33(1)");
+    $ctx.setSourceText("Välittäjä");
+end
+
+rule "RightToInformation_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Right to basis of advice");
+    $ctx.setLegalBasis("Section 37");
+    $ctx.setSourceText("Neuvon perusteet");
+end
+
+rule "RightToInformation_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Right to fee information");
+    $ctx.setLegalBasis("Section 38");
+    $ctx.setSourceText("Maksutiedot");
+end
+
+// Decision: CancellationRightsDetails
+// Description: Detailed cancellation rights
+// Legal Source: Section 61
+// Inputs: 
+// Output: result
+
+rule "CancellationRightsDetails_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("14 days from contract");
+    $ctx.setLegalBasis("Section 61(1)");
+    $ctx.setSourceText("14 päivää");
+end
+
+rule "CancellationRightsDetails_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("30 days if not informed");
+    $ctx.setLegalBasis("Section 61(2)");
+    $ctx.setSourceText("30 päivää");
+end
+
+rule "CancellationRightsDetails_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Written notice required");
+    $ctx.setLegalBasis("Section 61(3)");
+    $ctx.setSourceText("Kirjallinen ilmoitus");
+end
+
+rule "CancellationRightsDetails_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Premium refunded within 30 days");
+    $ctx.setLegalBasis("Section 61(4)");
+    $ctx.setSourceText("Premium 30 päivässä");
+end
+
+// Decision: InsuranceDistributionBoardPowers
+// Description: Powers of Insurance Distribution Board
+// Legal Source: Section 64
+// Inputs: 
+// Output: result
+
+rule "InsuranceDistributionBoardPowers_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Can examine complaints");
+    $ctx.setLegalBasis("Section 64(1)");
+    $ctx.setSourceText("Valitusten käsittely");
+end
+
+rule "InsuranceDistributionBoardPowers_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Can issue recommendations");
+    $ctx.setLegalBasis("Section 64(2)");
+    $ctx.setSourceText("Suositukset");
+end
+
+rule "InsuranceDistributionBoardPowers_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Can mediate disputes");
+    $ctx.setLegalBasis("Section 64(2)");
+    $ctx.setSourceText("Sovittelu");
+end
+
+rule "InsuranceDistributionBoardPowers_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Can publish opinions");
+    $ctx.setLegalBasis("Section 64(4)");
+    $ctx.setSourceText("Julkaiseminen");
+end
+
+// Decision: AdministrativeFineCalculation
+// Description: Calculation of administrative fines
+// Legal Source: Section 71
+// Inputs: 
+// Output: result
+
+rule "AdministrativeFineCalculation_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Based on violation severity");
+    $ctx.setLegalBasis("Section 71(1)");
+    $ctx.setSourceText("Rikkomuksen vakavuus");
+end
+
+rule "AdministrativeFineCalculation_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Based on benefit gained");
+    $ctx.setLegalBasis("Section 71(2)");
+    $ctx.setSourceText("Saatu etu");
+end
+
+rule "AdministrativeFineCalculation_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Based on financial position");
+    $ctx.setLegalBasis("Section 71(3)");
+    $ctx.setSourceText("Taloudellinen tilanne");
+end
+
+rule "AdministrativeFineCalculation_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Maximum 5000 EUR per day");
+    $ctx.setLegalBasis("Section 71(4)");
+    $ctx.setSourceText("5000 euroa/päivä");
+end
+
+// Decision: WrittenAgreementRequirements
+// Description: Requirements for written agreements
+// Legal Source: Section 56
+// Inputs: 
+// Output: result
+
+rule "WrittenAgreementRequirements_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Broker must have written agreement");
+    $ctx.setLegalBasis("Section 56(1)");
+    $ctx.setSourceText("Kirjallinen sopimus");
+end
+
+rule "WrittenAgreementRequirements_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must specify duration and fees");
+    $ctx.setLegalBasis("Section 56(2)");
+    $ctx.setSourceText("Kesto ja palkkio");
+end
+
+rule "WrittenAgreementRequirements_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Copy to client required");
+    $ctx.setLegalBasis("Section 56(3)");
+    $ctx.setSourceText("Kappale asiakkaalle");
+end
+
+rule "WrittenAgreementRequirements_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Changes require agreement");
+    $ctx.setLegalBasis("Section 56(4)");
+    $ctx.setSourceText("Muutokset");
+end
+
+// Decision: ProfessionalDevelopment
+// Description: Professional development requirements
+// Legal Source: Section 20
+// Inputs: 
+// Output: result
+
+rule "ProfessionalDevelopment_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Minimum 15 hours per year");
+    $ctx.setLegalBasis("Section 20(1)");
+    $ctx.setSourceText("15 tuntia/vuosi");
+end
+
+rule "ProfessionalDevelopment_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must be relevant to insurance");
+    $ctx.setLegalBasis("Section 20(2)");
+    $ctx.setSourceText("Vakuutustoimintaan liittyvä");
+end
+
+rule "ProfessionalDevelopment_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must document training");
+    $ctx.setLegalBasis("Section 20(3)");
+    $ctx.setSourceText("Dokumentointi");
+end
+
+rule "ProfessionalDevelopment_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must provide records to FIN-FSA");
+    $ctx.setLegalBasis("Section 20(4)");
+    $ctx.setSourceText("Finanssivalvonnalle");
+end
+
+// Decision: ProductInformationRequirements
+// Description: Requirements for product information
+// Legal Source: Section 43
+// Inputs: 
+// Output: result
+
+rule "ProductInformationRequirements_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Provide before contract");
+    $ctx.setLegalBasis("Section 43(1)");
+    $ctx.setSourceText("Ennen sopimusta");
+end
+
+rule "ProductInformationRequirements_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Insurance terms and conditions");
+    $ctx.setLegalBasis("Section 43(2)");
+    $ctx.setSourceText("Vakuutusehdot");
+end
+
+rule "ProductInformationRequirements_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("In official language");
+    $ctx.setLegalBasis("Section 43(3)");
+    $ctx.setSourceText("Virallisella kielellä");
+end
+
+rule "ProductInformationRequirements_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("In durable form");
+    $ctx.setLegalBasis("Section 43(4)");
+    $ctx.setSourceText("Kestävässä muodossa");
+end
+
+// Decision: CrossBorderNotificationProcess
+// Description: Cross-border notification process
+// Legal Source: Section 23
+// Inputs: 
+// Output: result
+
+rule "CrossBorderNotificationProcess_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Notify FIN-FSA before cross-border");
+    $ctx.setLegalBasis("Section 23(1)");
+    $ctx.setSourceText("Ilmoitus Finanssivalvonnalle");
+end
+
+rule "CrossBorderNotificationProcess_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Provide required information");
+    $ctx.setLegalBasis("Section 23(2)");
+    $ctx.setSourceText("Tarvittavat tiedot");
+end
+
+rule "CrossBorderNotificationProcess_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("FIN-FSA notifies host state");
+    $ctx.setLegalBasis("Section 23(3)");
+    $ctx.setSourceText("Kohdemaalle ilmoitus");
+end
+
+rule "CrossBorderNotificationProcess_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Notify changes 30 days before");
+    $ctx.setLegalBasis("Section 23(4)");
+    $ctx.setSourceText("Muutokset 30 päivää ennen");
+end
+
+// Decision: SupervisoryAuthorityPowers
+// Description: Supervisory authority powers detailed
+// Legal Source: Section 66
+// Inputs: 
+// Output: result
+
+rule "SupervisoryAuthorityPowers_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Can maintain register");
+    $ctx.setLegalBasis("Section 66(1)");
+    $ctx.setSourceText("Rekisterin pitäminen");
+end
+
+rule "SupervisoryAuthorityPowers_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Can conduct inspections");
+    $ctx.setLegalBasis("Section 66(2)");
+    $ctx.setSourceText("Tarkastukset");
+end
+
+rule "SupervisoryAuthorityPowers_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Can impose sanctions");
+    $ctx.setLegalBasis("Section 66(3)");
+    $ctx.setSourceText("Seuraamukset");
+end
+
+rule "SupervisoryAuthorityPowers_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Can publish decisions");
+    $ctx.setLegalBasis("Section 66(4)");
+    $ctx.setSourceText("Päätösten julkaiseminen");
+end
+
+// Decision: InsuranceDistributionAgreementContent
+// Description: Content of insurance distribution agreement
+// Legal Source: Section 56
+// Inputs: 
+// Output: result
+
+rule "InsuranceDistributionAgreementContent_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Identify parties");
+    $ctx.setLegalBasis("Section 56(2)");
+    $ctx.setSourceText("Osapuolten tunnistaminen");
+end
+
+rule "InsuranceDistributionAgreementContent_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Describe services");
+    $ctx.setLegalBasis("Section 56(2)");
+    $ctx.setSourceText("Palveluiden kuvaus");
+end
+
+rule "InsuranceDistributionAgreementContent_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Specify fees and calculation");
+    $ctx.setLegalBasis("Section 56(2)");
+    $ctx.setSourceText("Palkkiot ja laskenta");
+end
+
+rule "InsuranceDistributionAgreementContent_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Specify duration");
+    $ctx.setLegalBasis("Section 56(2)");
+    $ctx.setSourceText("Sopimuksen kesto");
+end
+
+// Decision: CustomerDueDiligence
+// Description: Customer due diligence requirements
+// Legal Source: Section 35
+// Inputs: 
+// Output: result
+
+rule "CustomerDueDiligence_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Identify customer");
+    $ctx.setLegalBasis("Section 35(1)");
+    $ctx.setSourceText("Asiakkaan tunnistaminen");
+end
+
+rule "CustomerDueDiligence_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Verify identity");
+    $ctx.setLegalBasis("Section 35(1)");
+    $ctx.setSourceText("Henkilöllisyyden vahvistaminen");
+end
+
+rule "CustomerDueDiligence_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Assess needs");
+    $ctx.setLegalBasis("Section 35(2)");
+    $ctx.setSourceText("Tarpeiden arviointi");
+end
+
+rule "CustomerDueDiligence_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Assess suitability");
+    $ctx.setLegalBasis("Section 35(2)");
+    $ctx.setSourceText("Soveltuvuuden arviointi");
+end
+
+// Decision: ThirdCountryRestrictions
+// Description: Third country operation restrictions
+// Legal Source: Section 28
+// Inputs: 
+// Output: result
+
+rule "ThirdCountryRestrictions_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("No passport rights");
+    $ctx.setLegalBasis("Section 28(1)");
+    $ctx.setSourceText("Ei vapautta");
+end
+
+rule "ThirdCountryRestrictions_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Can open representative office");
+    $ctx.setLegalBasis("Section 28(2)");
+    $ctx.setSourceText("Edustusto");
+end
+
+rule "ThirdCountryRestrictions_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Equivalence decision required");
+    $ctx.setLegalBasis("Section 28(3)");
+    $ctx.setSourceText("Vastaavuuspäätös");
+end
+
+rule "ThirdCountryRestrictions_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("FIN-FSA sets conditions");
+    $ctx.setLegalBasis("Section 28(4)");
+    $ctx.setSourceText("Finanssivalvonnan ehdot");
+end
+
+// Decision: InsuranceIntermediaryTitle
+// Description: Use of professional title
+// Legal Source: Section 55
+// Inputs: 
+// Output: result
+
+rule "InsuranceIntermediaryTitle_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Can use broker/agent title if registered");
+    $ctx.setLegalBasis("Section 55(1)");
+    $ctx.setSourceText("Rekisteröitynä");
+end
+
+rule "InsuranceIntermediaryTitle_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Cannot use title if not registered");
+    $ctx.setLegalBasis("Section 55(2)");
+    $ctx.setSourceText("Ei rekisteröitynä");
+end
+
+rule "InsuranceIntermediaryTitle_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Cannot give misleading impression");
+    $ctx.setLegalBasis("Section 55(3)");
+    $ctx.setSourceText("Harhaanjohtava");
+end
+
+rule "InsuranceIntermediaryTitle_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("EEA registered can use title");
+    $ctx.setLegalBasis("Section 55(4)");
+    $ctx.setSourceText("ETA-rekisteröity");
+end
+
+// Decision: ComplaintToBoard
+// Description: Complaint procedure to Insurance Distribution Board
+// Legal Source: Section 64
+// Inputs: 
+// Output: result
+
+rule "ComplaintToBoard_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Any customer can complain");
+    $ctx.setLegalBasis("Section 64(1)");
+    $ctx.setSourceText("Asiakas voi valittaa");
+end
+
+rule "ComplaintToBoard_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("About distributor conduct");
+    $ctx.setLegalBasis("Section 64(1)");
+    $ctx.setSourceText("Välittäjän toiminta");
+end
+
+rule "ComplaintToBoard_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("In writing");
+    $ctx.setLegalBasis("Section 64(2)");
+    $ctx.setSourceText("Kirjallisesti");
+end
+
+rule "ComplaintToBoard_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Within reasonable time");
+    $ctx.setLegalBasis("Section 64(2)");
+    $ctx.setSourceText("Kohtuullisessa ajassa");
+end
+
+// Decision: NotificationOfChanges
+// Description: Notification requirements for changes
+// Legal Source: Section 10
+// Inputs: 
+// Output: result
+
+rule "NotificationOfChanges_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Notify FIN-FSA");
+    $ctx.setLegalBasis("Section 10(1)");
+    $ctx.setSourceText("Ilmoitus Finanssivalvonnalle");
+end
+
+rule "NotificationOfChanges_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Within 30 days");
+    $ctx.setLegalBasis("Section 10(1)");
+    $ctx.setSourceText("30 päivän kuluessa");
+end
+
+rule "NotificationOfChanges_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Significant changes immediately");
+    $ctx.setLegalBasis("Section 10(2)");
+    $ctx.setSourceText("Merkittävät välittömästi");
+end
+
+rule "NotificationOfChanges_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Update register");
+    $ctx.setLegalBasis("Section 10(3)");
+    $ctx.setSourceText("Rekisterin päivitys");
+end
+
+// Decision: RegisterPublicAccess
+// Description: Public access to insurance distribution register
+// Legal Source: Section 11
+// Inputs: 
+// Output: result
+
+rule "RegisterPublicAccess_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Available online 24/7");
+    $ctx.setLegalBasis("Section 11(1)");
+    $ctx.setSourceText("Saatavilla verkossa");
+end
+
+rule "RegisterPublicAccess_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Free access");
+    $ctx.setLegalBasis("Section 11(1)");
+    $ctx.setSourceText("Maksuton");
+end
+
+rule "RegisterPublicAccess_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Can request extracts");
+    $ctx.setLegalBasis("Section 11(2)");
+    $ctx.setSourceText("Otteiden pyyntö");
+end
+
+rule "RegisterPublicAccess_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Updated in real-time");
+    $ctx.setLegalBasis("Section 11(3)");
+    $ctx.setSourceText("Reaaliaikainen");
+end
+
+// Decision: InsuranceDistributionBoardAppeal
+// Description: Appeal against Insurance Distribution Board decisions
+// Legal Source: Section 65
+// Inputs: 
+// Output: result
+
+rule "InsuranceDistributionBoardAppeal_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Appeal to Administrative Court");
+    $ctx.setLegalBasis("Section 65(1)");
+    $ctx.setSourceText("Hallinto-oikeuteen");
+end
+
+rule "InsuranceDistributionBoardAppeal_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("30 days to appeal");
+    $ctx.setLegalBasis("Section 65(2)");
+    $ctx.setSourceText("30 päivää");
+end
+
+rule "InsuranceDistributionBoardAppeal_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Appeal fee may apply");
+    $ctx.setLegalBasis("Section 65(3)");
+    $ctx.setSourceText("Maksu");
+end
+
+rule "InsuranceDistributionBoardAppeal_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Does not automatically stay decision");
+    $ctx.setLegalBasis("Section 65(4)");
+    $ctx.setSourceText("Ei automaattista jäädytystä");
+end
+
+// Decision: FINFSADecisionAppeal
+// Description: Appeal against FIN-FSA decisions
+// Legal Source: Section 82
+// Inputs: 
+// Output: result
+
+rule "FINFSADecisionAppeal_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Appeal to Administrative Court");
+    $ctx.setLegalBasis("Section 82(1)");
+    $ctx.setSourceText("Hallinto-oikeuteen");
+end
+
+rule "FINFSADecisionAppeal_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Follows Administrative Court rules");
+    $ctx.setLegalBasis("Section 82(2)");
+    $ctx.setSourceText("Administrative Court procedure");
+end
+
+rule "FINFSADecisionAppeal_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Cost rules apply");
+    $ctx.setLegalBasis("Section 82(3)");
+    $ctx.setSourceText("Kustannukset");
+end
+
+rule "FINFSADecisionAppeal_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Can request prejudice prevention");
+    $ctx.setLegalBasis("Section 82(4)");
+    $ctx.setSourceText("Ennaltaehkäisy");
+end
+
+// Decision: InsuranceCompanyExemption
+// Description: Exemption for insurance companies
+// Legal Source: Section 6(3)
+// Inputs: 
+// Output: result
+
+rule "InsuranceCompanyExemption_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Exempt from registration");
+    $ctx.setLegalBasis("Section 6(3)");
+    $ctx.setSourceText("Vakuutusyhtiö");
+end
+
+rule "InsuranceCompanyExemption_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("FIN-FSA supervised");
+    $ctx.setLegalBasis("Section 6(3)");
+    $ctx.setSourceText("Finanssivalvonnan valvoma");
+end
+
+rule "InsuranceCompanyExemption_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Can act as agent if registered");
+    $ctx.setLegalBasis("Section 6(3)");
+    $ctx.setSourceText("Voi toimia asiamiehenä");
+end
+
+rule "InsuranceCompanyExemption_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Still must disclose status");
+    $ctx.setLegalBasis("Section 6(3)");
+    $ctx.setSourceText("Ilmoitusvelvollisuus");
+end
+
+// Decision: PartTimeAgentLimits
+// Description: Limits for part-time insurance agents
+// Legal Source: Section 4
+// Inputs: 
+// Output: result
+
+rule "PartTimeAgentLimits_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Activity must be ancillary");
+    $ctx.setLegalBasis("Section 4(1)");
+    $ctx.setSourceText("Sivutoiminen");
+end
+
+rule "PartTimeAgentLimits_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Premium max 600 EUR/year");
+    $ctx.setLegalBasis("Section 4(1)");
+    $ctx.setSourceText("600 euroa/vuosi");
+end
+
+rule "PartTimeAgentLimits_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Trip insurance max 200 EUR");
+    $ctx.setLegalBasis("Section 4(2)");
+    $ctx.setSourceText("200 euroa/matka");
+end
+
+rule "PartTimeAgentLimits_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Complementary to goods/service");
+    $ctx.setLegalBasis("Section 4(1)");
+    $ctx.setSourceText("Tavaran/palvelun yhteydessä");
+end
+
+// Decision: InvestmentInsuranceExclusions
+// Description: Products excluded from investment insurance rules
+// Legal Source: Section 5(12)
+// Inputs: 
+// Output: result
+
+rule "InvestmentInsuranceExclusions_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Excluded if pure life");
+    $ctx.setLegalBasis("Section 5(12)");
+    $ctx.setSourceText("Puhdas henkivakuutus");
+end
+
+rule "InvestmentInsuranceExclusions_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Excluded if occupational pension");
+    $ctx.setLegalBasis("Section 5(12)");
+    $ctx.setSourceText("Työeläke");
+end
+
+rule "InvestmentInsuranceExclusions_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Excluded if state pension");
+    $ctx.setLegalBasis("Section 5(12)");
+    $ctx.setSourceText("Kansaneläke");
+end
+
+rule "InvestmentInsuranceExclusions_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Included if capital redemption life");
+    $ctx.setLegalBasis("Section 5(12)");
+    $ctx.setSourceText("Kapitalisaatiosopimus");
+end
+
+// Decision: AdviceWithoutRecommendation
+// Description: Information provision without personal recommendation
+// Legal Source: Section 2
+// Inputs: 
+// Output: result
+
+rule "AdviceWithoutRecommendation_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("General information allowed");
+    $ctx.setLegalBasis("Section 2(1)");
+    $ctx.setSourceText("Yleistä tietoa");
+end
+
+rule "AdviceWithoutRecommendation_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Not personal recommendation");
+    $ctx.setLegalBasis("Section 2(1)");
+    $ctx.setSourceText("Ei henkilökohtainen suositus");
+end
+
+rule "AdviceWithoutRecommendation_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Can provide product comparison");
+    $ctx.setLegalBasis("Section 2(1)");
+    $ctx.setSourceText("Tuotevertailu");
+end
+
+rule "AdviceWithoutRecommendation_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must distinguish from advice");
+    $ctx.setLegalBasis("Section 2(1)");
+    $ctx.setSourceText("Eroteltava neuvonnasta");
+end
+
+// Decision: Multi jurisdictionalRules
+// Description: Rules when multiple jurisdictions involved
+// Legal Source: Section 24
+// Inputs: 
+// Output: result
+
+rule "Multi jurisdictionalRules_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Home state rules apply");
+    $ctx.setLegalBasis("Section 24(3)");
+    $ctx.setSourceText("Kotivaltion säännöt");
+end
+
+rule "Multi jurisdictionalRules_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Host state consumer rules apply");
+    $ctx.setLegalBasis("Section 24(3)");
+    $ctx.setSourceText("Kuluttajasuojat");
+end
+
+rule "Multi jurisdictionalRules_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Can complain to both states");
+    $ctx.setLegalBasis("Section 24(4)");
+    $ctx.setSourceText("Valitus molempiin");
+end
+
+rule "Multi jurisdictionalRules_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Use customer's language");
+    $ctx.setLegalBasis("Section 24(5)");
+    $ctx.setSourceText("Asiakkaan kieli");
+end
+
+// Decision: ClaimsHandlingExclusion
+// Description: Activities excluded from insurance distribution
+// Legal Source: Section 2(2)
+// Inputs: 
+// Output: result
+
+rule "ClaimsHandlingExclusion_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Claims handling excluded");
+    $ctx.setLegalBasis("Section 2(2)");
+    $ctx.setSourceText("Korvauskäsittely");
+end
+
+rule "ClaimsHandlingExclusion_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Policy administration excluded");
+    $ctx.setLegalBasis("Section 2(2)");
+    $ctx.setSourceText("Hallinnointi");
+end
+
+rule "ClaimsHandlingExclusion_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Loss adjustment excluded");
+    $ctx.setLegalBasis("Section 2(2)");
+    $ctx.setSourceText("Tappioiden sovitus");
+end
+
+rule "ClaimsHandlingExclusion_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Assistance services excluded");
+    $ctx.setLegalBasis("Section 2(2)");
+    $ctx.setSourceText("Avustuspalvelut");
+end
+
+// Decision: PremiumCollectionRules
+// Description: Rules for premium collection
+// Legal Source: Section 60
+// Inputs: 
+// Output: result
+
+rule "PremiumCollectionRules_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Collect in Finland");
+    $ctx.setLegalBasis("Section 60(1)");
+    $ctx.setSourceText("Peritään Suomessa");
+end
+
+rule "PremiumCollectionRules_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Document collection");
+    $ctx.setLegalBasis("Section 60(2)");
+    $ctx.setSourceText("Asiakirjoitettava");
+end
+
+rule "PremiumCollectionRules_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Transfer to insurer promptly");
+    $ctx.setLegalBasis("Section 60(3)");
+    $ctx.setSourceText("Siirrettävä välittömästi");
+end
+
+rule "PremiumCollectionRules_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Return uncollected premiums");
+    $ctx.setLegalBasis("Section 60(4)");
+    $ctx.setSourceText("Palautetaan perimättä jäänyt");
+end
+
+// Decision: ProductGovernanceTimeline
+// Description: Product governance timeline requirements
+// Legal Source: Section 42
+// Inputs: 
+// Output: result
+
+rule "ProductGovernanceTimeline_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Define governance before launch");
+    $ctx.setLegalBasis("Section 42(1)");
+    $ctx.setSourceText("Ennen lanseerausta");
+end
+
+rule "ProductGovernanceTimeline_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Review at least annually");
+    $ctx.setLegalBasis("Section 42(5)");
+    $ctx.setSourceText("Vuosittain");
+end
+
+rule "ProductGovernanceTimeline_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Monitor distribution");
+    $ctx.setLegalBasis("Section 42(4)");
+    $ctx.setSourceText("Jakelun seuranta");
+end
+
+rule "ProductGovernanceTimeline_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Can withdraw if issues");
+    $ctx.setLegalBasis("Section 42(6)");
+    $ctx.setSourceText("Voi vetää pois");
+end
+
+// Decision: ProfessionalQualificationRenewal
+// Description: Professional qualification maintenance
+// Legal Source: Section 18
+// Inputs: 
+// Output: result
+
+rule "ProfessionalQualificationRenewal_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("One-time exam");
+    $ctx.setLegalBasis("Section 18(1)");
+    $ctx.setSourceText("Kertakoe");
+end
+
+rule "ProfessionalQualificationRenewal_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Maintain through training");
+    $ctx.setLegalBasis("Section 20");
+    $ctx.setSourceText("Koulutuksella");
+end
+
+rule "ProfessionalQualificationRenewal_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Equivalent recognized");
+    $ctx.setLegalBasis("Section 18(2)");
+    $ctx.setSourceText("Tunnustaminen");
+end
+
+rule "ProfessionalQualificationRenewal_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Can revoke if violations");
+    $ctx.setLegalBasis("Section 18(4)");
+    $ctx.setSourceText("Voidaan peruuttaa");
+end
+
+// Decision: InsuranceDistributionServiceExclusions
+// Description: Activities not considered insurance distribution
+// Legal Source: Section 2(3)
+// Inputs: 
+// Output: result
+
+rule "InsuranceDistributionServiceExclusions_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Incidental information excluded");
+    $ctx.setLegalBasis("Section 2(3)");
+    $ctx.setSourceText("Satunnainen tieto");
+end
+
+rule "InsuranceDistributionServiceExclusions_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Consumer agency help excluded");
+    $ctx.setLegalBasis("Section 2(3)");
+    $ctx.setSourceText("Kuluttajaneuvonta");
+end
+
+rule "InsuranceDistributionServiceExclusions_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Professional advice on assets excluded");
+    $ctx.setLegalBasis("Section 2(3)");
+    $ctx.setSourceText("Ammattimainen varallisuusneuvonta");
+end
+
+rule "InsuranceDistributionServiceExclusions_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Cannot be insurance distribution");
+    $ctx.setLegalBasis("Section 2(4)");
+    $ctx.setSourceText("Ei vakuutusten välittämistä");
+end
+
+// Decision: InsuranceTypesClassification
+// Description: Classification of insurance types
+// Legal Source: Section 5
+// Inputs: 
+// Output: result
+
+rule "InsuranceTypesClassification_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Life insurance class I");
+    $ctx.setLegalBasis("Section 5(4)");
+    $ctx.setSourceText("Henkivakuutusluokka I");
+end
+
+rule "InsuranceTypesClassification_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Life insurance class II");
+    $ctx.setLegalBasis("Section 5(5)");
+    $ctx.setSourceText("Henkivakuutusluokka II");
+end
+
+rule "InsuranceTypesClassification_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Non-life class A");
+    $ctx.setLegalBasis("Section 5(6)");
+    $ctx.setSourceText("Vahinkovakuutusryhmä A");
+end
+
+rule "InsuranceTypesClassification_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Non-life class B");
+    $ctx.setLegalBasis("Section 5(7)");
+    $ctx.setSourceText("Vahinkovakuutusryhmä B");
+end
+
+// Decision: ContinuingEducationDocumentation
+// Description: Continuing education documentation requirements
+// Legal Source: Section 20
+// Inputs: 
+// Output: result
+
+rule "ContinuingEducationDocumentation_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Minimum 15 hours");
+    $ctx.setLegalBasis("Section 20(1)");
+    $ctx.setSourceText("15 tuntia");
+end
+
+rule "ContinuingEducationDocumentation_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Relevant to insurance");
+    $ctx.setLegalBasis("Section 20(2)");
+    $ctx.setSourceText("Vakuutustoimintaan liittyvä");
+end
+
+rule "ContinuingEducationDocumentation_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Approved provider");
+    $ctx.setLegalBasis("Section 20(3)");
+    $ctx.setSourceText("Hyväksytty kouluttaja");
+end
+
+rule "ContinuingEducationDocumentation_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Keep records 5 years");
+    $ctx.setLegalBasis("Section 20(4)");
+    $ctx.setSourceText("5 vuoden säilytys");
+end
+
+// Decision: InformationLanguageRequirements
+// Description: Language requirements for information
+// Legal Source: Section 14
+// Inputs: 
+// Output: result
+
+rule "InformationLanguageRequirements_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("In Finnish");
+    $ctx.setLegalBasis("Section 14(1)");
+    $ctx.setSourceText("Suomeksi");
+end
+
+rule "InformationLanguageRequirements_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("In Swedish");
+    $ctx.setLegalBasis("Section 14(1)");
+    $ctx.setSourceText("Ruotsiksi");
+end
+
+rule "InformationLanguageRequirements_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Customer can choose");
+    $ctx.setLegalBasis("Section 14(1)");
+    $ctx.setSourceText("Asiakas valitsee");
+end
+
+rule "InformationLanguageRequirements_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Other language allowed if customer understands");
+    $ctx.setLegalBasis("Section 14(2)");
+    $ctx.setSourceText("Muu kieli");
+end

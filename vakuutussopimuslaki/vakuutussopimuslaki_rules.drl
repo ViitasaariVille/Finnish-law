@@ -1,0 +1,2259 @@
+// Drools Business Rules for Vakuutussopimuslaki
+// Law: 543/1994
+// Generated from DMN rules
+// Total decisions: 58
+
+package fi.law.vakuutussopimuslaki
+
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
+import java.util.ArrayList;
+
+// Context fact for rule evaluation
+declare Context
+    result : Object
+    legalBasis : String
+    sourceText : String
+    // Dynamic fields
+end
+
+// ========== DECISION TABLES ==========
+
+// Decision: ScopeOfAct
+// Description: Determines if Act applies to insurance
+// Legal Source: Section 1
+// Inputs: 
+// Output: result
+
+rule "ScopeOfAct_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Excluded from Act");
+    $ctx.setLegalBasis("Section 1(1)");
+    $ctx.setSourceText("Lakisääteinen vakuutus");
+end
+
+rule "ScopeOfAct_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Applies per special law");
+    $ctx.setLegalBasis("Section 1(2)");
+    $ctx.setSourceText("Liikennevakuutus");
+end
+
+rule "ScopeOfAct_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Applies per special law");
+    $ctx.setLegalBasis("Section 1(2)");
+    $ctx.setSourceText("Potilasvakuutus");
+end
+
+rule "ScopeOfAct_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Applies per special law");
+    $ctx.setLegalBasis("Section 1(3)");
+    $ctx.setSourceText("Ympäristövahinkovakuutus");
+end
+
+rule "ScopeOfAct_5"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Excluded from Act");
+    $ctx.setLegalBasis("Section 1(4)");
+    $ctx.setSourceText("Jälleenvakuutus");
+end
+
+// Decision: InsuranceTypeClassification
+// Description: Classifies insurance type
+// Legal Source: Section 2
+// Inputs: 
+// Output: result
+
+rule "InsuranceTypeClassification_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Life Insurance");
+    $ctx.setLegalBasis("Section 2(1)");
+    $ctx.setSourceText("Henkilövakuutus");
+end
+
+rule "InsuranceTypeClassification_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Non-Life Insurance");
+    $ctx.setLegalBasis("Section 2(2)");
+    $ctx.setSourceText("Vahinkovakuutus");
+end
+
+rule "InsuranceTypeClassification_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Investment Insurance");
+    $ctx.setLegalBasis("Section 2(2a)");
+    $ctx.setSourceText("Sijoitusvakuutus");
+end
+
+rule "InsuranceTypeClassification_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Capital Redemption");
+    $ctx.setLegalBasis("Section 4a");
+    $ctx.setSourceText("Kapitalisaatiosopimus");
+end
+
+rule "InsuranceTypeClassification_5"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Group Insurance");
+    $ctx.setLegalBasis("Section 2(6)");
+    $ctx.setSourceText("Ryhmävakuutus");
+end
+
+// Decision: ContractualTermsMandatory
+// Description: Determines which terms are mandatory
+// Legal Source: Section 3
+// Inputs: 
+// Output: result
+
+rule "ContractualTermsMandatory_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Void if detrimental to insured");
+    $ctx.setLegalBasis("Section 3(1)");
+    $ctx.setSourceText("Mitätön vakuutetun vahingoksi");
+end
+
+rule "ContractualTermsMandatory_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Void if detrimental to consumer");
+    $ctx.setLegalBasis("Section 3(2)");
+    $ctx.setSourceText("Mitätön kuluttajaa kohtaan");
+end
+
+rule "ContractualTermsMandatory_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Not mandatory for credit");
+    $ctx.setLegalBasis("Section 3(3)");
+    $ctx.setSourceText("Luottovakuutus");
+end
+
+rule "ContractualTermsMandatory_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Not mandatory for transport");
+    $ctx.setLegalBasis("Section 3(3)");
+    $ctx.setSourceText("Kuljetusvakuutus");
+end
+
+// Decision: PreContractInformation
+// Description: Pre-contractual information requirements
+// Legal Source: Section 5
+// Inputs: 
+// Output: result
+
+rule "PreContractInformation_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Provide insurance forms");
+    $ctx.setLegalBasis("Section 5(1)");
+    $ctx.setSourceText("Vakuutusmuodot");
+end
+
+rule "PreContractInformation_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Provide premium information");
+    $ctx.setLegalBasis("Section 5(1)");
+    $ctx.setSourceText("Vakuutusmaksut");
+end
+
+rule "PreContractInformation_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Provide terms and conditions");
+    $ctx.setLegalBasis("Section 5(1)");
+    $ctx.setSourceText("Vakuutusehdot");
+end
+
+rule "PreContractInformation_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Provide information on policyholder needs");
+    $ctx.setLegalBasis("Section 5(1)");
+    $ctx.setSourceText("Vakuutustarve");
+end
+
+rule "PreContractInformation_5"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Warn of investment risks");
+    $ctx.setLegalBasis("Section 5(2)");
+    $ctx.setSourceText("Sijoitusriskit");
+end
+
+// Decision: InformationDeliveryMethod
+// Description: How information must be delivered
+// Legal Source: Section 5a
+// Inputs: 
+// Output: result
+
+rule "InformationDeliveryMethod_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Allowed");
+    $ctx.setLegalBasis("Section 5a(1)");
+    $ctx.setSourceText("Paperilla");
+end
+
+rule "InformationDeliveryMethod_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Allowed");
+    $ctx.setLegalBasis("Section 5a(1)");
+    $ctx.setSourceText("Pysyvällä tavalla");
+end
+
+rule "InformationDeliveryMethod_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Allowed");
+    $ctx.setLegalBasis("Section 5a(1)");
+    $ctx.setSourceText("Verkkosivustolla");
+end
+
+rule "InformationDeliveryMethod_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must provide on paper");
+    $ctx.setLegalBasis("Section 5a(3)");
+    $ctx.setSourceText("Pyynnöstä paperilla");
+end
+
+// Decision: PolicyDocumentDelivery
+// Description: When policy document must be delivered
+// Legal Source: Section 6
+// Inputs: 
+// Output: result
+
+rule "PolicyDocumentDelivery_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Deliver without undue delay");
+    $ctx.setLegalBasis("Section 6(1)");
+    $ctx.setSourceText("Ilman aiheetonta viivytystä");
+end
+
+rule "PolicyDocumentDelivery_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must include key terms");
+    $ctx.setLegalBasis("Section 6(1)");
+    $ctx.setSourceText("Sopimuksen keskeinen sisältö");
+end
+
+rule "PolicyDocumentDelivery_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must include conditions");
+    $ctx.setLegalBasis("Section 6(1)");
+    $ctx.setSourceText("Vakuutusehdot");
+end
+
+rule "PolicyDocumentDelivery_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Note in policy document");
+    $ctx.setLegalBasis("Section 6(2)");
+    $ctx.setSourceText("Maksun muuttumisoikeus");
+end
+
+// Decision: AnnualNoticeRequirement
+// Description: Annual notice to policyholder
+// Legal Source: Section 7
+// Inputs: 
+// Output: result
+
+rule "AnnualNoticeRequirement_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Annual notice required");
+    $ctx.setLegalBasis("Section 7(1)");
+    $ctx.setSourceText("Vuositiedote");
+end
+
+rule "AnnualNoticeRequirement_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Include insurance sum");
+    $ctx.setLegalBasis("Section 7(1)");
+    $ctx.setSourceText("Vakuutusmäärä");
+end
+
+rule "AnnualNoticeRequirement_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Include cost information");
+    $ctx.setLegalBasis("Section 7(2)");
+    $ctx.setSourceText("Kulut");
+end
+
+rule "AnnualNoticeRequirement_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Include suitability assessment");
+    $ctx.setLegalBasis("Section 7(3)");
+    $ctx.setSourceText("Soveltuvuuden arviointi");
+end
+
+// Decision: CoverageStart
+// Description: When insurer liability begins
+// Legal Source: Section 11
+// Inputs: 
+// Output: result
+
+rule "CoverageStart_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Liability begins");
+    $ctx.setLegalBasis("Section 11(1)");
+    $ctx.setSourceText("Hyväksyvä vastaus");
+end
+
+rule "CoverageStart_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Liability from application");
+    $ctx.setLegalBasis("Section 11(2)");
+    $ctx.setSourceText("Kirjallinen hakemus");
+end
+
+rule "CoverageStart_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("May require premium first");
+    $ctx.setLegalBasis("Section 11(3)");
+    $ctx.setSourceText("Vakuutusmaksu");
+end
+
+rule "CoverageStart_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Considered submitted to insurer");
+    $ctx.setLegalBasis("Section 11(4)");
+    $ctx.setSourceText("Edustajalle annettu");
+end
+
+// Decision: PolicyholderTerminationRight
+// Description: Policyholder right to terminate
+// Legal Source: Section 12
+// Inputs: 
+// Output: result
+
+rule "PolicyholderTerminationRight_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Can terminate anytime");
+    $ctx.setLegalBasis("Section 12(1)");
+    $ctx.setSourceText("Milloin tahansa");
+end
+
+rule "PolicyholderTerminationRight_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must be written");
+    $ctx.setLegalBasis("Section 12(1)");
+    $ctx.setSourceText("Kirjallisesti");
+end
+
+rule "PolicyholderTerminationRight_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Ends current period");
+    $ctx.setLegalBasis("Section 12(1)");
+    $ctx.setSourceText("Päättyy vakuutuskauden aikana");
+end
+
+rule "PolicyholderTerminationRight_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("No termination if <30 days");
+    $ctx.setLegalBasis("Section 12(2)");
+    $ctx.setSourceText("Alle 30 päivää");
+end
+
+// Decision: SurrenderValueRight
+// Description: Right to surrender value
+// Legal Source: Section 13
+// Inputs: 
+// Output: result
+
+rule "SurrenderValueRight_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Can get free policy");
+    $ctx.setLegalBasis("Section 13(1)");
+    $ctx.setSourceText("Vapaakirja");
+end
+
+rule "SurrenderValueRight_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Can get surrender value");
+    $ctx.setLegalBasis("Section 13(1)");
+    $ctx.setSourceText("Takaisinostoarvo");
+end
+
+rule "SurrenderValueRight_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Surrender value on ending");
+    $ctx.setLegalBasis("Section 13(2)");
+    $ctx.setSourceText("Päättyessä");
+end
+
+rule "SurrenderValueRight_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("May exclude surrender value");
+    $ctx.setLegalBasis("Section 13(3)");
+    $ctx.setSourceText("Eläkevakuutus");
+end
+
+// Decision: CancellationRight
+// Description: Right to cancel insurance
+// Legal Source: Section 13a
+// Inputs: 
+// Output: result
+
+rule "CancellationRight_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("30-day cancellation right");
+    $ctx.setLegalBasis("Section 13a(1)");
+    $ctx.setSourceText("30 päivää");
+end
+
+rule "CancellationRight_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("30-day cancellation right");
+    $ctx.setLegalBasis("Section 13a(1)");
+    $ctx.setSourceText("Säästöhenkivakuutus");
+end
+
+rule "CancellationRight_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("From acceptance notification");
+    $ctx.setLegalBasis("Section 13a(1)");
+    $ctx.setSourceText("Hyväksymisestä");
+end
+
+rule "CancellationRight_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Refund within 30 days");
+    $ctx.setLegalBasis("Section 13a(2)");
+    $ctx.setSourceText("Palautus 30 päivässä");
+end
+
+// Decision: TransferRight
+// Description: Right to transfer pension insurance
+// Legal Source: Section 13b
+// Inputs: 
+// Output: result
+
+rule "TransferRight_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Can transfer surrender value");
+    $ctx.setLegalBasis("Section 13b(1)");
+    $ctx.setSourceText("Siirto-oikeus");
+end
+
+rule "TransferRight_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("To another pension insurance");
+    $ctx.setLegalBasis("Section 13b(1)");
+    $ctx.setSourceText("Toiseen eläkevakuutukseen");
+end
+
+rule "TransferRight_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("To long-term savings");
+    $ctx.setLegalBasis("Section 13b(1)");
+    $ctx.setSourceText("Pitkäaikaissäästötili");
+end
+
+rule "TransferRight_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Within 30 days");
+    $ctx.setLegalBasis("Section 13b(2)");
+    $ctx.setSourceText("30 päivän kuluessa");
+end
+
+// Decision: ContinuationInsuranceRight
+// Description: Right to continuation insurance
+// Legal Source: Section 14
+// Inputs: 
+// Output: result
+
+rule "ContinuationInsuranceRight_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Right to continuation");
+    $ctx.setLegalBasis("Section 14(1)");
+    $ctx.setSourceText("Jatkovakuutusoikeus");
+end
+
+rule "ContinuationInsuranceRight_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("No health assessment required");
+    $ctx.setLegalBasis("Section 14(1)");
+    $ctx.setSourceText("Ei terveysselvitystä");
+end
+
+rule "ContinuationInsuranceRight_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Adjusted for surrender value");
+    $ctx.setLegalBasis("Section 14(1)");
+    $ctx.setSourceText("Takaisinostoarvon mukaisesti");
+end
+
+rule "ContinuationInsuranceRight_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Within 6 months");
+    $ctx.setLegalBasis("Section 14(3)");
+    $ctx.setSourceText("6 kuukauden kuluessa");
+end
+
+// Decision: InsurerTerminationNonLife
+// Description: Insurer right to terminate non-life insurance
+// Legal Source: Section 15
+// Inputs: 
+// Output: result
+
+rule "InsurerTerminationNonLife_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Can terminate during period");
+    $ctx.setLegalBasis("Section 15(1)");
+    $ctx.setSourceText("Vakuutuskauden aikana");
+end
+
+rule "InsurerTerminationNonLife_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Requires valid reason");
+    $ctx.setLegalBasis("Section 15(1)");
+    $ctx.setSourceText("Pätevä syy");
+end
+
+rule "InsurerTerminationNonLife_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("14-day notice required");
+    $ctx.setLegalBasis("Section 15(2)");
+    $ctx.setSourceText("14 päivää");
+end
+
+rule "InsurerTerminationNonLife_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Refund unearned premium");
+    $ctx.setLegalBasis("Section 15(3)");
+    $ctx.setSourceText("Palautus");
+end
+
+// Decision: ContinuousInsuranceTermination
+// Description: Termination of continuous non-life insurance
+// Legal Source: Section 16
+// Inputs: 
+// Output: result
+
+rule "ContinuousInsuranceTermination_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Can terminate at period end");
+    $ctx.setLegalBasis("Section 16(1)");
+    $ctx.setSourceText("Vakuutuskauden päättyessä");
+end
+
+rule "ContinuousInsuranceTermination_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("One month notice");
+    $ctx.setLegalBasis("Section 16(1)");
+    $ctx.setSourceText("Kuukauden irtisanomisaika");
+end
+
+rule "ContinuousInsuranceTermination_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("No termination for claims-free");
+    $ctx.setLegalBasis("Section 16(2)");
+    $ctx.setSourceText("Korvaukseton");
+end
+
+rule "ContinuousInsuranceTermination_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Can increase premium");
+    $ctx.setLegalBasis("Section 16(3)");
+    $ctx.setSourceText("Korotettu maksu");
+end
+
+// Decision: PolicyholderDisclosureDuty
+// Description: Duty to provide information
+// Legal Source: Section 22
+// Inputs: 
+// Output: result
+
+rule "PolicyholderDisclosureDuty_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must disclose all known risk factors");
+    $ctx.setLegalBasis("Section 22(1)");
+    $ctx.setSourceText("Tunnetut riskitekijät");
+end
+
+rule "PolicyholderDisclosureDuty_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must answer all questions");
+    $ctx.setLegalBasis("Section 22(1)");
+    $ctx.setSourceText("Kysymyksiin vastaaminen");
+end
+
+rule "PolicyholderDisclosureDuty_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Same duty applies to insured");
+    $ctx.setLegalBasis("Section 22(2)");
+    $ctx.setSourceText("Vakuutettu");
+end
+
+rule "PolicyholderDisclosureDuty_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must notify of changes");
+    $ctx.setLegalBasis("Section 22(3)");
+    $ctx.setSourceText("Muutoksista ilmoittaminen");
+end
+
+// Decision: NonLifeDisclosureBreach
+// Description: Consequences of disclosure breach in non-life
+// Legal Source: Section 23
+// Inputs: 
+// Output: result
+
+rule "NonLifeDisclosureBreach_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Insurer not liable");
+    $ctx.setLegalBasis("Section 23(1)");
+    $ctx.setSourceText("Tahallinen");
+end
+
+rule "NonLifeDisclosureBreach_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("May reduce compensation");
+    $ctx.setLegalBasis("Section 23(2)");
+    $ctx.setSourceText("Huolimaton");
+end
+
+rule "NonLifeDisclosureBreach_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Material breach affects liability");
+    $ctx.setLegalBasis("Section 23(3)");
+    $ctx.setSourceText("Olennainen");
+end
+
+rule "NonLifeDisclosureBreach_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("If immaterial, full liability");
+    $ctx.setLegalBasis("Section 35");
+    $ctx.setSourceText("Olennaisuus");
+end
+
+// Decision: LifeInsuranceDisclosureBreach
+// Description: Consequences of disclosure breach in life insurance
+// Legal Source: Section 24
+// Inputs: 
+// Output: result
+
+rule "LifeInsuranceDisclosureBreach_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Insurer not liable");
+    $ctx.setLegalBasis("Section 24(1)");
+    $ctx.setSourceText("Petollinen");
+end
+
+rule "LifeInsuranceDisclosureBreach_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("After 10 years, full liability");
+    $ctx.setLegalBasis("Section 24(2)");
+    $ctx.setSourceText("10 vuotta");
+end
+
+rule "LifeInsuranceDisclosureBreach_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Proportionate liability");
+    $ctx.setLegalBasis("Section 24(3)");
+    $ctx.setSourceText("Osittainen vastuu");
+end
+
+rule "LifeInsuranceDisclosureBreach_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Special rules apply");
+    $ctx.setLegalBasis("Section 24(4)");
+    $ctx.setSourceText("2 vuoden sisällä");
+end
+
+// Decision: RiskIncrease
+// Description: Risk increase notification
+// Legal Source: Sections 26-27
+// Inputs: 
+// Output: result
+
+rule "RiskIncrease_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must notify insurer");
+    $ctx.setLegalBasis("Section 26(1)");
+    $ctx.setSourceText("Vaaran lisääntyminen");
+end
+
+rule "RiskIncrease_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Insurer may adjust terms");
+    $ctx.setLegalBasis("Section 26(2)");
+    $ctx.setSourceText("Ehtojen muuttaminen");
+end
+
+rule "RiskIncrease_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Different rules for life");
+    $ctx.setLegalBasis("Section 27");
+    $ctx.setSourceText("Henkilövakuutus");
+end
+
+rule "RiskIncrease_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("No adjustment if immaterial");
+    $ctx.setLegalBasis("Section 35");
+    $ctx.setSourceText("Olennaisuus");
+end
+
+// Decision: CausedInsuranceEvent
+// Description: Causing insurance event
+// Legal Source: Sections 28-30
+// Inputs: 
+// Output: result
+
+rule "CausedInsuranceEvent_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("No compensation if intentional");
+    $ctx.setLegalBasis("Section 28");
+    $ctx.setSourceText("Tahallinen kuolema");
+end
+
+rule "CausedInsuranceEvent_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("No compensation if intentional");
+    $ctx.setLegalBasis("Section 29");
+    $ctx.setSourceText("Edunsaajan aiheuttama");
+end
+
+rule "CausedInsuranceEvent_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Third party liability");
+    $ctx.setLegalBasis("Section 30");
+    $ctx.setSourceText("Kolmannen aiheuttama");
+end
+
+rule "CausedInsuranceEvent_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Intent affects liability");
+    $ctx.setLegalBasis("Section 30");
+    $ctx.setSourceText("Tahallisuus");
+end
+
+// Decision: SafetyInstructions
+// Description: Following safety instructions
+// Legal Source: Section 31
+// Inputs: 
+// Output: result
+
+rule "SafetyInstructions_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("May reduce compensation");
+    $ctx.setLegalBasis("Section 31(1)");
+    $ctx.setSourceText("Suojeluohjeiden noudattaminen");
+end
+
+rule "SafetyInstructions_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Insurance may be void");
+    $ctx.setLegalBasis("Section 31(2)");
+    $ctx.setSourceText("Noudattamatta jättäminen");
+end
+
+rule "SafetyInstructions_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must be reasonable");
+    $ctx.setLegalBasis("Section 31(3)");
+    $ctx.setSourceText("Kohtuulliset ohjeet");
+end
+
+// Decision: SalvageDuty
+// Description: Duty to salvage
+// Legal Source: Section 32
+// Inputs: 
+// Output: result
+
+rule "SalvageDuty_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must attempt to prevent");
+    $ctx.setLegalBasis("Section 32(1)");
+    $ctx.setSourceText("Pelastamisvelvollisuus");
+end
+
+rule "SalvageDuty_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Covered if reasonable");
+    $ctx.setLegalBasis("Section 32(2)");
+    $ctx.setSourceText("Kohtuulliset kustannukset");
+end
+
+rule "SalvageDuty_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Covered even if exceeding loss");
+    $ctx.setLegalBasis("Section 32(3)");
+    $ctx.setSourceText("Ylittää vahingon");
+end
+
+// Decision: ImmaterialBreach
+// Description: When breach is immaterial
+// Legal Source: Section 35
+// Inputs: 
+// Output: result
+
+rule "ImmaterialBreach_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Full liability remains");
+    $ctx.setLegalBasis("Section 35(1)");
+    $ctx.setSourceText("Olennaisuus");
+end
+
+rule "ImmaterialBreach_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("No adjustment");
+    $ctx.setLegalBasis("Section 35(2)");
+    $ctx.setSourceText("Ei vaikutusta");
+end
+
+rule "ImmaterialBreach_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("No liability reduction");
+    $ctx.setLegalBasis("Section 35(3)");
+    $ctx.setSourceText("Tiedonannolla ei ole merkitystä");
+end
+
+// Decision: UnawarenessAndCompulsion
+// Description: Unawareness and compulsion defenses
+// Legal Source: Section 36
+// Inputs: 
+// Output: result
+
+rule "UnawarenessAndCompulsion_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("No liability if unaware");
+    $ctx.setLegalBasis("Section 36(1)");
+    $ctx.setSourceText("Syyntakeettomuus");
+end
+
+rule "UnawarenessAndCompulsion_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("No liability if compelled");
+    $ctx.setLegalBasis("Section 36(2)");
+    $ctx.setSourceText("Pakkotila");
+end
+
+rule "UnawarenessAndCompulsion_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Emergency situation");
+    $ctx.setLegalBasis("Section 36(2)");
+    $ctx.setSourceText("Hätätila");
+end
+
+// Decision: WarRisk
+// Description: War risk exclusion in life insurance
+// Legal Source: Section 37a
+// Inputs: 
+// Output: result
+
+rule "WarRisk_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("May limit liability");
+    $ctx.setLegalBasis("Section 37a(1)");
+    $ctx.setSourceText("Sotariski");
+end
+
+rule "WarRisk_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("May limit during service");
+    $ctx.setLegalBasis("Section 37a(2)");
+    $ctx.setSourceText("Armeijapalvelus");
+end
+
+rule "WarRisk_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("International conflict");
+    $ctx.setLegalBasis("Section 37a(3)");
+    $ctx.setSourceText("Kansainvälinen konflikti");
+end
+
+// Decision: PremiumPayment
+// Description: Risk increase notification
+// Legal Source: Sections 26-27
+// Inputs: 
+// Output: result
+
+rule "PremiumPayment_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must notify insurer");
+    $ctx.setLegalBasis("Section 26(1)");
+    $ctx.setSourceText("Vaaran lisääntyminen");
+end
+
+rule "PremiumPayment_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Insurer may adjust terms");
+    $ctx.setLegalBasis("Section 26(2)");
+    $ctx.setSourceText("Ehtojen muuttaminen");
+end
+
+rule "PremiumPayment_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Different rules for life");
+    $ctx.setLegalBasis("Section 27");
+    $ctx.setSourceText("Henkilövakuutus");
+end
+
+rule "PremiumPayment_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("No adjustment if immaterial");
+    $ctx.setLegalBasis("Section 35");
+    $ctx.setSourceText("Olennaisuus");
+end
+
+// Decision: PremiumPayment
+// Description: Premium payment obligations
+// Legal Source: Section 38
+// Inputs: 
+// Output: result
+
+rule "PremiumPayment_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must pay when due");
+    $ctx.setLegalBasis("Section 38(1)");
+    $ctx.setSourceText("Maksuvelvollisuus");
+end
+
+rule "PremiumPayment_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Pay to insurer or bank");
+    $ctx.setLegalBasis("Section 38(2)");
+    $ctx.setSourceText("Pankkiin");
+end
+
+rule "PremiumPayment_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Late fee may apply");
+    $ctx.setLegalBasis("Section 39");
+    $ctx.setSourceText("Viivästyskorko");
+end
+
+rule "PremiumPayment_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Coverage may lapse");
+    $ctx.setLegalBasis("Section 40");
+    $ctx.setSourceText("Vastuun lakkaaminen");
+end
+
+// Decision: LatePremiumConsequences
+// Description: Consequences of late premium payment
+// Legal Source: Section 39
+// Inputs: 
+// Output: result
+
+rule "LatePremiumConsequences_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Interest on late payment");
+    $ctx.setLegalBasis("Section 39(1)");
+    $ctx.setSourceText("Viivästyskorko");
+end
+
+rule "LatePremiumConsequences_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Reminder fee may apply");
+    $ctx.setLegalBasis("Section 39(2)");
+    $ctx.setSourceText("Muistutusmaksu");
+end
+
+rule "LatePremiumConsequences_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("May use debt collection");
+    $ctx.setLegalBasis("Section 39(3)");
+    $ctx.setSourceText("Perintä");
+end
+
+rule "LatePremiumConsequences_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Late payment interest exempt in some cases");
+    $ctx.setLegalBasis("Section 39(4)");
+    $ctx.setSourceText("Poikkeukset");
+end
+
+// Decision: CoverageLapseNonPayment
+// Description: Coverage lapse due to non-payment
+// Legal Source: Section 40
+// Inputs: 
+// Output: result
+
+rule "CoverageLapseNonPayment_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Coverage lapses");
+    $ctx.setLegalBasis("Section 40(1)");
+    $ctx.setSourceText("Vastuu lakkaa");
+end
+
+rule "CoverageLapseNonPayment_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("After written demand");
+    $ctx.setLegalBasis("Section 40(1)");
+    $ctx.setSourceText("Kirjallinen vaatimus");
+end
+
+rule "CoverageLapseNonPayment_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("14-day grace period");
+    $ctx.setLegalBasis("Section 40(1)");
+    $ctx.setSourceText("14 päivää");
+end
+
+rule "CoverageLapseNonPayment_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Can reinstate by paying");
+    $ctx.setLegalBasis("Section 40(2)");
+    $ctx.setSourceText("Jälleenvoimaansaattaminen");
+end
+
+// Decision: BeneficiaryDesignation
+// Description: Rules for designating beneficiary
+// Legal Source: Sections 47-48
+// Inputs: 
+// Output: result
+
+rule "BeneficiaryDesignation_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Can designate in life insurance");
+    $ctx.setLegalBasis("Section 47(1)");
+    $ctx.setSourceText("Edunsaajan määrääminen");
+end
+
+rule "BeneficiaryDesignation_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must be in writing");
+    $ctx.setLegalBasis("Section 48(1)");
+    $ctx.setSourceText("Kirjallinen muoto");
+end
+
+rule "BeneficiaryDesignation_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Can revoke");
+    $ctx.setLegalBasis("Section 49");
+    $ctx.setSourceText("Peruuttaminen");
+end
+
+rule "BeneficiaryDesignation_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Falls if beneficiary predeceases");
+    $ctx.setLegalBasis("Section 49");
+    $ctx.setSourceText("Raukeaminen");
+end
+
+// Decision: OverInsurance
+// Description: Rules for over-insurance
+// Legal Source: Section 57
+// Inputs: 
+// Output: result
+
+rule "OverInsurance_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Is over-insurance");
+    $ctx.setLegalBasis("Section 57(1)");
+    $ctx.setSourceText("Ylivakuutus");
+end
+
+rule "OverInsurance_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Void if intentional");
+    $ctx.setLegalBasis("Section 57(2)");
+    $ctx.setSourceText("Tahallinen");
+end
+
+rule "OverInsurance_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Pay only actual loss");
+    $ctx.setLegalBasis("Section 57(3)");
+    $ctx.setSourceText("Todellinen vahinko");
+end
+
+rule "OverInsurance_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Premium refund for excess");
+    $ctx.setLegalBasis("Section 57(4)");
+    $ctx.setSourceText("Maksun palautus");
+end
+
+// Decision: UnderInsurance
+// Description: Rules for under-insurance
+// Legal Source: Section 58
+// Inputs: 
+// Output: result
+
+rule "UnderInsurance_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Is under-insurance");
+    $ctx.setLegalBasis("Section 58(1)");
+    $ctx.setSourceText("Alivakuutus");
+end
+
+rule "UnderInsurance_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Compensation proportionate");
+    $ctx.setLegalBasis("Section 58(1)");
+    $ctx.setSourceText("Suhteellinen korvaus");
+end
+
+rule "UnderInsurance_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Full value can be required");
+    $ctx.setLegalBasis("Section 58(2)");
+    $ctx.setSourceText("Täysi arvo");
+end
+
+rule "UnderInsurance_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Premium adjustment possible");
+    $ctx.setLegalBasis("Section 58(3)");
+    $ctx.setSourceText("Maksun tarkistus");
+end
+
+// Decision: MultipleInsurance
+// Description: 
+// Legal Source: 
+// Inputs: 
+// Output: result
+
+rule "MultipleInsurance_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Is multiple insurance");
+    $ctx.setLegalBasis("Section 59(1)");
+    $ctx.setSourceText("Monivakuutus");
+end
+
+rule "MultipleInsurance_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Can claim from any insurer");
+    $ctx.setLegalBasis("Section 59(2)");
+    $ctx.setSourceText("Vaatia keneltä tahansa");
+end
+
+rule "MultipleInsurance_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Insurers share liability");
+    $ctx.setLegalBasis("Section 60");
+    $ctx.setSourceText("Vastuun jakaminen");
+end
+
+rule "MultipleInsurance_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Can recover from others");
+    $ctx.setLegalBasis("Section 60(2)");
+    $ctx.setSourceText("Takautumisoikeus");
+end
+
+// Decision: SalvageCosts
+// Description: Coverage for salvage costs
+// Legal Source: Section 61
+// Inputs: 
+// Output: result
+
+rule "SalvageCosts_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Covered if reasonable");
+    $ctx.setLegalBasis("Section 61(1)");
+    $ctx.setSourceText("Pelastamiskustannukset");
+end
+
+rule "SalvageCosts_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Covered for prevention");
+    $ctx.setLegalBasis("Section 61(1)");
+    $ctx.setSourceText("Ehkäisykustannukset");
+end
+
+rule "SalvageCosts_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must be reasonable");
+    $ctx.setLegalBasis("Section 61(2)");
+    $ctx.setSourceText("Kohtuulliset");
+end
+
+rule "SalvageCosts_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Limited to insurance sum");
+    $ctx.setLegalBasis("Section 61(3)");
+    $ctx.setSourceText("Vakuutusmäärään");
+end
+
+// Decision: ThirdPartyRights
+// Description: Third party rights in non-life insurance
+// Legal Source: Section 62
+// Inputs: 
+// Output: result
+
+rule "ThirdPartyRights_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Has rights to compensation");
+    $ctx.setLegalBasis("Section 62(1)");
+    $ctx.setSourceText("Kolmas henkilö");
+end
+
+rule "ThirdPartyRights_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("New owner covered");
+    $ctx.setLegalBasis("Section 63");
+    $ctx.setSourceText("Omistajan vaihtuminen");
+end
+
+rule "ThirdPartyRights_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Can claim directly");
+    $ctx.setLegalBasis("Section 65");
+    $ctx.setSourceText("Vaatia korvausta");
+end
+
+rule "ThirdPartyRights_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Third party liability insurance");
+    $ctx.setLegalBasis("Section 67");
+    $ctx.setSourceText("Vastuuvakuutus");
+end
+
+// Decision: ClaimProcedure
+// Description: Insurance claim procedure
+// Legal Source: Sections 69-70
+// Inputs: 
+// Output: result
+
+rule "ClaimProcedure_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must provide documentation");
+    $ctx.setLegalBasis("Section 69(1)");
+    $ctx.setSourceText("Selvitykset");
+end
+
+rule "ClaimProcedure_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Without undue delay");
+    $ctx.setLegalBasis("Section 69(2)");
+    $ctx.setSourceText("Viipymättä");
+end
+
+rule "ClaimProcedure_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Pay within 30 days");
+    $ctx.setLegalBasis("Section 70(1)");
+    $ctx.setSourceText("30 päivää");
+end
+
+rule "ClaimProcedure_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Provide reasons for denial");
+    $ctx.setLegalBasis("Section 70(2)");
+    $ctx.setSourceText("Hylkäyksen perusteet");
+end
+
+// Decision: ClaimLimitationPeriod
+// Description: Time limits for claims
+// Legal Source: Section 73
+// Inputs: 
+// Output: result
+
+rule "ClaimLimitationPeriod_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("3 years from claim right arose");
+    $ctx.setLegalBasis("Section 73(1)");
+    $ctx.setSourceText("3 vuotta");
+end
+
+rule "ClaimLimitationPeriod_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("From when learned of event");
+    $ctx.setLegalBasis("Section 73(1)");
+    $ctx.setSourceText("Tieto tapahtumasta");
+end
+
+rule "ClaimLimitationPeriod_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Max 10 years from event");
+    $ctx.setLegalBasis("Section 73(2)");
+    $ctx.setSourceText("10 vuotta");
+end
+
+rule "ClaimLimitationPeriod_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Life insurance 10 years");
+    $ctx.setLegalBasis("Section 73(3)");
+    $ctx.setSourceText("Henkilövakuutus 10 vuotta");
+end
+
+// Decision: GroupInsuranceRules
+// Description: Special rules for group insurance
+// Legal Source: Section 76
+// Inputs: 
+// Output: result
+
+rule "GroupInsuranceRules_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Provide group information");
+    $ctx.setLegalBasis("Section 76(1)");
+    $ctx.setSourceText("Ryhmätiedot");
+end
+
+rule "GroupInsuranceRules_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Notify of termination");
+    $ctx.setLegalBasis("Section 77");
+    $ctx.setSourceText("Päättymisilmoitus");
+end
+
+rule "GroupInsuranceRules_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Member rights apply");
+    $ctx.setLegalBasis("Section 78");
+    $ctx.setSourceText("Jäsenen oikeudet");
+end
+
+rule "GroupInsuranceRules_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Right to continue individually");
+    $ctx.setLegalBasis("Section 80");
+    $ctx.setSourceText("Jatkaminen yksilöllisenä");
+end
+
+// Decision: ReinsuranceExclusion
+// Description: Reinsurance is excluded from this Act
+// Legal Source: Section 1(4)
+// Inputs: 
+// Output: result
+
+rule "ReinsuranceExclusion_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Excluded from Act");
+    $ctx.setLegalBasis("Section 1(4)");
+    $ctx.setSourceText("Jälleenvakuutus");
+end
+
+// Decision: PremiumRefundOnTermination
+// Description: Premium refund when insurance terminates
+// Legal Source: Section 45
+// Inputs: 
+// Output: result
+
+rule "PremiumRefundOnTermination_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Refund unearned premium");
+    $ctx.setLegalBasis("Section 45(1)");
+    $ctx.setSourceText("Palautus");
+end
+
+rule "PremiumRefundOnTermination_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Refund to estate");
+    $ctx.setLegalBasis("Section 45(2)");
+    $ctx.setSourceText("Kuolleen jäkeen");
+end
+
+rule "PremiumRefundOnTermination_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Calculate pro-rata");
+    $ctx.setLegalBasis("Section 45(3)");
+    $ctx.setSourceText("Suhteutettuna");
+end
+
+// Decision: PremiumDebtLimitation
+// Description: Limitation of premium debt
+// Legal Source: Section 46
+// Inputs: 
+// Output: result
+
+rule "PremiumDebtLimitation_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("5 years from due date");
+    $ctx.setLegalBasis("Section 46(1)");
+    $ctx.setSourceText("5 vuotta");
+end
+
+rule "PremiumDebtLimitation_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Acknowledged debt 10 years");
+    $ctx.setLegalBasis("Section 46(2)");
+    $ctx.setSourceText("Tunnustettu");
+end
+
+rule "PremiumDebtLimitation_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Judgment resets limitation");
+    $ctx.setLegalBasis("Section 46(3)");
+    $ctx.setSourceText("Tuomio");
+end
+
+// Decision: DistraintLifeInsurance
+// Description: Distraint of life insurance
+// Legal Source: Section 54
+// Inputs: 
+// Output: result
+
+rule "DistraintLifeInsurance_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Generally exempt");
+    $ctx.setLegalBasis("Section 54(1)");
+    $ctx.setSourceText("Yleensä vapautettu");
+end
+
+rule "DistraintLifeInsurance_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Surrender value can be distrained");
+    $ctx.setLegalBasis("Section 54(2)");
+    $ctx.setSourceText("Takaisinostoarvo");
+end
+
+rule "DistraintLifeInsurance_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Basic exemption applies");
+    $ctx.setLegalBasis("Section 54(3)");
+    $ctx.setSourceText("Perusvapaus");
+end
+
+// Decision: DistraintAccidentInsurance
+// Description: Distraint of accident and health insurance
+// Legal Source: Section 55
+// Inputs: 
+// Output: result
+
+rule "DistraintAccidentInsurance_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Limited distraint");
+    $ctx.setLegalBasis("Section 55(1)");
+    $ctx.setSourceText("Rajoitettu ulosmittaus");
+end
+
+rule "DistraintAccidentInsurance_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Limited distraint");
+    $ctx.setLegalBasis("Section 55(1)");
+    $ctx.setSourceText("Sairausvakuutus");
+end
+
+rule "DistraintAccidentInsurance_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Exception for own debt");
+    $ctx.setLegalBasis("Section 55(2)");
+    $ctx.setSourceText("Oma velka");
+end
+
+// Decision: BankruptcyRecovery
+// Description: Recovery in bankruptcy
+// Legal Source: Section 56
+// Inputs: 
+// Output: result
+
+rule "BankruptcyRecovery_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Recovery limited");
+    $ctx.setLegalBasis("Section 56(1)");
+    $ctx.setSourceText("Rajoitettu takaisinsaanti");
+end
+
+rule "BankruptcyRecovery_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Recent premiums recoverable");
+    $ctx.setLegalBasis("Section 56(2)");
+    $ctx.setSourceText("Maksut");
+end
+
+rule "BankruptcyRecovery_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Exception for good faith");
+    $ctx.setLegalBasis("Section 56(3)");
+    $ctx.setSourceText("Hyvä tahti");
+end
+
+// Decision: PolicyholderInsuredRelation
+// Description: When policyholder and insured are same/different
+// Legal Source: Section 33
+// Inputs: 
+// Output: result
+
+rule "PolicyholderInsuredRelation_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Same rights and duties");
+    $ctx.setLegalBasis("Section 33(1)");
+    $ctx.setSourceText("Sama henkilö");
+end
+
+rule "PolicyholderInsuredRelation_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Both have duties");
+    $ctx.setLegalBasis("Section 33(2)");
+    $ctx.setSourceText("Eri henkilöt");
+end
+
+rule "PolicyholderInsuredRelation_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Knowledge shared");
+    $ctx.setLegalBasis("Section 33(3)");
+    $ctx.setSourceText("Tieto");
+end
+
+// Decision: CompensationReduction
+// Description: When compensation can be reduced
+// Legal Source: Section 34
+// Inputs: 
+// Output: result
+
+rule "CompensationReduction_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("May reduce proportionally");
+    $ctx.setLegalBasis("Section 34(1)");
+    $ctx.setSourceText("Olennainen rikkominen");
+end
+
+rule "CompensationReduction_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("May refuse entirely");
+    $ctx.setLegalBasis("Section 34(2)");
+    $ctx.setSourceText("Tahallinen");
+end
+
+rule "CompensationReduction_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Full compensation if immaterial");
+    $ctx.setLegalBasis("Section 34(3)");
+    $ctx.setSourceText("Olennaton");
+end
+
+// Decision: LiabilityLimitation
+// Description: Limitation of liability in certain cases
+// Legal Source: Section 37
+// Inputs: 
+// Output: result
+
+rule "LiabilityLimitation_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("War or military service");
+    $ctx.setLegalBasis("Section 37(1)");
+    $ctx.setSourceText("Sota");
+end
+
+rule "LiabilityLimitation_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Earthquake");
+    $ctx.setLegalBasis("Section 37(1)");
+    $ctx.setSourceText("Maanjäristys");
+end
+
+rule "LiabilityLimitation_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Nuclear damage");
+    $ctx.setLegalBasis("Section 37(2)");
+    $ctx.setSourceText("Ydinvaurio");
+end
+
+// Decision: ThirdPartyPropertyInsurance
+// Description: Third party rights in property insurance
+// Legal Source: Section 62
+// Inputs: 
+// Output: result
+
+rule "ThirdPartyPropertyInsurance_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Third party has rights");
+    $ctx.setLegalBasis("Section 62(1)");
+    $ctx.setSourceText("Omaisuusvakuutus");
+end
+
+rule "ThirdPartyPropertyInsurance_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("New owner covered");
+    $ctx.setLegalBasis("Section 63");
+    $ctx.setSourceText("Omistajan vaihtuminen");
+end
+
+rule "ThirdPartyPropertyInsurance_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Notify of liability change");
+    $ctx.setLegalBasis("Section 64");
+    $ctx.setSourceText("Ilmoitus vastuun päättymisestä");
+end
+
+rule "ThirdPartyPropertyInsurance_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Insured has standing");
+    $ctx.setLegalBasis("Section 65");
+    $ctx.setSourceText("Vakuutetun asema");
+end
+
+// Decision: PriorityOfCompensation
+// Description: Priority of third party compensation
+// Legal Source: Section 66
+// Inputs: 
+// Output: result
+
+rule "PriorityOfCompensation_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Priority over pledge");
+    $ctx.setLegalBasis("Section 66(1)");
+    $ctx.setSourceText("Etuoikeus panttiin");
+end
+
+rule "PriorityOfCompensation_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Limited to insurance sum");
+    $ctx.setLegalBasis("Section 66(2)");
+    $ctx.setSourceText("Vakuutusmäärään");
+end
+
+rule "PriorityOfCompensation_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Multiple claimants share");
+    $ctx.setLegalBasis("Section 66(3)");
+    $ctx.setSourceText("Jaetaan");
+end
+
+// Decision: LiabilityInsuranceClaim
+// Description: Third party claim in liability insurance
+// Legal Source: Section 67
+// Inputs: 
+// Output: result
+
+rule "LiabilityInsuranceClaim_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Third party can claim");
+    $ctx.setLegalBasis("Section 67(1)");
+    $ctx.setSourceText("Vastuu todettu");
+end
+
+rule "LiabilityInsuranceClaim_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Can claim directly from insurer");
+    $ctx.setLegalBasis("Section 67(1)");
+    $ctx.setSourceText("Vaatia suoraan");
+end
+
+rule "LiabilityInsuranceClaim_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("1 year to claim");
+    $ctx.setLegalBasis("Section 67(2)");
+    $ctx.setSourceText("1 vuosi");
+end
+
+// Decision: AppealCompensationDecision
+// Description: Appeal against compensation decision
+// Legal Source: Section 68
+// Inputs: 
+// Output: result
+
+rule "AppealCompensationDecision_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Can appeal denial");
+    $ctx.setLegalBasis("Section 68(1)");
+    $ctx.setSourceText("Valitus");
+end
+
+rule "AppealCompensationDecision_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Can appeal amount");
+    $ctx.setLegalBasis("Section 68(1)");
+    $ctx.setSourceText("Määrästä");
+end
+
+rule "AppealCompensationDecision_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Court jurisdiction");
+    $ctx.setLegalBasis("Section 68(2)");
+    $ctx.setSourceText("Tuomioistuin");
+end
+
+// Decision: ClaimDocumentation
+// Description: Required claim documentation
+// Legal Source: Section 69
+// Inputs: 
+// Output: result
+
+rule "ClaimDocumentation_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must provide proof");
+    $ctx.setLegalBasis("Section 69(1)");
+    $ctx.setSourceText("Todisteet");
+end
+
+rule "ClaimDocumentation_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Without undue delay");
+    $ctx.setLegalBasis("Section 69(2)");
+    $ctx.setSourceText("Viipymättä");
+end
+
+rule "ClaimDocumentation_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Must cooperate");
+    $ctx.setLegalBasis("Section 69(3)");
+    $ctx.setSourceText("Yhteistyö");
+end
+
+// Decision: CompensationPayment
+// Description: Compensation payment rules
+// Legal Source: Section 70
+// Inputs: 
+// Output: result
+
+rule "CompensationPayment_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Within 30 days");
+    $ctx.setLegalBasis("Section 70(1)");
+    $ctx.setSourceText("30 päivää");
+end
+
+rule "CompensationPayment_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Pay undisputed portion immediately");
+    $ctx.setLegalBasis("Section 70(2)");
+    $ctx.setSourceText("Riidaton osa heti");
+end
+
+rule "CompensationPayment_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Pay disputed portion if clear");
+    $ctx.setLegalBasis("Section 70(3)");
+    $ctx.setSourceText("Selvä osa");
+end
+
+// Decision: WrongPayment
+// Description: Wrong payment to third party
+// Legal Source: Section 71
+// Inputs: 
+// Output: result
+
+rule "WrongPayment_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Can recover");
+    $ctx.setLegalBasis("Section 71(1)");
+    $ctx.setSourceText("Vaatia takaisin");
+end
+
+rule "WrongPayment_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("If good faith, no recovery");
+    $ctx.setLegalBasis("Section 71(2)");
+    $ctx.setSourceText("Hyvässä uskossa");
+end
+
+rule "WrongPayment_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Pay correct person");
+    $ctx.setLegalBasis("Section 71(3)");
+    $ctx.setSourceText("Oikealle henkilölle");
+end
+
+// Decision: FalseInformationAfterEvent
+// Description: False information after insurance event
+// Legal Source: Section 72
+// Inputs: 
+// Output: result
+
+rule "FalseInformationAfterEvent_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Compensation may be denied");
+    $ctx.setLegalBasis("Section 72(1)");
+    $ctx.setSourceText("Korvaus voidaan evätä");
+end
+
+rule "FalseInformationAfterEvent_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("May reduce compensation");
+    $ctx.setLegalBasis("Section 72(2)");
+    $ctx.setSourceText("Voidaan alentaa");
+end
+
+rule "FalseInformationAfterEvent_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Can recover paid compensation");
+    $ctx.setLegalBasis("Section 72(3)");
+    $ctx.setSourceText("Voidaan vaatia takaisin");
+end
+
+// Decision: ClaimLimitation
+// Description: Time limits for claims
+// Legal Source: Section 73
+// Inputs: 
+// Output: result
+
+rule "ClaimLimitation_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("3 years from right");
+    $ctx.setLegalBasis("Section 73(1)");
+    $ctx.setSourceText("3 vuotta");
+end
+
+rule "ClaimLimitation_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("From when learned");
+    $ctx.setLegalBasis("Section 73(1)");
+    $ctx.setSourceText("Tieto");
+end
+
+rule "ClaimLimitation_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Max 10 years from event");
+    $ctx.setLegalBasis("Section 73(2)");
+    $ctx.setSourceText("10 vuotta");
+end
+
+rule "ClaimLimitation_4"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Life insurance 10 years");
+    $ctx.setLegalBasis("Section 73(3)");
+    $ctx.setSourceText("Henkilövakuutus");
+end
+
+// Decision: LegalProceedingsTime
+// Description: Time for legal proceedings
+// Legal Source: Section 74
+// Inputs: 
+// Output: result
+
+rule "LegalProceedingsTime_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("3 years limitation");
+    $ctx.setLegalBasis("Section 74(1)");
+    $ctx.setSourceText("3 vuotta");
+end
+
+rule "LegalProceedingsTime_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("From decision");
+    $ctx.setLegalBasis("Section 74(2)");
+    $ctx.setSourceText("Päätöksestä");
+end
+
+rule "LegalProceedingsTime_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Can be extended");
+    $ctx.setLegalBasis("Section 74(3)");
+    $ctx.setSourceText("Jatkoaika");
+end
+
+// Decision: InsurerSubrogation
+// Description: Insurer right of subrogation
+// Legal Source: Section 75
+// Inputs: 
+// Output: result
+
+rule "InsurerSubrogation_1"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Can claim from liable third party");
+    $ctx.setLegalBasis("Section 75(1)");
+    $ctx.setSourceText("Takautumisoikeus");
+end
+
+rule "InsurerSubrogation_2"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Up to compensation paid");
+    $ctx.setLegalBasis("Section 75(2)");
+    $ctx.setSourceText("Maksettuun asti");
+end
+
+rule "InsurerSubrogation_3"
+    when
+    $ctx : Context(this != null)
+    then
+    $ctx.setResult("Cannot waive against insured");
+    $ctx.setLegalBasis("Section 75(3)");
+    $ctx.setSourceText("Ei luopumista vakuutettua vastaan");
+end
