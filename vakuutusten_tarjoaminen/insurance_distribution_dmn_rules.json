@@ -154,6 +154,26 @@
         {"inputs": ["CustomerContracts", "any"], "output": "Retain for 5 years minimum", "legal_basis": "Section 78(2)", "source_text": "Sopimukset"},
         {"inputs": ["ProfessionalDevelopment", "any"], "output": "Retain records of training", "legal_basis": "Section 78", "source_text": "Koulutustiedot"}
       ]
+    },
+    {
+      "name": "ClientAgreementRequirement",
+      "description": "Requirements for broker-client agreement",
+      "legal_source": "Section 56",
+      "rules": [
+        {"inputs": ["Broker", "any"], "output": "Must have written agreement", "legal_basis": "Section 56(1)", "source_text": "Kirjallinen sopimus"},
+        {"inputs": ["Agreement", "provided"], "output": "Copy to client required", "legal_basis": "Section 56(1)", "source_text": "Asiakkaalle kappale"},
+        {"inputs": ["Agreement", "content"], "output": "Must specify: duration, fees, basis", "legal_basis": "Section 56(2)", "source_text": "Sisältövaatimukset"}
+      ]
+    },
+    {
+      "name": "WhistleblowingRequirement",
+      "description": "Whistleblowing procedure requirements",
+      "legal_source": "Section 72",
+      "rules": [
+        {"inputs": ["Company", "any"], "output": "Must have reporting procedure", "legal_basis": "Section 72(1)", "source_text": "Ilmoitusmenettely"},
+        {"inputs": ["Reporter", "any"], "output": "Must protect reporter identity", "legal_basis": "Section 72", "source_text": "Suojaa ilmoittaja"},
+        {"inputs": ["Retention", "any"], "output": "Retain records 5 years", "legal_basis": "Section 72(2)", "source_text": "Säilytys 5 vuotta"}
+      ]
     }
   ]
 }
