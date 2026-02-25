@@ -202,6 +202,26 @@
       "finnish_name": "Osatyö",
       "description": "Part-time work",
       "legal_basis": "Section 4.1a"
+    },
+    "YouthAddition": {
+      "finnish_name": "Nuortenlisä",
+      "description": "Youth addition to benefit",
+      "legal_basis": "Section 6.5"
+    },
+    "ReemploymentBonus": {
+      "finnish_name": "Uudelleen työllistymisbonus",
+      "description": "Bonus for quick re-employment",
+      "legal_basis": "Section 6.3b"
+    },
+    "ActivationService": {
+      "finnish_name": "Aktivoiva palvelu",
+      "description": "Activation service",
+      "legal_basis": "Section 10"
+    },
+    "Rehabilitation": {
+      "finnish_name": "Kuntoutus",
+      "description": "Vocational rehabilitation",
+      "legal_basis": "Section 10"
     }
   },
   "relationships": [
