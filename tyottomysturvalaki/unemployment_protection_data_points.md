@@ -361,22 +361,136 @@ This file documents the **data points needed** to calculate each business rule i
 
 ---
 
-## Summary: All Data Points
+## 22. CommutingExpenses (2026 Amendment)
+
+**Decision:** Reimbursement of commuting expenses
+
+### Input Variables (Data Points)
+| Data Point | Type | Source | Legal Basis |
+|-----------|------|--------|-------------|
+| commute.distance_km | Decimal | Address / Map | Section 8.3 |
+| commute.public_transport_cost | Decimal | Transport provider | Section 8.3 |
+| commute.daily_travel_expense | Decimal | Receipts | Section 8.3 |
+| commute.monthly_max | Decimal | Calculated | Section 8.3 |
+| job.permanent | Boolean | Employment contract | Section 8.1 |
+| job.start_date | Date | Employer | Section 8.1 |
+| residence.municipality | String | Population register | Section 8.3 |
+
+### Rule Reference
+- `unemployment_protection_dmn_rules.json` - Decision: CommutingExpenses
+
+---
+
+## 23. TrainingAndRehabilitation
+
+**Decision:** Benefit during training or rehabilitation
+
+### Input Variables (Data Points)
+| Data Point | Type | Source | Legal Basis |
+|-----------|------|--------|-------------|
+| training.vocational | Boolean | Koulutus | Section 2.13 |
+| training.employment_relation | Boolean | TE-palvelut | Section 2.13 |
+| training.voucher | Boolean | TE-palvelut | Section 10.5 |
+| rehabilitation.medical | Boolean | Doctor | Section 10 |
+| rehabilitation.vocational | Boolean | Kela / TE | Section 10 |
+| service.start_date | Date | TE-palvelut | Section 10.1 |
+
+### Rule Reference
+- `unemployment_protection_dmn_rules.json` - Decision: TrainingAndRehabilitation
+
+---
+
+## 24. YouthUnemployment
+
+**Decision:** Special rules for young job seekers
+
+### Input Variables (Data Points)
+| Data Point | Type | Source | Legal Basis |
+|-----------|------|--------|-------------|
+| person.age | Integer | Population register | Section 6.10 |
+| person.under_25 | Boolean | Calculated | Section 6.10 |
+| education.completed | Boolean | Education register | Section 2.9 |
+| jobseeker.without_profession | Boolean | TE-palvelut | Section 2.9 |
+
+### Rule Reference
+- `unemployment_protection_dmn_rules.json` - Decision: YouthUnemployment
+
+---
+
+## 25. OlderWorkerProtection
+
+**Decision:** Extended protection for older workers
+
+### Input Variables (Data Points)
+| Data Point | Type | Source | Legal Basis |
+|-----------|------|--------|-------------|
+| person.age | Integer | Population register | Section 6.9 |
+| person.age_60_plus | Boolean | Calculated | Section 6.9 |
+| employment.total_years | Integer | Employment history | Section 6.9 |
+| redundancy.layoff_notice | Boolean | Employer | Section 9.1 |
+
+### Rule Reference
+- `unemployment_protection_dmn_rules.json` - Decision: OlderWorkerProtection
+
+---
+
+## 26. IncomeVerification2026
+
+**Decision:** Income verification for new 2026 system
+
+### Input Variables (Data Points)
+| Data Point | Type | Source | Legal Basis |
+|-----------|------|--------|-------------|
+| income.tygr_18_months | Decimal | Tulorekisteri | Section 6.1 |
+| income.insurable_earnings | Decimal | Tax records | Section 6.1 |
+| person.unemployment_fund_member | Boolean | Fund membership | Section 5 |
+| person.member_since | Date | Fund records | Section 5 |
+| benefit.transitional_arrangement | Boolean | Fund / Kela | Section 5a |
+
+### Rule Reference
+- `unemployment_protection_dmn_rules.json` - Decision: IncomeVerification2026
+
+---
+
+## 27. HousingCosts
+
+**Decision:** Housing cost subsidies
+
+### Input Variables (Data Points)
+| Data Point | Type | Source | Legal Basis |
+|-----------|------|--------|-------------|
+| housing.cost | Decimal | Vuokrasopimus | Section 7.6 |
+| housing.own | Boolean | Population register | Section 7.6 |
+| housing.municipality | String | Address | Section 7.6 |
+| income.household | Decimal | Tax records | Section 7.6 |
+| person.dependency | Boolean | Population register | Section 7.6 |
+
+### Rule Reference
+- `unemployment_protection_dmn_rules.json` - Decision: HousingCosts
+
+---
+
+## Summary: All Data Points (Updated 2026)
 
 ### Person Data
 - person.type
 - person.age
+- person.age_60_plus
+- person.under_25
 - person.employee
 - person.entrepreneur
 - person.unemployment_fund_member
+- person.member_since
 - person.incarcerated
 - person.abroad
 - person.striking
+- person.dependency
 
 ### Job Seeker Data
 - jobseeker.registered
 - jobseeker.available
 - jobseeker.actively_seeking
+- jobseeker.without_profession
 
 ### Employment Data
 - employment.months_last_24
@@ -401,6 +515,8 @@ This file documents the **data points needed** to calculate each business rule i
 - wages.daily_average
 - income.household
 - income.other
+- income.tygr_18_months
+- income.insurable_earnings
 - earnings.monthly
 - earnings.below_limit
 - income.verified
@@ -411,6 +527,36 @@ This file documents the **data points needed** to calculate each business rule i
 
 ### Work Data
 - work.hours_per_week
+
+### Commuting Data (2026)
+- commute.distance_km
+- commute.public_transport_cost
+- commute.daily_travel_expense
+- commute.monthly_max
+
+### Housing Data
+- housing.cost
+- housing.own
+- housing.municipality
+
+### Residence Data
+- residence.municipality
+- previous.residence
+- return.finland
+
+### Education Data
+- education.completed
+- study.full_time
+- study.part_time
+- study.vocational
+- study.ended
+- training.vocational
+- training.employment_relation
+- training.voucher
+
+### Rehabilitation Data
+- rehabilitation.medical
+- rehabilitation.vocational
 
 ### Refusal Data
 - refusal.occurred
@@ -424,16 +570,11 @@ This file documents the **data points needed** to calculate each business rule i
 - reason.education
 - reason.distance
 
-### Study Data
-- study.full_time
-- study.part_time
-- study.vocational
-- study.ended
-
 ### Benefit Data
 - benefit.first_time
 - benefit.previous_periods
 - benefit.full_amount
+- benefit.transitional_arrangement
 
 ### Illness Data
 - illness.during_wait
@@ -451,7 +592,7 @@ This file documents the **data points needed** to calculate each business rule i
 - move.distance_km
 - job.permanent
 - job.duration_months
-- previous.residence
+- job.start_date
 
 ### Employer Data
 - employer.bankruptcy
@@ -461,6 +602,7 @@ This file documents the **data points needed** to calculate each business rule i
 
 ### Redundancy Data
 - refused.reemployment
+- redundancy.layoff_notice
 
 ### Application Data
 - application.submitted
@@ -490,5 +632,5 @@ This file documents the **data points needed** to calculate each business rule i
 - job.search_eu
 - return.finland
 
-### Legal Basis
+### Legal Basis (Updated)
 - Sections: 1, 2.1-2.13, 3.1-3.7, 4.1a, 4.2-4.5, 5.1-5.13, 5a, 6.1-6.10, 7.1-7.8, 8.1-8.5, 8a-8b, 9.1-9.3, 9a, 10.1-10.6, 11.1-11.13, 12.1-12.9

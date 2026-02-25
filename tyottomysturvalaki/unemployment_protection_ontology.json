@@ -262,16 +262,78 @@
       "finnish_name": "Palvelus ulkomailla",
       "description": "Military or civil service",
       "legal_basis": "Section 3.5"
+    },
+    "CommutingExpense": {
+      "finnish_name": "Matkakustannus",
+      "description": "Commuting expense reimbursement",
+      "legal_basis": "Section 8.3"
+    },
+    "HousingCost": {
+      "finnish_name": "Asumiskustannus",
+      "description": "Housing cost support",
+      "legal_basis": "Section 7.6"
+    },
+    "TrainingVoucher": {
+      "finnish_name": "Koulutuskortti",
+      "description": "Training voucher for job seekers",
+      "legal_basis": "Section 10.5"
+    },
+    "YouthJobSeeker": {
+      "finnish_name": "Nuori työnhakija",
+      "description": "Young job seeker under 25",
+      "legal_basis": "Section 6.10"
+    },
+    "OlderWorker": {
+      "finnish_name": "Ikääntynyt työntekijä",
+      "description": "Worker aged 60+",
+      "legal_basis": "Section 6.9"
+    },
+    "TransitionalArrangement": {
+      "finnish_name": "Siirtymäsäännös",
+      "description": "Transitional arrangement for 2026",
+      "legal_basis": "Section 5a"
     }
   },
   "relationships": [
-    {"from": "UnemployedPerson", "to": "JobSeeker", "type": "registers_as"},
-    {"from": "Employee", "to": "EmploymentCondition", "type": "must_meet"},
-    {"from": "JobSeeker", "to": "UnemploymentBenefit", "type": "may_qualify_for"},
-    {"from": "EarningsRelatedAllowance", "to": "UnemploymentFund", "type": "paid_by"},
-    {"from": "BenefitApplication", "to": "BenefitDecision", "type": "results_in"},
-    {"from": "AdjustedBenefit", "to": "IncomeRelatedComponent", "type": "reduces"},
-    {"from": "JobSeeker", "to": "JobSearchRequirement", "type": "must_fulfill"},
-    {"from": "JobSeeker", "to": "AcceptableReason", "type": "may_invoked"}
+    {
+      "from": "UnemployedPerson",
+      "to": "JobSeeker",
+      "type": "registers_as"
+    },
+    {
+      "from": "Employee",
+      "to": "EmploymentCondition",
+      "type": "must_meet"
+    },
+    {
+      "from": "JobSeeker",
+      "to": "UnemploymentBenefit",
+      "type": "may_qualify_for"
+    },
+    {
+      "from": "EarningsRelatedAllowance",
+      "to": "UnemploymentFund",
+      "type": "paid_by"
+    },
+    {
+      "from": "BenefitApplication",
+      "to": "BenefitDecision",
+      "type": "results_in"
+    },
+    {
+      "from": "AdjustedBenefit",
+      "to": "IncomeRelatedComponent",
+      "type": "reduces"
+    },
+    {
+      "from": "JobSeeker",
+      "to": "JobSearchRequirement",
+      "type": "must_fulfill"
+    },
+    {
+      "from": "JobSeeker",
+      "to": "AcceptableReason",
+      "type": "may_invoked"
+    }
   ]
 }

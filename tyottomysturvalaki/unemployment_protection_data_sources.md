@@ -295,3 +295,81 @@ This file maps each data point to potential **data sources** - where the data ca
 - reason.distance - From map calculation
 - study.vocational - From enrollment
 - person.financial_situation - From debt register
+
+---
+
+## New Data Points (2026 Amendments)
+
+### Commuting Data
+
+| Data Point | Data Source | Source Type | Access |
+|-----------|-------------|-------------|--------|
+| commute.distance_km | Kartta / Osoitteet | Distance calculation | Map API |
+| commute.public_transport_cost | VR / Matkahuolto | Timetables | Transport |
+| commute.daily_travel_expense | Työnhakija | Receipts | Job seeker |
+| commute.monthly_max | Laskettu | Calculation | System |
+| residence.municipality | Väestörekisteri | Address | DVV |
+
+### Housing Data
+
+| Data Point | Data Source | Source Type | Access |
+|-----------|-------------|-------------|--------|
+| housing.cost | Vuokranantaja / Vuokrasopimus | Rental agreement | Landlord |
+| housing.own | Väestörekisteri | Population register | DVV |
+| housing.municipality | Väestörekisteri | Address | DVV |
+| person.dependency | Väestörekisteri | Household | DVV |
+
+### Education & Training Data
+
+| Data Point | Data Source | Source Type | Access |
+|-----------|-------------|-------------|--------|
+| education.completed | Opetushallitus | Education register | EDUFI |
+| training.vocational | Koulutus | Enrollment | Institution |
+| training.employment_relation | TE-palvelut | Service decision | TE |
+| training.voucher | TE-palvelut | Voucher system | TE |
+
+### Rehabilitation Data
+
+| Data Point | Data Source | Source Type | Access |
+|-----------|-------------|-------------|--------|
+| rehabilitation.medical | Terveyspalvelut | Medical certificate | Doctor |
+| rehabilitation.vocational | Kela / TE-palvelut | Rehabilitation plan | Kela / TE |
+
+### Income Data (2026 System)
+
+| Data Point | Data Source | Source Type | Access |
+|-----------|-------------|-------------|--------|
+| income.tygr_18_months | Tulorekisteri | Incomes register | Incomes Register |
+| income.insurable_earnings | Verohallinto | Tax records | Tax |
+| person.member_since | Työttömyyskassa | Membership | Fund |
+| benefit.transitional_arrangement | Työttömyyskassa / Kela | Decision | Fund / Kela |
+
+### Youth & Older Worker Data
+
+| Data Point | Data Source | Source Type | Access |
+|-----------|-------------|-------------|--------|
+| person.under_25 | Laskettu | Date calculation | System |
+| person.age_60_plus | Laskettu | Date calculation | System |
+| jobseeker.without_profession | TE-palvelut | Assessment | TE |
+| redundancy.layoff_notice | Työnantaja | Notice | Employer |
+
+---
+
+## Updated API Integration (2026)
+
+### Real-Time APIs
+
+| API | Provider | New Data Points |
+|-----|----------|------------------|
+| Tulorekisteri (TYGR) | Verohallinto | income.tygr_18_months, income.insurable_earnings |
+| Education Register | Opetushallitus | education.completed |
+| Kela API | Kela | rehabilitation.vocational, benefit.transitional_arrangement |
+| TE-palvelut API | TE-hallinto | training.voucher, jobseeker.without_profession |
+
+### New Data Sources
+
+| Authority | Register | New Data Points |
+|-----------|----------|-----------------|
+| **Opetushallitus** | Education register | education.completed |
+| **VR / Matkahuolto** | Transport timetables | commute.public_transport_cost |
+| **Työttömyyskassat** | Membership records | person.member_since, benefit.transitional_arrangement |
