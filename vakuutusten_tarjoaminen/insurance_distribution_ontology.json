@@ -15,8 +15,21 @@
     },
     "InsuranceBroker": {
       "description": "Professional intermediary who arranges insurance for clients",
+      "finnish_name": "Vakuutusmeklari",
       "attributes": ["name", "businessId", "registrationNumber", "professionalQualification"],
       "legal_basis": "Section 5(2)",
+      "registration_conditions": {
+        "not_employed_by_insurer": "Not in employment/agency relationship that could affect customer interests",
+        "registered_in_finland": "Registered in trade register, Finnish residence",
+        "not_bankrupt": "Not bankrupt, not under guardianship, of legal age",
+        "good_reputation": "Persons in §17 must have good reputation",
+        "professional_qualification": "Exam or equivalent required",
+        "liability_insurance": "Required per §58",
+        "client_assets": "System for separating client funds required",
+        "staff_requirement": "At least 30% of staff must be registered brokers",
+        "ownership_disclosure": "10%+ shareholders must be disclosed",
+        "control_disclosure": "Controlling interests must be disclosed"
+      },
       "subclasses": {
         "RegisteredInsuranceBroker": {"description": "Full-time insurance broker", "legal_basis": "Section 55"},
         "PartTimeInsuranceBroker": {"description": "Part-time insurance broker", "legal_basis": "Section 55"}
@@ -29,9 +42,16 @@
     },
     "PartTimeAgent": {
       "description": "Part-time insurance agent (ancillary activity)",
+      "finnish_name": "Sivutoiminen vakuutusedustaja",
       "attributes": ["name", "principal", "annualPremiumLimit"],
       "legal_basis": "Section 4",
-      "constraints": "Maximum 600 EUR annual premium or 200 EUR per insured"
+      "constraints": {
+        "max_annual_premium": "600 EUR per year",
+        "max_per_insured": "200 EUR per person if trip <= 3 months",
+        "must_be": "Complementary to main goods/services",
+        "covers": ["Goods_defects", "Damage", "Non_use", "Travel_risks"],
+        "excludes": ["Life_insurance", "Liability_risks (unless complementary)"]
+      }
     },
     "InsuranceDistributionService": {
       "description": "Service of offering insurance products",
@@ -41,6 +61,11 @@
         "Advice": {"description": "Personal recommendation", "legal_basis": "Section 2"},
         "PolicyPreparation": {"description": "Preparing insurance contracts", "legal_basis": "Section 2"},
         "PolicyAdministration": {"description": "Assisting in contract management", "legal_basis": "Section 2"}
+      },
+      "exclusions": {
+        "IncidentalInformation": {"description": "Incidental info, not for helping with insurance", "legal_basis": "Section 2(1)"},
+        "ClaimsHandling": {"description": "Claims administration by insurer", "legal_basis": "Section 2(2)"},
+        "ConsumerAdvice": {"description": "Consumer advice by non-insurance entities", "legal_basis": "Section 2(3)"}
       }
     },
     "Customer": {
@@ -52,6 +77,48 @@
         "CommercialCustomer": {"description": "Business customer", "legal_basis": "Section 5"}
       }
     },
+    "InsuranceIntermediary": {
+      "description": "Insurance intermediary - broker or agent",
+      "finnish_name": "Vakuutusedustaja",
+      "legal_basis": "Section 5(4)",
+      "subclasses": ["InsuranceBroker", "InsuranceAgent"]
+    },
+    "InsuranceDistributor": {
+      "description": "Insurance provider, intermediary, or part-time agent",
+      "finnish_name": "Vakuutuksentarjoaja",
+      "legal_basis": "Section 5(6)",
+      "includes": ["InsuranceProvider", "InsuranceIntermediary", "PartTimeAgent"]
+    },
+    "DurableMedium": {
+      "description": "Medium that allows storing information for future reference",
+      "finnish_name": "Pysyvä tapa",
+      "legal_basis": "Section 5(9)"
+    },
+    "HomeState": {
+      "description": "Home Member State for intermediaries",
+      "finnish_name": "Kotijäsenvaltio",
+      "legal_basis": "Section 5(15)"
+    },
+    "HostState": {
+      "description": "Host Member State where services provided",
+      "finnish_name": "Vastaanottava jäsenvaltio",
+      "legal_basis": "Section 5(16)"
+    },
+    "Branch": {
+      "description": "Permanent establishment in another EEA state",
+      "finnish_name": "Sivuliike",
+      "legal_basis": "Section 5(17)"
+    },
+    "LargeRisk": {
+      "description": "Large risk as defined in Insurance Companies Act",
+      "finnish_name": "Suuri riski",
+      "legal_basis": "Section 5(18)"
+    },
+    "Remuneration": {
+      "description": "Payment, commission or fee",
+      "finnish_name": "Vastike",
+      "legal_basis": "Section 5(8)"
+    },
     "InsuranceProduct": {
       "description": "Insurance contract or product offered",
       "attributes": ["type", "coverage", "premium", "terms"],
@@ -59,9 +126,30 @@
     },
     "InvestmentInsurance": {
       "description": "Life insurance with investment component",
+      "finnish_name": "Sijoitusvakuutus",
       "attributes": ["fundValue", "surrenderValue", "riskLevel"],
       "legal_basis": "Section 5(12)",
-      "additional_requirements": "Sections 44-54"
+      "additional_requirements": "Sections 44-54",
+      "exclusions": ["pure_death_benefit", "occupational_pension", "state_pension"]
+    },
+    "ProductGovernance": {
+      "finnish_name": "Tuotehallinta",
+      "description": "Product governance requirements for insurers",
+      "legal_basis": "Section 42",
+      "requirements": ["product_approval", "target_market_definition", "risk_assessment", "distribution_plan"]
+    },
+    "CrossBorderOperation": {
+      "finnish_name": "Rajat ylittävä toiminta",
+      "description": "Cross-border insurance distribution within EEA",
+      "legal_basis": "Sections 22-29",
+      "types": ["service_freedom", "establishment_freedom"],
+      "requirements": ["home_state_notification", "host_state_rules_compliance"]
+    },
+    "ConflictsOfInterest": {
+      "finnish_name": "Eturistiriitatilanteet",
+      "description": "Conflicts of interest management",
+      "legal_basis": "Sections 44-45",
+      "requirements": ["identification", "prevention", "disclosure"]
     },
     "ProfessionalQualification": {
       "description": "Professional competence requirements",
@@ -77,8 +165,21 @@
     },
     "Registration": {
       "description": "Entry in Insurance Distribution Register",
+      "finnish_name": "Vakuutusedustajarekisteri",
       "attributes": ["registrationNumber", "registrationDate", "status", "changes"],
-      "legal_basis": "Sections 6-15"
+      "legal_basis": "Sections 6-15",
+      "required_information": {
+        "natural_person": ["name", "businessName", "possibleTradingName", "personalId", "address", "businessAddress"],
+        "legal_entity": ["businessName", "companyId", "registeredAddress", "businessAddress", "boardMembers", "responsiblePersons"],
+        "type_of_intermediary": ["broker_or_agent", "primary_or_parttime"],
+        "insurance_types": ["life", "non_life", "pension", "reinsurance"],
+        "principals": ["insurance_companies_represented"],
+        "liability_insurance": ["provider", "coverage_amount"],
+        "eea_states": ["states_of_operation"],
+        "ownership": ["10%+_shareholders", "controlling_entities"],
+        "sanctions": ["administrative_measures", "prohibitions"],
+        "removal": ["removal_date", "reason"]
+      }
     },
     "SupervisoryAuthority": {
       "description": "Financial Supervisory Authority (FIN-FSA)",
@@ -98,8 +199,22 @@
       "subclasses": {
         "Prohibition": {"description": "Prohibition to conduct insurance distribution", "legal_basis": "Section 70"},
         "AdministrativeFine": {"description": "Monetary penalty", "legal_basis": "Section 71"},
-        "Warning": {"description": "Public warning", "legal_basis": "Section 71"}
+        "Warning": {"description": "Public warning", "legal_basis": "Section 71"},
+        "Deregistration": {"description": "Removal from register", "legal_basis": "Section 73"}
       }
+    },
+    "InsuranceDistributionBoard": {
+      "finnish_name": "Vakuutusedustuslautakunta",
+      "description": "Board that organizes broker examinations",
+      "legal_basis": "Section 61",
+      "functions": ["organize_broker_examinations", "grant_broker_certificates"],
+      "composition": ["chair", "vice_chair", "3-6_members", "alternates"]
+    },
+    "BrokerExamination": {
+      "finnish_name": "Vakuutusmeklarikoe",
+      "description": "Professional exam for insurance brokers",
+      "legal_basis": "Section 62",
+      "requirements": ["minimum_2_exams_per_year", "30_days_notice", "published_materials"]
     }
   },
   "relationships": [
@@ -154,7 +269,7 @@
       "legal_basis": "Section 42"
     },
     {
-      name: "InvestmentInsuranceSuitability",
+      "name": "InvestmentInsuranceSuitability",
       "condition": "product.type = InvestmentInsurance AND customer.profile = undefined",
       "conclusion": "provider.must_assess_suitability = true",
       "legal_basis": "Section 49"
