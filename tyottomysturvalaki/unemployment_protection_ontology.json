@@ -1,0 +1,202 @@
+{
+  "ontology_name": "Unemployment Protection Act",
+  "finnish_name": "Työttömyysturvalaki",
+  "law_number": "1290/2002",
+  "effective_date": "1.1.2003",
+  "last_amended": "16.1.2026",
+  "eli": "http://data.finlex.fi/eli/sd/2002/1290/ajantasa/2026-01-16/fin",
+  "entities": {
+    "UnemploymentBenefit": {
+      "finnish_name": "Työttömyysetuus",
+      "description": "Unemployment benefit or allowance",
+      "legal_basis": "Section 1-2",
+      "subclasses": {
+        "UnemploymentDailyAllowance": {
+          "finnish_name": "Työttömyyspäiväraha",
+          "description": "Daily unemployment allowance",
+          "legal_basis": "Part II"
+        },
+        "EarningsRelatedAllowance": {
+          "finnish_name": "Ansiopäiväraha",
+          "description": "Earnings-related daily allowance",
+          "legal_basis": "Section 5-6"
+        },
+        "BasicAllowance": {
+          "finnish_name": "Peruspäiväraha",
+          "description": "Basic daily allowance",
+          "legal_basis": "Section 7"
+        },
+        "LabourMarketSupport": {
+          "finnish_name": "Työmarkkinatuki",
+          "description": "Labour market support",
+          "legal_basis": "Part III, Chapter 7"
+        }
+      }
+    },
+    "UnemployedPerson": {
+      "finnish_name": "Työtön",
+      "description": "Unemployed person seeking work",
+      "legal_basis": "Chapter 2.1"
+    },
+    "JobSeeker": {
+      "finnish_name": "Työnhakija",
+      "description": "Job seeker registered with TE services",
+      "legal_basis": "Section 2.1"
+    },
+    "Employee": {
+      "finnish_name": "Palkansaaja",
+      "description": "Employee",
+      "legal_basis": "Section 5.2"
+    },
+    "Entrepreneur": {
+      "finnish_name": "Yrittäjä",
+      "description": "Self-employed person",
+      "legal_basis": "Section 1.6"
+    },
+    "EmploymentCondition": {
+      "finnish_name": "Työssäoloehto",
+      "description": "Employment requirement for benefit",
+      "legal_basis": "Section 5.3"
+    },
+    "InsurancePeriod": {
+      "finnish_name": "Vakuutuskausi",
+      "description": "Insurance period",
+      "legal_basis": "Section 5.5"
+    },
+    "BenefitApplication": {
+      "finnish_name": "Etuushakemus",
+      "description": "Application for benefit",
+      "legal_basis": "Section 11.1"
+    },
+    "BenefitDecision": {
+      "finnish_name": "Etuuspäätös",
+      "description": "Benefit decision",
+      "legal_basis": "Section 11.3"
+    },
+    "BenefitAmount": {
+      "finnish_name": "Etuuden määrä",
+      "description": "Amount of benefit",
+      "legal_basis": "Section 6"
+    },
+    "BenefitDuration": {
+      "finnish_name": "Etuuden kesto",
+      "description": "Duration of benefit",
+      "legal_basis": "Section 6.7"
+    },
+    "DisregardPeriod": {
+      "finnish_name": "Omavastuuaika",
+      "description": "Waiting period before benefit",
+      "legal_basis": "Section 5.13"
+    },
+    "IncomeRelatedComponent": {
+      "finnish_name": "Ansiopäivärahan ansio-osa",
+      "description": "Earnings-related component",
+      "legal_basis": "Section 6.2"
+    },
+    "BasicComponent": {
+      "finnish_name": "Perusosa",
+      "description": "Basic component of benefit",
+      "legal_basis": "Section 6.1"
+    },
+    "AdditionalDays": {
+      "finnish_name": "Lisäpäiväoikeus",
+      "description": "Additional days for older workers",
+      "legal_basis": "Section 6.9"
+    },
+    "AdjustedBenefit": {
+      "finnish_name": "Soviteltu etuus",
+      "description": "Adjusted/reduced benefit",
+      "legal_basis": "Chapter 4"
+    },
+    "LabourMarketPolicy": {
+      "finnish_name": "Työvoimapoliittinen",
+      "description": "Labour market policy conditions",
+      "legal_basis": "Chapter 2"
+    },
+    "MobilitySupport": {
+      "finnish_name": "Liikkuvuusavustus",
+      "description": "Mobility support",
+      "legal_basis": "Part III, Chapter 8"
+    },
+    "RedundancyPay": {
+      "finnish_name": "Muutosturvaraha",
+      "description": "Redundancy payment",
+      "legal_basis": "Part III, Chapter 9"
+    },
+    "EmploymentService": {
+      "finnish_name": "Työllistymistä edistävä palvelu",
+      "description": "Employment promoting service",
+      "legal_basis": "Part IV, Chapter 10"
+    },
+    "JobSearchRequirement": {
+      "finnish_name": "Työnhak_velvollisuus",
+      "description": "Job search requirement",
+      "legal_basis": "Section 2a.1"
+    },
+    "AcceptableReason": {
+      "finnish_name": "Pätevä syy",
+      "description": "Acceptable reason for refusing work",
+      "legal_basis": "Section 2a.2"
+    },
+    "BenefitRestriction": {
+      "finnish_name": "Etuuden rajoitus",
+      "description": "Restriction of benefit",
+      "legal_basis": "Chapter 3"
+    },
+    "Recovery": {
+      "finnish_name": "Takaisinperintä",
+      "description": "Recovery of overpaid benefit",
+      "legal_basis": "Section 11.10"
+    },
+    "Appeal": {
+      "finnish_name": "Muutoksenhaku",
+      "description": "Right to appeal",
+      "legal_basis": "Chapter 12"
+    },
+    "Employer": {
+      "finnish_name": "Työnantaja",
+      "description": "Employer",
+      "legal_basis": "Section 1"
+    },
+    "UnemploymentFund": {
+      "finnish_name": "Työttömyyskassa",
+      "description": "Unemployment fund",
+      "legal_basis": "Section 1.4"
+    },
+    "SocialBenefit": {
+      "finnish_name": "Sosiaalietuus",
+      "description": "Social benefit",
+      "legal_basis": "Section 3.4"
+    },
+    "SelfEmployedWorker": {
+      "finnish_name": "Itsenäinen ammatinharjoittaja",
+      "description": "Self-employed worker",
+      "legal_basis": "Section 1.6"
+    },
+    "FamilyMember": {
+      "finnish_name": "Perheenjäsen",
+      "description": "Family member working in enterprise",
+      "legal_basis": "Section 2.7"
+    },
+    "WorkDisability": {
+      "finnish_name": "Työkyvyttömyys",
+      "description": "Work disability",
+      "legal_basis": "Section 3.3"
+    },
+    "Training": {
+      "finnish_name": "Koulutus",
+      "description": "Training",
+      "legal_basis": "Section 2.10"
+    }
+  },
+  "relationships": [
+    {"from": "UnemployedPerson", "to": "JobSeeker", "type": "registers_as"},
+    {"from": "Employee", "to": "EmploymentCondition", "type": "must_meet"},
+    {"from": "JobSeeker", "to": "UnemploymentBenefit", "type": "may_qualify_for"},
+    {"from": "EarningsRelatedAllowance", "to": "UnemploymentFund", "type": "paid_by"},
+    {"from": "BenefitApplication", "to": "BenefitDecision", "type": "results_in"},
+    {"from": "AdjustedBenefit", "to": "IncomeRelatedComponent", "type": "reduces"},
+    {"from": "JobSeeker", "to": "JobSearchRequirement", "type": "must_fulfill"},
+    {"from": "JobSeeker", "to": "AcceptableReason", "type": "may_invoked"}
+  ]
+}
