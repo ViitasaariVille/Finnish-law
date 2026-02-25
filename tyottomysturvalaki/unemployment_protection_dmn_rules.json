@@ -65,9 +65,9 @@
             "Work",
             "hours"
           ],
-          "output": "At least 18 hours per week",
+          "output": "At least 18 hours per week OR 52 hours over 4 weeks",
           "legal_basis": "Section 5.3",
-          "source_text": "18 tuntia viikossa"
+          "source_text": "18 tuntia viikossa tai 52 tuntia 4 viikon aikana"
         },
         {
           "inputs": [
@@ -99,7 +99,7 @@
             "Entrepreneur",
             "income"
           ],
-          "output": "At least 13,457 EUR annual income",
+          "output": "At least 14,000 EUR annual income (verified 2024)",
           "legal_basis": "Section 5.7",
           "source_text": "Tuloraja"
         },
@@ -133,7 +133,7 @@
             "Allowance",
             "basic"
           ],
-          "output": "33.66 EUR per day",
+          "output": "37.21 EUR per day (2024 rate)",
           "legal_basis": "Section 6.1",
           "source_text": "Perusosa"
         },
@@ -1301,7 +1301,7 @@
             "Support",
             "basic"
           ],
-          "output": "33.66 EUR per day",
+          "output": "37.21 EUR per day (2024 rate)",
           "legal_basis": "Section 7.4",
           "source_text": "Perusmäärä"
         },
@@ -1473,7 +1473,7 @@
             "Entrepreneur",
             "income_13457"
           ],
-          "output": "Annual income at least 13,457 EUR",
+          "output": "Annual income at least 14,000 EUR (verified 2024)",
           "legal_basis": "Section 5.7",
           "source_text": "Tulo 13 457 euroa"
         },

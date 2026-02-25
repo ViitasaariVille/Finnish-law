@@ -114,7 +114,7 @@ rule "EmploymentConditionEntrepreneur_2"
     when
     $ctx : Context(this != null)
     then
-    $ctx.setResult("At least 13,457 EUR annual income");
+    $ctx.setResult("At least 14,000 EUR annual income");
     $ctx.setLegalBasis("Section 5.7");
     $ctx.setSourceText("Tuloraja");
 end
@@ -147,7 +147,7 @@ rule "BenefitAmountCalculation_2"
     when
     $ctx : Context(this != null)
     then
-    $ctx.setResult("33.66 EUR per day");
+    $ctx.setResult("37.21 EUR per day");
     $ctx.setLegalBasis("Section 6.1");
     $ctx.setSourceText("Perusosa");
 end
@@ -1287,7 +1287,7 @@ rule "LabourMarketSupportAmount_1"
     when
     $ctx : Context(this != null)
     then
-    $ctx.setResult("33.66 EUR per day");
+    $ctx.setResult("37.21 EUR per day");
     $ctx.setLegalBasis("Section 7.4");
     $ctx.setSourceText("Perusmäärä");
 end
@@ -1455,7 +1455,7 @@ rule "EntrepreneurQualifyingPeriod_2"
     when
     $ctx : Context(this != null)
     then
-    $ctx.setResult("Annual income at least 13,457 EUR");
+    $ctx.setResult("Annual income at least 14,000 EUR");
     $ctx.setLegalBasis("Section 5.7");
     $ctx.setSourceText("Tulo 13 457 euroa");
 end
