@@ -10,8 +10,20 @@
   "entities": {
     "InsuranceProvider": {
       "description": "Entity that provides insurance contracts",
+      "finnish_name": "Vakuutuksenantaja",
       "attributes": ["name", "businessId", "address", "licenseType"],
-      "legal_basis": "Section 5(1)"
+      "legal_basis": "Section 5(1)",
+      "includes": ["InsuranceCompany", "ReinsuranceCompany", "ForeignInsuranceCompany"]
+    },
+    "EEAState": {
+      "finnish_name": "ETA-valtio",
+      "description": "European Economic Area member state",
+      "legal_basis": "Section 5(10)"
+    },
+    "ThirdCountry": {
+      "finnish_name": "Kolmas maa",
+      "description": "Non-EEA country",
+      "legal_basis": "Section 5(11)"
     },
     "InsuranceBroker": {
       "description": "Professional intermediary who arranges insurance for clients",
@@ -37,8 +49,15 @@
     },
     "InsuranceAgent": {
       "description": "Representative acting on behalf of insurance provider",
+      "finnish_name": "Asiamies",
       "attributes": ["name", "businessId", "principal", "registrationNumber"],
-      "legal_basis": "Section 5(3)"
+      "legal_basis": "Section 5(3)",
+      "registration_conditions": [
+        "Registered in Finland trade register",
+        "Not bankrupt, of legal age",
+        "Good reputation required",
+        "Professional qualification required"
+      ]
     },
     "PartTimeAgent": {
       "description": "Part-time insurance agent (ancillary activity)",
@@ -153,9 +172,15 @@
     },
     "ProfessionalQualification": {
       "description": "Professional competence requirements",
+      "finnish_name": "Ammattipätevyys",
       "attributes": ["type", "obtained", "validUntil", "continuingEducation"],
       "legal_basis": "Sections 18-21",
-      "requirements": "15 hours annually"
+      "requirements": "15 hours annually",
+      "components": {
+        "insurance_knowledge": "Knowledge of insurance products",
+        "legal_knowledge": "Knowledge of relevant legislation",
+        "good_practice": "Good insurance/broker practice"
+      }
     },
     "GoodReputation": {
       "description": "Character requirements for insurance intermediaries",
@@ -187,8 +212,25 @@
       "attributes": ["name", "contact", "supervisionScope"],
       "legal_basis": "Section 66"
     },
+    "ProfessionalLiabilityInsurance": {
+      "finnish_name": "Vastuuvakuutus",
+      "description": "Mandatory professional liability insurance for brokers",
+      "legal_basis": "Section 58",
+      "minimum_coverage": {
+        "per_claim_eur": 1564610,
+        "annual_aggregate_eur": 2315610
+      },
+      "conditions": [
+        "Must cover entire EEA",
+        "Minimum 2 months cancellation notice",
+        "No deductible for damaged party",
+        "Insurer must be EEA-based",
+        "Covers claims within contract period + 3 years"
+      ]
+    },
     "Compensation": {
       "description": "Damages or compensation for breach of duty",
+      "finnish_name": "Vahingonkorvaus",
       "attributes": ["amount", "basis", "liabilityType"],
       "legal_basis": "Sections 74-75"
     },
@@ -229,7 +271,8 @@
     {"from": "SupervisoryAuthority", "to": "InsuranceBroker", "type": "supervises"},
     {"from": "SupervisoryAuthority", "to": "InsuranceAgent", "type": "supervises"},
     {"from": "Customer", "to": "InsuranceProduct", "type": "purchases"},
-    {"from": "Customer", "to": "Compensation", "type": "entitled_to"}
+    {"from": "Customer", "to": "Compensation", "type": "entitled_to"},
+    {"from": "InsuranceBroker", "to": "ProfessionalLiabilityInsurance", "type": "must_have"}
   ],
   "rules": [
     {
