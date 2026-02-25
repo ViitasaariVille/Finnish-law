@@ -4330,6 +4330,260 @@
           "reason": "Medium income renter - partial housing support"
         }
       ]
+    },
+    {
+      "name": "YouthJobSeekerRules",
+      "finnish_name": "Nuoren työnhakijan säännöt",
+      "description": "Special rules for job seekers under 25",
+      "input_data_points": [
+        "person.age",
+        "person.under_25",
+        "education.completed",
+        "jobseeker.without_profession"
+      ],
+      "output_data_points": [
+        "youth.bonus_eligible",
+        "youth.addition_amount"
+      ],
+      "rules": [
+        {
+          "conditions": {
+            "person.under_25": true,
+            "education.completed": true
+          },
+          "output": {
+            "youth.bonus_eligible": true,
+            "youth.addition_amount": 33.66
+          },
+          "reason": "Under 25 with completed education - youth addition"
+        },
+        {
+          "conditions": {
+            "person.under_25": true,
+            "education.completed": false,
+            "jobseeker.without_profession": true
+          },
+          "output": {
+            "youth.bonus_eligible": true,
+            "youth.addition_amount": 33.66
+          },
+          "reason": "Under 25 without profession - still eligible for addition"
+        },
+        {
+          "conditions": {
+            "person.age": {
+              "min": 25
+            }
+          },
+          "output": {
+            "youth.bonus_eligible": false,
+            "youth.addition_amount": 0
+          },
+          "reason": "Over 25 - youth addition not applicable"
+        }
+      ]
+    },
+    {
+      "name": "DisabilityPensionInteraction",
+      "finnish_name": "Työkyvyttömyyseläke vuorovaikutus",
+      "description": "Interaction between unemployment benefit and disability pension",
+      "input_data_points": [
+        "work_disability.exist",
+        "work_disability.partial",
+        "rehabilitation.medical"
+      ],
+      "output_data_points": [
+        "benefit.adjusted_for_disability",
+        "benefit.reduction_percentage"
+      ],
+      "rules": [
+        {
+          "conditions": {
+            "work_disability.partial": true
+          },
+          "output": {
+            "benefit.adjusted_for_disability": true,
+            "benefit.reduction_percentage": 50
+          },
+          "reason": "Partial disability - 50% reduction in unemployment benefit"
+        },
+        {
+          "conditions": {
+            "work_disability.exist": true,
+            "rehabilitation.medical": true
+          },
+          "output": {
+            "benefit.adjusted_for_disability": true,
+            "benefit.reduction_percentage": 0
+          },
+          "reason": "Full disability with rehabilitation plan - benefit suspended"
+        },
+        {
+          "conditions": {
+            "work_disability.exist": false
+          },
+          "output": {
+            "benefit.adjusted_for_disability": false,
+            "benefit.reduction_percentage": 0
+          },
+          "reason": "No work disability - full benefit"
+        }
+      ]
+    },
+    {
+      "name": "SocialBenefitIntegration",
+      "finnish_name": "Sosiaalietuuksien yhteensovitus",
+      "description": "Integration of unemployment benefit with social benefits",
+      "input_data_points": [
+        "social_benefit.type",
+        "income.household"
+      ],
+      "output_data_points": [
+        "benefit.integrated_amount",
+        "benefit.social_reduction"
+      ],
+      "rules": [
+        {
+          "conditions": {
+            "social_benefit.type": "housing"
+          },
+          "output": {
+            "benefit.integrated_amount": "separate",
+            "benefit.social_reduction": 0
+          },
+          "reason": "Housing benefit paid separately by Kela"
+        },
+        {
+          "conditions": {
+            "social_benefit.type": "guaranteed",
+            "income.household": {
+              "max": 10000
+            }
+          },
+          "output": {
+            "benefit.integrated_amount": "reduced",
+            "benefit.social_reduction": 50
+          },
+          "reason": "Guaranteed pension reduces unemployment benefit by 50%"
+        },
+        {
+          "conditions": {
+            "social_benefit.type": null
+          },
+          "output": {
+            "benefit.integrated_amount": "full",
+            "benefit.social_reduction": 0
+          },
+          "reason": "No social benefits - full unemployment benefit"
+        }
+      ]
+    },
+    {
+      "name": "TrainingVoucherEligibility",
+      "finnish_name": "Koulutuskortin kelpoisuus",
+      "description": "Eligibility for training voucher",
+      "input_data_points": [
+        "jobseeker.registered",
+        "person.age",
+        "employment.total_years"
+      ],
+      "output_data_points": [
+        "training.voucher_eligible",
+        "training.voucher_amount"
+      ],
+      "rules": [
+        {
+          "conditions": {
+            "jobseeker.registered": true,
+            "person.age": {
+              "min": 30
+            }
+          },
+          "output": {
+            "training.voucher_eligible": true,
+            "training.voucher_amount": 400
+          },
+          "reason": "Registered job seeker over 30 - eligible for 400€ training voucher"
+        },
+        {
+          "conditions": {
+            "jobseeker.registered": true,
+            "employment.total_years": {
+              "min": 5
+            }
+          },
+          "output": {
+            "training.voucher_eligible": true,
+            "training.voucher_amount": 500
+          },
+          "reason": "Registered with 5+ years work experience - eligible for 500€ voucher"
+        },
+        {
+          "conditions": {
+            "person.age": {
+              "max": 29
+            }
+          },
+          "output": {
+            "training.voucher_eligible": false,
+            "training.voucher_amount": 0
+          },
+          "reason": "Under 30 - training voucher not primary tool"
+        }
+      ]
+    },
+    {
+      "name": "TransitionalRules2026",
+      "finnish_name": "Siirtymäsäännöt 2026",
+      "description": "Transitional rules for 2026 system change",
+      "input_data_points": [
+        "benefit.previous_periods",
+        "person.unemployment_fund_member",
+        "person.member_since"
+      ],
+      "output_data_points": [
+        "benefit.transitional_arrangement",
+        "benefit.transitional_type"
+      ],
+      "rules": [
+        {
+          "conditions": {
+            "person.unemployment_fund_member": true,
+            "person.member_since": {
+              "before": "2025-12-31"
+            }
+          },
+          "output": {
+            "benefit.transitional_arrangement": true,
+            "benefit.transitional_type": "continuing_member"
+          },
+          "reason": "Member before 2025 - transitional arrangement applies"
+        },
+        {
+          "conditions": {
+            "benefit.previous_periods": {
+              "min": 1
+            },
+            "person.unemployment_fund_member": false
+          },
+          "output": {
+            "benefit.transitional_arrangement": true,
+            "benefit.transitional_type": "former_member"
+          },
+          "reason": "Former member with previous periods - grandfathered rights"
+        },
+        {
+          "conditions": {
+            "person.unemployment_fund_member": false,
+            "benefit.previous_periods": 0
+          },
+          "output": {
+            "benefit.transitional_arrangement": false,
+            "benefit.transitional_type": "new_system"
+          },
+          "reason": "New entrant - new system applies"
+        }
+      ]
     }
   ]
 }
