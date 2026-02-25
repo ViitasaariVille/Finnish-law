@@ -4524,6 +4524,103 @@
           "legal_basis": "Section TBD"
         }
       ]
+    },
+    {
+      "name": "RedundancyLayoff",
+      "description": "Redundancy and layoff procedures",
+      "legal_source": "Section 9.1",
+      "rules": [
+        {
+          "inputs": [
+            "employer.layoff_notice",
+            "layoff.duration_days"
+          ],
+          "output": "Redundancy eligible",
+          "legal_basis": "Section 9.1"
+        },
+        {
+          "inputs": [
+            "employer.bankruptcy"
+          ],
+          "output": "Bankruptcy protection",
+          "legal_basis": "Section 9a"
+        }
+      ]
+    },
+    {
+      "name": "RedundancyCompensation",
+      "description": "Redundancy compensation calculation",
+      "legal_source": "Section 9.2",
+      "rules": [
+        {
+          "inputs": [
+            "employment.tenure_years",
+            "wages.daily_average"
+          ],
+          "output": "Compensation amount",
+          "legal_basis": "Section 9.2"
+        }
+      ]
+    },
+    {
+      "name": "LabourMarketSupportHousing",
+      "description": "Housing supplements for labour market support",
+      "legal_source": "Section 7.6",
+      "rules": [
+        {
+          "inputs": [
+            "income.household",
+            "housing.cost"
+          ],
+          "output": "Housing supplement",
+          "legal_basis": "Section 7.6"
+        }
+      ]
+    },
+    {
+      "name": "LabourMarketSupportDuration",
+      "description": "Duration of labour market support",
+      "legal_source": "Section 7.4",
+      "rules": [
+        {
+          "inputs": [
+            "benefit.previous_periods",
+            "person.age"
+          ],
+          "output": "Maximum duration",
+          "legal_basis": "Section 7.4"
+        }
+      ]
+    },
+    {
+      "name": "AppealToInsuranceCourt",
+      "description": "Appeal to insurance court",
+      "legal_source": "Section 12.2",
+      "rules": [
+        {
+          "inputs": [
+            "appeal.submitted",
+            "decision.type"
+          ],
+          "output": "Court appeal eligible",
+          "legal_basis": "Section 12.2"
+        }
+      ]
+    },
+    {
+      "name": "AppealTimeLimits",
+      "description": "Time limits for appeals",
+      "legal_source": "Section 12.1",
+      "rules": [
+        {
+          "inputs": [
+            "decision.received_date",
+            "appeal.submitted"
+          ],
+          "output": "Appeal within time limit",
+          "legal_basis": "Section 12.1"
+        }
+      ]
     }
   ]
 }
