@@ -1,0 +1,212 @@
+{
+  "ontology": {
+    "name": "Insurance Distribution Act",
+    "finnish_name": "Laki vakuutusten tarjoamisesta",
+    "law_number": "234/2018",
+    "effective_date": "2018-10-01",
+    "source": "https://www.finlex.fi/fi/lainsaadanto/2018/234",
+    "description": "Finnish law governing insurance distribution, insurance intermediaries, and insurance broker activities"
+  },
+  "entities": {
+    "InsuranceProvider": {
+      "description": "Entity that provides insurance contracts",
+      "attributes": ["name", "businessId", "address", "licenseType"],
+      "legal_basis": "Section 5(1)"
+    },
+    "InsuranceBroker": {
+      "description": "Professional intermediary who arranges insurance for clients",
+      "attributes": ["name", "businessId", "registrationNumber", "professionalQualification"],
+      "legal_basis": "Section 5(2)",
+      "subclasses": {
+        "RegisteredInsuranceBroker": {"description": "Full-time insurance broker", "legal_basis": "Section 55"},
+        "PartTimeInsuranceBroker": {"description": "Part-time insurance broker", "legal_basis": "Section 55"}
+      }
+    },
+    "InsuranceAgent": {
+      "description": "Representative acting on behalf of insurance provider",
+      "attributes": ["name", "businessId", "principal", "registrationNumber"],
+      "legal_basis": "Section 5(3)"
+    },
+    "PartTimeAgent": {
+      "description": "Part-time insurance agent (ancillary activity)",
+      "attributes": ["name", "principal", "annualPremiumLimit"],
+      "legal_basis": "Section 4",
+      "constraints": "Maximum 600 EUR annual premium or 200 EUR per insured"
+    },
+    "InsuranceDistributionService": {
+      "description": "Service of offering insurance products",
+      "attributes": ["serviceType", "targetMarket", "complianceStatus"],
+      "legal_basis": "Section 2",
+      "subclasses": {
+        "Advice": {"description": "Personal recommendation", "legal_basis": "Section 2"},
+        "PolicyPreparation": {"description": "Preparing insurance contracts", "legal_basis": "Section 2"},
+        "PolicyAdministration": {"description": "Assisting in contract management", "legal_basis": "Section 2"}
+      }
+    },
+    "Customer": {
+      "description": "Person or entity seeking or holding insurance",
+      "attributes": ["type", "country", "needsAssessment"],
+      "subclasses": {
+        "Consumer": {"description": "Natural person acting for personal purposes", "legal_basis": "Section 5"},
+        "ProfessionalCustomer": {"description": "Professional or institutional customer", "legal_basis": "Section 5(13)"},
+        "CommercialCustomer": {"description": "Business customer", "legal_basis": "Section 5"}
+      }
+    },
+    "InsuranceProduct": {
+      "description": "Insurance contract or product offered",
+      "attributes": ["type", "coverage", "premium", "terms"],
+      "legal_basis": "Section 42"
+    },
+    "InvestmentInsurance": {
+      "description": "Life insurance with investment component",
+      "attributes": ["fundValue", "surrenderValue", "riskLevel"],
+      "legal_basis": "Section 5(12)",
+      "additional_requirements": "Sections 44-54"
+    },
+    "ProfessionalQualification": {
+      "description": "Professional competence requirements",
+      "attributes": ["type", "obtained", "validUntil", "continuingEducation"],
+      "legal_basis": "Sections 18-21",
+      "requirements": "15 hours annually"
+    },
+    "GoodReputation": {
+      "description": "Character requirements for insurance intermediaries",
+      "attributes": ["criminalRecord", "bankruptcyStatus", "debarmentStatus"],
+      "legal_basis": "Sections 16-17",
+      "conditions": "No conviction for relevant crimes in past 5 years"
+    },
+    "Registration": {
+      "description": "Entry in Insurance Distribution Register",
+      "attributes": ["registrationNumber", "registrationDate", "status", "changes"],
+      "legal_basis": "Sections 6-15"
+    },
+    "SupervisoryAuthority": {
+      "description": "Financial Supervisory Authority (FIN-FSA)",
+      "finnish_name": "Finanssivalvonta",
+      "attributes": ["name", "contact", "supervisionScope"],
+      "legal_basis": "Section 66"
+    },
+    "Compensation": {
+      "description": "Damages or compensation for breach of duty",
+      "attributes": ["amount", "basis", "liabilityType"],
+      "legal_basis": "Sections 74-75"
+    },
+    "AdministrativeSanction": {
+      "description": "Administrative penalties for violations",
+      "attributes": ["type", "amount", "reason"],
+      "legal_basis": "Sections 70-71",
+      "subclasses": {
+        "Prohibition": {"description": "Prohibition to conduct insurance distribution", "legal_basis": "Section 70"},
+        "AdministrativeFine": {"description": "Monetary penalty", "legal_basis": "Section 71"},
+        "Warning": {"description": "Public warning", "legal_basis": "Section 71"}
+      }
+    }
+  },
+  "relationships": [
+    {"from": "InsuranceBroker", "to": "InsuranceProvider", "type": "arranges_coverage_with"},
+    {"from": "InsuranceAgent", "to": "InsuranceProvider", "type": "represents"},
+    {"from": "InsuranceDistributionService", "to": "Customer", "type": "provides_to"},
+    {"from": "InsuranceProduct", "to": "Customer", "type": "covers"},
+    {"from": "InsuranceBroker", "to": "Registration", "type": "has"},
+    {"from": "InsuranceAgent", "to": "Registration", "type": "has"},
+    {"from": "InsuranceBroker", "to": "ProfessionalQualification", "type": "holds"},
+    {"from": "InsuranceBroker", "to": "GoodReputation", "type": "meets_requirements"},
+    {"from": "SupervisoryAuthority", "to": "InsuranceBroker", "type": "supervises"},
+    {"from": "SupervisoryAuthority", "to": "InsuranceAgent", "type": "supervises"},
+    {"from": "Customer", "to": "InsuranceProduct", "type": "purchases"},
+    {"from": "Customer", "to": "Compensation", "type": "entitled_to"}
+  ],
+  "rules": [
+    {
+      "name": "BrokerRegistrationRequirement",
+      "condition": "entity.type = InsuranceBroker AND entity.activity = primary",
+      "conclusion": "entity.must_register = true",
+      "legal_basis": "Section 6"
+    },
+    {
+      "name": "AgentRegistrationRequirement",
+      "condition": "entity.type = InsuranceAgent",
+      "conclusion": "entity.must_register = true",
+      "legal_basis": "Section 6"
+    },
+    {
+      "name": "GoodReputationRequirement",
+      "condition": "person.conviction_relevant = true AND conviction.within_5_years = true",
+      "conclusion": "person.good_reputation = false",
+      "legal_basis": "Section 16"
+    },
+    {
+      "name": "ProfessionalCompetenceRequirement",
+      "condition": "broker.professional_exam = false AND broker.equivalent_qualification = false",
+      "conclusion": "broker.can_not_register = true",
+      "legal_basis": "Section 18"
+    },
+    {
+      "name": "ContinuingEducationRequirement",
+      "condition": "professional.annual_training_hours < 15",
+      "conclusion": "professional.compliance = false",
+      "legal_basis": "Section 20"
+    },
+    {
+      "name": "ProductGovernanceRequirement",
+      "condition": "provider.offers_insurance_products = true",
+      "conclusion": "provider.must_have_product_governance = true",
+      "legal_basis": "Section 42"
+    },
+    {
+      name: "InvestmentInsuranceSuitability",
+      "condition": "product.type = InvestmentInsurance AND customer.profile = undefined",
+      "conclusion": "provider.must_assess_suitability = true",
+      "legal_basis": "Section 49"
+    },
+    {
+      "name": "DisclosureRequirement",
+      "condition": "intermediary.provides_advice = true",
+      "conclusion": "intermediary.must_disclose_commission = true",
+      "legal_basis": "Section 38"
+    },
+    {
+      "name": "ProfessionalLiabilityInsurance",
+      "condition": "broker.registers = true",
+      "conclusion": "broker.must_have_liability_insurance = true",
+      "legal_basis": "Section 58",
+      "minimum_coverage": "1,564,610 EUR per claim"
+    },
+    {
+      "name": "ClientAssetsSegregation",
+      "condition": "broker.holds_client_funds = true",
+      "conclusion": "broker.must_segregate_assets = true",
+      "legal_basis": "Section 59"
+    },
+    {
+      "name": "CrossBorderNotification",
+      "condition": "intermediary.plans_operations_in_EEA = true",
+      "conclusion": "intermediary.must_notify_authority = true",
+      "legal_basis": "Section 22"
+    },
+    {
+      "name": "ProfessionalTitleProtection",
+      "condition": "entity.uses_title = InsuranceBroker AND entity.not_registered = true",
+      "conclusion": "entity.illegal_practice = true",
+      "legal_basis": "Section 55"
+    },
+    {
+      "name": "InformationRequestRight",
+      "condition": "authority.requests_information = true",
+      "conclusion": "entity.must_provide = true",
+      "legal_basis": "Section 76"
+    },
+    {
+      "name": "SupervisoryPowers",
+      "condition": "entity.violates_law = true",
+      "conclusion": "authority.may_impose_sanction = true",
+      "legal_basis": "Sections 70-71"
+    },
+    {
+      "name": "RightToCompensation",
+      "condition": "broker.breaches_duty = true AND customer.suffers_damage = true",
+      "conclusion": "customer.entitled_to_compensation = true",
+      "legal_basis": "Section 74"
+    }
+  ]
+}

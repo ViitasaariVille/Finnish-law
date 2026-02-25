@@ -1,0 +1,159 @@
+{
+  "dmn_version": "1.3",
+  "law": "Laki vakuutusten tarjoamisesta (Insurance Distribution Act)",
+  "law_number": "234/2018",
+  "decisions": [
+    {
+      "name": "RegistrationRequirement",
+      "description": "Determines if entity must register as insurance intermediary",
+      "legal_source": "Section 6",
+      "rules": [
+        {"inputs": ["InsuranceBroker", "primary_activity"], "output": "Registration required", "legal_basis": "Section 6(1)", "source_text": "Vakuutusmeklari rekisteröitävä"},
+        {"inputs": ["InsuranceAgent", "any"], "output": "Registration required", "legal_basis": "Section 6(1)", "source_text": "Asiamies rekisteröitävä"},
+        {"inputs": ["InsuranceCompany", "any"], "output": "Not required (exempt)", "legal_basis": "Section 6(3)", "source_text": "Vakuutuksenantajat"},
+        {"inputs": ["PartTimeAgent", "within_limits"], "output": "Limited registration", "legal_basis": "Section 4", "source_text": "Sivutoiminen vakuutusedustaja"}
+      ]
+    },
+    {
+      "name": "GoodReputation",
+      "description": "Determines if person meets good reputation requirement",
+      "legal_source": "Section 16",
+      "rules": [
+        {"inputs": ["no_conviction", "5_years"], "output": "Good reputation", "legal_basis": "Section 16", "source_text": "Ei tuomio 5 vuoteen"},
+        {"inputs": ["prison_sentence", "within_5_years"], "output": "No good reputation", "legal_basis": "Section 16", "source_text": "Vankeusrangaistus 5 vuoden aikana"},
+        {"inputs": ["fine_sentence", "within_3_years"], "output": "No good reputation", "legal_basis": "Section 16", "source_text": "Sakkorangaistus 3 vuoden aikana"},
+        {"inputs": ["bankruptcy", "active"], "output": "No good reputation", "legal_basis": "Section 16", "source_text": "Konkurssissa"},
+        {"inputs": ["business_ban", "active"], "output": "No good reputation", "legal_basis": "Section 16 ref", "source_text": "Liiketoimintakielto"}
+      ]
+    },
+    {
+      "name": "ProfessionalQualification",
+      "description": "Determines if person has required professional qualification",
+      "legal_source": "Section 18",
+      "rules": [
+        {"inputs": ["broker_exam", "passed"], "output": "Qualified", "legal_basis": "Section 18", "source_text": "Vakuutusmeklaritutkinto"},
+        {"inputs": ["equivalent_qualification", "approved"], "output": "Qualified", "legal_basis": "Section 18", "source_text": "Vastaava pätevyys"},
+        {"inputs": ["no_qualification", "any"], "output": "Not qualified", "legal_basis": "Section 18", "source_text": "Ei pätevyysvaatimuksia"},
+        {"inputs": ["exemption", "applicable"], "output": "Exempt from exam", "legal_basis": "Section 84", "source_text": "Siirtymäsäännös"}
+      ]
+    },
+    {
+      "name": "ContinuingEducation",
+      "description": "Minimum continuing education requirements",
+      "legal_source": "Section 20",
+      "rules": [
+        {"inputs": ["training_hours", "15_or_more"], "output": "Compliant", "legal_basis": "Section 20", "source_text": "15 tuntia vuodessa"},
+        {"inputs": ["training_hours", "under_15"], "output": "Non-compliant", "legal_basis": "Section 20", "source_text": "Alle 15 tuntia"}
+      ]
+    },
+    {
+      "name": "DisclosureObligations",
+      "description": "Information disclosure requirements before contract",
+      "legal_source": "Sections 32-38",
+      "rules": [
+        {"inputs": ["Insurer", "any"], "output": "Must disclose: name, contact, licensing", "legal_basis": "Section 32", "source_text": "Vakuutuksenantajan tiedot"},
+        {"inputs": ["Agent", "any"], "output": "Must disclose: name, register check, principal(s)", "legal_basis": "Section 33", "source_text": "Asiamiehen tiedot"},
+        {"inputs": ["Broker", "any"], "output": "Must disclose: commission, analysis basis, conflicts", "legal_basis": "Section 33", "source_text": "Vakuutusmeklarin tiedot"},
+        {"inputs": ["Broker", "recommendation"], "output": "Must explain why recommended", "legal_basis": "Section 37", "source_text": "Henkilökohtainen suositus"},
+        {"inputs": ["Any", "advice_given"], "output": "Must disclose commission/fees", "legal_basis": "Section 38", "source_text": "Vastikkeen ilmoittaminen"}
+      ]
+    },
+    {
+      "name": "ProductGovernance",
+      "description": "Product governance requirements for insurers",
+      "legal_source": "Section 42",
+      "rules": [
+        {"inputs": ["Insurer", "offers_products"], "output": "Must have product governance", "legal_basis": "Section 42(1)", "source_text": "Tuotehallintajärjestelmä"},
+        {"inputs": ["TargetMarket", "defined"], "output": "Target market defined", "legal_basis": "Section 42(2)", "source_text": "Kohdemarkkinat"},
+        {"inputs": ["RiskAssessment", "completed"], "output": "Risk assessment done", "legal_basis": "Section 42(3)", "source_text": "Riskien arviointi"},
+        {"inputs": ["DistributionStrategy", "documented"], "output": "Distribution plan in place", "legal_basis": "Section 42(4)", "source_text": "Tarjoamissuunnitelma"}
+      ]
+    },
+    {
+      "name": "InvestmentInsuranceRequirements",
+      "description": "Additional requirements for investment insurance",
+      "legal_source": "Sections 44-54",
+      "rules": [
+        {"inputs": ["ConflictOfInterest", "exists"], "output": "Must disclose to customer", "legal_basis": "Section 45", "source_text": "Eturistiriita"},
+        {"inputs": ["Incentive", "offered"], "output": "Must not impair service quality", "legal_basis": "Section 46", "source_text": "Kannustimet"},
+        {"inputs": ["InvestmentInsurance", "recommended"], "output": "Suitability assessment required", "legal_basis": "Section 49", "source_text": "Asianmukaisuuden arviointi"},
+        {"inputs": ["ProfessionalCustomer", "any"], "output": "Exempt from suitability", "legal_basis": "Section 54", "source_text": "Ammattimainen asiakas"}
+      ]
+    },
+    {
+      "name": "ProfessionalLiabilityInsurance",
+      "description": "Mandatory liability insurance for brokers",
+      "legal_source": "Section 58",
+      "rules": [
+        {"inputs": ["Broker", "registered"], "output": "Liability insurance mandatory", "legal_basis": "Section 58(1)", "source_text": "Vastuuvakuutus pakollinen"},
+        {"inputs": ["MinimumCoverage", "per_claim"], "output": "1,564,610 EUR minimum", "legal_basis": "Section 58(1)", "source_text": "Vähimmäiskate"},
+        {"inputs": ["MinimumCoverage", "annual_aggregate"], "output": "2,315,610 EUR minimum", "legal_basis": "Section 58(1)", "source_text": "Vuosi aggregate"},
+        {"inputs": ["EEACoverage", "required"], "output": "Must cover entire EEA", "legal_basis": "Section 58(2)", "source_text": "Koko ETA-alue"}
+      ]
+    },
+    {
+      "name": "ClientAssetSegregation",
+      "description": "Requirements for segregating client assets",
+      "legal_source": "Section 59",
+      "rules": [
+        {"inputs": ["HoldsClientFunds", "yes"], "output": "Must segregate in bank account", "legal_basis": "Section 59", "source_text": "Asiakasvarat erikseen"},
+        {"inputs": ["ConsumerFunds", "yes"], "output": "Cannot hold consumer funds", "legal_basis": "Section 59(2)", "source_text": "Kuluttajan varat"},
+        {"inputs": ["RecordKeeping", "required"], "output": "Must keep proper records", "legal_basis": "Section 59", "source_text": "Kirjanpito"}
+      ]
+    },
+    {
+      "name": "CrossBorderOperations",
+      "description": "Requirements for operating in other EEA states",
+      "legal_source": "Sections 22-29",
+      "rules": [
+        {"inputs": ["ServicesToEEA", "planned"], "output": "Notify home state authority", "legal_basis": "Section 22", "source_text": "Ilmoitusvelvollisuus"},
+        {"inputs": ["Establishment", "planned"], "output": "Provide additional information", "legal_basis": "Section 22(2)", "source_text": "Sivuliikkeen tiedot"},
+        {"inputs": ["HomeStateApproval", "received"], "output": "Can start operations", "legal_basis": "Section 24", "source_text": "Oikeus aloittaa"},
+        {"inputs": ["HostStateRules", "applicable"], "output": "Must comply with host state rules", "legal_basis": "Section 24(2)", "source_text": "Vastaanottavan valtion säännöt"}
+      ]
+    },
+    {
+      "name": "SupervisorySanctions",
+      "description": "Available sanctions for violations",
+      "legal_source": "Sections 70-71",
+      "rules": [
+        {"inputs": ["UnregisteredActivity", "detected"], "output": "Prohibition to operate", "legal_basis": "Section 70", "source_text": "Toiminnan kieltäminen"},
+        {"inputs": ["Violation", "significant"], "output": "Administrative fine possible", "legal_basis": "Section 71", "source_text": "Seuraamusmaksu"},
+        {"inputs": ["RepeatedViolation", "yes"], "output": "Deregistration possible", "legal_basis": "Section 73", "source_text": "Rekisteristä poistaminen"},
+        {"inputs": ["CustomerDamage", "proven"], "output": "Compensation liability", "legal_basis": "Sections 74-75", "source_text": "Vahingonkorvausvastuu"}
+      ]
+    },
+    {
+      "name": "CompensationLiability",
+      "description": "Liability for damages to customers",
+      "legal_source": "Sections 74-75",
+      "rules": [
+        {"inputs": ["BrokerBreach", "proven", "Damage", "proven"], "output": "Broker liable to compensate", "legal_basis": "Section 74(1)", "source_text": "Vakuutusmeklarin korvausvastuu"},
+        {"inputs": ["InformationOmission", "proven"], "output": "Compensate for losses", "legal_basis": "Section 74(2)", "source_text": "Tietojen antamatta jättäminen"},
+        {"inputs": ["InsurerBreach", "Sections 30/34/45/46"], "output": "Insurer liable", "legal_basis": "Section 75", "source_text": "Vakuutuksenantajan vastuu"},
+        {"inputs": ["ProfessionalConduct", "proven"], "output": "Exempt from liability", "legal_basis": "Section 74", "source_text": "Ammattitaitoisesti toiminut"}
+      ]
+    },
+    {
+      "name": "DataProtection",
+      "description": "Confidentiality and data protection requirements",
+      "legal_source": "Sections 79-81",
+      "rules": [
+        {"inputs": ["CustomerData", "obtained"], "output": "Must maintain confidentiality", "legal_basis": "Section 79", "source_text": "Vaitiolovelvollisuus"},
+        {"inputs": ["SupervisoryRequest", "legitimate"], "output": "Can disclose to FIN-FSA", "legal_basis": "Section 80(1)", "source_text": "Finanssivalvonnalle"},
+        {"inputs": ["LegalProceedings", "required"], "output": "Can disclose for investigations", "legal_basis": "Section 80(5)", "source_text": "Rikoksen estämiseksi"},
+        {"inputs": ["Breach", "proven"], "output": "Criminal liability", "legal_basis": "Section 81", "source_text": "Rikosoikeudellinen vastuu"}
+      ]
+    },
+    {
+      "name": "DocumentRetention",
+      "description": "Requirements for document retention",
+      "legal_source": "Section 78",
+      "rules": [
+        {"inputs": ["QualificationRecords", "any"], "output": "Retain for 5 years minimum", "legal_basis": "Section 78", "source_text": "Pätevyysasiakirjat"},
+        {"inputs": ["CustomerContracts", "any"], "output": "Retain for 5 years minimum", "legal_basis": "Section 78(2)", "source_text": "Sopimukset"},
+        {"inputs": ["ProfessionalDevelopment", "any"], "output": "Retain records of training", "legal_basis": "Section 78", "source_text": "Koulutustiedot"}
+      ]
+    }
+  ]
+}
