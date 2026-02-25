@@ -231,7 +231,19 @@
       "description": "Financial Supervisory Authority (FIN-FSA)",
       "finnish_name": "Finanssivalvonta",
       "attributes": ["name", "contact", "supervisionScope"],
-      "legal_basis": "Section 66"
+      "legal_basis": "Section 66",
+      "powers": ["registration", "supervision", "sanctions", "information_requests"]
+    },
+    "CrossBorderSupervision": {
+      "finnish_name": "Rajat ylittävä valvonta",
+      "description": "Supervision of cross-border operations",
+      "legal_basis": "Sections 67-69",
+      "cooperation": ["home_state", "host_state", "EIOPA"]
+    },
+    "EuropeanSupervisoryAuthority": {
+      "finnish_name": "Euroopan vakuutus- ja lisäeläkeviranomainen",
+      "description": "EIOPA - European Insurance and Occupational Pensions Authority",
+      "legal_basis": "Section 29"
     },
     "ProfessionalLiabilityInsurance": {
       "finnish_name": "Vastuuvakuutus",
@@ -380,6 +392,21 @@
       "finnish_name": "Eläketuote",
       "description": "Pension product as defined in law",
       "legal_basis": "Section 5"
+    },
+    "Appeal": {
+      "finnish_name": "Muutoksenhaku",
+      "description": "Right to appeal administrative decisions",
+      "legal_basis": "Sections 65, 82"
+    },
+    "AdministrativeFine": {
+      "finnish_name": "Seuraamusmaksu",
+      "description": "Administrative fine for violations",
+      "legal_basis": "Section 71"
+    },
+    "Deregistration": {
+      "finnish_name": "Rekisteristä poistaminen",
+      "description": "Removal from insurance distribution register",
+      "legal_basis": "Section 73"
     }
   },
   "relationships": [

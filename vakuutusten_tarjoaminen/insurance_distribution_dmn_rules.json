@@ -222,6 +222,45 @@
         {"inputs": ["InsuranceProduct", "investment_type"], "output": "Disclose sustainability risks", "legal_basis": "Section 54a", "source_text": "Kestävyysriskit"},
         {"inputs": ["Company", "over_3_employees"], "output": "ESG disclosure required", "legal_basis": "Section 54a", "source_text": "yli 3 työntekijää"}
       ]
+    },
+    {
+      "name": "SupervisionPowers",
+      "description": "FIN-FSA supervisory powers",
+      "legal_source": "Section 66",
+      "rules": [
+        {"inputs": ["FIN-FSA", "any"], "output": "Supervises this Act", "legal_basis": "Section 66", "source_text": "Valvoo tätä lakia"},
+        {"inputs": ["EEA_Broker", "Finland"], "output": "Supervises Finnish operations", "legal_basis": "Section 66(2)", "source_text": "Valvoo Suomen toimintaa"},
+        {"inputs": ["Information", "requested"], "output": "Must provide information", "legal_basis": "Section 76", "source_text": "Tietojenantovelvollisuus"}
+      ]
+    },
+    {
+      "name": "CrossBorderSupervision",
+      "description": "Supervision of cross-border activities",
+      "legal_source": "Sections 67-69",
+      "rules": [
+        {"inputs": ["Foreign_Broker", "violation_reported"], "output": "Take measures per §67", "legal_basis": "Section 67", "source_text": "Toimenpiteet"},
+        {"inputs": ["EEA_Authority", "request"], "output": "Cooperate with foreign authority", "legal_basis": "Section 69", "source_text": "Yhteistyö"}
+      ]
+    },
+    {
+      "name": "SanctionPowers",
+      "description": "Administrative sanctions available",
+      "legal_source": "Sections 70-73",
+      "rules": [
+        {"inputs": ["Unregistered", "operating"], "output": "Prohibition to operate", "legal_basis": "Section 70", "source_text": "Toiminnan kieltäminen"},
+        {"inputs": ["Violation", "serious"], "output": "Administrative fine", "legal_basis": "Section 71", "source_text": "Seuraamusmaksu"},
+        {"inputs": ["Repeated", "violations"], "output": "Deregistration", "legal_basis": "Section 73", "source_text": "Poistaminen rekisteristä"},
+        {"inputs": ["Public_Interest", "at_risk"], "output": "Warning published", "legal_basis": "Section 71", "source_text": "Julkinen varoitus"}
+      ]
+    },
+    {
+      "name": "RightToAppeal",
+      "description": "Appeal rights against administrative decisions",
+      "legal_source": "Sections 65, 82",
+      "rules": [
+        {"inputs": ["Board_Decision", "any"], "output": "Appeal to Administrative Court", "legal_basis": "Section 65", "source_text": "Hallinto-oikeus"},
+        {"inputs": ["FIN-FSA_Decision", "any"], "output": "Appeal to Administrative Court", "legal_basis": "Section 82", "source_text": "Hallinto-oikeus"}
+      ]
     }
   ]
 }
