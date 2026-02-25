@@ -504,6 +504,118 @@
         {"inputs": ["Cause", "earthquake"], "output": "Earthquake", "legal_basis": "Section 37(1)", "source_text": "Maanjäristys"},
         {"inputs": ["Cause", "nuclear"], "output": "Nuclear damage", "legal_basis": "Section 37(2)", "source_text": "Ydinvaurio"}
       ]
+    },
+    {
+      "name": "ThirdPartyPropertyInsurance",
+      "description": "Third party rights in property insurance",
+      "legal_source": "Section 62",
+      "rules": [
+        {"inputs": ["Insurance", "property"], "output": "Third party has rights", "legal_basis": "Section 62(1)", "source_text": "Omaisuusvakuutus"},
+        {"inputs": ["Owner", "change"], "output": "New owner covered", "legal_basis": "Section 63", "source_text": "Omistajan vaihtuminen"},
+        {"inputs": ["Notification", "required"], "output": "Notify of liability change", "legal_basis": "Section 64", "source_text": "Ilmoitus vastuun päättymisestä"},
+        {"inputs": ["Insured", "rights"], "output": "Insured has standing", "legal_basis": "Section 65", "source_text": "Vakuutetun asema"}
+      ]
+    },
+    {
+      "name": "PriorityOfCompensation",
+      "description": "Priority of third party compensation",
+      "legal_source": "Section 66",
+      "rules": [
+        {"inputs": ["Claim", "third_party"], "output": "Priority over pledge", "legal_basis": "Section 66(1)", "source_text": "Etuoikeus panttiin"},
+        {"inputs": ["Claim", "limited"], "output": "Limited to insurance sum", "legal_basis": "Section 66(2)", "source_text": "Vakuutusmäärään"},
+        {"inputs": ["Claim", "multiple"], "output": "Multiple claimants share", "legal_basis": "Section 66(3)", "source_text": "Jaetaan"}
+      ]
+    },
+    {
+      "name": "LiabilityInsuranceClaim",
+      "description": "Third party claim in liability insurance",
+      "legal_source": "Section 67",
+      "rules": [
+        {"inputs": ["Liability", "established"], "output": "Third party can claim", "legal_basis": "Section 67(1)", "source_text": "Vastuu todettu"},
+        {"inputs": ["Claim", "direct"], "output": "Can claim directly from insurer", "legal_basis": "Section 67(1)", "source_text": "Vaatia suoraan"},
+        {"inputs": ["Claim", "time_limit"], "output": "1 year to claim", "legal_basis": "Section 67(2)", "source_text": "1 vuosi"}
+      ]
+    },
+    {
+      "name": "AppealCompensationDecision",
+      "description": "Appeal against compensation decision",
+      "legal_source": "Section 68",
+      "rules": [
+        {"inputs": ["Appeal", "denied"], "output": "Can appeal denial", "legal_basis": "Section 68(1)", "source_text": "Valitus"},
+        {"inputs": ["Appeal", "amount"], "output": "Can appeal amount", "legal_basis": "Section 68(1)", "source_text": "Määrästä"},
+        {"inputs": ["Forum", "court"], "output": "Court jurisdiction", "legal_basis": "Section 68(2)", "source_text": "Tuomioistuin"}
+      ]
+    },
+    {
+      "name": "ClaimDocumentation",
+      "description": "Required claim documentation",
+      "legal_source": "Section 69",
+      "rules": [
+        {"inputs": ["Claim", "proof"], "output": "Must provide proof", "legal_basis": "Section 69(1)", "source_text": "Todisteet"},
+        {"inputs": ["Claim", "delay"], "output": "Without undue delay", "legal_basis": "Section 69(2)", "source_text": "Viipymättä"},
+        {"inputs": ["Claim", "cooperate"], "output": "Must cooperate", "legal_basis": "Section 69(3)", "source_text": "Yhteistyö"}
+      ]
+    },
+    {
+      "name": "CompensationPayment",
+      "description": "Compensation payment rules",
+      "legal_source": "Section 70",
+      "rules": [
+        {"inputs": ["Payment", "time"], "output": "Within 30 days", "legal_basis": "Section 70(1)", "source_text": "30 päivää"},
+        {"inputs": ["Payment", "undisputed"], "output": "Pay undisputed portion immediately", "legal_basis": "Section 70(2)", "source_text": "Riidaton osa heti"},
+        {"inputs": ["Payment", "dispute"], "output": "Pay disputed portion if clear", "legal_basis": "Section 70(3)", "source_text": "Selvä osa"}
+      ]
+    },
+    {
+      "name": "WrongPayment",
+      "description": "Wrong payment to third party",
+      "legal_source": "Section 71",
+      "rules": [
+        {"inputs": ["Payment", "wrong_person"], "output": "Can recover", "legal_basis": "Section 71(1)", "source_text": "Vaatia takaisin"},
+        {"inputs": ["Payment", "good_faith"], "output": "If good faith, no recovery", "legal_basis": "Section 71(2)", "source_text": "Hyvässä uskossa"},
+        {"inputs": ["Payment", "right_person"], "output": "Pay correct person", "legal_basis": "Section 71(3)", "source_text": "Oikealle henkilölle"}
+      ]
+    },
+    {
+      "name": "FalseInformationAfterEvent",
+      "description": "False information after insurance event",
+      "legal_source": "Section 72",
+      "rules": [
+        {"inputs": ["Information", "false"], "output": "Compensation may be denied", "legal_basis": "Section 72(1)", "source_text": "Korvaus voidaan evätä"},
+        {"inputs": ["Information", "misleading"], "output": "May reduce compensation", "legal_basis": "Section 72(2)", "source_text": "Voidaan alentaa"},
+        {"inputs": ["Information", "recovery"], "output": "Can recover paid compensation", "legal_basis": "Section 72(3)", "source_text": "Voidaan vaatia takaisin"}
+      ]
+    },
+    {
+      "name": "ClaimLimitation",
+      "description": "Time limits for claims",
+      "legal_source": "Section 73",
+      "rules": [
+        {"inputs": ["Claim", "standard"], "output": "3 years from right", "legal_basis": "Section 73(1)", "source_text": "3 vuotta"},
+        {"inputs": ["Claim", "knowledge"], "output": "From when learned", "legal_basis": "Section 73(1)", "source_text": "Tieto"},
+        {"inputs": ["Claim", "maximum"], "output": "Max 10 years from event", "legal_basis": "Section 73(2)", "source_text": "10 vuotta"},
+        {"inputs": ["Claim", "life"], "output": "Life insurance 10 years", "legal_basis": "Section 73(3)", "source_text": "Henkilövakuutus"}
+      ]
+    },
+    {
+      "name": "LegalProceedingsTime",
+      "description": "Time for legal proceedings",
+      "legal_source": "Section 74",
+      "rules": [
+        {"inputs": ["Proceedings", "limit"], "output": "3 years limitation", "legal_basis": "Section 74(1)", "source_text": "3 vuotta"},
+        {"inputs": ["Proceedings", "start"], "output": "From decision", "legal_basis": "Section 74(2)", "source_text": "Päätöksestä"},
+        {"inputs": ["Proceedings", "extension"], "output": "Can be extended", "legal_basis": "Section 74(3)", "source_text": "Jatkoaika"}
+      ]
+    },
+    {
+      "name": "InsurerSubrogation",
+      "description": "Insurer right of subrogation",
+      "legal_source": "Section 75",
+      "rules": [
+        {"inputs": ["Subrogation", "right"], "output": "Can claim from liable third party", "legal_basis": "Section 75(1)", "source_text": "Takautumisoikeus"},
+        {"inputs": ["Subrogation", "limit"], "output": "Up to compensation paid", "legal_basis": "Section 75(2)", "source_text": "Maksettuun asti"},
+        {"inputs": ["Subrogation", "waiver"], "output": "Cannot waive against insured", "legal_basis": "Section 75(3)", "source_text": "Ei luopumista vakuutettua vastaan"}
+      ]
     }
   ]
 }
