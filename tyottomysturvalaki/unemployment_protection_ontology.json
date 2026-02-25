@@ -334,6 +334,161 @@
       "from": "JobSeeker",
       "to": "AcceptableReason",
       "type": "may_invoked"
+    },
+    {
+      "from": "Employee",
+      "to": "EmploymentCondition",
+      "type": "satisfies"
+    },
+    {
+      "from": "Entrepreneur",
+      "to": "EmploymentCondition",
+      "type": "satisfies"
+    },
+    {
+      "from": "EmploymentCondition",
+      "to": "UnemploymentBenefit",
+      "type": "prerequisite_for"
+    },
+    {
+      "from": "UnemployedPerson",
+      "to": "BasicComponent",
+      "type": "entitled_to"
+    },
+    {
+      "from": "UnemployedPerson",
+      "to": "IncomeRelatedComponent",
+      "type": "entitled_to"
+    },
+    {
+      "from": "UnemployedPerson",
+      "to": "YouthAddition",
+      "type": "may_receive"
+    },
+    {
+      "from": "UnemployedPerson",
+      "to": "ChildSupplement",
+      "type": "may_receive"
+    },
+    {
+      "from": "UnemployedPerson",
+      "to": "BenefitApplication",
+      "type": "submits"
+    },
+    {
+      "from": "BenefitApplication",
+      "to": "UnemploymentFund",
+      "type": "filed_to"
+    },
+    {
+      "from": "BenefitApplication",
+      "to": "BenefitDecision",
+      "type": "leads_to"
+    },
+    {
+      "from": "AdjustedBenefit",
+      "to": "PartTimeWork",
+      "type": "due_to"
+    },
+    {
+      "from": "AdjustedBenefit",
+      "to": "EarnedIncome",
+      "type": "reduced_by"
+    },
+    {
+      "from": "IndexAdjustment",
+      "to": "BenefitAmount",
+      "type": "adjusts"
+    },
+    {
+      "from": "JobSeeker",
+      "to": "LabourMarketPolicy",
+      "type": "subject_to"
+    },
+    {
+      "from": "JobSeeker",
+      "to": "ActivationService",
+      "type": "participates_in"
+    },
+    {
+      "from": "JobSeeker",
+      "to": "BenefitRestriction",
+      "type": "may_be_subject_to"
+    },
+    {
+      "from": "JobSeeker",
+      "to": "WaitingPeriod",
+      "type": "serves"
+    },
+    {
+      "from": "UnemployedPerson",
+      "to": "MobilitySupport",
+      "type": "may_apply_for"
+    },
+    {
+      "from": "Employee",
+      "to": "RedundancyPay",
+      "type": "may_claim"
+    },
+    {
+      "from": "Employee",
+      "to": "EmployerInsolvency",
+      "type": "protected_from"
+    },
+    {
+      "from": "JobSeeker",
+      "to": "PublicWorks",
+      "type": "may_participate"
+    },
+    {
+      "from": "JobSeeker",
+      "to": "JobClub",
+      "type": "may_join"
+    },
+    {
+      "from": "JobSeeker",
+      "to": "WorkTrial",
+      "type": "may_start"
+    },
+    {
+      "from": "JobSeeker",
+      "to": "VocationalRehabilitation",
+      "type": "may_be_referred_to"
+    },
+    {
+      "from": "BenefitDecision",
+      "to": "Appeal",
+      "type": "may_be_appealed"
+    },
+    {
+      "from": "Appeal",
+      "to": "InsuranceCourt",
+      "type": "filed_to"
+    },
+    {
+      "from": "BenefitDecision",
+      "to": "Recovery",
+      "type": "subject_to"
+    },
+    {
+      "from": "YouthBonus",
+      "to": "UnemployedPerson",
+      "type": "added_to"
+    },
+    {
+      "from": "AdditionalDays",
+      "to": "UnemployedPerson",
+      "type": "extends"
+    },
+    {
+      "from": "OlderWorker",
+      "to": "AdditionalDays",
+      "type": "entitled_to"
+    },
+    {
+      "from": "SelfEmployedWorker",
+      "to": "BusinessStartUpAllowance",
+      "type": "may_receive"
     }
   ]
 }

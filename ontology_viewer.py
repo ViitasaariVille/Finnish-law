@@ -113,6 +113,9 @@ def build_graph(ontology):
     elif '@graph' in ontology:
         # JSON-LD format
         return G
+    elif 'entities' in ontology:
+        # Direct structure (tyottomysturvalaki, etc.)
+        ont = ontology
     else:
         ont = ontology
     
