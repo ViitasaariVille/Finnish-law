@@ -4621,6 +4621,65 @@
           "legal_basis": "Section 12.1"
         }
       ]
+    },
+    {
+      "name": "JobSeekers500Days",
+      "description": "Extended unemployment benefit for job seekers over 500 days",
+      "legal_source": "Section 6.7",
+      "rules": [
+        {
+          "inputs": [
+            "benefit.previous_days",
+            "person.age"
+          ],
+          "output": "Extended benefit eligible",
+          "legal_basis": "Section 6.7"
+        }
+      ]
+    },
+    {
+      "name": "IncreaseEarningsRelated",
+      "description": "Increase to earnings-related allowance",
+      "legal_source": "Section 6.4",
+      "rules": [
+        {
+          "inputs": [
+            "children.count",
+            "wages.daily_average"
+          ],
+          "output": "Increase percentage",
+          "legal_basis": "Section 6.4"
+        }
+      ]
+    },
+    {
+      "name": "ReducedEarningsCapacityWork",
+      "description": "Work with reduced earnings capacity",
+      "legal_source": "Section 6.2",
+      "rules": [
+        {
+          "inputs": [
+            "work.hours_per_week",
+            "earnings.monthly"
+          ],
+          "output": "Reduced capacity benefit",
+          "legal_basis": "Section 6.2"
+        }
+      ]
+    },
+    {
+      "name": "CorporationTaxCard",
+      "description": "Tax card requirements for corporations",
+      "legal_source": "Section 11.7",
+      "rules": [
+        {
+          "inputs": [
+            "person.tax_card"
+          ],
+          "output": "Tax card valid",
+          "legal_basis": "Section 11.7"
+        }
+      ]
     }
   ]
 }
