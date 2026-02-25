@@ -133,7 +133,7 @@
             "Allowance",
             "basic"
           ],
-          "output": "37.21 EUR per day (2024 rate)",
+          "output": "38.86 EUR per day (2025 rate)",
           "legal_basis": "Section 6.1",
           "source_text": "Perusosa"
         },
@@ -1301,7 +1301,7 @@
             "Support",
             "basic"
           ],
-          "output": "37.21 EUR per day (2024 rate)",
+          "output": "38.86 EUR per day (2025 rate)",
           "legal_basis": "Section 7.4",
           "source_text": "Perusmäärä"
         },
@@ -1362,7 +1362,7 @@
             "Amount",
             "solidarity"
           ],
-          "output": "Higher than basic",
+          "output": "43.07 EUR per day (2025 rate, basic + 4.21)",
           "legal_basis": "Section 7.4a",
           "source_text": "Korotettu määrä"
         }
@@ -1471,9 +1471,9 @@
         {
           "inputs": [
             "Entrepreneur",
-            "income_13457"
+            "annual_income"
           ],
-          "output": "Annual income at least 14,000 EUR (verified 2024)",
+          "output": "Annual income at least 14,279 EUR (2025 rate)",
           "legal_basis": "Section 5.7",
           "source_text": "Tulo 13 457 euroa"
         },
@@ -4136,7 +4136,7 @@
             "commute.monthly_max",
             "commute.daily_travel_expense"
           ],
-          "legal_basis": "Section TBD"
+          "legal_basis": "Section 2.10"
         },
         {
           "inputs": [
@@ -4149,7 +4149,7 @@
             "commute.monthly_max",
             "commute.daily_travel_expense"
           ],
-          "legal_basis": "Section TBD"
+          "legal_basis": "Section 2.10"
         },
         {
           "inputs": [
@@ -4162,7 +4162,7 @@
             "commute.monthly_max",
             "commute.daily_travel_expense"
           ],
-          "legal_basis": "Section TBD"
+          "legal_basis": "Section 2.10"
         }
       ]
     },
@@ -4183,7 +4183,7 @@
             "benefit.during_training",
             "service.type"
           ],
-          "legal_basis": "Section TBD"
+          "legal_basis": "Section 2.10"
         },
         {
           "inputs": [
@@ -4197,7 +4197,7 @@
             "benefit.during_training",
             "service.type"
           ],
-          "legal_basis": "Section TBD"
+          "legal_basis": "Section 2.10"
         },
         {
           "inputs": [
@@ -4211,7 +4211,7 @@
             "benefit.during_training",
             "service.type"
           ],
-          "legal_basis": "Section TBD"
+          "legal_basis": "Section 2.10"
         }
       ]
     },
@@ -4231,7 +4231,7 @@
             "income.insurable_earnings",
             "benefit.earnings_related_eligible"
           ],
-          "legal_basis": "Section TBD"
+          "legal_basis": "Section 2.10"
         },
         {
           "inputs": [
@@ -4244,7 +4244,7 @@
             "income.insurable_earnings",
             "benefit.earnings_related_eligible"
           ],
-          "legal_basis": "Section TBD"
+          "legal_basis": "Section 2.10"
         },
         {
           "inputs": [
@@ -4257,7 +4257,7 @@
             "income.insurable_earnings",
             "benefit.earnings_related_eligible"
           ],
-          "legal_basis": "Section TBD"
+          "legal_basis": "Section 2.10"
         }
       ]
     },
@@ -4278,7 +4278,7 @@
             "housing.support_amount",
             "housing.support_eligible"
           ],
-          "legal_basis": "Section TBD"
+          "legal_basis": "Section 2.10"
         },
         {
           "inputs": [
@@ -4292,7 +4292,7 @@
             "housing.support_amount",
             "housing.support_eligible"
           ],
-          "legal_basis": "Section TBD"
+          "legal_basis": "Section 2.10"
         },
         {
           "inputs": [
@@ -4306,7 +4306,7 @@
             "housing.support_amount",
             "housing.support_eligible"
           ],
-          "legal_basis": "Section TBD"
+          "legal_basis": "Section 2.10"
         }
       ]
     },
@@ -4326,7 +4326,7 @@
             "youth.bonus_eligible",
             "youth.addition_amount"
           ],
-          "legal_basis": "Section TBD"
+          "legal_basis": "Section 2.10"
         },
         {
           "inputs": [
@@ -4339,7 +4339,7 @@
             "youth.bonus_eligible",
             "youth.addition_amount"
           ],
-          "legal_basis": "Section TBD"
+          "legal_basis": "Section 2.10"
         },
         {
           "inputs": [
@@ -4352,7 +4352,7 @@
             "youth.bonus_eligible",
             "youth.addition_amount"
           ],
-          "legal_basis": "Section TBD"
+          "legal_basis": "Section 2.10"
         }
       ]
     },
@@ -4371,7 +4371,7 @@
             "benefit.adjusted_for_disability",
             "benefit.reduction_percentage"
           ],
-          "legal_basis": "Section TBD"
+          "legal_basis": "Section 2.10"
         },
         {
           "inputs": [
@@ -4383,7 +4383,7 @@
             "benefit.adjusted_for_disability",
             "benefit.reduction_percentage"
           ],
-          "legal_basis": "Section TBD"
+          "legal_basis": "Section 2.10"
         },
         {
           "inputs": [
@@ -4395,7 +4395,7 @@
             "benefit.adjusted_for_disability",
             "benefit.reduction_percentage"
           ],
-          "legal_basis": "Section TBD"
+          "legal_basis": "Section 2.10"
         }
       ]
     },
@@ -4413,7 +4413,7 @@
             "benefit.integrated_amount",
             "benefit.social_reduction"
           ],
-          "legal_basis": "Section TBD"
+          "legal_basis": "Section 2.10"
         },
         {
           "inputs": [
@@ -4424,7 +4424,7 @@
             "benefit.integrated_amount",
             "benefit.social_reduction"
           ],
-          "legal_basis": "Section TBD"
+          "legal_basis": "Section 2.10"
         },
         {
           "inputs": [
@@ -4435,7 +4435,7 @@
             "benefit.integrated_amount",
             "benefit.social_reduction"
           ],
-          "legal_basis": "Section TBD"
+          "legal_basis": "Section 2.10"
         }
       ]
     },
@@ -4454,7 +4454,7 @@
             "training.voucher_eligible",
             "training.voucher_amount"
           ],
-          "legal_basis": "Section TBD"
+          "legal_basis": "Section 2.10"
         },
         {
           "inputs": [
@@ -4466,7 +4466,7 @@
             "training.voucher_eligible",
             "training.voucher_amount"
           ],
-          "legal_basis": "Section TBD"
+          "legal_basis": "Section 2.10"
         },
         {
           "inputs": [
@@ -4478,7 +4478,7 @@
             "training.voucher_eligible",
             "training.voucher_amount"
           ],
-          "legal_basis": "Section TBD"
+          "legal_basis": "Section 2.10"
         }
       ]
     },
@@ -4497,7 +4497,7 @@
             "benefit.transitional_arrangement",
             "benefit.transitional_type"
           ],
-          "legal_basis": "Section TBD"
+          "legal_basis": "Section 2.10"
         },
         {
           "inputs": [
@@ -4509,7 +4509,7 @@
             "benefit.transitional_arrangement",
             "benefit.transitional_type"
           ],
-          "legal_basis": "Section TBD"
+          "legal_basis": "Section 2.10"
         },
         {
           "inputs": [
@@ -4521,7 +4521,7 @@
             "benefit.transitional_arrangement",
             "benefit.transitional_type"
           ],
-          "legal_basis": "Section TBD"
+          "legal_basis": "Section 2.10"
         }
       ]
     },
