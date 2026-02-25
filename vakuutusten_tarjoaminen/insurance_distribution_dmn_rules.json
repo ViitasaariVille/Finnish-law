@@ -15,6 +15,21 @@
       ]
     },
     {
+      "name": "BrokerRegistrationConditions",
+      "description": "Conditions required for broker registration under Section 8",
+      "legal_source": "Section 8",
+      "rules": [
+        {"inputs": ["Broker", "not_sole_insurer_employee"], "output": "Condition met", "legal_basis": "Section 8(1)", "source_text": "Ei yhden vakuutuksenantajan palveluksessa"},
+        {"inputs": ["Broker", "registered_in_finland"], "output": "Condition met", "legal_basis": "Section 8(2)", "source_text": "Rekisteröity Suomessa"},
+        {"inputs": ["Broker", "not_bankrupt"], "output": "Condition met", "legal_basis": "Section 8(3)", "source_text": "Ei konkurssissa"},
+        {"inputs": ["Broker", "good_reputation"], "output": "Condition met", "legal_basis": "Section 8(4)", "source_text": "Hyvä maine"},
+        {"inputs": ["Broker", "professional_qualification"], "output": "Condition met", "legal_basis": "Section 8(5)", "source_text": "Ammattipätevyys"},
+        {"inputs": ["Broker", "liability_insurance"], "output": "Condition met", "legal_basis": "Section 8(6)", "source_text": "Vastuuvakuutus"},
+        {"inputs": ["Broker", "client_funds_system"], "output": "Condition met", "legal_basis": "Section 8(7)", "source_text": "Asiakasvarajärjestelmä"},
+        {"inputs": ["Broker", "30_percent_staff_registered"], "output": "Condition met", "legal_basis": "Section 8(8)", "source_text": "30% henkilökunnasta"}
+      ]
+    },
+    {
       "name": "GoodReputation",
       "description": "Determines if person meets good reputation requirement",
       "legal_source": "Section 16",
@@ -260,6 +275,165 @@
       "rules": [
         {"inputs": ["Board_Decision", "any"], "output": "Appeal to Administrative Court", "legal_basis": "Section 65", "source_text": "Hallinto-oikeus"},
         {"inputs": ["FIN-FSA_Decision", "any"], "output": "Appeal to Administrative Court", "legal_basis": "Section 82", "source_text": "Hallinto-oikeus"}
+      ]
+    },
+    {
+      "name": "CodeOfConduct",
+      "description": "General code of conduct requirements",
+      "legal_source": "Section 30",
+      "rules": [
+        {"inputs": ["Distributor", "any"], "output": "Act honestly and professionally", "legal_basis": "Section 30(1)", "source_text": "Rehellisesti ja ammattitaitoisesti"},
+        {"inputs": ["Distributor", "any"], "output": "Prioritize customer interests", "legal_basis": "Section 30(1)", "source_text": "Asiakkaan etu edelle"},
+        {"inputs": ["Distributor", "any"], "output": "Provide sufficient information", "legal_basis": "Section 30(2)", "source_text": "Riittävät tiedot"},
+        {"inputs": ["Distributor", "any"], "output": "Must not mislead", "legal_basis": "Section 30(2)", "source_text": "Ei harhaanjohtavaa"},
+        {"inputs": ["Distributor", "any"], "output": "Sufficient resources required", "legal_basis": "Section 30(3)", "source_text": "Riittävät voimavarat"}
+      ]
+    },
+    {
+      "name": "PreContractDisclosure",
+      "description": "Pre-contractual information disclosure",
+      "legal_source": "Section 14",
+      "rules": [
+        {"inputs": ["Insurance", "any"], "output": "Disclose in official language(s)", "legal_basis": "Section 14(1)", "source_text": "Virallisella kielellä"},
+        {"inputs": ["Insurance", "distance"], "output": "Provide info before commitment", "legal_basis": "Section 14(2)", "source_text": "Ennen sitoutumista"},
+        {"inputs": ["Insurance", "complex"], "output": "Additional explanation required", "legal_basis": "Section 14(3)", "source_text": "Lisäselvitys"},
+        {"inputs": ["Consumer", "any"], "output": "Information in durable medium", "legal_basis": "Section 14(4)", "source_text": "Kestävällä tavalla"}
+      ]
+    },
+    {
+      "name": "RemunerationTransparency",
+      "description": "Remuneration and fee disclosure",
+      "legal_source": "Section 47",
+      "rules": [
+        {"inputs": ["Broker", "any"], "output": "Disclose fees to customer", "legal_basis": "Section 47(1)", "source_text": "Palkkion ilmoittaminen"},
+        {"inputs": ["Broker", "fee_based"], "output": "Disclose fee amount", "legal_basis": "Section 47(1)", "source_text": "Maksetun palkkion määrä"},
+        {"inputs": ["Broker", "commission_based"], "output": "Disclose commission received", "legal_basis": "Section 47(2)", "source_text": "Saadut palkkiot"},
+        {"inputs": ["Incentive", "conflicts"], "output": "Explain impact on service", "legal_basis": "Section 47(3)", "source_text": "Vaikutus palveluun"}
+      ]
+    },
+    {
+      "name": "AdviceRecords",
+      "description": "Documentation of advice given",
+      "legal_source": "Section 53",
+      "rules": [
+        {"inputs": ["Advice", "given"], "output": "Record the advice", "legal_basis": "Section 53(1)", "source_text": "Kirjataan annettu neuvo"},
+        {"inputs": ["Advice", "basis"], "output": "Record basis for recommendation", "legal_basis": "Section 53(2)", "source_text": "Suosituksen perusteet"},
+        {"inputs": ["Advice", "retained"], "output": "Retain records 5 years", "legal_basis": "Section 53(3)", "source_text": "Säilytys 5 vuotta"},
+        {"inputs": ["Advice", "available"], "output": "Provide copy to customer", "legal_basis": "Section 53(4)", "source_text": "Asiakkaalle kappale"}
+      ]
+    },
+    {
+      "name": "CancellationRight",
+      "description": "Customer cancellation rights",
+      "legal_source": "Section 61",
+      "rules": [
+        {"inputs": ["Insurance", "new_contract"], "output": "14-day cancellation right", "legal_basis": "Section 61(1)", "source_text": "14 päivän perumisoikeus"},
+        {"inputs": ["Insurance", "distance_sale"], "output": "30-day if not informed", "legal_basis": "Section 61(2)", "source_text": "30 päivää jos tietoja ei annettu"},
+        {"inputs": ["Cancellation", "timely"], "output": "Premium refund within 30 days", "legal_basis": "Section 61(4)", "source_text": "Premium palautetaan 30 päivässä"}
+      ]
+    },
+    {
+      "name": "EmployeeInformation",
+      "description": "Information to employees about insurance distribution",
+      "legal_source": "Section 55",
+      "rules": [
+        {"inputs": ["Company", "distributes_insurance"], "output": "Provide employee information", "legal_basis": "Section 55(1)", "source_text": "Henkilöstön tiedot"},
+        {"inputs": ["Company", "registered"], "output": "Disclose registration status", "legal_basis": "Section 55(2)", "source_text": "Rekisteröintitiedot"},
+        {"inputs": ["Employee", "involved"], "output": "Inform of duties and rules", "legal_basis": "Section 55(3)", "source_text": "Velvollisuudet"}
+      ]
+    },
+    {
+      "name": "Outsourcing",
+      "description": "Outsourcing requirements",
+      "legal_source": "Section 57",
+      "rules": [
+        {"inputs": ["Function", "outsourced"], "output": "Written agreement required", "legal_basis": "Section 57(1)", "source_text": "Kirjallinen sopimus"},
+        {"inputs": ["Function", "outsourced"], "output": "Supervision remains with company", "legal_basis": "Section 57(2)", "source_text": "Valvonta säilyy"},
+        {"inputs": ["ServiceProvider", "any"], "output": "Must meet same standards", "legal_basis": "Section 57(3)", "source_text": "Samat vaatimukset"}
+      ]
+    },
+    {
+      "name": "ProductInformationDocument",
+      "description": "Pre-contractual product information document",
+      "legal_source": "Section 43",
+      "rules": [
+        {"inputs": ["InsuranceProduct", "non-life"], "output": "Provide standardized document", "legal_basis": "Section 43(1)", "source_text": "Vakioasiakirja"},
+        {"inputs": ["InsuranceProduct", "content"], "output": "Include: insurer, cover, exclusions", "legal_basis": "Section 43(2)", "source_text": "Sisältövaatimukset"},
+        {"inputs": ["InsuranceProduct", "timing"], "output": "Before contract conclusion", "legal_basis": "Section 43(3)", "source_text": "Ennen sopimusta"}
+      ]
+    },
+    {
+      "name": "PremiumPayment",
+      "description": "Premium payment and collection rules",
+      "legal_source": "Section 60",
+      "rules": [
+        {"inputs": ["Premium", "due"], "output": "Collect in Finland", "legal_basis": "Section 60(1)", "source_text": "Peritään Suomessa"},
+        {"inputs": ["Premium", "collection"], "output": "Document collection properly", "legal_basis": "Section 60(2)", "source_text": "Asiakirjoitettava"},
+        {"inputs": ["Premium", "uncollected"], "output": "Return to insurer promptly", "legal_basis": "Section 60(3)", "source_text": "Palautetaan vakuutuksenantajalle"}
+      ]
+    },
+    {
+      "name": "AncillaryInsuranceDistributor",
+      "description": "Ancillary insurance distributor rules",
+      "legal_source": "Section 5(11)",
+      "rules": [
+        {"inputs": ["MainBusiness", "non-insurance"], "output": "Insurance is ancillary", "legal_basis": "Section 5(11)", "source_text": "Sivutoiminen vakuutusedustaja"},
+        {"inputs": ["MainBusiness", "goods"], "output": "Main business is goods/services", "legal_basis": "Section 5(11)", "source_text": "Tavarat/palvelut"},
+        {"inputs": ["Insurance", "complementary"], "output": "Complements main business", "legal_basis": "Section 5(11)", "source_text": "Täydentää päätoimintaa"},
+        {"inputs": ["Register", "required"], "output": "Must register if conditions met", "legal_basis": "Section 5(11)", "source_text": "Rekisteröinti"}
+      ]
+    },
+    {
+      "name": "EEAOperations",
+      "description": "Cross-border operations within EEA",
+      "legal_source": "Sections 24-25",
+      "rules": [
+        {"inputs": ["Provider", "EEA_home"], "output": "Freedom to provide services", "legal_basis": "Section 24", "source_text": "Palvelun vapaus"},
+        {"inputs": ["Provider", "establishment"], "output": "Freedom of establishment", "legal_basis": "Section 25", "source_text": "Sijainnin vapaus"},
+        {"inputs": ["Provider", "Finland_host"], "output": "Notify FIN-FSA", "legal_basis": "Section 24(2)", "source_text": "Ilmoitus Finanssivalvonnalle"},
+        {"inputs": ["Provider", "rules_apply"], "output": "Host state rules apply", "legal_basis": "Section 24(3)", "source_text": "Kohdemaan säännöt"}
+      ]
+    },
+    {
+      "name": "AgentRegistration",
+      "description": "Insurance agent registration requirements",
+      "legal_source": "Section 21",
+      "rules": [
+        {"inputs": ["Agent", "natural_person"], "output": "Register as natural person", "legal_basis": "Section 21(1)", "source_text": "Luonnollinen henkilö"},
+        {"inputs": ["Agent", "legal_person"], "output": "Register legal entity and responsible person", "legal_basis": "Section 21(2)", "source_text": "Oikeushenkilö ja vastuuhenkilö"},
+        {"inputs": ["Agent", "multiple_principals"], "output": "Can represent multiple insurers", "legal_basis": "Section 21(3)", "source_text": "Useita päämiesten"},
+        {"inputs": ["Agent", "register_verified"], "output": "Registration publicly verifiable", "legal_basis": "Section 21(4)", "source_text": "Julkisesti tarkistettavissa"}
+      ]
+    },
+    {
+      "name": "ThirdCountryOperations",
+      "description": "Operations from third countries",
+      "legal_source": "Section 28",
+      "rules": [
+        {"inputs": ["Provider", "third_country"], "output": "No freedom to provide services", "legal_basis": "Section 28", "source_text": "Ei palvelun vapautta"},
+        {"inputs": ["Provider", "representative"], "output": "Representative office possible", "legal_basis": "Section 28", "source_text": "Edustusto"},
+        {"inputs": ["Provider", "equivalent"], "output": "Equivalence decision required", "legal_basis": "Section 28", "source_text": "Vastaavuuspäätös"}
+      ]
+    },
+    {
+      "name": "RegistrationVerification",
+      "description": "Verification of registration status",
+      "legal_source": "Section 26",
+      "rules": [
+        {"inputs": ["Customer", "any"], "output": "Right to verify registration", "legal_basis": "Section 26(1)", "source_text": "Oikeus tarkistaa"},
+        {"inputs": ["Register", "public"], "output": "Public online register", "legal_basis": "Section 26(2)", "source_text": "Julkinen rekisteri"},
+        {"inputs": ["Information", "requested"], "output": "Provide extracts to customers", "legal_basis": "Section 26(3)", "source_text": "Ote asiakkaalle"}
+      ]
+    },
+    {
+      "name": "RegistrationRefusal",
+      "description": "Grounds for registration refusal",
+      "legal_source": "Section 7",
+      "rules": [
+        {"inputs": ["Applicant", "false_info"], "output": "Refuse - false information", "legal_basis": "Section 7(1)", "source_text": "Väärät tiedot"},
+        {"inputs": ["Applicant", "conditions_missing"], "output": "Refuse - conditions not met", "legal_basis": "Section 7(2)", "source_text": "Edellytykset puuttuvat"},
+        {"inputs": ["Applicant", "prior_violations"], "output": "Refuse - prior serious violations", "legal_basis": "Section 7(3)", "source_text": "Vakavia rikkomuksia"},
+        {"inputs": ["Applicant", "refused"], "output": "Can reapply after 5 years", "legal_basis": "Section 7(4)", "source_text": "Uudelleenhakeminen 5 vuoden jälkeen"}
       ]
     }
   ]

@@ -393,6 +393,12 @@
       "description": "Pension product as defined in law",
       "legal_basis": "Section 5"
     },
+    "OccupationalPension": {
+      "finnish_name": "Työeläkevakuutus",
+      "description": "Occupational pension insurance",
+      "legal_basis": "Section 5(14)",
+      "excluded_from": "This Act (separate legislation)"
+    },
     "Appeal": {
       "finnish_name": "Muutoksenhaku",
       "description": "Right to appeal administrative decisions",
