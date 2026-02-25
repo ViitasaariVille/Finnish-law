@@ -313,12 +313,47 @@
     "TyingPractice": {
       "finnish_name": "Kytkykauppa",
       "description": "Tying and bundling practices",
-      "legal_basis": "Sections 40-41"
+      "legal_basis": "Sections 40-41",
+      "prohibited_for": "Consumer insurance",
+      "rules_for_business": "Disclosure required if bundled separately"
+    },
+    "MarketingPractice": {
+      "finnish_name": "Markkinointi",
+      "description": "Marketing requirements for insurance",
+      "legal_basis": "Section 34",
+      "requirements": ["clear_identification", "truthful_information", "no_misleading"]
+    },
+    "ProfessionalCustomer": {
+      "finnish_name": "Ammattimainen asiakas",
+      "description": "Professional customer as defined in investment services law",
+      "legal_basis": "Section 5(13)"
     },
     "Incentive": {
       "finnish_name": "Kannustin",
       "description": "Incentives and commissions in insurance distribution",
-      "legal_basis": "Section 46"
+      "legal_basis": "Section 46",
+      "rules": ["must_not_impair_service_quality", "disclosure_required"]
+    },
+    "InvestmentInsurance": {
+      "description": "Life insurance with investment component",
+      "finnish_name": "Sijoitusvakuutus",
+      "attributes": ["fundValue", "surrenderValue", "riskLevel"],
+      "legal_basis": "Section 5(12)",
+      "additional_requirements": "Sections 44-54",
+      "exclusions": ["pure_death_benefit", "occupational_pension", "state_pension"],
+      "types": ["unit_linked", "capital_ redemption", "other_investment_linked"]
+    },
+    "SuitabilityAssessment": {
+      "finnish_name": "Soveltuvuuden arviointi",
+      "description": "Assessment of suitability for investment insurance",
+      "legal_basis": "Sections 49-50",
+      "required_for": "Personal recommendations",
+      "assesses": ["customer_experience", "customer_knowledge", "financial_situation", "investment_objectives", "risk_tolerance"]
+    },
+    "AppropriatenessAssessment": {
+      "finnish_name": "Asianmukaisuuden arviointi",
+      "description": "Assessment of appropriateness for non-advised sales",
+      "legal_basis": "Section 49"
     },
     "Notification": {
       "finnish_name": "Ilmoitus",
@@ -330,6 +365,21 @@
       "finnish_name": "Tietojen pyyntö",
       "description": "Supervisory authority right to request information",
       "legal_basis": "Section 76"
+    },
+    "ServiceSummary": {
+      "finnish_name": "Palveluiden yhteenveto",
+      "description": "Regular summary of services provided to customer",
+      "legal_basis": "Section 52"
+    },
+    "SustainabilityDisclosure": {
+      "finnish_name": "Kestävyystiedot",
+      "description": "Sustainability-related disclosures for insurance products",
+      "legal_basis": "Section 54a"
+    },
+    "PensionProduct": {
+      "finnish_name": "Eläketuote",
+      "description": "Pension product as defined in law",
+      "legal_basis": "Section 5"
     }
   },
   "relationships": [

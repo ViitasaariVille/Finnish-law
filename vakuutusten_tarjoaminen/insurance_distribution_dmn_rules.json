@@ -174,6 +174,54 @@
         {"inputs": ["Reporter", "any"], "output": "Must protect reporter identity", "legal_basis": "Section 72", "source_text": "Suojaa ilmoittaja"},
         {"inputs": ["Retention", "any"], "output": "Retain records 5 years", "legal_basis": "Section 72(2)", "source_text": "Säilytys 5 vuotta"}
       ]
+    },
+    {
+      "name": "MarketingRequirements",
+      "description": "Marketing practice requirements",
+      "legal_source": "Section 34",
+      "rules": [
+        {"inputs": ["Insurance", "marketed"], "output": "Must be clearly identifiable as marketing", "legal_basis": "Section 34", "source_text": "Tunnistettava markkinoinniksi"},
+        {"inputs": ["Information", "any"], "output": "Must be accurate and clear", "legal_basis": "Section 34", "source_text": "Täsmälliset tiedot"},
+        {"inputs": ["Misleading", "any"], "output": "Prohibited", "legal_basis": "Section 34", "source_text": "Ei harhaanjohtavaa"}
+      ]
+    },
+    {
+      "name": "TyingAndBundling",
+      "description": "Tying and bundling rules",
+      "legal_source": "Sections 40-41",
+      "rules": [
+        {"inputs": ["Consumer", "tied"], "output": "Prohibited - must offer separately", "legal_basis": "Section 40", "source_text": "Kielletty kuluttajalle"},
+        {"inputs": ["Business", "bundled"], "output": "Must disclose if can buy separately", "legal_basis": "Section 41", "source_text": "Ilmoitettava erikseen ostosta"}
+      ]
+    },
+    {
+      "name": "InvestmentInsuranceRequirements",
+      "description": "Requirements for investment insurance distribution",
+      "legal_source": "Sections 44-54",
+      "rules": [
+        {"inputs": ["ConflictOfInterest", "exists"], "output": "Must disclose to customer", "legal_basis": "Section 45", "source_text": "Eturistiriita"},
+        {"inputs": ["Incentive", "received"], "output": "Must not impair service quality", "legal_basis": "Section 46", "source_text": "Ei saa heikentää laatua"},
+        {"inputs": ["Recommendation", "personal"], "output": "Must assess suitability", "legal_basis": "Section 50", "source_text": "Soveltuvuuden arviointi"},
+        {"inputs": ["NoAdvice", "any"], "output": "Must assess appropriateness", "legal_basis": "Section 49", "source_text": "Asianmukaisuuden arviointi"},
+        {"inputs": ["ProfessionalCustomer", "any"], "output": "Exempt from suitability", "legal_basis": "Section 54", "source_text": "Ammattimainen asiakas"}
+      ]
+    },
+    {
+      "name": "RegularServiceSummary",
+      "description": "Regular summary of services requirement",
+      "legal_source": "Section 52",
+      "rules": [
+        {"inputs": ["Broker", "ongoing"], "output": "Provide regular summary", "legal_basis": "Section 52", "source_text": "Palveluiden yhteenveto"}
+      ]
+    },
+    {
+      "name": "SustainabilityDisclosure",
+      "description": "Sustainability information disclosure",
+      "legal_source": "Section 54a",
+      "rules": [
+        {"inputs": ["InsuranceProduct", "investment_type"], "output": "Disclose sustainability risks", "legal_basis": "Section 54a", "source_text": "Kestävyysriskit"},
+        {"inputs": ["Company", "over_3_employees"], "output": "ESG disclosure required", "legal_basis": "Section 54a", "source_text": "yli 3 työntekijää"}
+      ]
     }
   ]
 }
