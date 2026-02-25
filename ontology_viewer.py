@@ -140,10 +140,15 @@ def build_graph(ontology):
             for subclass_name in subclasses:
                 G.add_edge(subclass_name, cls_name, relationship='rdfs:subClassOf')
     
-    # Add other relationships
+    # Add other relationships (handle different formats)
     for rel in ont.get('relationships', []):
         if isinstance(rel, dict):
-            G.add_edge(rel['from'], rel['to'], relationship=rel['type'])
+            # Try different formats: from/to or subject/predicate/object
+            source = rel.get('from') or rel.get('subject')
+            target = rel.get('to') or rel.get('object')
+            rel_type = rel.get('type') or rel.get('predicate')
+            if source and target:
+                G.add_edge(source, target, relationship=rel_type or 'related')
     
     return G
 
