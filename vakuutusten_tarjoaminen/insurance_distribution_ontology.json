@@ -157,6 +157,27 @@
       "legal_basis": "Section 42",
       "requirements": ["product_approval", "target_market_definition", "risk_assessment", "distribution_plan"]
     },
+    "TargetMarket": {
+      "finnish_name": "Kohdemarkkinat",
+      "description": "Target market for insurance products",
+      "legal_basis": "Section 42"
+    },
+    "DisclosureRequirements": {
+      "finnish_name": "Tiedonantovelvollisuus",
+      "description": "Information disclosure requirements",
+      "legal_basis": "Sections 32-38",
+      "types": ["insurer_information", "intermediary_information", "product_information", "commission_disclosure"]
+    },
+    "NeedsAssessment": {
+      "finnish_name": "Vakuutustarpeen selvittäminen",
+      "description": "Broker duty to assess customer needs",
+      "legal_basis": "Section 35"
+    },
+    "SuitabilityAssessment": {
+      "finnish_name": "Soveltuvuuden arviointi",
+      "description": "Assessment of suitability for investment insurance",
+      "legal_basis": "Sections 49-50"
+    },
     "CrossBorderOperation": {
       "finnish_name": "Rajat ylittävä toiminta",
       "description": "Cross-border insurance distribution within EEA",
@@ -257,6 +278,58 @@
       "description": "Professional exam for insurance brokers",
       "legal_basis": "Section 62",
       "requirements": ["minimum_2_exams_per_year", "30_days_notice", "published_materials"]
+    },
+    "ClientAgreement": {
+      "finnish_name": "Toimeksiantosopimus",
+      "description": "Written agreement between broker and client",
+      "legal_basis": "Section 56",
+      "requirements": ["written_form", "copy_to_client", "content_requirements", "duration", "fees"]
+    },
+    "WhistleblowingProcedure": {
+      "finnish_name": "Ilmoitusmenettely",
+      "description": "Internal reporting procedure for violations",
+      "legal_basis": "Section 72",
+      "requirements": ["independent_channel", "confidential_reporter", "proper_handling", "protection"]
+    },
+    "Confidentiality": {
+      "finnish_name": "Vaitiolovelvollisuus",
+      "description": "Professional confidentiality obligation",
+      "legal_basis": "Sections 79-81",
+      "exceptions": ["supervisory_authorities", "legal_proceedings", "research_statistics"]
+    },
+    "ContinuingEducation": {
+      "finnish_name": "Ammattipätevyyden ylläpito",
+      "description": "Ongoing professional development requirements",
+      "legal_basis": "Section 20",
+      "minimum_hours": 15,
+      "frequency": "per_year"
+    },
+    "AdministrativeMeasure": {
+      "finnish_name": "Hallinnollinen toimenpide",
+      "description": "Administrative measures and sanctions",
+      "legal_basis": "Sections 71-73",
+      "types": ["warning", "prohibition", "fine", "deregistration"]
+    },
+    "TyingPractice": {
+      "finnish_name": "Kytkykauppa",
+      "description": "Tying and bundling practices",
+      "legal_basis": "Sections 40-41"
+    },
+    "Incentive": {
+      "finnish_name": "Kannustin",
+      "description": "Incentives and commissions in insurance distribution",
+      "legal_basis": "Section 46"
+    },
+    "Notification": {
+      "finnish_name": "Ilmoitus",
+      "description": "Cross-border notification requirements",
+      "legal_basis": "Sections 22-23",
+      "types": ["service_notification", "establishment_notification"]
+    },
+    "InformationRequest": {
+      "finnish_name": "Tietojen pyyntö",
+      "description": "Supervisory authority right to request information",
+      "legal_basis": "Section 76"
     }
   },
   "relationships": [
