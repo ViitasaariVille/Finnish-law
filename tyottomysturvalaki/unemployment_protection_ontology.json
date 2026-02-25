@@ -187,6 +187,21 @@
       "finnish_name": "Koulutus",
       "description": "Training",
       "legal_basis": "Section 2.10"
+    },
+    "YouthBonus": {
+      "finnish_name": "Nuorten työttömyysturva",
+      "description": "Youth unemployment benefit addition",
+      "legal_basis": "Section 6.5"
+    },
+    "DisabilityPension": {
+      "finnish_name": "Työkyvyttömyyseläke",
+      "description": "Disability pension",
+      "legal_basis": "Section 3.3"
+    },
+    "PartTimeWork": {
+      "finnish_name": "Osatyö",
+      "description": "Part-time work",
+      "legal_basis": "Section 4.1a"
     }
   },
   "relationships": [

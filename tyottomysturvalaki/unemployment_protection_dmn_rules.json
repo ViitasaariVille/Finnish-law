@@ -231,6 +231,145 @@
         {"inputs": ["Job", "search_EU"], "output": "Can search for job in EU", "legal_basis": "Section 8b", "source_text": "Työnhaku toisessa valtiossa"},
         {"inputs": ["Return", "Finland"], "output": "Return to Finland maintains rights", "legal_basis": "Section 8b", "source_text": "Paluu Suomeen"}
       ]
+    },
+    {
+      "name": "YouthUnemploymentBenefit",
+      "description": "Youth additional benefit",
+      "legal_source": "Section 6.5",
+      "rules": [
+        {"inputs": ["Age", "under_25"], "output": "Youth addition available", "legal_basis": "Section 6.5", "source_text": "Alle 25-vuotias"},
+        {"inputs": ["Employment", "short"], "output": "Youth addition if short employment", "legal_basis": "Section 6.5", "source_text": "Lyhyt työhistoria"},
+        {"inputs": ["Amount", "youth_bonus"], "output": "Additional percentage", "legal_basis": "Section 6.5", "source_text": "Lisäprosentti"}
+      ]
+    },
+    {
+      "name": "EmploymentInsuranceAccumulation",
+      "description": "How employment insurance period accumulates",
+      "legal_source": "Section 5.4",
+      "rules": [
+        {"inputs": ["Work", "hours_per_week"], "output": "18+ hours = 1 month", "legal_basis": "Section 5.4", "source_text": "18 tuntia viikossa"},
+        {"inputs": ["Work", "monthly_hours"], "output": "80+ hours = 1 month", "legal_basis": "Section 5.4", "source_text": "80 tuntia kuukaudessa"},
+        {"inputs": ["Work", "full_time"], "output": "Full month counts fully", "legal_basis": "Section 5.4", "source_text": "Täysi kuukausi"},
+        {"inputs": ["Work", "multiple"], "output": "Can combine multiple jobs", "legal_basis": "Section 5.4", "source_text": "Yhdistellä"}
+      ]
+    },
+    {
+      "name": "WorkDisabilityEffect",
+      "description": "Effect of work disability on benefit",
+      "legal_source": "Section 3.3",
+      "rules": [
+        {"inputs": ["Disability", "full"], "output": "No unemployment benefit", "legal_basis": "Section 3.3", "source_text": "Täysi työkyvyttömyys"},
+        {"inputs": ["Disability", "partial"], "output": "May receive adjusted benefit", "legal_basis": "Section 3.3", "source_text": "Osittainen"},
+        {"inputs": ["Disability", "recovered"], "output": "Can return to unemployment benefit", "legal_basis": "Section 3.3", "source_text": "Toipuminen"},
+        {"inputs": ["Pension", "disability"], "output": "Excludes unemployment benefit", "legal_basis": "Section 3.3", "source_text": "Työkyvyttömyyseläke"}
+      ]
+    },
+    {
+      "name": "LeaveAndBenefit",
+      "description": "Parental leave and unemployment benefit",
+      "legal_source": "Section 3.4",
+      "rules": [
+        {"inputs": ["Leave", "parental"], "output": "No unemployment benefit during leave", "legal_basis": "Section 3.4", "source_text": "Van parental leave"},
+        {"inputs": ["Leave", "care"], "output": "Care leave affects benefit", "legal_basis": "Section 3.4", "source_text": "Hoitovapaa"},
+        {"inputs": ["Leave", "studying"], "output": "Study leave", "legal_basis": "Section 3.4", "source_text": "Opintovapaa"}
+      ]
+    },
+    {
+      "name": "EarnedIncomeEffect",
+      "description": "Effect of earned income on benefit",
+      "legal_source": "Section 3.7",
+      "rules": [
+        {"inputs": ["Income", "below_300"], "output": "Full benefit", "legal_basis": "Section 3.7", "source_text": "Alle 300 euroa"},
+        {"inputs": ["Income", "300_850"], "output": "Benefit reduced 50%", "legal_basis": "Section 3.7", "source_text": "300-850 euroa"},
+        {"inputs": ["Income", "over_850"], "output": "No benefit", "legal_basis": "Section 3.7", "source_text": "Yli 850 euroa"},
+        {"inputs": ["Income", "net"], "output": "Net income counted", "legal_basis": "Section 3.7", "source_text": "Netto tulo"}
+      ]
+    },
+    {
+      "name": "TerminationByEmployee",
+      "description": "Termination by employee (quitting)",
+      "legal_source": "Section 2a.1",
+      "rules": [
+        {"inputs": ["Quit", "without_reason"], "output": "Benefit cut off 90 days", "legal_basis": "Section 2a.1", "source_text": "Eroaminen ilman syytä"},
+        {"inputs": ["Quit", "acceptable"], "output": "No penalty if acceptable reason", "legal_basis": "Section 2a.2", "source_text": "Pätevä syy"},
+        {"inputs": ["Quit", "changed"], "output": "Changed circumstances", "legal_basis": "Section 2a.2", "source_text": "Muuttuneet olosuhteet"},
+        {"inputs": ["Quit", "3_months"], "output": "3 month penalty period", "legal_basis": "Section 2a.1", "source_text": "3 kuukauden korvauskatko"}
+      ]
+    },
+    {
+      "name": "LayoffAndBenefit",
+      "description": "Layoff (lomautus) and benefit",
+      "legal_source": "Section 2.1",
+      "rules": [
+        {"inputs": ["Layoff", "full"], "output": "Full benefit available", "legal_basis": "Section 2.1", "source_text": "Täysi lomautus"},
+        {"inputs": ["Layoff", "partial"], "output": "Partial benefit", "legal_basis": "Section 2.1", "source_text": "Osittainen lomautus"},
+        {"inputs": ["Layoff", "recalled"], "output": "Return to work ends benefit", "legal_basis": "Section 2.1", "source_text": "Paluu työhön"},
+        {"inputs": ["Layoff", "ended"], "output": "New application after layoff ends", "legal_basis": "Section 2.1", "source_text": "Uusi hakemus"}
+      ]
+    },
+    {
+      "name": "SeasonalWorkEffect",
+      "description": "Seasonal work and benefit",
+      "legal_source": "Section 2.4",
+      "rules": [
+        {"inputs": ["Work", "seasonal"], "output": "Seasonal work counted", "legal_basis": "Section 2.4", "source_text": "Kausityö"},
+        {"inputs": ["Work", "ended"], "output": "Can claim after seasonal ends", "legal_basis": "Section 2.4", "source_text": "Kauden päättyminen"},
+        {"inputs": ["Work", "same_employer"], "output": "Same employer next season", "legal_basis": "Section 2.4", "source_text": "Sama työnantaja"}
+      ]
+    },
+    {
+      "name": "EntrepreneurStartPeriod",
+      "description": "Starting entrepreneurship and benefit",
+      "legal_source": "Section 5a",
+      "rules": [
+        {"inputs": ["Entrepreneur", "starting"], "output": "Business start period", "legal_basis": "Section 5a(1)", "source_text": "Aloittava yrittäjä"},
+        {"inputs": ["Entrepreneur", "support"], "output": "Start grant can affect benefit", "legal_basis": "Section 5a(2)", "source_text": "Starttiraha"},
+        {"inputs": ["Entrepreneur", "full_time"], "output": "Must be full-time", "legal_basis": "Section 5a(1)", "source_text": "Kokopäiväinen"},
+        {"inputs": ["Entrepreneur", "planned"], "output": "Business plan required", "legal_basis": "Section 5a(1)", "source_text": "Liiketoimintasuunnitelma"}
+      ]
+    },
+    {
+      "name": "OldWorkerAdditionalDays",
+      "description": "Additional days for older workers",
+      "legal_source": "Section 6.9",
+      "rules": [
+        {"inputs": ["Age", "over_61"], "output": "Additional 150 days available", "legal_basis": "Section 6.9(1)", "source_text": "150 lisäpäivää"},
+        {"inputs": ["Age", "over_59"], "output": "Additional 100 days at 59", "legal_basis": "Section 6.9(1)", "source_text": "100 lisäpäivää"},
+        {"inputs": ["Employment", "years"], "output": "At least 5 years employment", "legal_basis": "Section 6.9(1)", "source_text": "5 vuotta"},
+        {"inputs": ["Benefit", "exhausted"], "output": "After regular benefit ends", "legal_basis": "Section 6.9(2)", "source_text": "Jakson jälkeen"}
+      ]
+    },
+    {
+      "name": "LabourMarketSupportAmount",
+      "description": "Labour market support amount",
+      "legal_source": "Section 7.4",
+      "rules": [
+        {"inputs": ["Support", "basic"], "output": "33.66 EUR per day", "legal_basis": "Section 7.4", "source_text": "Perusmäärä"},
+        {"inputs": ["Support", "with_children"], "output": "Increased with children", "legal_basis": "Section 7.4", "source_text": "Lapsikorotuksella"},
+        {"inputs": ["Income", "test"], "output": "Income test reduces", "legal_basis": "Section 7.6", "source_text": "Tuloharkinta"},
+        {"inputs": ["Support", "full"], "output": "Without income test at start", "legal_basis": "Section 7.8", "source_text": "Alussa ilman tulotestiä"}
+      ]
+    },
+    {
+      "name": "SolidarityAllowance",
+      "description": "Solidarity allowance for certain groups",
+      "legal_source": "Section 7.4a",
+      "rules": [
+        {"inputs": ["Person", "long_term"], "output": "Long-term unemployed", "legal_basis": "Section 7.4a", "source_text": "Pitkäaikaistyötön"},
+        {"inputs": ["Person", "over_50"], "output": "Over 50 years old", "legal_basis": "Section 7.4a", "source_text": "Yli 50-vuotias"},
+        {"inputs": ["Amount", "solidarity"], "output": "Higher than basic", "legal_basis": "Section 7.4a", "source_text": "Korotettu määrä"}
+      ]
+    },
+    {
+      "name": "WorkingWhileUnemployed",
+      "description": "Working while registered unemployed",
+      "legal_source": "Section 4.1a",
+      "rules": [
+        {"inputs": ["Work", "trial"], "output": "Trial work period allowed", "legal_basis": "Section 4.1a", "source_text": "Koeaika"},
+        {"inputs": ["Work", "max_days"], "output": "Maximum 5 days per week credit", "legal_basis": "Section 4.1a", "source_text": "Enintään 5 päivää"},
+        {"inputs": ["Work", "report"], "output": "Must report earnings", "legal_basis": "Section 4.1a", "source_text": "Ilmoitettava"},
+        {"inputs": ["Work", "adjustment"], "output": "Benefit adjusted next period", "legal_basis": "Section 4.1a", "source_text": "Sovitellaan"}
+      ]
     }
   ]
 }
