@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/"
+             xmlns:dc="https://www.omg.org/spec/DMN/20180521/DC/"
+             xmlns:di="https://www.omg.org/spec/DMN/20180521/DI/"
+             xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/"
+             xmlns:drg="https://www.omg.org/spec/DMN/20191111/DRG/"
+             id="liikennevakuutuslaki_drd"
+             name="Liikennevakuutuslaki DRD"
+             namespace="https://github.com/ViitasaariVille/Finnish-law/drd">
+
+  <!-- Input Data Nodes -->
+  <inputData id="Input_Claim" name="Claim Received">
+    <variable name="claim" typeRef="feel:any"/>
+  </inputData>
+  
+  <inputData id="Input_Vehicle" name="Vehicle Information">
+    <variable name="vehicle" typeRef="feel:any"/>
+  </inputData>
+  
+  <inputData id="Input_Driver" name="Driver Information">
+    <variable name="driver" typeRef="feel:any"/>
+  </inputData>
+  
+  <inputData id="Input_Damage" name="Damage Information">
+    <variable name="damage" typeRef="feel:any"/>
+  </inputData>
+  
+  <inputData id="Input_Insurance" name="Insurance Information">
+    <variable name="insurance" typeRef="feel:any"/>
+  </inputData>
+  
+  <inputData id="Input_Person" name="Person Information">
+    <variable name="person" typeRef="feel:any"/>
+  </inputData>
+
+  <!-- Decision Nodes -->
+  <decision id="Decision_N1_NegativeClaims" name="1. Negative Claims Check">
+    <informationRequirement><requiredInput href="#Input_Vehicle"/></informationRequirement>
+    <informationRequirement><requiredInput href="#Input_Driver"/></informationRequirement>
+    <informationRequirement><requiredInput href="#Input_Insurance"/></informationRequirement>
+  </decision>
+
+  <decision id="Decision_E1_Coverage" name="2. Coverage Determination">
+    <informationRequirement><requiredInput href="#Input_Vehicle"/></informationRequirement>
+    <informationRequirement><requiredInput href="#Input_Damage"/></informationRequirement>
+  </decision>
+
+  <decision id="Decision_E2_CompensationCalc" name="3. Compensation Calculation">
+    <informationRequirement><requiredInput href="#Input_Damage"/></informationRequirement>
+    <informationRequirement><requiredInput href="#Input_Person"/></informationRequirement>
+  </decision>
+
+  <decision id="Decision_E3_PropertyMax" name="4. Property Damage Maximum">
+    <informationRequirement><requiredInput href="#Input_Damage"/></informationRequirement>
+  </decision>
+
+  <decision id="Decision_E4_Alcohol" name="5. Alcohol Impairment">
+    <informationRequirement><requiredInput href="#Input_Driver"/></informationRequirement>
+  </decision>
+
+  <decision id="Decision_Final" name="Compensation Paid">
+    <informationRequirement><requiredDecision href="#Decision_E1_Coverage"/></informationRequirement>
+    <informationRequirement><requiredDecision href="#Decision_E2_CompensationCalc"/></informationRequirement>
+  </decision>
+
+  <!-- DRD Diagram Layout -->
+  <dmndi:DMNDI>
+    <dmndi:Diagram>
+      <di:DiagramElement id="d1" width="200" height="100" x="300" y="50">
+        <dc:Bounds height="100" width="200" x="300" y="50"/>
+      </di:DiagramElement>
+    </dmndi:Diagram>
+  </dmndi:DMNDI>
+
+</definitions>

@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/"
+             xmlns:dc="https://www.omg.org/spec/DMN/20180521/DC/"
+             xmlns:di="https://www.omg.org/spec/DMN/20180521/DI/"
+             xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/"
+             xmlns:feel="https://www.omg.org/spec/DMN/20191111/FEEL/"
+             id="liikennevakuutuslaki"
+             name="Liikennevakuutuslaki (Traffic Insurance Act 460/2016)"
+             namespace="https://github.com/ViitasaariVille/Finnish-law">
+
+  <!-- Input Data Definitions -->
+  <inputData id="Input_Vehicle" name="Vehicle Information">
+    <variable name="vehicle" typeRef="feel:string"/>
+  </inputData>
+  
+  <inputData id="Input_Damage" name="Damage Information">
+    <variable name="damage" typeRef="feel:string"/>
+  </inputData>
+  
+  <inputData id="Input_Driver" name="Driver Information">
+    <variable name="driver" typeRef="feel:string"/>
+  </inputData>
+  
+  <inputData id="Input_Insurance" name="Insurance Status">
+    <variable name="insurance" typeRef="feel:string"/>
+  </inputData>
+
+  <!-- Decision: Negative Claims Check -->
+  <decision id="Decision_NegativeClaims" name="Negative Claims Check">
+    <informationRequirement>
+      <requiredInput href="#Input_Vehicle"/>
+    </informationRequirement>
+    <informationRequirement>
+      <requiredInput href="#Input_Driver"/>
+    </informationRequirement>
+    <informationRequirement>
+      <requiredInput href="#Input_Insurance"/>
+    </informationRequirement>
+    <decisionTable hitPolicy="FIRST" outputLabel="coverage_status">
+      <input label="vehicle.usedWithoutPermission">
+        <inputExpression typeRef="feel:boolean">
+          <text>vehicle.usedWithoutPermission</text>
+        </inputExpression>
+      </input>
+      <input label="driver.isInsane">
+        <inputExpression typeRef="feel:boolean">
+          <text>driver.isInsane</text>
+        </inputExpression>
+      </input>
+      <input label="driver.inEmergency">
+        <inputExpression typeRef="feel:boolean">
+          <text>driver.inEmergency</text>
+        </inputExpression>
+      </input>
+      <input label="insurance.obligationMet">
+        <inputExpression typeRef="feel:boolean">
+          <text>insurance.obligationMet</text>
+        </inputExpression>
+      </input>
+      <output name="result" typeRef="feel:string"/>
+      <rule>
+        <inputEntry id="r1"><text>true</text></inputEntry>
+        <inputEntry id="r2"><text>-</text></inputEntry>
+        <inputEntry id="r3"><text>-</text></inputEntry>
+        <inputEntry id="r4"><text>-</text></inputEntry>
+        <outputEntry id="o1"><text>"NOT_COVERED"</text></outputEntry>
+      </rule>
+      <rule>
+        <inputEntry id="r5"><text>false</text></inputEntry>
+        <inputEntry id="r6"><text>true</text></inputEntry>
+        <inputEntry id="r7"><text>-</text></inputEntry>
+        <inputEntry id="r8"><text>-</text></inputEntry>
+        <outputEntry id="o2"><text>"NOT_COVERED"</text></outputEntry>
+      </rule>
+      <rule>
+        <inputEntry id="r9"><text>false</text></inputEntry>
+        <inputEntry id="r10"><text>false</text></inputEntry>
+        <inputEntry id="r11"><text>true</text></inputEntry>
+        <inputEntry id="r12"><text>-</text></inputEntry>
+        <outputEntry id="o3"><text>"NOT_COVERED"</text></outputEntry>
+      </rule>
+      <rule>
+        <inputEntry id="r13"><text>false</text></inputEntry>
+        <inputEntry id="r14"><text>false</text></inputEntry>
+        <inputEntry id="r15"><text>false</text></inputEntry>
+        <inputEntry id="r16"><text>false</text></inputEntry>
+        <outputEntry id="o4"><text>"NOT_COVERED"</text></outputEntry>
+      </rule>
+      <rule>
+        <inputEntry id="r17"><text>false</text></inputEntry>
+        <inputEntry id="r18"><text>false</text></inputEntry>
+        <inputEntry id="r19"><text>false</text></inputEntry>
+        <inputEntry id="r20"><text>true</text></inputEntry>
+        <outputEntry id="o5"><text>"CHECK_ELIGIBILITY"</text></outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+
+  <!-- Decision: Coverage Determination -->
+  <decision id="Decision_Coverage" name="Coverage Determination">
+    <informationRequirement>
+      <requiredInput href="#Input_Vehicle"/>
+    </informationRequirement>
+    <informationRequirement>
+      <requiredInput href="#Input_Damage"/>
+    </informationRequirement>
+    <decisionTable hitPolicy="FIRST" outputLabel="coverage_result">
+      <input label="vehicle.permanentLocation">
+        <inputExpression typeRef="feel:string">
+          <text>vehicle.permanentLocation</text>
+        </inputExpression>
+      </input>
+      <input label="vehicle.type">
+        <inputExpression typeRef="feel:string">
+          <text>vehicle.type</text>
+        </inputExpression>
+      </input>
+      <input label="damage.type">
+        <inputExpression typeRef="feel:string">
+          <text>damage.type</text>
+        </inputExpression>
+      </input>
+      <output name="result" typeRef="feel:string"/>
+      <rule>
+        <inputEntry><text>"Finland"</text></inputEntry>
+        <inputEntry><text>"covered_type"</text></inputEntry>
+        <inputEntry><text>"any"</text></inputEntry>
+        <outputEntry><text>"MUST_INSURE"</text></outputEntry>
+      </rule>
+      <rule>
+        <inputEntry><text>"Finland"</text></inputEntry>
+        <inputEntry><text>"exempt_type"</text></inputEntry>
+        <inputEntry><text>"any"</text></inputEntry>
+        <outputEntry><text>"EXEMPT"</text></outputEntry>
+      </rule>
+      <rule>
+        <inputEntry><text>"EEA"</text></inputEntry>
+        <inputEntry><text>"any"</text></inputEntry>
+        <inputEntry><text>"any"</text></inputEntry>
+        <outputEntry><text>"COVERED_EEA"</text></outputEntry>
+      </rule>
+      <rule>
+        <inputEntry><text>"third_country"</text></inputEntry>
+        <inputEntry><text>"any"</text></inputEntry>
+        <inputEntry><text>"personal"</text></inputEntry>
+        <outputEntry><text>"GREEN_CARD_OR_LOCAL"</text></outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+
+  <!-- Decision: Compensation Calculation -->
+  <decision id="Decision_Compensation" name="Compensation Calculation">
+    <informationRequirement>
+      <requiredInput href="#Input_Damage"/>
+    </informationRequirement>
+    <decisionTable hitPolicy="FIRST" outputLabel="compensation_amount">
+      <input label="person.incomeType">
+        <inputExpression typeRef="feel:string">
+          <text>person.incomeType</text>
+        </inputExpression>
+      </input>
+      <input label="person.netMonthlyIncome">
+        <inputExpression typeRef="feel:number">
+          <text>person.netMonthlyIncome</text>
+        </inputExpression>
+      </input>
+      <input label="injury.workAbilityLostDays">
+        <inputExpression typeRef="feel:number">
+          <text>injury.workAbilityLostDays</text>
+        </inputExpression>
+      </input>
+      <output name="result" typeRef="feel:string"/>
+      <rule>
+        <inputEntry><text>"Employed"</text></inputEntry>
+        <inputEntry><text>>=0"</text></inputEntry>
+        <inputEntry><text">>=0"</text></inputEntry>
+        <outputEntry><text>"Calculate_NetMonthly/30 * Days"</text></outputEntry>
+      </rule>
+      <rule>
+        <inputEntry><text>"SelfEmployed"</text></inputEntry>
+        <inputEntry><text>"-"</text></inputEntry>
+        <inputEntry><text">>=0"</text></inputEntry>
+        <outputEntry><text>"Calculate_Annual/365 * Days"</text></outputEntry>
+      </rule>
+      <rule>
+        <inputEntry><text>"Unemployed"</text></inputEntry>
+        <inputEntry><text>"-"</text></inputEntry>
+        <inputEntry><text>"-"</text></inputEntry>
+        <outputEntry><text>"No_Loss_Of_Earnings"</text></outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+
+  <!-- Decision: Property Damage Maximum -->
+  <decision id="Decision_PropertyMax" name="Property Damage Maximum">
+    <decisionTable hitPolicy="FIRST" outputLabel="max_amount">
+      <input label="damage.amount">
+        <inputExpression typeRef="feel:number">
+          <text>damage.amount</text>
+        </inputExpression>
+      </input>
+      <output name="result" typeRef="feel:number"/>
+      <rule>
+        <inputEntry><text>"&lt;=5000000"</text></inputEntry>
+        <outputEntry><text>damage.amount</text></outputEntry>
+      </rule>
+      <rule>
+        <inputEntry><text>">5000000"</text></inputEntry>
+        <outputEntry><text>5000000</text></outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+
+  <!-- Decision: Alcohol Impairment -->
+  <decision id="Decision_Alcohol" name="Alcohol Impairment">
+    <decisionTable hitPolicy="FIRST" outputLabel="coverage_reduction">
+      <input label="driver.bacPermille">
+        <inputExpression typeRef="feel:number">
+          <text>driver.bacPermille</text>
+        </inputExpression>
+      </input>
+      <input label="driver.contribution">
+        <inputExpression typeRef="feel:string">
+          <text>driver.contribution</text>
+        </inputExpression>
+      </input>
+      <output name="result" typeRef="feel:string"/>
+      <rule>
+        <inputEntry><text">">=1.2"</text></inputEntry>
+        <inputEntry><text>"sole_fault"</text></inputEntry>
+        <outputEntry><text>"ONLY_OTHER_FACTORS"</text></outputEntry>
+      </rule>
+      <rule>
+        <inputEntry><text>">=0.5"</text></inputEntry>
+        <inputEntry><text>"partial"</text></inputEntry>
+        <outputEntry><text>"PROPORTIONAL_REDUCTION"</text></outputEntry>
+      </rule>
+      <rule>
+        <inputEntry><text>"&lt;0.5"</text></inputEntry>
+        <inputEntry><text>"any"</text></inputEntry>
+        <outputEntry><text>"FULL_COVERED"</text></outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+
+  <!-- DRD Information: Decision Service References -->
+  <decisionService id="DecisionService_NegativeClaims" name="Negative Claims Check">
+    <decision id="Decision_NegativeClaims"/>
+  </decisionService>
+
+  <decisionService id="DecisionService_Coverage" name="Coverage Determination">
+    <decision id="Decision_Coverage"/>
+  </decisionService>
+
+  <decisionService id="DecisionService_Compensation" name="Compensation Calculation">
+    <decision id="Decision_Compensation"/>
+  </decisionService>
+
+</definitions>
