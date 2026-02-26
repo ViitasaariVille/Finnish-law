@@ -114,11 +114,19 @@ Claim Received
 
 #### N9: Drunk Driver Sole Fault (§48)
 
-| driver.bloodAlcoholLevel | driver.breathAlcoholLevel | driver.drugImpaired | driver.contributionDegree | victim.isAtFault | damage.damageType | Output |
-|-------------------------|--------------------------|-------------------|--------------------------|-----------------|-------------------|--------|
-| >=1.2_permille | any | false | SoleFault | false | any | **NOT_COVERED** |
-| any | >=0.53_mg_L | false | SoleFault | false | any | **NOT_COVERED** |
-| any | any | true | SoleFault | false | any | **NOT_COVERED** |
+**Blood Alcohol Concentration (BAC) Thresholds:**
+- Blood: ≥1.2‰ (≥0.53 mg/L breath)
+- "Verensä alkoholipitoisuus on ajon aikana tai sen jälkeen vähintään 1,2 promillea"
+- "Vähintään 0,53 milligrammaa alkoholia litrassa uloshengitysilmaa"
+
+| driver.bloodAlcoholLevel | driver.breathAlcoholLevel | driver.contributionDegree | victim.isAtFault | Output |
+|-------------------------|--------------------------|--------------------------|-----------------|--------|
+| >=1.2_permille | any | SoleFault | false | **NOT_COVERED** |
+| any | >=0.53_mg_per_L | SoleFault | false | **NOT_COVERED** |
+
+**Drug Impairment (§48):**
+- "Kykynsä tehtävän vaatimiin suorituksiin on tuntuvasti huonontunut muun huumaavan aineen kuin alkoholin vaikutuksesta"
+- Combined alcohol + drugs: enhanced reduction applies
 
 ---
 
@@ -132,17 +140,22 @@ Claim Received
 | true | Slight | any | **75_PERCENT** |
 | true | Moderate | any | **50_PERCENT** |
 
-#### N11: Alcohol/Drug Impairment (§48)
+#### N11: Alcohol Impairment (§48)
 
-| driver.bloodAlcoholLevel | driver.breathAlcoholLevel | driver.drugImpaired | driver.contributionDegree | victim.isAtFault | damage.damageType | Output |
-|--------------------------|--------------------------|-------------------|--------------------------|-----------------|-------------------|--------|
-| >=1.2_permille | any | false | PartialFault | false | PersonalInjury | **50_PERCENT** |
-| any | >=0.53_mg_L | false | PartialFault | false | PersonalInjury | **50_PERCENT** |
-| any | any | true | PartialFault | false | PersonalInjury | **50_PERCENT** |
-| 0.5-1.19_permille | any | false | PartialFault | false | PersonalInjury | **75_PERCENT** |
-| any | 0.22-0.52_mg_L | false | PartialFault | false | PersonalInjury | **75_PERCENT** |
-| 0.5-1.19_permille | any | false | SoleFault | false | PersonalInjury | **NOT_COVERED** |
-| 0.5-1.19_permille | any | false | any | false | PropertyDamage | **COVERED** |
+**BAC Thresholds (Blood & Breath):**
+- Blood ≥1.2‰ OR Breath ≥0.53 mg/L: Significant reduction/denial
+- Blood 0.5-1.19‰ OR Breath 0.22-0.52 mg/L: Proportional reduction
+
+| driver.bloodAlcoholLevel | driver.breathAlcoholLevel | driver.contributionDegree | victim.isAtFault | Output |
+|--------------------------|--------------------------|--------------------------|-----------------|--------|
+| >=1.2_permille | any | PartialFault | false | **50_PERCENT** |
+| any | >=0.53_mg_per_L | PartialFault | false | **50_PERCENT** |
+| 0.5-1.19_permille | 0.22-0.52_mg_per_L | PartialFault | false | **75_PERCENT** |
+| 0.5-1.19_permille | 0.22-0.52_mg_per_L | SoleFault | false | **NOT_COVERED** |
+
+**Drug Impairment (§48):**
+- "Kykynsä tehtävän vaatimiin suorituksiin on huonontunut muun huumaavan aineen kuin alkoholin vaikutuksesta"
+- Combined alcohol + drug impairment: applies same reduction rules
 
 ---
 
@@ -185,11 +198,19 @@ Claim Received
 
 #### N17: Third Party Victim (§48)
 
-| driver.bloodAlcoholLevel | victim.relationshipType | victim.isAtFault | Output |
-|--------------------------|-------------------------|-----------------|--------|
-| >=1.2_permille | ThirdParty | false | **COVERED** |
-| 0.5-1.19_permille | ThirdParty | false | **COVERED** |
-| <0.5_permille | any | false | **COVERED** |
+**Third parties are protected from alcohol-based reductions (§48):**
+- Blood ≥1.2‰ OR Breath ≥0.53 mg/L: Full coverage for third parties
+- Blood 0.5-1.19‰ OR Breath 0.22-0.52 mg/L: Full coverage for third parties
+- <0.5‰ BAC: Full coverage
+
+| driver.bloodAlcoholLevel | driver.breathAlcoholLevel | victim.relationshipType | victim.isAtFault | Output |
+|--------------------------|--------------------------|-------------------------|-----------------|--------|
+| >=1.2_permille | any | ThirdParty | false | **COVERED** |
+| any | >=0.53_mg_per_L | ThirdParty | false | **COVERED** |
+| 0.5-1.19_permille | 0.22-0.52_mg_per_L | ThirdParty | false | **COVERED** |
+| <0.5_permille | any | any | false | **COVERED** |
+
+**§48 Note:** Reductions for alcohol impairment do NOT apply to third party victims
 
 ---
 
@@ -240,16 +261,58 @@ Claim Received
 
 #### E5: Medical Expense Compensation (§§53-59)
 
-| medicalExpense.treatmentType | medicalExpense.isNecessary | medicalExpense.providerType | Output |
-|------------------------------|---------------------------|---------------------------|--------|
-| Emergency | true | public | **100_PERCENT** |
-| Emergency | true | private | **100_PERCENT_REIMBURSEMENT** |
-| Surgery | true | any | **100_PERCENT** |
-| Medicines | true | pharmacy | **100_PERCENT** |
-| Rehabilitation | true | any | **100_PERCENT** |
-| DentalTreatment | true | any | **100_PERCENT** |
-| Prosthesis | true | any | **100_PERCENT** |
-| TravelToTreatment | true | any | **100_PERCENT** |
+**Treatment Authorization Requirements:**
+- §53: Treatment must be necessary ("vahingon vuoksi tarpeellinen")
+- §54: Public healthcare = customer fee only (asiakasmaksu)
+- §56: Notification within 4 business days ("neljän arkipäivän kuluessa")
+- §57: Insurer can direct to specific facility (maksusitoumus)
+- §58-59: Private care requires prior approval (except emergency)
+
+| medicalExpense.treatmentType | medicalExpense.isNecessary | medicalExpense.providerType | medicalExpense.maksusitoumusRequired | medicalExpense.notificationWithin4Days | Output |
+|------------------------------|---------------------------|---------------------------|-------------------------------------|----------------------------------------|--------|
+| Emergency | true | public | N/A | N/A | **100_PERCENT** |
+| Emergency | true | private | No | N/A | **100_PERCENT_REIMBURSEMENT** |
+| NonEmergency | true | public | N/A | Yes | **100_PERCENT** |
+| NonEmergency | true | private | Yes | Yes | **100_PERCENT_REIMBURSEMENT** |
+| NonEmergency | true | private | No | Yes | **CustomerFeeOnly** |
+| NonEmergency | true | any | any | No | **NotificationRequired** |
+| any | false | any | any | any | **NOT_COVERED** |
+
+**Treatment Types Covered:**
+- Surgery (leikkaus)
+- Medicines (lääkkeet)
+- Rehabilitation (kuntoutus)
+- Dental treatment (hammashoito)
+- Prosthesis (proteesi)
+- Travel to treatment (hoitomatkat)
+
+**§55 Täyskustannusmaksu:** Full cost payment to municipality for public healthcare
+
+---
+
+### 2.7 Medical Treatment Workflow (§§56-59)
+
+#### M1: Healthcare Provider Notification (§56)
+
+| treatment.decisionDate | notification.sentDate | notification.recipient | Output |
+|------------------------|----------------------|------------------------|--------|
+| any | within 4 business days | Insurer | **Compliant** |
+| any | after 4 business days | Insurer | **NotificationDelayed** |
+| emergency | immediate | Insurer | **EmergencyException** |
+
+**§56:** Healthcare provider must notify insurer within 4 business days of treatment decision.
+
+#### M2: Maksusitoumus Requirement (§57, §59)
+
+| treatment.type | treatment.provider | maksusitoumus.obtained | Output |
+|----------------|-------------------|------------------------|--------|
+| Emergency | private | N/A | **Covered_NoPriorApproval** |
+| NonEmergency | private | Yes | **Covered_WithMaksusitoumus** |
+| NonEmergency | private | No | **CustomerFeeOnly** |
+| any | public | N/A | **FullCoverage** |
+
+**§57:** Insurer has right to direct patient to specific facility via maksusitoumus.
+**§59:** Non-emergency private care requires maksusitoumus for full coverage.
 
 #### E6: Lost Wages Compensation (§34)
 
@@ -257,27 +320,27 @@ Claim Received
 |-------------------|------------------------|---------------------|----------------------------|--------|
 | Employed | any | null | any | Calculate_NetMonthly/30×Days |
 | SelfEmployed | null | any | any | Calculate_Annual/365×Days |
-| Unemployed | any | null | any | **No_Loss_Of_Earnings** |
+| Unemployed | any | null | any | **Minimum_36.90_PerDay** |
 | Student | any | null | any | StudentGrant_Adjustment |
 
 #### E7: Pain and Suffering Compensation (§35)
 
-| injury.isPermanent | injury.permanentDisabilityPercentage | painSuffering.level | Output |
-|-------------------|---------------------------------------|---------------------|--------|
-| true | 1-10_PERCENT | moderate | Scale_1_10_Percent |
-| true | 11-20_PERCENT | moderate | Scale_11_20_Percent |
-| true | 21-50_PERCENT | significant | Scale_21_50_Percent |
-| true | 51-100_PERCENT | severe | Scale_51_100_Percent |
-| false | null | any | TemporaryPain_Scale |
+**Index Adjustment for Continuous Compensation (§35):**
+- Annual adjustment using Työeläkeindeksi (Employee Pension Index)
+- Ansiotulot adjusted using Palkkakerroin (Wage Coefficient)
 
-#### E7b: Index Adjustment for Continuous Compensation (§35)
+| injury.isPermanent | injury.permanentDisabilityPercentage | painSuffering.level | compensation.type | Output |
+|-------------------|---------------------------------------|---------------------|-------------------|--------|
+| true | 1-10_PERCENT | moderate | Continuous | Scale_1_10_Percent × Työeläkeindeksi |
+| true | 11-20_PERCENT | moderate | Continuous | Scale_11_20_Percent × Työeläkeindeksi |
+| true | 21-50_PERCENT | significant | Continuous | Scale_21_50_Percent × Työeläkeindeksi |
+| true | 51-100_PERCENT | severe | Continuous | Scale_51_100_Percent × Työeläkeindeksi |
+| false | null | any | OneTime | TemporaryPain_Scale |
+| true | any | any | LumpSum | FixedAmount (erityisen painava syy) |
 
-| compensation.type | years_elapsed | index.factor | Output |
-|------------------|---------------|--------------|--------|
-| continuous | >0 | any | **INDEX_ADJUSTED** |
-| lumpSum | any | any | **NO_ADJUSTMENT** |
+**§35:** "Tämän lain ja liikennevakuutuslain perusteella korvattavasta kuntoutuksesta annetun lain nojalla henkilövahingon johdosta suoritettavat jatkuvat korvaukset tarkistetaan kalenterivuosittain työntekijän eläkelain (395/2006) 98 §:ssä tarkoitetulla työeläkeindeksillä."
 
-#### E8: Property Damage Compensation (§3)
+#### E8: Property Damage Compensation (§3, §38)
 
 | property.type | property.marketValue | damage.severity | Output |
 |---------------|---------------------|-----------------|--------|
@@ -285,6 +348,13 @@ Claim Received
 | Vehicle | any | PartialDamage | **RepairCost** |
 | ThirdPartyProperty | any | any | **ActualValue** |
 | Clothing | any | any | **ReplacementValue** |
+
+**Maximum Compensation (§38):** €5,000,000 per insurance policy
+
+| totalClaimsAmount | Output |
+|-------------------|--------|
+| <= 5,000,000 EUR | **FullCompensation** |
+| > 5,000,000 EUR | **ProRataDistribution** |
 
 ---
 
@@ -342,6 +412,48 @@ Claim Received
 
 ---
 
+### 2.6 Time Limits and Deadlines (§§61, 62, 79)
+
+#### T1: Claim Filing Deadline (§61)
+
+| claim.knowledgeDate | claim.submissionDate | Output |
+|---------------------|----------------------|--------|
+| known | within 3 years of knowledge | **ValidClaim** |
+| known | after 3 years of knowledge | **TimeBarred** |
+| unknown | within 10 years of accident | **ValidClaim** |
+| unknown | after 10 years of accident | **AbsolutelyTimeBarred** |
+
+**§61:** Korvausvaatimus on esitettävä kolmen vuoden kuluessa siitä, kun korvauksen hakija on saanut tietää vahinkotapahtumasta. Korvausvaatimus on joka tapauksessa esitettävä kymmenen vuoden kuluessa vahinkoseuraamuksen aiheutumisesta.
+
+#### T2: Investigation Start Deadline (§62)
+
+| claim.receivedDate | investigation.startDate | Output |
+|--------------------|------------------------|--------|
+| any | within 7 business days | **Compliant** |
+| any | after 7 business days | **InvestigationDelayed** |
+
+**§62:** Vakuutusyhtiön on aloitettava korvausasian selvittäminen viipymättä ja viimeistään seitsemän arkipäivän kuluessa vireilletulosta.
+
+#### T3: Payment Deadline (§62)
+
+| documents.completeDate | payment.date | Output |
+|------------------------|--------------|--------|
+| any | within 1 month | **Compliant** |
+| any | after 1 month | **PaymentDelayed** |
+
+**§62:** Vakuutusyhtiön on suoritettava korvaus tai ilmoitettava, ettei korvausta suoriteta, joutuisasti ja viimeistään kuukauden kuluttua siitä, kun se on saanut riittävän selvityksen.
+
+#### T4: Court Action Deadline (§79)
+
+| decision.notificationDate | courtAction.filingDate | Output |
+|---------------------------|------------------------|--------|
+| any | within 3 years | **ValidAction** |
+| any | after 3 years | **ActionTimeBarred** |
+
+**§79:** Kanne on oikeuden menettämisen uhalla nostettava vakuutusyhtiötä vastaan kolmen vuoden kuluessa siitä, kun asianosainen on saanut kirjallisen tiedon vakuutusyhtiön päätöksestä.
+
+---
+
 ## VARIABLE NAMING CONVENTION
 
 All variables follow `entity.attribute` format matching the business ontology:
@@ -363,6 +475,64 @@ All variables follow `entity.attribute` format matching the business ontology:
 
 ---
 
+## SECTION 3: PROCEDURAL RULES (§§60-72, 19)
+
+### 3.1 Claims Submission and Processing
+
+#### P1: Direct Claim Right (§60)
+
+| claimant.type | claim.submittedTo | Output |
+|---------------|-------------------|--------|
+| ThirdParty | Insurer | **DirectClaimAllowed** |
+| Passenger | AnyInvolvedVehicleInsurer | **DirectClaimAllowed** |
+| Pedestrian | AnyInvolvedVehicleInsurer | **DirectClaimAllowed** |
+| Driver | OwnVehicleInsurer | **DirectClaimAllowed** |
+
+**§60:** "Vahinkoa kärsineellä on oikeus vaatia korvausta suoraan vakuutusyhtiöltä."
+
+#### P2: Claims History Certificate (§19)
+
+| certificate.requestDate | certificate.issuedDate | policy.endDate | Output |
+|------------------------|------------------------|----------------|--------|
+| any | within 15 days | any | **Compliant** |
+| any | after 15 days | any | **CertificateDelayed** |
+| any | N/A | >5 years ago | **CertificateNotRequired** |
+
+**§19:** "Vakuutusyhtiön on toimitettava todistus vakuutuksenottajalle 15 päivän kuluessa pyynnöstä."
+
+#### P3: Decision Justification Requirements (§63)
+
+| decision.type | justification.includesMedicalAssessment | justification.includesKeyFactors | Output |
+|---------------|----------------------------------------|----------------------------------|--------|
+| Reduction | Yes | Yes | **Compliant** |
+| Denial | Yes | Yes | **Compliant** |
+| any | No | Yes | **IncompleteJustification** |
+
+**§63:** If decision is based on medical factors, justification must include key factors and conclusions.
+
+#### P4: Liikennevahinkolautakunta Opinion Right (§65)
+
+| decision.notificationDate | opinion.requestDate | request.within1Year | Output |
+|---------------------------|--------------------|---------------------|--------|
+| any | within 1 year | Yes | **OpinionRequestValid** |
+| any | after 1 year | No | **OpinionRequestTimeBarred** |
+
+**§65:** Parties can request Liikennevahinkolautakunta opinion within 1 year of decision.
+
+#### P5: Delay Interest Calculation (§67)
+
+| payment.dueDate | payment.actualDate | interest.rate | Output |
+|-----------------|--------------------|---------------|--------|
+| any | on time | N/A | **NoInterest** |
+| any | delayed | Korkolaki + increase | **DelayInterestApplied** |
+| any | duringLautakuntaReview | 0 | **InterestPaused** |
+
+**§67:** "Henkilövahingosta suoritettavan korvauksen viivästyessä vakuutusyhtiön on maksettava viivästynyt korvaus viivästysajalta korotettuna (viivästyskorotus)."
+
+**Minimum interest:** €7.28 (adjusted annually by palkkakerroin)
+
+---
+
 ## METADATA
 
 - **Law**: Liikennevakuutuslaki (Traffic Insurance Act) 460/2016
@@ -371,621 +541,3 @@ All variables follow `entity.attribute` format matching the business ontology:
 - **Total Decisions**: 30 (17 Negative Claims + 13 Eligibility)
 - **Decision Order**: Negative Claims → Eligibility → Compensation
 - **Variable Convention**: entity.attribute (ontology-aligned)
-
-
----
-
-## SECTION 2: ELIGIBILITY RULES
-
-### 2.1 Coverage Determination (Positive Rules)
-
-#### E15: Scope of Application (§1)
-
-| vehicle.inTraffic | vehicle.purpose | vehicle.location | Output |
-|-------------------|-----------------|-----------------|--------|
-| false | construction_other | any | **NOT_IN_SCOPE** |
-| false | repair_maintenance | any | **NOT_IN_SCOPE** |
-| true | transport | any | **IN_SCOPE** |
-
-#### E16: Definition - Vehicle Types (§2)
-
-| vehicle.mechanical | vehicle.speed | vehicle.weight | Output |
-|-------------------|---------------|----------------|--------|
-| true | >25_kmh | any | **COVERED_VEHICLE** |
-| true | any | >25_kg | **COVERED_VEHICLE** |
-| false | any | any | **NOT_COVERED** |
-
-#### E17: Mandatory Nature (§3)
-
-| contract.contrary_to_law | party.damaged | Output |
-|--------------------------|---------------|--------|
-| true | true | **VOID_CONTRACT** |
-| false | any | **VALID_CONTRACT** |
-
-#### E18: Liikennevakuutuskeskus Role (§4)
-
-| entity.type | function.requested | Output |
-|-------------|-------------------|--------|
-| Centre | funding | **CENTRE_RESPONSIBLE** |
-| Centre | administration | **CENTRE_RESPONSIBLE** |
-
-#### E19: Insurance Contract Act Application (§4a)
-
-| section.applied | Output |
-|-----------------|--------|
-| 3 | **APPLIES** |
-| 4b | **APPLIES** |
-| 5 | **APPLIES** |
-
-#### E20: Consumer Protection Application (§4b)
-
-| policyholder.type | Output |
-|------------------|--------|
-| consumer | **CONSUMER_PROTECTION_APPLIES** |
-| business | **NOT_APPLIES** |
-
-#### E21: Vehicles to Insure (§5)
-
-| vehicle.permanent_location | vehicle.type | Output |
-|---------------------------|--------------|--------|
-| Finland | covered_type | **MUST_INSURE** |
-| Finland | exempt_type | **EXEMPT** |
-
-#### E22: Insurance Obligation Begins (§6)
-
-| ownership_date | delivery_date | Output |
-|---------------|---------------|--------|
-| date | any | **OBLIGATION_STARTS** |
-| future | date | **OBLIGATION_STARTS** |
-
-#### E23: Import from EEA (§6a)
-
-| vehicle.imported_from | registration.country | Output |
-|----------------------|---------------------|--------|
-| EEA | Finland | **CAN_CHOOSE_FINLAND** |
-| EEA | origin_country | **MUST_INSURE_ORIGIN** |
-
-#### E24: Border Traffic Insurance (§7)
-
-| vehicle.permanent_country | green_card | accident.country | Output |
-|--------------------------|------------|-----------------|--------|
-| third_country | false | Finland | **MUST_INSURE** |
-| third_country | true | any | **GREEN_CARD_OK** |
-
-#### E25: Exemptions from Insurance (§8)
-
-| vehicle.type | vehicle.speed | vehicle.purpose | Output |
-|-------------|---------------|-----------------|--------|
-| tractor | <=15_kmh | agricultural | **EXEMPT** |
-| trailer | not_registered | any | **EXEMPT** |
-| wheelchair | any | disability | **EXEMPT** |
-
-#### E26: Information to Transport Agency (§9)
-
-| information.type | timeliness | Output |
-|-----------------|------------|--------|
-| new_policy | <=7_days | **MUST_REPORT** |
-| premium_default | any | **MUST_REPORT** |
-
-#### E27: Vehicle Identification (§10)
-
-| vehicle.registered | vehicle.identified | notification.days | Output |
-|-------------------|-------------------|-------------------|--------|
-| true | false | >7 | **LIABILITY_EXPIRES** |
-| true | true | <=7 | **LIABILITY_VALID** |
-
-#### E28: Policy Document (§11)
-
-| document.contains_key_terms | terms.provided | Output |
-|---------------------------|-----------------|--------|
-| true | true | **VALID_DOCUMENT** |
-| false | any | **INCOMPLETE** |
-
-#### E29: Validity Period (§12)
-
-| acceptance.date | policy.period | Output |
-|-----------------|---------------|--------|
-| date | any | **COVERAGE_STARTS** |
-| any | 13_months | **FIRST_PERIOD_13_MONTHS** |
-
-#### E30: Geographical Scope (§13)
-
-| country | green_card | Output |
-|---------|------------|--------|
-| EEA | true | **COVERED** |
-| EEA | false | **COVERED_MINIMUM** |
-
-### 2.2 Premium Calculation
-
-#### E31: Information Withholding (§14)
-
-| information.withheld | years_back | Output |
-|---------------------|-------------|--------|
-| true | <=5 | **RETROACTIVE_5_YEARS** |
-| false | any | **NO_RETROACTIVE** |
-
-#### E32: Risk Increase (§15)
-
-| risk.increased | years_back | Output |
-|---------------|-------------|--------|
-| true | <=5 | **RETROACTIVE_5_YEARS** |
-| false | any | **NO_RETROACTIVE** |
-
-#### E33: Cancellation Right (§16)
-
-| cancellation.reason | new_insurance.exists | Output |
-|---------------------|---------------------|--------|
-| new_insurer | true | **CANCELLATION_ALLOWED** |
-| theft | true | **CANCELLATION_ALLOWED** |
-
-#### E34: Insurer Obligation (§17)
-
-| vehicle.type | insurer.licensed | Output |
-|-------------|------------------|--------|
-| covered_type | true | **MUST_PROVIDE** |
-
-#### E35: Owner/Holder Change (§18)
-
-| transfer.date | new_insurance.date | days_elapsed | Output |
-|--------------|-------------------|--------------|--------|
-| date | none | <=7 | **OLD_POLICY_COVERS** |
-| date | date | >7 | **NEW_POLICY_REQUIRED** |
-
-#### E36: Damage History (§19)
-
-| history.years | history.claims | Output |
-|--------------|-----------------|--------|
-| <=5 | any | **HISTORY_RELEVANT** |
-| >5 | any | **HISTORY_EXPIRED** |
-
-#### E37: Premium Calculation Factors (§20)
-
-| vehicle.type | driver.age | claims.count | Output |
-|-------------|-----------|--------------|--------|
-| private_car | >25 | 0 | **BASE_PREMIUM** |
-| private_car | <25 | any | **YOUNG_DRIVER_LOADING** |
-| motorcycle | any | any | **MOTORCYCLE_RATE** |
-
-#### E38: History Transfer (§21)
-
-| policy.new_company | history.exists | Output |
-|-------------------|----------------|--------|
-| true | true | **MUST_TRANSFER** |
-
-#### E39: Usage During Removal Period (§22)
-
-| registered_removed | used_in_traffic | Output |
-|-------------------|-----------------|--------|
-| true | true | **TRIPLE_PREMIUM** |
-| true | false | **NORMAL_PREMIUM** |
-
-#### E40: Premium Refund (§23)
-
-| refund.amount | Output |
-|--------------|--------|
-| >8 | **REFUND_PROCESSED** |
-| <=8 | **NO_REFUND** |
-
-#### E41: Late Payment Interest (§24)
-
-| overdue | Output |
-|---------|--------|
-| true | **INTEREST_CHARGED** |
-
-#### E42: Liability Continues (§25)
-
-| premium.unpaid | Output |
-|--------------|--------|
-| true | **LIABILITY_CONTINUES** |
-
-#### E43: Limitation (§26)
-
-| claim.year | billing.year | Output |
-|-----------|--------------|--------|
-| >5 | any | **TIME_BARRED** |
-
-#### E44: Payment When Uninsured (§27)
-
-| obligation_violated | period_months | Output |
-|--------------------|---------------|--------|
-| true | <=60 | **REASONABLE_PREMIUM** |
-
-#### E45: Penalty Fee (§28)
-
-| laiminlynti.type | multiplier | Output |
-|------------------|------------|--------|
-| first_time | 1 | **SINGLE_FEE** |
-| repeated | 3 | **TRIPLE_FEE** |
-
-#### E46: Penalty Determination (§29)
-
-| proposal.made | Output |
-|--------------|--------|
-| true | **PROCEED_PENALTY** |
-
-#### E47: Usage Ban (§30)
-
-| insurance.obligation | Output |
-|---------------------|--------|
-| violated | **USAGE_BANNED** |
-
-### 2.3 Compensation Calculation
-
-#### E48: Strict Liability (§31)
-
-| accident.occurred | vehicle.insured | driver.fault | Output |
-|------------------|-----------------|--------------|--------|
-| true | true | any | **STRICT_LIABILITY** |
-
-#### E49: Insurer Liability Period (§32)
-
-| policy.active | accident.date | Output |
-|--------------|--------------|--------|
-| true | within_term | **INSURER_LIABLE** |
-| false | any | **NOT_LIABLE** |
-
-#### E50: Two or More Vehicles (§33)
-
-| accident.vehicles | fault.determined | Output |
-|-----------------|-----------------|--------|
-| two_or_more | first_vehicle | **FIRST_NOT_LIABLE** |
-| two_or_more | second_vehicle | **SECOND_NOT_LIABLE** |
-| two_or_more | both | **SHARED_LIABILITY** |
-
-#### E51: Rented E-Scooter (§34a)
-
-| vehicle.type | rental.business | Output |
-|-------------|-----------------|--------|
-| e_scooter | rented | **LIMITED_COVERAGE** |
-
-#### E52: Property Damage (§37)
-
-| property.type | repair.possible | total_loss | Output |
-|--------------|-----------------|------------|--------|
-| vehicle | true | false | **REPAIR_COST** |
-| vehicle | false | true | **MARKET_VALUE** |
-
-#### E53: Maximum Property Damage (§38)
-
-| damage.amount | claimants | Output |
-|--------------|-----------|--------|
-| >5000000 | 1 | **MAX_5000000** |
-| >5000000 | >1 | **PROPORTIONAL** |
-
-#### E54: Rescuer Compensation (§39)
-
-| person.helped | helper.is_professional | Output |
-|--------------|----------------------|--------|
-| true | false | **COVERED** |
-| true | true | **NOT_COVERED** |
-
-#### E55: Vehicle Combinations (§39a)
-
-| combination.towing | combination.trailer | Output |
-|-------------------|--------------------|--------|
-| identified | any | **TOWING_INSURER** |
-| not_identified | identified | **TRAILER_INSURER** |
-
-#### E56: Property Exclusions (§40)
-
-| damage.to_own | damage.to_connected | Output |
-|---------------|---------------------|--------|
-| true | any | **NOT_COVERED** |
-| false | true | **NOT_COVERED** |
-
-#### E57: Work Performance (§42)
-
-| vehicle.status | work.type | Output |
-|---------------|-----------|--------|
-| stationary | loading_unloading | **NOT_COVERED** |
-
-#### E58: Outside Finland (§45)
-
-| accident.country | vehicle.home | Output |
-|-----------------|-------------|--------|
-| EEA_not_Finland | Finland | **COVERED_GUARANTEE** |
-
-#### E59: Liability Distribution (§51)
-
-| insurers.multiple | fault.distribution | Output |
-|------------------|-------------------|--------|
-| true | shared | **JOINT_SEVERAL** |
-| true | identified | **SPECIFIC_SOLE** |
-
-#### E60: Rail Liability Division (§52)
-
-| accident.involves_rail | fault.rail | fault.road | Output |
-|------------------------|-----------|-----------|--------|
-| true | sole | no_fault | **RAIL_SOLE** |
-| true | shared | shared | **PROPORTIONAL** |
-| true | no_fault | sole | **ROAD_SOLE** |
-
-### 2.4 Medical Care
-
-#### E61: Public Healthcare (§54)
-
-| care.provider.public | Output |
-|---------------------|--------|
-| true | **PATIENT_FEE_COVERED** |
-
-#### E62: Full Cost Payment (§55)
-
-| care.provided | authority.reported | Output |
-|--------------|-------------------|--------|
-| true | true | **FULL_COST** |
-
-#### E63: Reporting Requirement (§56)
-
-| report.submitted | content.complete | Output |
-|-----------------|------------------|--------|
-| true | true | **VALID_REPORT** |
-
-#### E64: Direct to Provider (§57)
-
-| directed | provider.appropriate | Output |
-|----------|----------------------|--------|
-| true | true | **DIRECTION_VALID** |
-
-#### E65: Private Without Authorization (§58)
-
-| care.type | urgency | Output |
-|----------|---------|--------|
-| emergency | true | **COVERED** |
-| visit | any | **COVERED** |
-
-#### E66: Private With Authorization (§59)
-
-| authorization.given | provider.appropriate | Output |
-|--------------------|---------------------|--------|
-| true | true | **FULL_COVERED** |
-
-### 2.5 Claims Procedure
-
-#### E67: Right to Compensation (§60)
-
-| claim.submitted | damage.proven | Output |
-|----------------|--------------|--------|
-| true | true | **RIGHT_ESTABLISHED** |
-| true | false | **RIGHT_NOT_ESTABLISHED** |
-
-#### E68: Claim Timing (§61)
-
-| claim.timing | limitation.period | Output |
-|-------------|-------------------|--------|
-| within_3_years | not_expired | **ACCEPTED** |
-| within_10_years | expired | **EXCEPTIONAL** |
-| after_10_years | expired | **TIME_BARRED** |
-
-#### E69: Decision Deadline (§62)
-
-| claim.type | complexity | Output |
-|-----------|------------|--------|
-| property | simple | **30_DAYS** |
-| personal | any | **90_DAYS** |
-
-#### E69b: Investigation Start Deadline (§62)
-
-| claim.received | days_elapsed | Output |
-|---------------|--------------|--------|
-| true | <=7 | **TIMELY_START** |
-| true | >7 | **DELAYED_START** |
-
-#### E69c: Payment Deadline (§62)
-
-| claim.documentation.complete | claim.type | Output |
-|------------------------------|-----------|--------|
-| true | property | **30_DAYS** |
-| true | personal | **90_DAYS** |
-| false | any | **AWAITING_DOCS** |
-
-#### E70: Registered Rights Limitation (§62a)
-
-| data_subject.request | processing.lawful | Output |
-|---------------------|------------------|--------|
-| restrict | legitimate | **REQUEST_DENIED** |
-
-#### E71: Decision & Reasoning (§63)
-
-| decision.type | reasoning.provided | Output |
-|--------------|--------------------|--------|
-| approval | true | **VALID_DECISION** |
-| rejection | true | **MUST_EXPLAIN** |
-
-#### E72: Board (§64)
-
-| board.requested | Output |
-|-----------------|--------|
-| true | **BOARD_CAN_ADVISE** |
-
-#### E73: Board Recommendation (§65)
-
-| party.requested | Output |
-|-----------------|--------|
-| injured | **CAN_REQUEST** |
-| policyholder | **CAN_REQUEST** |
-
-#### E74: Board Recommendation Obligation (§66)
-
-| claim.type | severity | Output |
-|-----------|----------|--------|
-| permanent_loss | any | **MUST_REQUEST** |
-| death | any | **MUST_REQUEST** |
-| severe_disability | any | **MUST_REQUEST** |
-
-#### E75: Delayed Compensation (§67)
-
-| compensation.type | delay.reason | Output |
-|------------------|--------------|--------|
-| personal_injury | insurer_fault | **ENHANCED_INTEREST** |
-| property | insurer_fault | **STANDARD_INTEREST** |
-
-#### E76: Claimant Notification Duty (§68)
-
-| change.occurred | notification.made | Output |
-|-----------------|-------------------|--------|
-| true | false | **NOTIFICATION_REQUIRED** |
-
-#### E77: Representative (§69)
-
-| company.type | eea_operation | Output |
-|-------------|---------------|--------|
-| insurer | true | **MUST_NOMINATE** |
-
-#### E78: Right to Claim from Representative (§70)
-
-| accident.country | victim.residence | Output |
-|-----------------|------------------|--------|
-| EEA | Finland | **CAN_CLAIM_REP** |
-
-#### E79: Liability Handling Delay (§71)
-
-| insurer.delayed | victim.residence | Output |
-|-----------------|------------------|--------|
-| true | Finland | **CENTRE_CAN_INTERVENE** |
-
-#### E80: Right to Info from Centre (§72)
-
-| info.requested | accident.country | Output |
-|----------------|------------------|--------|
-| owner_info | Finland | **MUST_PROVIDE** |
-
-#### E81: Subrogation (§73)
-
-| insurer.paid | third_party.liable | Output |
-|-------------|-------------------|--------|
-| true | true | **SUBROGATION_EXISTS** |
-
-### 2.6 Distribution System
-
-#### E82: Distribution System (§75)
-
-| company.type | participation | Output |
-|-------------|---------------|--------|
-| insurer | mandatory | **MUST_PARTICIPATE** |
-
-#### E83: Contribution Amount (§76)
-
-| costs.total | method.calculation | Output |
-|-------------|-------------------|--------|
-| any | proportional | **CONTRIBUTION_OWED** |
-
-#### E84: Portfolio Transfer (§78)
-
-| transfer.type | effect | Output |
-|--------------|--------|--------|
-| merger | adjusts_contribution | **ADJUSTED** |
-
-### 2.7 Miscellaneous
-
-#### E85: Limitation Period (§79)
-
-| claim.type | years_elapsed | Output |
-|-----------|---------------|--------|
-| any | <=3 | **WITHIN_PERIOD** |
-| any | >3 | **TIME_BARRED** |
-
-#### E86: Court Proceedings (§80)
-
-| court.claimed | Output |
-|--------------|--------|
-| damages | **COURT_CAN_DECIDE** |
-
-#### E87: Authority Appeal Right (§81)
-
-| authority.type | Output |
-|---------------|--------|
-| welfare | **CAN_APPEAL** |
-
-#### E88: Information Right (§82)
-
-| info.type | requester.type | Output |
-|----------|---------------|--------|
-| employment | insurer | **MUST_PROVIDE** |
-| medical | insurer | **MUST_PROVIDE** |
-
-#### E89: (Repealed) (§83)
-
-| N/A | N/A | N/A | Output |
-|------|-----|-----|--------|
-| N/A | N/A | N/A | **NOT_APPLICABLE** |
-
-#### E90: Right to Information (§84)
-
-| info.type | legitimate_interest | Output |
-|----------|---------------------|--------|
-| policy | true | **MUST_PROVIDE** |
-
-#### E91: Document Retention (§85)
-
-| document.type | retention.period | Output |
-|--------------|------------------|--------|
-| personal_injury | 100_years | **MUST_RETAIN** |
-| appeals | 50_years | **MUST_RETAIN** |
-
-#### E92: Info Centre (§86)
-
-| centre.function | Output |
-|----------------|--------|
-| information | **CENTRE_OPERATES** |
-
-#### E93: Centre Duties (§87)
-
-| duty.type | Output |
-|----------|--------|
-| statistics | **MUST_COMPILE** |
-| guarantee | **MUST_ADMINISTER** |
-
-#### E94: Information to Centre (§88)
-
-| info.type | timeliness | Output |
-|----------|------------|--------|
-| statistics | annual | **MUST_REPORT** |
-
-#### E95: Finanssivalvonta (§90)
-
-| authority.function | Output |
-|-------------------|--------|
-| supervision | **SUPERVISES** |
-
-#### E96: Customs Duties (§91)
-
-| vehicle.imported | customs.duties | Output |
-|-----------------|---------------|--------|
-| temporary | border_insurance | **MUST_ENSURE** |
-
-#### E97: Insolvency (§91a)
-
-| insolvency.type | victim.residence | Output |
-|----------------|------------------|--------|
-| company | Finland | **CENTRE_CAN_PAY** |
-
-#### E98: Insolvency Duties (§91b)
-
-| action.type | Output |
-|-------------|--------|
-| notify_eea | **MUST_NOTIFY** |
-
-#### E99: Insolvency & Bankruptcy (§92)
-
-| status.type | output |
-|------------|--------|
-| liquidation | policy_terminates |
-
-#### E100: Additional Payment (§93)
-
-| situation.type | Output |
-|---------------|--------|
-| shortfall | **ADDITIONAL_DUE** |
-
-#### E101: Joint Guarantee (§94)
-
-| default.company | Output |
-|----------------|--------|
-| insolvent | **GUARANTEE_ASSESSES** |
-
-#### E102: Official Liability (§95)
-
-| official.type | Output |
-|--------------|--------|
-| company_personnel | **OFFICIAL_LIABILITY** |
-
