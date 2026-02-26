@@ -128,6 +128,23 @@ Claim Received
 - "Kykynsä tehtävän vaatimiin suorituksiin on tuntuvasti huonontunut muun huumaavan aineen kuin alkoholin vaikutuksesta"
 - Combined alcohol + drugs: enhanced reduction applies
 
+#### N18: Owner/Holder Property Exclusion with Passenger Exception (§40)
+
+| property.location | property.ownerRelationship | property.type | property.isAttachedToVehicle | Output |
+|-------------------|---------------------------|---------------|------------------------------|--------|
+| InsuredVehicle | Owner | any | true | **NOT_COVERED** |
+| InsuredVehicle | Holder | any | true | **NOT_COVERED** |
+| InsuredVehicle | Driver | any | false | **NOT_COVERED** |
+| InsuredVehicle | Owner | OtherVehicle | true | **NOT_COVERED** |
+| InsuredVehicle | Owner | OtherProperty | false | **NOT_COVERED** |
+| InsuredVehicle | Passenger-NotOwnerHolder | Clothing | false | **COVERED** (passenger exception) |
+| InsuredVehicle | Passenger-NotOwnerHolder | PersonalItems | false | **COVERED** (passenger exception) |
+| InsuredVehicle | Passenger-NotOwnerHolder | OtherProperty | false | **NOT_COVERED** |
+
+**§40:** "Vakuutuksesta korvataan kuitenkin vahinko, joka on aiheutunut muun matkustajan kuin ajoneuvon omistajan tai haltijan yllä tai mukana olleiden vaatteiden ja henkilökohtaisten käyttöesineiden vahingoittumisesta."
+
+**Special Case (§40(3)):** If owner/holder owns ANOTHER vehicle involved, that vehicle's damage IS covered.
+
 ---
 
 ### 1.2 Reduced Compensation
@@ -254,6 +271,22 @@ Claim Received
 | true | false | true | **OwnerLiable** |
 | false | true | true | **HolderLiable** |
 | true | false | false | **OwnerLiableFromOwnership** |
+
+#### E15: Coverage During Ownership Transfer (§18)
+
+| insurance.status | ownership.transferOccurred | daysSinceTransfer | newOwner.hasInsurance | Output |
+|------------------|---------------------------|-------------------|----------------------|--------|
+| Terminated | true | ≤7 | false | **COVERED** (7-day extension) |
+| Terminated | true | ≤7 | true | **NOT_COVERED** (new insurance applies) |
+| Terminated | true | >7 | any | **NOT_COVERED** |
+| Active | false | any | any | **COVERED** |
+
+**§18:** "Korvataan päättyneestä vakuutuksesta myös ne vahingot, jotka ovat sattuneet seitsemän päivän kuluessa omistusoikeuden siirtymisestä taikka ajoneuvon hallinnan vaihtumisesta tai palautumisesta omistajalle, jollei ajoneuvon seuraava omistaja tai haltija ole ottanut vakuutusta mainitun ajan kuluessa."
+
+**Variables:**
+- `ownership.transferDate`: Date of ownership/holdership transfer
+- `newOwner.insuranceStartDate`: Date new owner took insurance (if any)
+- `daysSinceTransfer`: Calculated from transfer date |
 
 ---
 
@@ -412,6 +445,49 @@ Claim Received
 
 ---
 
+### 2.7 Large Loss Distribution System (§75)
+
+#### S1: Large Loss Distribution System (§75)
+
+| totalClaimAmount | threshold.exceeded | amountOverThreshold | costType | yearsSinceAccident | distribution.applies | Output |
+|------------------|-------------------|---------------------|----------|-------------------|---------------------|--------|
+| ≤ €75M | false | 0 | any | any | false | **NormalCoverage** |
+| > €75M | true | >0 | LVKCosts | any | true | **Distribute(amountOverThreshold)** |
+| > €75M | true | >0 | IndexAdjustment | any | true | **Distribute(amountOverThreshold)** |
+| > €75M | true | >0 | Healthcare | ≤9 | false | **NormalCoverage** |
+| > €75M | true | >0 | Healthcare | >9 | true | **Distribute(amountOverThreshold)** |
+| > €75M | true | >0 | Rehabilitation | ≤9 | false | **NormalCoverage** |
+| > €75M | true | >0 | Rehabilitation | >9 | true | **Distribute(amountOverThreshold)** |
+| > €75M | true | >0 | Täyskustannusmaksu | ≤9 | false | **NormalCoverage** |
+| > €75M | true | >0 | Täyskustannusmaksu | >9 | true | **Distribute(amountOverThreshold)** |
+| > €75M | true | >0 | LargeLoss | any | true | **Distribute(amountOverThreshold)** |
+
+**Distribution Formula:**
+```
+insurerShare = (insurerPremiumIncome / totalPremiumIncome) × amountOverThreshold
+```
+
+**§75:** "Suurvahingolla tarkoitetaan ajallisesti ja paikallisesti rajoittunutta tapahtumaa tai samaa alkuperää olevaa tapahtumasarjaa, jonka seurauksena liikennevakuutuksen perusteella maksettuja korvauksia maksetaan yhdelle tai useammalle vahinkoa kärsineelle tai muulle korvaukseen oikeutetulle yhteensä yli 75 000 000 euroa (suurvahinkoraja)."
+
+**Key Points:**
+- Large loss threshold: €75,000,000
+- Distribution applies only to amounts EXCEEDING the threshold
+- Certain costs (Healthcare, Rehabilitation, Täyskustannusmaksu) only enter distribution after 9 years
+- Distribution is proportional based on premium income
+
+**Variables:**
+- `totalClaimAmount`: Sum of all claims from the event
+- `threshold.value`: €75,000,000 (adjustable)
+- `yearsSinceAccident`: Years from accident date
+- `insurer.premiumIncome`: Insurance premium income for distribution calculation
+
+**Related Sections:**
+- §76: Jakojärjestelmämaksun suuruus (calculation details)
+- §77: Jakojärjestelmämaksun suorittaminen (payment)
+- §78: Vakuutuskannan siirron vaikutus (portfolio transfer effects)
+
+---
+
 ### 2.6 Time Limits and Deadlines (§§61, 62, 79)
 
 #### T1: Claim Filing Deadline (§61)
@@ -480,6 +556,47 @@ Claim Received
 
 ---
 
+### 2.8 Penalty Rules (§§27-28)
+
+#### P8: Insurance Obligation Failure Penalty (§27)
+
+| obligation.failure | failure.durationYears | reasonablePremium | daysUninsured | Output |
+|-------------------|----------------------|-------------------|----------------|--------|
+| true | ≤5 | any | any | **BasePenalty = reasonablePremium × daysUninsured / 365** |
+| true | >5 | any | any | **5YearLimit** (retroactive penalty limited to current + 5 years) |
+
+**§27:** "Se, joka on laiminlyönyt 6 §:n mukaisen vakuuttamisvelvollisuutensa, on velvollinen maksamaan maksun, joka vastaa kohtuulliseksi katsottavaa vakuutusmaksua siltä ajalta, jota laiminlyönti koskee, ei kuitenkaan pitemmältä ajalta kuin kulumassa olevalta ja viideltä viimeksi kuluneelta kalenterivuodelta."
+
+#### P9: Laiminlyöntimaksu Penalty Multiplier (§28)
+
+| obligation.failure | failure.durationYears | failure.intentional | failure.repeated | vehicle.usedDuringFailure | penalty.multiplier | Output |
+|-------------------|----------------------|--------------------|-----------------|--------------------------|-------------------|--------|
+| true | ≤5 | false | false | false | 1.0 | **BasePenalty** |
+| true | ≤5 | false | false | true | 1.5 | **Penalty×1.5** |
+| true | ≤5 | true | false | false | 2.0 | **Penalty×2** |
+| true | ≤5 | true | true | false | 2.5 | **Penalty×2.5** |
+| true | ≤5 | true | true | true | 3.0 | **Penalty×3** (max) |
+| true | >5 | any | any | any | N/A | **5YearLimit** |
+
+**Total Penalty Calculation:**
+```
+basePenalty = reasonablePremium × daysUninsured / 365
+totalPenalty = basePenalty × multiplier (max 3× base)
+```
+
+**§28:** "Laiminlyöntimaksun korotuskerrointa määrättäessä otetaan huomioon laiminlyöntiajan pituus, laiminlyönnin tahallisuus ja toistuvuus sekä se, onko ajoneuvoa käytetty liikenteessä."
+
+**Variables:**
+- `obligation.failure`: Boolean if insurance obligation was not met
+- `failure.durationYears`: Years of non-compliance
+- `failure.intentional`: Boolean for intentional failure
+- `failure.repeated`: Boolean for repeated violations
+- `vehicle.usedDuringFailure`: Boolean if vehicle was used uninsured
+- `reasonablePremium`: Reasonable premium for the vehicle type
+- `daysUninsured`: Number of days without insurance
+
+---
+
 ### 1.1.1 Extended Exemptions (§8)
 
 #### N5a: Complete Vehicle Exemptions (§8)
@@ -542,13 +659,30 @@ All variables follow `entity.attribute` format matching the business ontology:
 
 #### P2: Claims History Certificate (§19)
 
-| certificate.requestDate | certificate.issuedDate | policy.endDate | Output |
-|------------------------|------------------------|----------------|--------|
-| any | within 15 days | any | **Compliant** |
-| any | after 15 days | any | **CertificateDelayed** |
-| any | N/A | >5 years ago | **CertificateNotRequired** |
+| certificate.requested | certificate.requestDate | certificate.responseDate | policy.endDate | yearsSinceEnd | Output |
+|---------------------|------------------------|-------------------------|----------------|---------------|--------|
+| true | any | ≤15 days from request | any | ≤5 | **Compliant** |
+| true | any | >15 days from request | any | ≤5 | **CertificateDelayed** |
+| true | any | any | any | >5 | **NotRequired** (5-year statute) |
+| true | any | any | unknown | any | **ProvideIfAvailable** |
 
-**§19:** "Vakuutusyhtiön on toimitettava todistus vakuutuksenottajalle 15 päivän kuluessa pyynnöstä."
+**Required Certificate Contents (§19):**
+1. Policy validity period (voimassaoloaika)
+2. List of covered vehicles (kattamat ajoneuvot)
+3. List of claims paid (vahingot joiden perusteella korvaus maksettu)
+
+| certificate.requested | certificate.includesValidityPeriod | certificate.includesVehicles | certificate.includesClaims | Output |
+|---------------------|-------------------------------------|------------------------------|----------------------------|--------|
+| true | true | true | true | **Complete** |
+| true | false | any | any | **Incomplete_MissingValidity** |
+| true | true | false | any | **Incomplete_MissingVehicles** |
+| true | true | true | false | **Incomplete_MissingClaims** |
+
+**Variables:**
+- `certificate.requestDate`: Date certificate was requested
+- `certificate.responseDate`: Date certificate was provided
+- `policy.endDate`: Policy end date (if ended)
+- `yearsSinceEnd`: Years from policy end to request date
 
 #### P3: Decision Justification Requirements (§63)
 
@@ -571,15 +705,27 @@ All variables follow `entity.attribute` format matching the business ontology:
 
 #### P5: Delay Interest Calculation (§67)
 
-| payment.dueDate | payment.actualDate | interest.rate | Output |
-|-----------------|--------------------|---------------|--------|
-| any | on time | N/A | **NoInterest** |
-| any | delayed | Korkolaki + increase | **DelayInterestApplied** |
-| any | duringLautakuntaReview | 0 | **InterestPaused** |
+| interest.calculatedAmount | interest.currentMinimum | palkkakerroin.value | paymentDelay.cause | lautakunta.reviewActive | Output |
+|---------------------------|------------------------|---------------------|--------------------|------------------------|--------|
+| < €7.28 | €7.28 | current | any | false | **NoInterest** (below minimum) |
+| ≥ €7.28 | €7.28 | current | Normal | false | **Interest = calculated × palkkakerroin** |
+| any | €7.28 | current | VictimCaused | false | **NoInterest** |
+| any | €7.28 | current | ForceMajeure | false | **NoInterestForDelayPeriod** |
+| ≥ €7.28 | €7.28 | current | any | true | **InterestPaused** (during Lautakunta review) |
 
-**§67:** "Henkilövahingosta suoritettavan korvauksen viivästyessä vakuutusyhtiön on maksettava viivästynyt korvaus viivästysajalta korotettuna (viivästyskorotus)."
+**Minimum Update Formula:**
+```
+newMinimum = €7.28 × palkkakerroin[currentYear]
+newMinimum = Round(newMinimum, nearest cent)
+```
 
-**Minimum interest:** €7.28 (adjusted annually by palkkakerroin)
+**§67:** "Viivästyskorotusta tai viivästyskorkoa, jonka määrä on pienempi kuin 7,28 euroa, ei makseta. Rahamäärä tarkistetaan kalenterivuosittain työntekijän eläkelain 96 §:ssä tarkoitetulla palkkakertoimella. Tarkistettu euromäärä pyöristetään lähimmäksi sentiksi."
+
+**Variables:**
+- `interest.currentMinimum`: Current year threshold (default €7.28)
+- `palkkakerroin.value`: Annual wage coefficient from Työeläkelaki
+- `paymentDelay.cause`: Normal | VictimCaused | ForceMajeure
+- `lautakunta.reviewActive`: Boolean
 
 ---
 
