@@ -92,7 +92,41 @@
               "WorkplaceAccident": "Accident at workplace during work",
               "CommuteAccident": "Accident on home-work journey",
               "BusinessTripAccident": "Accident during work-related travel",
-              "WorkRelatedActivityAccident": "Accident during employer-organized activity",
+              "WorkRelatedActivityAccident": {
+                "description": "Accident during employer-organized or approved activity",
+                "legal_basis": "Sections 24-24a",
+                "subclasses": {
+                  "WorkRelatedTraining": {
+                    "description": "Accident during work-related training",
+                    "legal_basis": "Section 24(2)",
+                    "conditions": ["Organized by employer", "Employer-approved participation"]
+                  },
+                  "WorkRelatedRecreation": {
+                    "description": "Accident during work-related recreation activities",
+                    "legal_basis": "Section 24(1)",
+                    "conditions": ["Organized by employer", "Employer-approved participation"]
+                  },
+                  "WorkAbilityMaintenance": {
+                    "description": "Accident during work ability maintenance activities",
+                    "legal_basis": "Section 24(1)",
+                    "conditions": ["Per good occupational health practice", "Organized based on Työterveyshuoltolaki (1383/2001)"]
+                  },
+                  "FitnessSportsDuringWork": {
+                    "description": "Accident during employer-approved fitness sports during work time",
+                    "legal_basis": "Section 24(1)",
+                    "conditions": ["Approved by employer", "Related to physical condition requirements"]
+                  },
+                  "WorkInjuryHealthcareVisit": {
+                    "description": "Accident during healthcare visit related to work injury",
+                    "legal_basis": "Section 24"
+                  },
+                  "ExceptionalRiskAccommodation": {
+                    "description": "Accident during accommodation under exceptional risk conditions",
+                    "legal_basis": "Section 24a",
+                    "conditions": ["Employer-provided accommodation", "During exceptional risk conditions"]
+                  }
+                }
+              },
               "SportsAccident": {
                 "description": "Accident during work-sponsored sports or fitness activities",
                 "legal_basis": "Section 24(1)",
@@ -163,6 +197,20 @@
               "CarpalTunnelSyndrome": {
                 "description": "Median nerve compression from repetitive work",
                 "legal_basis": "Section 28(1)"
+              },
+              "Epicondylitis": {
+                "description": "Tennis elbow or golfer's elbow from work-related strain",
+                "legal_basis": "Section 28(1)",
+                "alternative_names": ["TennisElbow", "GolferElbow"]
+              },
+              "Bursitis": {
+                "description": "Bursa inflammation from pressure or repetitive work",
+                "legal_basis": "Section 28(1)"
+              },
+              "VibrationDisease": {
+                "description": "Disease caused by exposure to hand-arm vibration",
+                "legal_basis": "Section 28(1)",
+                "includes": ["Vibration-induced neuropathy", "Vibration white finger"]
               },
               "Tendinosis": {
                 "description": "Chronic tendon condition from repetitive strain",

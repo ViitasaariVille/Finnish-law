@@ -37,8 +37,23 @@
 | Not compensable | CommuteAccident | home_work_route | detour_personal | Section 21(3) | Oma-aloitteinen kiertotie |
 | Compensable | BusinessTripAccident | work_travel | during_travel | Section 22 | Työmatkalla |
 | Compensable | BusinessTripAccident | accommodation | any | Section 23 | Majoituksen aikana |
-| Limited | BusinessTripAccident | free_time | during_trip | Section 24 | Vapaa-aikana |
+| Compensable | WorkRelatedTraining | employer_organized | during_training | Section 24(2) | Työhön liittyvä koulutus |
+| Compensable | WorkRelatedTraining | employer_approved | during_training | Section 24(2) | Työhön liittyvä koulutus |
+| Compensable | WorkRelatedRecreation | employer_organized | during_recreation | Section 24(1) | Työhön liittyvä virkistystoiminta |
+| Compensable | WorkRelatedRecreation | employer_approved | during_recreation | Section 24(1) | Työhön liittyvä virkistystoiminta |
+| Compensable | WorkAbilityMaintenance | occupational_health | any | Section 24(1) | Työkyvyn ylläpitäminen |
+| Compensable | FitnessSportsDuringWork | employer_approved | during_work_hours | Section 24(1) | Kuntoiluliikunta työajalla |
+| Compensable | WorkInjuryHealthcareVisit | medical_facility | any | Section 24 | Työtapaturmaan liittyvät terveydenhuoltokäynnit |
+| Compensable | ExceptionalRiskAccommodation | employer_provided | during_risk_period | Section 24a | Poikkeuksellisen riskin aikainen majoitus |
+| Limited | BusinessTripFreeTime | free_time | during_trip | Section 24(3) | Vapaa-aikana |
 | Compensable | OccupationalDisease | any | diagnosed | Section 26(1) | Ammattitauti |
+| Compensable | Tendinitis | any | any | Section 28(1) | Jännetulehdus |
+| Compensable | CarpalTunnelSyndrome | any | any | Section 28(1) | Rannekanavaoireyhtymä |
+| Compensable | Epicondylitis | any | any | Section 28(1) | Epikondyliitti |
+| Compensable | Bursitis | any | any | Section 28(1) | Bursiitti |
+| Compensable | VibrationDisease | any | any | Section 28(1) | Värinätaudit |
+| Compensable | NoiseInducedHearingLoss | any | any | Section 28(1) | Meluvamma |
+| Compensable | DiseaseWorsening | work_related | any | Section 29 | Taudin paheneminen |
 | Compensable | RepetitiveStrainInjury | any | any | Section 33 | Yksipuolinen kuormitus |
 | Compensable | ViolenceIncident | work_related | during_work | Section 34 | Väkivalta |
 | Compensable | PsychologicalInjury | work_related | serious | Section 35 | Psykografkinen sairaus |
