@@ -373,6 +373,19 @@ Claim Received
 | EEA | false | any | LimitedCoverage_BureauGuarantee |
 | Non-EEA | any | any | CheckBilateralAgreement |
 
+#### E3b: Guarantee Fund Coverage Outside Finland (§45)
+
+| accident.locationCountry | victim.residenceCountry | vehicle.ownerCountry | vehicle.identified | response.twoMonths | Output |
+|-------------------------|------------------------|----------------------|-------------------|-------------------|--------|
+| EEA (not FI) | Finland | any | any | any | **Covered_ByLVK** |
+| EEA (not FI) | Finland | unknown | unknown | any | **Covered_ByLVK** |
+| Non-EEA | Finland | EEA | any | no_insurer | **Covered_ByLVK** |
+| Non-EEA (GreenCard) | Finland | any | any | any | **Covered_ByLVK** |
+
+**§45(1):** "Liikennevakuutuskeskus korvaa 43 §:n 1 momentissa tarkoitetun ajoneuvon liikenteeseen käyttämisestä aiheutuneen liikennevahingon silloin, kun se on sattunut muussa ETA-valtiossa kuin Suomessa..."
+
+**§45(2):** "Jos tuntemattomaksi jääneen ajoneuvon... vahinkoa kärsinyt, jolla on kotipaikka Suomessa, voi esittää korvausvaatimuksensa Liikennevakuutuskeskukselle."
+
 #### E4: Insurance Obligation Liable Party (§6)
 
 | person.owner.exists | person.holder.exists | vehicle.ownershipTransferred | Output |
