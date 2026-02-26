@@ -1,183 +1,183 @@
-# Finnish Work Accident Insurance - DMN Business Rules
+# Work Accident Dmn Rules DMN Rules
 
-**Based on:** Työtapaturma- ja ammattitautilaki (459/2015)  
-**Version:** 1.1  
-**DMN Version:** 1.3  
-**Source:** https://www.finlex.fi/fi/laki/alkup/2015/20150459
+**Version:** 1.1
+**Total Decisions:** 10
 
 ---
 
-## 1. Insurance Obligation
+## Unknown
 
-**Legal Source:** Part I, Sections 1-14
+### InsuranceObligation
 
-| **OUTPUT: Insurance Required** | Person Type | Employment Status | Legal Basis | Source Text |
-|-------------------------------|-------------|-------------------|-------------|-------------|
-| MandatoryInsurance | Employee | employed | Section 3(1) | Työnantajan on otettava vakuutus |
-| MandatoryInsurance | Employee | probation | Section 3(1) | Koeaikana vakuutusvelvollisuus |
-| MandatoryInsurance | Employee | contract | Section 3(2) | Työsopimuksen perusteella |
-| VoluntaryWorkTimeInsurance | Entrepreneur | YEL_insured | Sections 188-190 | Yrittäjän vapaaehtoinen vakuutus |
-| Excluded | Farmer | any | Section 11 | Maa- ja metsätalousyrittäjät |
-| MandatoryInsurance | ForeignWorker | EU | Section 8(1) | EU-kansalaiset |
-| Check bilateral | ForeignWorker | non_EU | Section 8(2) | Kolmansien maiden kansalaiset |
+- **Description:** Determine if employer has mandatory insurance obligation
+- **Legal Source:** Part I, Sections 1-14
+- **Hit Policy:** UNIQUE
+- **Output:** insurance_required
+- **Inputs:** person.type, person.employment_status
 
----
+| Inputs | Output | Legal Basis |
+|--------|--------|-------------|
+| Employee | employed | MandatoryInsurance | Section 3(1) |
+| Employee | probation | MandatoryInsurance | Section 3(1) |
+| Employee | contract | MandatoryInsurance | Section 3(2) |
+| Entrepreneur | YEL_insured | VoluntaryWorkTimeInsurance | Sections 188-190 |
+| Farmer | any | Excluded | Section 11 |
+| ForeignWorker | EU | MandatoryInsurance | Section 8(1) |
+| ForeignWorker | non_EU | Check bilateral | Section 8(2) |
 
-## 2. Compensable Event
+### CompensableEvent
 
-**Legal Source:** Part II, Sections 15-35
+- **Description:** Determine if event is compensable under the law
+- **Legal Source:** Part II, Sections 15-35
+- **Hit Policy:** FIRST
+- **Output:** compensable
+- **Inputs:** event.type, event.location, event.timing
 
-| **OUTPUT: Compensable** | Event Type | Location | Timing | Legal Basis | Source Text |
-|------------------------|------------|----------|--------|-------------|-------------|
-| Compensable | WorkplaceAccident | workplace | during_work | Section 17(1) | Työtapaturma |
-| Compensable | WorkplaceAccident | workplace | before_after | Section 18 | Muut vammat |
-| Compensable | WorkplaceAccident | workplace | breaks | Section 17(3) | Tauolla |
-| Compensable | CommuteAccident | home_work_route | direct_route | Section 21(1) | Kotimatkan aikana |
-| Compensable | CommuteAccident | home_work_route | detour_necessary | Section 21(2) | Välttämätön kiertotie |
-| Not compensable | CommuteAccident | home_work_route | detour_personal | Section 21(3) | Oma-aloitteinen kiertotie |
-| Compensable | BusinessTripAccident | work_travel | during_travel | Section 22 | Työmatkalla |
-| Compensable | BusinessTripAccident | accommodation | any | Section 23 | Majoituksen aikana |
-| Limited | BusinessTripAccident | free_time | during_trip | Section 24 | Vapaa-aikana |
-| Compensable | OccupationalDisease | any | diagnosed | Section 26(1) | Ammattitauti |
-| Compensable | RepetitiveStrainInjury | any | any | Section 33 | Yksipuolinen kuormitus |
-| Compensable | ViolenceIncident | work_related | during_work | Section 34 | Väkivalta |
-| Compensable | PsychologicalInjury | work_related | serious | Section 35 | Psykografkinen sairaus |
+| Inputs | Output | Legal Basis |
+|--------|--------|-------------|
+| WorkplaceAccident | workplace | during_work | Compensable | Section 17(1) |
+| WorkplaceAccident | workplace | before_after | Compensable | Section 18 |
+| WorkplaceAccident | workplace | breaks | Compensable | Section 17(3) |
+| CommuteAccident | home_work_route | direct_route | Compensable | Section 21(1) |
+| CommuteAccident | home_work_route | detour_necessary | Compensable | Section 21(2) |
+| CommuteAccident | home_work_route | detour_personal | Not compensable | Section 21(3) |
+| BusinessTripAccident | work_travel | during_travel | Compensable | Section 22 |
+| BusinessTripAccident | accommodation | any | Compensable | Section 23 |
+| BusinessTripAccident | free_time | during_trip | Limited | Section 24 |
+| OccupationalDisease | any | diagnosed | Compensable | Section 26(1) |
+| RepetitiveStrainInjury | any | any | Compensable | Section 33 |
+| ViolenceIncident | work_related | during_work | Compensable | Section 34 |
+| PsychologicalInjury | work_related | serious | Compensable | Section 35 |
 
----
+### CompensationType
 
-## 3. Compensation Type
+- **Description:** Determine type of compensation based on injury
+- **Legal Source:** Part III, Sections 36-109
+- **Hit Policy:** FIRST
+- **Output:** compensation_type
+- **Inputs:** injury.type, injury.severity, injury.duration
 
-**Legal Source:** Part III, Sections 36-109
+| Inputs | Output | Legal Basis |
+|--------|--------|-------------|
+| PhysicalInjury | minor | < 1 year | MedicalExpenses | Section 36 |
+| PhysicalInjury | moderate | 1-3 years | MedicalExpenses + LostWages | Sections 36, 55 |
+| PhysicalInjury | severe | > 3 years | MedicalExpenses + LostWages + Disability | Sections 36, 55, 83 |
+| PhysicalInjury | permanent | any | PermanentDisabilityCompensation | Section 83(1) |
+| OccupationalDisease | any | any | MedicalExpenses + LostWages | Sections 26-32 |
+| MentalInjury | moderate | any | Rehabilitation | Section 88(1) |
+| Death | any | any | DeathCompensation | Section 99(1) |
 
-| **OUTPUT: Compensation Type** | Injury Type | Severity | Duration | Legal Basis | Source Text |
-|-------------------------------|-------------|----------|---------|-------------|-------------|
-| MedicalExpenses | PhysicalInjury | minor | < 1 year | Section 36 | Sairaanhoito |
-| MedicalExpenses + LostWages | PhysicalInjury | moderate | 1-3 years | Sections 36, 55 | Sairaanhoito + ansionmenetys |
-| MedicalExpenses + LostWages + Disability | PhysicalInjury | severe | > 3 years | Sections 36, 55, 83 | Kokonaiskorvaus |
-| PermanentDisabilityCompensation | PhysicalInjury | permanent | any | Section 83(1) | Pysyvä haitta |
-| MedicalExpenses + LostWages | OccupationalDisease | any | any | Sections 26-32 | Ammattitaudin korvaus |
-| Rehabilitation | MentalInjury | moderate | any | Section 88(1) | Kuntoutus |
-| DeathCompensation | Death | any | any | Section 99(1) | Kuoleman korvaus |
+### CompensationAmount
 
----
+- **Description:** Calculate compensation amount
+- **Legal Source:** Part III, Sections 36-109
+- **Hit Policy:** UNIQUE
+- **Output:** compensation_amount
+- **Inputs:** compensation_type, income.annual, injury.severity, work_ability.lost_percentage
 
-## 4. Compensation Amount
+| Inputs | Output | Legal Basis |
+|--------|--------|-------------|
+| LostWages | any | any | 100% | income.annual / 365 * days | Section 56(1) |
+| LostWages | any | any | 50% | income.annual / 365 * days * 0.5 | Section 56(2) |
+| LostWages | any | any | 0% | 0 | Section 56 |
+| PermanentDisability | any | 10-19% | any | income.annual * 0.1 | Section 84(1) |
+| PermanentDisability | any | 20-50% | any | income.annual * 0.2 | Section 84(1) |
+| PermanentDisability | any | 51-100% | any | income.annual | Section 84(2) |
+| Death | any | any | any | Section 99-109 rates | Sections 99-109 |
 
-**Legal Source:** Part III, Sections 36-109
+### MedicalCareCoverage
 
-| **OUTPUT: Formula** | Compensation Type | Income | Severity | Work Ability Lost | Legal Basis | Source Text |
-|--------------------|------------------|--------|----------|-------------------|-------------|-------------|
-| income.annual / 365 * days | LostWages | any | any | 100% | Section 56(1) | Täysi ansionmenetys |
-| income.annual / 365 * days * 0.5 | LostWages | any | any | 50% | Section 56(2) | Osittainen ansionmenetys |
-| 0 | LostWages | any | any | 0% | Section 56 | Ei ansionmenetystä |
-| income.annual * 0.1 | PermanentDisability | any | 10-19% | any | Section 84(1) | Haittalisä 10-19% |
-| income.annual * 0.2 | PermanentDisability | any | 20-50% | any | Section 84(1) | Haittalisä 20-50% |
-| income.annual | PermanentDisability | any | 51-100% | any | Section 84(2) | Täysi haittalisä |
-| Section 99-109 rates | Death | any | any | any | Sections 99-109 | Kuoleman korvaukset |
+- **Description:** Determine medical care coverage
+- **Legal Source:** Part III, Sections 36-54
+- **Hit Policy:** FIRST
+- **Output:** coverage
+- **Inputs:** treatment.type, treatment.necessity, treatment.provider
 
----
+| Inputs | Output | Legal Basis |
+|--------|--------|-------------|
+| EmergencyCare | required | public | 100% | Section 37(1) |
+| EmergencyCare | required | private | 100% (reimbursement) | Section 37(2) |
+| Surgery | required | any | 100% | Section 38(1) |
+| Medicines | prescribed | pharmacy | 100% (drug list) | Section 45 |
+| Rehabilitation | medical_necessity | any | 100% | Section 88(1) |
+| DentalTreatment | accident_related | any | 100% | Section 48 |
+| TravelToTreatment | required | any | Kilometre allowance | Section 50 |
+| Prosthesis | required | any | 100% | Section 47 |
 
-## 5. Medical Care Coverage
+### ClaimTimeLimit
 
-**Legal Source:** Part III, Sections 36-54
+- **Description:** Determine claim submission time limit
+- **Legal Source:** Part IV, Section 110
+- **Hit Policy:** UNIQUE
+- **Output:** time_limit
+- **Inputs:** claim.type, injury.timing
 
-| **OUTPUT: Coverage** | Treatment Type | Necessity | Provider | Legal Basis | Source Text |
-|---------------------|---------------|-----------|----------|-------------|-------------|
-| 100% | EmergencyCare | required | public | Section 37(1) | Julkisen terveydenhuollon hoito |
-| 100% (reimbursement) | EmergencyCare | required | private | Section 37(2) | Yksityisen hoidon korvaus |
-| 100% | Surgery | required | any | Section 38(1) | Leikkaushoito |
-| 100% (drug list) | Medicines | prescribed | pharmacy | Section 45 | Lääkkeet |
-| 100% | Rehabilitation | medical_necessity | any | Section 88(1) | Kuntoutus |
-| 100% | DentalTreatment | accident_related | any | Section 48 | Hammashoito |
-| Kilometre allowance | TravelToTreatment | required | any | Section 50 | Matkakustannukset |
-| 100% | Prosthesis | required | any | Section 47 | Silmälasit, proteesit |
+| Inputs | Output | Legal Basis |
+|--------|--------|-------------|
+| WorkAccident | within_3_years | 3 years from accident | Section 110(1) |
+| WorkAccident | after_3_years | Claim barred | Section 110(3) |
+| OccupationalDisease | any | 3 years from diagnosis | Section 110(2) |
+| DeathBenefit | within_3_years | 3 years from death | Section 110(1) |
+| SurvivorBenefit | any | 3 years from death | Section 110(1) |
 
----
+### RehabilitationEligibility
 
-## 6. Claim Time Limit
+- **Description:** Determine rehabilitation eligibility
+- **Legal Source:** Part III, Sections 88-98
+- **Hit Policy:** FIRST
+- **Output:** eligible
+- **Inputs:** injury.severity, work_ability.reduced, rehabilitation.medical_recommendation
 
-**Legal Source:** Part IV, Section 110
+| Inputs | Output | Legal Basis |
+|--------|--------|-------------|
+| severe | yes | yes | Full rehabilitation | Section 88(1) |
+| moderate | yes | yes | Vocational rehabilitation | Section 89(1) |
+| minor | no | no | Medical rehabilitation only | Section 88(1) |
+| any | any | no | Not eligible | Section 88(1) |
 
-| **OUTPUT: Time Limit** | Claim Type | Injury Timing | Legal Basis | Source Text |
-|-----------------------|------------|---------------|-------------|-------------|
-| 3 years from accident | WorkAccident | within_3_years | Section 110(1) | 3 vuoden määräaika |
-| Claim barred | WorkAccident | after_3_years | Section 110(3) | Määräajan umpeutuminen |
-| 3 years from diagnosis | OccupationalDisease | any | Section 110(2) | Ammattitaudin määräaika |
-| 3 years from death | DeathBenefit | within_3_years | Section 110(1) | Kuoleman korvaus |
-| 3 years from death | SurvivorBenefit | any | Section 110(1) | Leskeneläke |
+### InsurancePremium
 
----
+- **Description:** Calculate insurance premium
+- **Legal Source:** Part V, Sections 156-186
+- **Hit Policy:** UNIQUE
+- **Output:** premium
+- **Inputs:** employer.industry_risk, employer.payroll, employer.claims_history
 
-## 7. Rehabilitation Eligibility
+| Inputs | Output | Legal Basis |
+|--------|--------|-------------|
+| low_risk | any | no_claims | payroll * 0.005 | Section 166(1) |
+| medium_risk | any | no_claims | payroll * 0.01 | Section 166(1) |
+| high_risk | any | no_claims | payroll * 0.02 | Section 166(1) |
+| any | any | with_claims | base_premium + risk loading | Sections 171-176 |
 
-**Legal Source:** Part III, Sections 88-98
+### AppealsProcess
 
-| **OUTPUT: Eligible** | Injury Severity | Work Ability Reduced | Medical Recommendation | Legal Basis | Source Text |
-|----------------------|-----------------|---------------------|----------------------|-------------|-------------|
-| Full rehabilitation | severe | yes | yes | Section 88(1) | Ammatillinen kuntoutus |
-| Vocational rehabilitation | moderate | yes | yes | Section 89(1) | Ammatillinen kuntoutus |
-| Medical rehabilitation only | minor | no | no | Section 88(1) | Lääkinnällinen kuntoutus |
-| Not eligible | any | any | no | Section 88(1) | Ei oikeutta kuntoutukseen |
+- **Description:** Determine appeals process
+- **Legal Source:** Part VIII, Sections 237-247
+- **Hit Policy:** UNIQUE
+- **Output:** appeal_path
+- **Inputs:** decision.type, claimaint.disagreement
 
----
+| Inputs | Output | Legal Basis |
+|--------|--------|-------------|
+| Rejection | yes | Appeal to Insurance Company -> Accident Board | Section 237(1) |
+| AmountDispute | yes | Appeal to Accident Compensation Board | Section 238 |
+| LateDecision | yes | Complaint + Late interest | Section 146 |
+| AnyDecision | no | No appeal | N/A |
 
-## 8. Insurance Premium
+### SurvivorBenefits
 
-**Legal Source:** Part V, Sections 156-186
+- **Description:** Determine survivor benefit eligibility
+- **Legal Source:** Part III, Sections 99-109
+- **Hit Policy:** FIRST
+- **Output:** benefit
+- **Inputs:** survivor.relationship, survivor.age, deceased.contributory
 
-| **OUTPUT: Premium Formula** | Industry Risk | Payroll | Claims History | Legal Basis | Source Text |
-|----------------------------|---------------|---------|---------------|-------------|-------------|
-| payroll * 0.005 | low_risk | any | no_claims | Section 166(1) | Vakuutusmaksun peruste |
-| payroll * 0.01 | medium_risk | any | no_claims | Section 166(1) | Vakuutusmaksun peruste |
-| payroll * 0.02 | high_risk | any | no_claims | Section 166(1) | Korkea riski |
-| base_premium + risk loading | any | any | with_claims | Sections 171-176 | Lisämaksu |
+| Inputs | Output | Legal Basis |
+|--------|--------|-------------|
+| Spouse | any | yes | Spouse pension | Section 100(1) |
+| Spouse | any | no | Lump sum | Section 107(1) |
+| Child | under_18 | yes | Child pension + orphan allowance | Sections 101-102 |
+| Child | 18-24_student | yes | Student orphan pension | Section 103 |
+| Dependent | any | yes | Dependent allowance | Section 105 |
 
----
-
-## 9. Appeals Process
-
-**Legal Source:** Part VIII, Sections 237-247
-
-| **OUTPUT: Appeal Path** | Decision Type | Disagreement | Legal Basis | Source Text |
-|-------------------------|---------------|--------------|-------------|-------------|
-| Appeal to Insurance Company → Accident Board | Rejection | yes | Section 237(1) | Valitus vakuutusyhtiölle |
-| Appeal to Accident Compensation Board | AmountDispute | yes | Section 238 | Tapaturma-asianlautakunta |
-| Complaint + Late interest | LateDecision | yes | Section 146 | Viivästyskorotus |
-| No appeal | AnyDecision | no | N/A | Ei valitusta |
-
----
-
-## 10. Survivor Benefits
-
-**Legal Source:** Part III, Sections 99-109
-
-| **OUTPUT: Benefit** | Survivor Relationship | Age | Deceased Contributory | Legal Basis | Source Text |
-|--------------------|-----------------------|-----|----------------------|-------------|-------------|
-| Spouse pension | Spouse | any | yes | Section 100(1) | Leskeneläke |
-| Lump sum | Spouse | any | no | Section 107(1) | Kertakorvaus |
-| Child pension + orphan allowance | Child | under_18 | yes | Sections 101-102 | Lapseneläke |
-| Student orphan pension | Child | 18-24_student | yes | Section 103 | Opiskelijan eläke |
-| Dependent allowance | Dependent | any | yes | Section 105 | Huollettavan korvaus |
-
----
-
-## Legal Reference Summary
-
-| Part | Sections | Topic |
-|------|----------|-------|
-| Part I | 1-14 | General Provisions |
-| Part II | 15-35 | Compensable Events |
-| Part III | 36-109 | Benefits |
-| Part IV | 110-155 | Implementation |
-| Part V | 156-186 | Insurance & Premium |
-| Part VI | 187-204 | Voluntary Insurance |
-| Part VII | 205-236c | Implementation System |
-| Part VIII | 237-247 | Appeals |
-| Part IX | 248-278 | Miscellaneous |
-| Part X | 279-286 | Enforcement |
-
----
-
-## JSON Format (Machine-Readable)
-
-See `work_accident_dmn_rules.json` for DMN-compatible JSON format.

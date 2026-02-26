@@ -1,137 +1,161 @@
-# Finnish Patient Insurance - DMN Business Rules
+# Patient Insurance Dmn Rules DMN Rules
 
-**Based on:** Potilasvakuutuslaki (Patient Insurance Act) 948/2019  
-**Version:** 1.0  
-**Source:** https://www.finlex.fi/fi/laki/alkup/2019/20190948
-
----
-
-## 1. Insurance Obligation
-
-| **OUTPUT: Insurance Required** | Organization Type | Legal Basis | Source Text |
-|-------------------------------|------------------|-------------|-------------|
-| PatientInsurance | PublicHealthcareEntity | Section 6(1) | Terveyden- ja sairaanhoidon yhteisö |
-| PatientInsurance | PrivateHealthcareEntity | Section 6(1) | Yksityinen terveydenhuolto |
-| PatientInsurance | Employer | Section 6(1) | Työnantaja |
-| PatientInsurance | SelfEmployedProfessional | Section 6(1) | Itsenäinen ammatinharjoittaja |
-| Excluded | HealthcareProfessional (free, no org) | Section 6(2) | Vastikkeetta annettu hoito |
+**Version:** 1.0
+**Total Decisions:** 10
 
 ---
 
-## 2. Compensable Patient Injury
+## Unknown
 
-| **OUTPUT: Compensable** | Injury Type | Condition | Legal Basis | Source Text |
-|------------------------|-------------|-----------|-------------|-------------|
-| Compensable | TreatmentInjury | Deviation from proper care | Section 23(1)(1) | Tutkimus tai hoito |
-| Compensable | DeviceInjury | Device defect | Section 23(1)(2) | Laitteen vika |
-| Compensable | ImplantInjury | Not as safe as expected | Section 23(1)(3) | Kehoon asennettu laite |
-| Compensable | InfectionInjury | Patient shouldn't tolerate | Section 23(1)(4) | Infektio hoidon yhteydessä |
-| Compensable | AccidentInjury | During treatment/transport | Section 23(1)(5) | Tapaturma |
-| Compensable | FacilityInjury | Fire or damage | Section 23(1)(6) | Hoitohuoneiston palo |
-| Compensable | MedicationInjury | Contrary to regulations | Section 23(1)(7) | Lääkkeen toimittaminen |
-| Compensable | SevereConsequence | Unreasonable consequence | Section 23(1)(8) | Pysyvä vaikea sairaus |
+### InsuranceObligation
 
----
+- **Description:** Determine if organization has patient insurance obligation
+- **Legal Source:** Section 6
+- **Hit Policy:** FIRST
+- **Output:** insurance_required
+- **Inputs:** organization.type, organization.is_free, organization.has_employer
 
-## 3. Claim Time Limit
+| Inputs | Output | Legal Basis |
+|--------|--------|-------------|
+| PublicHealthcareEntity | any | any | PatientInsurance | Section 6(1) |
+| PrivateHealthcareEntity | any | any | PatientInsurance | Section 6(1) |
+| SelfEmployedProfessional | any | any | PatientInsurance | Section 6(1) |
+| HealthcareProfessional | True | False | PatientInsurance (personal) | Section 6(2) |
+| HealthcareProfessional | True | True | Employer liable | Section 6(2) |
 
-| **OUTPUT: Time Limit** | Knowledge Date | Event Date | Legal Basis | Source Text |
-|-----------------------|----------------|------------|-------------|-------------|
-| 3 years from knowledge | within 3 years | any | Section 31(1) | Tietää tai olisi pitänyt tietää |
-| 10 years from event | any | within 10 years | Section 31(1) | 10 vuoden määräaika |
-| Claim barred | after 3 years knowledge | over 10 years ago | Section 31(1) | Määräaika umpeutunut |
+### CompensableInjury
 
----
+- **Description:** Determine if patient injury is compensable
+- **Legal Source:** Section 23
+- **Hit Policy:** FIRST
+- **Output:** compensable
+- **Inputs:** injury.type, injury.condition_met
 
-## 4. Compensation Type
+| Inputs | Output | Legal Basis |
+|--------|--------|-------------|
+| TreatmentInjury | True | Compensable | Section 23(1)(1) |
+| DeviceInjury | True | Compensable | Section 23(1)(2) |
+| ImplantInjury | True | Compensable | Section 23(1)(3) |
+| InfectionInjury | True | Compensable | Section 23(1)(4) |
+| AccidentInjury | True | Compensable | Section 23(1)(5) |
+| FacilityInjury | True | Compensable | Section 23(1)(6) |
+| MedicationInjury | True | Compensable | Section 23(1)(7) |
+| SevereConsequenceInjury | True | Compensable | Section 23(1)(8) |
+| any | False | Not compensable | Section 23 |
 
-| **OUTPUT: Compensation Type** | Injury Result | Legal Basis | Source Text |
-|------------------------------|--------------|-------------|-------------|
-| MedicalExpenseCompensation | Necessary care costs | Section 24 | Sairaanhoidon kustannukset |
-| LostEarningsCompensation | Income loss | Section 24 | Ansiomenetys |
-| PermanentInjuryCompensation | Permanent damage | Section 24 | Pysyvä haitta |
-| PainAndSuffering | Pain and suffering | Section 24 | Kipu ja kärsimys |
-| DeathCompensation | Death | Section 24 | Kuolema |
-| VocationalRehabilitation | Work ability affected | Section 25 | Ammatillinen kuntoutus |
-| RehabilitationAllowance | During rehabilitation | Section 27 | Kuntoutusajan korvaus |
+### ClaimTimeLimit
 
----
+- **Description:** Determine claim time limit
+- **Legal Source:** Section 31
+- **Hit Policy:** UNIQUE
+- **Output:** time_limit
+- **Inputs:** claim.knowledge_date, claim.event_date
 
-## 5. Compensation Calculation
+| Inputs | Output | Legal Basis |
+|--------|--------|-------------|
+| within_3_years | any | 3 years from knowledge | Section 31(1) |
+| any | within_10_years | 10 years from event | Section 31(1) |
+| after_3_years | over_10_years | Claim barred | Section 31(1) |
 
-| **OUTPUT: Calculation** | Compensation Type | Method | Legal Basis | Source Text |
-|------------------------|-------------------|--------|-------------|-------------|
-| Per Tort Liability Act | Medical expenses | Chapter 5 | Section 24 | Vahingonkorvauslaki |
-| Per Tort Liability Act | Lost earnings | Chapter 5 | Section 24 | Ansiomenetys |
-| Per Tort Liability Act | Permanent injury | Chapter 5:2d | Section 24 | Pysyvä haitta |
-| Lump sum option | Any | Special reason only | Section 24(3) | Erityisen painavasta syystä |
-| Capital value | Continuous | Life expectancy + index | Section 24(4) | Pääoma-arvo |
+### CompensationType
 
----
+- **Description:** Determine type of compensation
+- **Legal Source:** Section 24
+- **Hit Policy:** FIRST
+- **Output:** compensation_type
+- **Inputs:** injury.result, patient.status
 
-## 6. Claim Processing Time
+| Inputs | Output | Legal Basis |
+|--------|--------|-------------|
+| medical_costs | alive | MedicalExpenseCompensation | Section 24 |
+| income_loss | alive | LostEarningsCompensation | Section 24 |
+| permanent_damage | alive | PermanentInjuryCompensation | Section 24 |
+| pain | alive | PainAndSuffering | Section 24 |
+| death | deceased | DeathCompensation | Section 24 |
+| work_ability_affected | alive | VocationalRehabilitation | Section 25 |
 
-| **OUTPUT: Deadline** | Stage | Legal Basis | Source Text |
-|----------------------|-------|-------------|-------------|
-| Start investigation | 7 days from filing | Section 33(1) | 7 arkipäivän kuluessa |
-| Decision | 3 months from complete claim | Section 33(2) | Kolmen kuukauden kuluessa |
-| Undisputed portion | Immediate | Section 33(3) | Riidaton osa heti |
+### ProcessingDeadline
 
----
+- **Description:** Determine processing deadline
+- **Legal Source:** Section 33
+- **Hit Policy:** UNIQUE
+- **Output:** deadline
+- **Inputs:** claim.stage
 
-## 7. Late Payment Interest
+| Inputs | Output | Legal Basis |
+|--------|--------|-------------|
+| filing | 7 days to start | Section 33(1) |
+| complete | 3 months to decision | Section 33(2) |
+| undisputed | Immediate payment | Section 33(3) |
 
-| **OUTPUT: Interest Rate** | Situation | Legal Basis | Source Text |
-|--------------------------|-----------|-------------|-------------|
-| Interest Act 4a§ | Late compensation | Section 42 | Viivästyskorotus |
-| Minimum 8€ | Below minimum not paid | Section 42(3) | Alle 8€ ei makseta |
+### LatePaymentInterest
 
----
+- **Description:** Determine late payment interest
+- **Legal Source:** Section 42
+- **Hit Policy:** UNIQUE
+- **Output:** interest
+- **Inputs:** payment.status, payment.amount
 
-## 8. Rehabilitation Eligibility
+| Inputs | Output | Legal Basis |
+|--------|--------|-------------|
+| late | over_8_euros | Interest Act 4a§ rate | Section 42(1) |
+| late | under_8_euros | Not paid | Section 42(3) |
+| on_time | any | No interest | Section 42 |
 
-| **OUTPUT: Eligible** | Work Ability | Need | Legal Basis | Source Text |
-|---------------------|--------------|------|-------------|-------------|
-| Full rehabilitation | Affected | Yes | Section 25 | Työkyky heikentynyt |
-| Vocational rehabilitation | May affect later | Probable | Section 25 | Voi myöhemmin heikentyä |
-| Costs covered | Any level | Required | Section 26 | Kohtuulliset kustannukset |
+### RehabilitationEligibility
 
----
+- **Description:** Determine rehabilitation eligibility
+- **Legal Source:** Section 25
+- **Hit Policy:** FIRST
+- **Output:** eligible
+- **Inputs:** work_ability.affected, future.affect_probable
 
-## 9. Subrogation Rights
+| Inputs | Output | Legal Basis |
+|--------|--------|-------------|
+| True | any | Vocational rehabilitation | Section 25(1) |
+| False | True | May become eligible | Section 25(1) |
+| False | False | Not eligible | Section 25 |
 
-| **OUTPUT: Subrogation** | Party | Condition | Legal Basis | Source Text |
-|------------------------|-------|-----------|-------------|-------------|
-| Centre recovers from wrongdoer | Any | Compensation paid | Section 45 | Takautumisoikeus |
-| Centre recovers from other insurer | Other system | Coordination | Section 46 | Yhteensovitus |
-| Insurer recovers from Centre | Work/Traffic insurance | Duplicate payment | Section 47 | Vakuutuslaitoksen oikeus |
+### SubrogationRight
 
----
+- **Description:** Determine subrogation rights
+- **Legal Source:** Sections 45-47
+- **Hit Policy:** FIRST
+- **Output:** subrogation
+- **Inputs:** claimant.type, injury.causation
 
-## 10. Appeal Process
+| Inputs | Output | Legal Basis |
+|--------|--------|-------------|
+| PatientInsuranceCentre | any | Can recover from wrongdoer | Section 45 |
+| OtherInsurer | coordinate | Coordination required | Section 46 |
+| WorkAccidentInsurer | duplicate | Can recover from Centre | Section 47 |
 
-| **OUTPUT: Appeal Path** | Decision Type | Legal Basis | Source Text |
-|------------------------|---------------|-------------|-------------|
-| Request Board recommendation | Within 1 year | Section 38 | Ratkaisusuositus |
-| Court if no Board | After Board | Section 41 | Tuomioistuin |
-| Mandatory Board consultation | Permanent disability/death | Section 40 | Pakollinen kuuleminen |
+### AppealProcess
 
----
+- **Description:** Determine appeal path
+- **Legal Source:** Sections 38-40
+- **Hit Policy:** FIRST
+- **Output:** appeal_path
+- **Inputs:** decision.type, timeline
 
-## Legal Reference Summary
+| Inputs | Output | Legal Basis |
+|--------|--------|-------------|
+| rejection | within_1_year | Request Board recommendation | Section 38 |
+| amount_dispute | any | Request Board recommendation | Section 38 |
+| permanent_disability | any | Mandatory Board consultation | Section 40 |
+| death_benefit | any | Mandatory Board consultation | Section 40 |
 
-| Section | Topic |
-|---------|-------|
-| Sections 1-5 | General Provisions |
-| Sections 6-21 | Insurance Obligation |
-| Sections 22-30 | Compensation |
-| Sections 31-47 | Procedure |
-| Sections 48-51 | Distribution System |
-| Sections 52-66 | Miscellaneous |
-| Sections 67-70 | Entry into Force |
+### IndexAdjustment
 
----
+- **Description:** Determine if compensation is index-adjusted
+- **Legal Source:** Section 28
+- **Hit Policy:** UNIQUE
+- **Output:** index_adjusted
+- **Inputs:** compensation.type
 
-## JSON Format
+| Inputs | Output | Legal Basis |
+|--------|--------|-------------|
+| continuous | Annual adjustment (TyEL index) | Section 28 |
+| lump_sum | No adjustment | Section 28 |
+| medical_expenses | As incurred | Section 24 |
 
-See `patient_insurance_dmn_rules.json` for machine-readable DMN format.
