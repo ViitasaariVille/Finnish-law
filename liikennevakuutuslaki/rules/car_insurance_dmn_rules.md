@@ -835,7 +835,7 @@ insurerShare = (insurerPremiumIncome / totalPremiumIncome) × amountOverThreshol
 
 ---
 
-### 2.7 Premium Calculation Rules (§§20-28)
+### 2.8 Premium Calculation Rules (§§20-28)
 
 #### P6: Traffic Removal Violation Premium (§22)
 
