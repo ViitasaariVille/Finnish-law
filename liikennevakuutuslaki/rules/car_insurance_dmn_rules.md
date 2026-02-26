@@ -761,6 +761,97 @@ totalPenalty = basePenalty × multiplier (max 3× base)
 
 ---
 
+### 2.8 Mandatory Opinion Requirements (§66)
+
+#### MOP-001: Mandatory Liikennevahinkolautakunta Opinion Triggers (§66)
+
+| claim.compensationType | injury.severity | claim.isCorrection | correction.partyAgreed | Output |
+|-----------------------|-----------------|-------------------|----------------------|--------|
+| ContinuousCompensation_Permanent | any | false | N/A | **OpinionMandatory** |
+| ContinuousCompensation_Death | any | false | N/A | **OpinionMandatory** |
+| ContinuousCompensation_Increase | any | false | N/A | **OpinionMandatory** |
+| ContinuousCompensation_Decrease | any | false | N/A | **OpinionMandatory** |
+| PainSuffering | Severe | false | N/A | **OpinionMandatory** |
+| PainSuffering | any | true | false | **OpinionMandatory** (unless obvious error) |
+| PainSuffering | any | true | true | **OpinionNotRequired** |
+| any | any | true | N/A | **OpinionNotRequired** |
+
+**§66 Mandatory Triggers:**
+1) Pysyvän ansionmenetyksen taikka kuoleman perusteella suoritettavaa jatkuvaa korvausta tai sen sijasta suoritettavaa kertakaikkista pääoma-arvoa
+2) Jatkuvan korvauksen korottamista tai alentamista vahingonkorvauslain 5 luvun 8 §:n perusteella
+3) Haitan perusteella suoritettavaa korvausta, jos vamma on vaikea
+4) Virheellisen päätöksen oikaisua asianosaisen vahingoksi, jos asianosainen ei suostu virheen korjaamiseen (ellei virhe ole ilmeinen ja aiheutunut asianosaisen omasta menettelystä)
+
+---
+
+### 2.9 Foreign Claims Representative Rules (§70)
+
+#### FCR-001: Foreign Representative 3-Month Deadline (§70)
+
+| accident.locationCountry | vehicle.homeCountry | victim.residenceCountry | daysSinceClaim | claim.status | Output |
+|------------------------|--------------------|------------------------|-----------------|--------------|--------|
+| EEA | EEA | Finland | ≤90 | ClaimComplete | **ResponseRequired** |
+| EEA | EEA | Finland | ≤90 | LiabilityDisputed | **JustifiedResponseRequired** |
+| EEA | EEA | Finland | >90 | NoResponse | **LVK_TakesOver** |
+| GreenCard | GreenCard | Finland | ≤90 | ClaimComplete | **ResponseRequired** |
+| GreenCard | GreenCard | Finland | ≤90 | LiabilityDisputed | **JustifiedResponseRequired** |
+| GreenCard | GreenCard | Finland | >90 | NoResponse | **LVK_TakesOver** |
+| Finland | any | any | any | any | **DomesticRulesApply** |
+
+**§70(2):** "Korvausedustajan on kolmen kuukauden kuluessa päivästä, jona vahinkoa kärsinyt on esittänyt korvausvaatimuksensa, korvattava 1 momentissa tarkoitettu liikennevahinko tai tehtävä perusteltu korvaustarjous, jos korvausvastuuta ei kiistetä ja jos vahinkojen suuruus on määritelty."
+
+**§71:** If representative fails to respond within 3 months, victim can demand compensation from Liikennevakuutuskeskus.
+
+---
+
+### 2.10 Subrogation Rights (§73)
+
+#### SUB-001: Insurer Subrogation - Individual vs Corporation (§73)
+
+| responsibleParty.type | responsibleParty.relationship | cause.intentional | cause.grossNegligence | driver.condition_§48 | subrogation.applies | Output |
+|----------------------|------------------------------|-------------------|----------------------|---------------------|---------------------|--------|
+| PrivateIndividual | any | false | false | any | **NoSubrogation** | **SubrogationDenied** |
+| PrivateIndividual | Owner/Holder/Driver/Passenger | true | any | any | **SubrogationAllowed** | **SubrogationAllowed** |
+| PrivateIndividual | Owner/Holder/Driver/Passenger | false | true | any | **SubrogationAllowed** | **SubrogationAllowed** |
+| PrivateIndividual | Owner/Holder/Driver/Passenger | false | false | any | **SubrogationAllowed** | **SubrogationAllowed** (if §48 applies) |
+| Corporation | any | false | false | any | **SubrogationAllowed** | **SubrogationAllowed** |
+| Corporation | any | true | any | any | **SubrogationAllowed** | **SubrogationAllowed** |
+| ThirdParty | any | any | any | any | **SubrogationAllowed** | **SubrogationAllowed** |
+
+**§73 Key Distinction:**
+- **Private individuals** (yksityishenkilö): Subrogation only if caused intentionally or with gross negligence, OR if driver was in §48(1) conditions
+- **Corporations/entities**: Subrogation allowed in all cases
+- **Employees, officials**: Treated as private individuals (§73 limits subrogation)
+
+**Protected persons under §73:**
+- Työntekijä (employee)
+- Virkamies (official)  
+- Other persons equated under Tort Liability Act §3:1
+- Ajoneuvon omistaja, haltija, kuljettaja, matkustaja
+
+---
+
+### 2.11 Liikennevakuutuskeskus Recourse (§74)
+
+#### LVK-001: LVK Recourse Scenarios (§74)
+
+| vehicle.insuranceRequired | vehicle.ownerFound | vehicle.identified | vehicle.homeCountry | recourse.target | Output |
+|-------------------------|-------------------|-------------------|---------------------|-----------------|--------|
+| false | N/A | any | EEA | **NationalGuaranteeFund_HomeCountry** | **RecourseToGuaranteeFund** |
+| true | false | true | EEA | **NationalGuaranteeFund_AccidentCountry** | **RecourseToGuaranteeFund** |
+| true | false | false | any | **NationalGuaranteeFund_AccidentCountry** | **RecourseToGuaranteeFund** |
+| any | any | any | Non-EEA | **NationalGuaranteeFund_AccidentCountry** | **RecourseToGuaranteeFund** |
+| true | true | any | any | **NotApplicable** | **NoRecourse** |
+
+**§74 Recourse Triggers:**
+1) Ajoneuvoa ei ole velvollisuus vakuuttaa → ETA-valtion takuurahasto (kotipaikka)
+2) Vakuutusyhtiötä ei saada selville → ETA-valtion takuurahasto (kotipaikka)
+3) Ajoneuvo jää tunnistamatta → ETA-valtion takuurahasto (vahinkomaa)
+4) Kolmannesta maasta peräisin oleva ajoneuvo → ETA-valtion takuurahasto (vahinkomaa)
+5) Vakuuttamisvelvollisuus laiminlyöty → ETA-valtion takuurahasto (kotipaikka)
+
+---
+
 ## VARIABLE NAMING CONVENTION
 
 All variables follow `entity.attribute` format matching the business ontology:
