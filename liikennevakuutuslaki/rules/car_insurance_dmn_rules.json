@@ -2,7 +2,7 @@
   "model": {
     "name": "Finnish Traffic Insurance DMN",
     "namespace": "https://liikennevakuutus-fi/dmn/traffic-insurance",
-    "version": "1.9",
+    "version": "2.4",
     "description": "Hierarchical DMN business rules for Liikennevakuutuslaki (460/2016) - Negative Claims First",
     "based_on": "Liikennevakuutuslaki (Traffic Insurance Act) 460/2016",
     "source": "https://www.finlex.fi/fi/lainsaadanto/2016/460",
@@ -3512,6 +3512,2753 @@
             "source_text": "Suomen lain mukaan"
           }
         ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E77_NotInTraffic_Situations",
+        "description": "Situations NOT in traffic (\u00a71)",
+        "hit_policy": "COLLECT",
+        "input_variables": [
+          "vehicle.location",
+          "activity.type"
+        ],
+        "output_variable": "traffic_status",
+        "legal_source": "Section 1",
+        "rules": [
+          {
+            "inputs": [
+              "construction_site",
+              "other_purpose"
+            ],
+            "output": "NOT_IN_TRAFFIC",
+            "legal_basis": "Section 1(1)"
+          },
+          {
+            "inputs": [
+              "repair_facility",
+              "maintenance"
+            ],
+            "output": "NOT_IN_TRAFFIC",
+            "legal_basis": "Section 1(2)"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E78_VehiclesExempt",
+        "description": "Vehicles exempt from insurance (\u00a78)",
+        "hit_policy": "COLLECT",
+        "input_variables": [
+          "vehicle.type",
+          "vehicle.speed",
+          "vehicle.purpose"
+        ],
+        "output_variable": "exemption_status",
+        "legal_source": "Section 8",
+        "rules": [
+          {
+            "inputs": [
+              "tractor",
+              "<15_kmh",
+              "agricultural"
+            ],
+            "output": "EXEMPT",
+            "legal_basis": "Section 8(1)"
+          },
+          {
+            "inputs": [
+              "trailer",
+              "not_registered",
+              "any"
+            ],
+            "output": "EXEMPT",
+            "legal_basis": "Section 8(3)"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E79_CoverageEEA",
+        "description": "Coverage in EEA (\u00a713)",
+        "hit_policy": "COLLECT",
+        "input_variables": [
+          "country",
+          "green_card",
+          "victim.residence"
+        ],
+        "output_variable": "coverage_scope",
+        "legal_source": "Section 13",
+        "rules": [
+          {
+            "inputs": [
+              "EEA",
+              true,
+              "any"
+            ],
+            "output": "Full_Coverage",
+            "legal_basis": "Section 13(1)"
+          },
+          {
+            "inputs": [
+              "EEA",
+              false,
+              "Finnish"
+            ],
+            "output": "Finnish_Law_Option",
+            "legal_basis": "Section 13(4)"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.premium_calculation",
+        "name": "E80_RetroactiveInfoWithheld",
+        "description": "Retroactive premium for withheld info (\u00a714)",
+        "hit_policy": "UNIQUE",
+        "input_variables": [
+          "information.withheld",
+          "years_back"
+        ],
+        "output_variable": "retroactive_amount",
+        "legal_source": "Section 14",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              "<=5"
+            ],
+            "output": "Retroactive_5_Years",
+            "legal_basis": "Section 14(1)"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.premium_calculation",
+        "name": "E81_RiskIncreaseRetroactive",
+        "description": "Retroactive premium for risk increase (\u00a715)",
+        "hit_policy": "UNIQUE",
+        "input_variables": [
+          "risk.increased",
+          "years_back"
+        ],
+        "output_variable": "retroactive_amount",
+        "legal_source": "Section 15",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              "<=5"
+            ],
+            "output": "Retroactive_5_Years",
+            "legal_basis": "Section 15(1)"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E82_OwnershipTransferCoverage",
+        "description": "Coverage during ownership transfer (\u00a718)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "transfer.date",
+          "new_insurance.date",
+          "days_elapsed"
+        ],
+        "output_variable": "coverage_during_transfer",
+        "legal_source": "Section 18",
+        "rules": [
+          {
+            "inputs": [
+              "date",
+              null,
+              "<=7"
+            ],
+            "output": "Old_Policy_Covers_7_Days",
+            "legal_basis": "Section 18(1)"
+          },
+          {
+            "inputs": [
+              "date",
+              "date",
+              ">7"
+            ],
+            "output": "New_Policy_Required",
+            "legal_basis": "Section 18"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.premium_calculation",
+        "name": "E83_PremiumFactors",
+        "description": "Premium calculation factors (\u00a720)",
+        "hit_policy": "COLLECT",
+        "input_variables": [
+          "vehicle.type",
+          "driver.age",
+          "claims.count"
+        ],
+        "output_variable": "premium_factors",
+        "legal_source": "Section 20",
+        "rules": [
+          {
+            "inputs": [
+              "private_car",
+              ">25",
+              0
+            ],
+            "output": "Base_Premium",
+            "legal_basis": "Section 20"
+          },
+          {
+            "inputs": [
+              "private_car",
+              "<25",
+              "any"
+            ],
+            "output": "Young_Driver_Loading",
+            "legal_basis": "Section 20"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.premium_calculation",
+        "name": "E84_UsageDuringRemoval",
+        "description": "Premium when used during removal (\u00a722)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "registered_removed",
+          "used_in_traffic"
+        ],
+        "output_variable": "premium_multiplier",
+        "legal_source": "Section 22",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              true
+            ],
+            "output": "Triple_Premium",
+            "legal_basis": "Section 22"
+          },
+          {
+            "inputs": [
+              true,
+              false
+            ],
+            "output": "Normal_Premium",
+            "legal_basis": "Section 22"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.premium_calculation",
+        "name": "E85_LatePaymentInterest",
+        "description": "Late payment interest rate (\u00a724)",
+        "hit_policy": "UNIQUE",
+        "input_variables": [
+          "overdue_days"
+        ],
+        "output_variable": "interest_rate",
+        "legal_source": "Section 24",
+        "rules": [
+          {
+            "inputs": [
+              ">0"
+            ],
+            "output": "Interest_At_Reference_Rate",
+            "legal_basis": "Section 24(1)"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.premium_calculation",
+        "name": "E86_UninsuredPayment",
+        "description": "Payment when uninsured (\u00a727)",
+        "hit_policy": "UNIQUE",
+        "input_variables": [
+          "obligation_violated",
+          "period_months"
+        ],
+        "output_variable": "payment_due",
+        "legal_source": "Section 27",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              "<=60"
+            ],
+            "output": "Reasonable_Premium",
+            "legal_basis": "Section 27(1)"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.compensation_calculation",
+        "name": "E87_VehicleToRailLiability",
+        "description": "Liability when vehicle hits rail (\u00a733)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "other_vehicle.rail",
+          "fault.road"
+        ],
+        "output_variable": "liability_rule",
+        "legal_source": "Section 33",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              "no_fault"
+            ],
+            "output": "Road_Not_Liable",
+            "legal_basis": "Section 33(1)"
+          },
+          {
+            "inputs": [
+              true,
+              "fault"
+            ],
+            "output": "Rail_Insurer_Full",
+            "legal_basis": "Section 33(3)"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.compensation_calculation",
+        "name": "E88_LossOfEarnings",
+        "description": "Loss of earnings calculation (\u00a734)",
+        "hit_policy": "UNIQUE",
+        "input_variables": [
+          "income.type",
+          "income.amount"
+        ],
+        "output_variable": "compensation_calculation",
+        "legal_source": "Section 34",
+        "rules": [
+          {
+            "inputs": [
+              "employed",
+              "net_monthly"
+            ],
+            "output": "Net_Monthly_30_Days",
+            "legal_basis": "Section 34(1)"
+          },
+          {
+            "inputs": [
+              "self_employed",
+              "annual"
+            ],
+            "output": "Annual_365_Days",
+            "legal_basis": "Section 34(2)"
+          },
+          {
+            "inputs": [
+              "unemployed",
+              "any"
+            ],
+            "output": "Minimum_36_90_Day",
+            "legal_basis": "Section 34(3)"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.compensation_calculation",
+        "name": "E89_IndexAdjustment",
+        "description": "Index adjustment calculation (\u00a735)",
+        "hit_policy": "UNIQUE",
+        "input_variables": [
+          "compensation.type",
+          "current_amount"
+        ],
+        "output_variable": "indexed_amount",
+        "legal_source": "Section 35",
+        "rules": [
+          {
+            "inputs": [
+              "continuous",
+              "amount"
+            ],
+            "output": "Adjusted_By_WorkPensionIndex",
+            "legal_basis": "Section 35(1)"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.compensation_calculation",
+        "name": "E90_PropertyDamageCalculation",
+        "description": "Property damage calculation (\u00a737)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "property.type",
+          "repair.possible",
+          "total_loss"
+        ],
+        "output_variable": "compensation_method",
+        "legal_source": "Section 37",
+        "rules": [
+          {
+            "inputs": [
+              "vehicle",
+              true,
+              false
+            ],
+            "output": "Repair_Cost",
+            "legal_basis": "Section 37(2)"
+          },
+          {
+            "inputs": [
+              "vehicle",
+              false,
+              true
+            ],
+            "output": "Market_Value",
+            "legal_basis": "Section 37(3)"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.compensation_calculation",
+        "name": "E91_MaximumDetails",
+        "description": "Maximum property damage (\u00a738)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "damage.amount",
+          "claimants.number"
+        ],
+        "output_variable": "cap_application",
+        "legal_source": "Section 38",
+        "rules": [
+          {
+            "inputs": [
+              ">=5000000",
+              1
+            ],
+            "output": "MAX_5000000",
+            "legal_basis": "Section 38(1)"
+          },
+          {
+            "inputs": [
+              ">=5000000",
+              ">1"
+            ],
+            "output": "Proportional",
+            "legal_basis": "Section 38(2)"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.compensation_calculation",
+        "name": "E92_CombinationLiabilityDetails",
+        "description": "Vehicle combination liability details (\u00a739a)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "combination.towing_identified",
+          "combination.trailer_identified",
+          "damage.exceeds_max"
+        ],
+        "output_variable": "liability_details",
+        "legal_source": "Section 39a",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              "any",
+              false
+            ],
+            "output": "Towing_Insurer",
+            "legal_basis": "Section 39a(1)"
+          },
+          {
+            "inputs": [
+              false,
+              true,
+              false
+            ],
+            "output": "Trailer_Insurer",
+            "legal_basis": "Section 39a(2)"
+          },
+          {
+            "inputs": [
+              "any",
+              "any",
+              true
+            ],
+            "output": "Excess_From_Other",
+            "legal_basis": "Section 39a(3)"
+          }
+        ]
+      },
+      {
+        "category": "negative_claims.full_denial",
+        "name": "N23_PropertyExclusionsDetails",
+        "description": "Property exclusion details (\u00a740)",
+        "hit_policy": "COLLECT",
+        "input_variables": [
+          "damage.to_own_vehicle",
+          "damage.to_connected",
+          "damage.owner_property"
+        ],
+        "output_variable": "exclusion_type",
+        "legal_source": "Section 40",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              "any",
+              "any"
+            ],
+            "output": "NOT_COVERED",
+            "legal_basis": "Section 40(1)"
+          },
+          {
+            "inputs": [
+              false,
+              true,
+              "any"
+            ],
+            "output": "NOT_COVERED",
+            "legal_basis": "Section 40(1)"
+          },
+          {
+            "inputs": [
+              false,
+              false,
+              true
+            ],
+            "output": "NOT_COVERED",
+            "legal_basis": "Section 40(2)"
+          }
+        ]
+      },
+      {
+        "category": "negative_claims.conditional_compensation",
+        "name": "N24_TheftDetails",
+        "description": "Theft compensation details (\u00a741)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "theft.reported",
+          "insurance.terminated",
+          "damage.type"
+        ],
+        "output_variable": "coverage_rule",
+        "legal_source": "Section 41",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              true,
+              "PropertyDamage"
+            ],
+            "output": "NOT_COVERED",
+            "legal_basis": "Section 41(1)"
+          },
+          {
+            "inputs": [
+              true,
+              true,
+              "PersonalInjury"
+            ],
+            "output": "COVERED_GUARANTEE_FUND",
+            "legal_basis": "Section 41(2)"
+          }
+        ]
+      },
+      {
+        "category": "negative_claims.reduced_compensation",
+        "name": "N25_VictimContributionDetails",
+        "description": "Victim contribution details (\u00a747)",
+        "hit_policy": "COLLECT",
+        "input_variables": [
+          "victim.intentional",
+          "victim.gross_negligence",
+          "victim.contribution"
+        ],
+        "output_variable": "reduction_rule",
+        "legal_source": "Section 47",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              "any",
+              "any"
+            ],
+            "output": "REDUCE_OR_DENY",
+            "legal_basis": "Section 47(1)"
+          },
+          {
+            "inputs": [
+              false,
+              true,
+              "any"
+            ],
+            "output": "REDUCE_OR_DENY",
+            "legal_basis": "Section 47(1)"
+          },
+          {
+            "inputs": [
+              false,
+              false,
+              "moderate"
+            ],
+            "output": "REDUCE_50_PERCENT",
+            "legal_basis": "Section 47(2)"
+          }
+        ]
+      },
+      {
+        "category": "negative_claims.reduced_compensation",
+        "name": "N26_AlcoholDetails",
+        "description": "Alcohol impairment details (\u00a748)",
+        "hit_policy": "COLLECT",
+        "input_variables": [
+          "driver.bac_permille",
+          "driver.substance",
+          "victim.type"
+        ],
+        "output_variable": "compensation_rule",
+        "legal_source": "Section 48",
+        "rules": [
+          {
+            "inputs": [
+              ">=1.2",
+              "any",
+              "driver"
+            ],
+            "output": "REDUCE_OR_DENY",
+            "legal_basis": "Section 48(1)"
+          },
+          {
+            "inputs": [
+              ">=0.5",
+              "any",
+              "any"
+            ],
+            "output": "REDUCE_PROPORTIONALLY",
+            "legal_basis": "Section 48(2)"
+          },
+          {
+            "inputs": [
+              "any",
+              "narcotic",
+              "third_party"
+            ],
+            "output": "FULL_COVERED",
+            "legal_basis": "Section 48(3)"
+          }
+        ]
+      },
+      {
+        "category": "negative_claims.full_denial",
+        "name": "N27_IllegalUseDetails",
+        "description": "Illegal use details (\u00a749)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "vehicle.illegal_use",
+          "victim.knows_illegal"
+        ],
+        "output_variable": "coverage_rule",
+        "legal_source": "Section 49",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              true
+            ],
+            "output": "NOT_COVERED",
+            "legal_basis": "Section 49(1)"
+          },
+          {
+            "inputs": [
+              true,
+              false
+            ],
+            "output": "COVERED_SPECIAL_REASON",
+            "legal_basis": "Section 49(1)"
+          }
+        ]
+      },
+      {
+        "category": "negative_claims.full_denial",
+        "name": "N28_InsanityExemption",
+        "description": "Insanity exemption details (\u00a750)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "victim.age",
+          "victim.mental_state",
+          "victim.emergency_action"
+        ],
+        "output_variable": "exemption_rule",
+        "legal_source": "Section 50",
+        "rules": [
+          {
+            "inputs": [
+              "<12",
+              "any",
+              "any"
+            ],
+            "output": "NOT_APPLY_EXEMPTION",
+            "legal_basis": "Section 50"
+          },
+          {
+            "inputs": [
+              "any",
+              "insane",
+              "any"
+            ],
+            "output": "NOT_APPLY_EXEMPTION",
+            "legal_basis": "Section 50(1)"
+          },
+          {
+            "inputs": [
+              "any",
+              "any",
+              true
+            ],
+            "output": "NOT_APPLY_EXEMPTION",
+            "legal_basis": "Section 50(2)"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.compensation_calculation",
+        "name": "E94_LiabilityDistributionDetails",
+        "description": "Liability distribution details (\u00a751)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "insurers.multiple",
+          "fault.distribution",
+          "cause.specific"
+        ],
+        "output_variable": "distribution_rule",
+        "legal_source": "Section 51",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              "shared",
+              "none"
+            ],
+            "output": "JOINT_SEVERAL",
+            "legal_basis": "Section 51(1)"
+          },
+          {
+            "inputs": [
+              true,
+              "no_fault",
+              "identified"
+            ],
+            "output": "SPECIFIC_SOLE",
+            "legal_basis": "Section 51(2)"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.compensation_calculation",
+        "name": "E95_RailLiabilityDivision",
+        "description": "Rail liability division (\u00a752)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "accident.involves_rail",
+          "fault.rail",
+          "fault.road"
+        ],
+        "output_variable": "division_rule",
+        "legal_source": "Section 52",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              "sole",
+              "no_fault"
+            ],
+            "output": "RAIL_SOLE",
+            "legal_basis": "Section 52(1)"
+          },
+          {
+            "inputs": [
+              true,
+              "shared",
+              "shared"
+            ],
+            "output": "PROPORTIONAL",
+            "legal_basis": "Section 52(1)"
+          },
+          {
+            "inputs": [
+              true,
+              "no_fault",
+              "sole"
+            ],
+            "output": "ROAD_SOLE",
+            "legal_basis": "Section 52(1)"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.compensation_calculation",
+        "name": "E96_MedicalCareConditions",
+        "description": "Medical care conditions (\u00a753)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "care.necessary",
+          "care.provider.type"
+        ],
+        "output_variable": "coverage_eligibility",
+        "legal_source": "Section 53",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              "public"
+            ],
+            "output": "COVERED",
+            "legal_basis": "Section 53"
+          },
+          {
+            "inputs": [
+              true,
+              "private"
+            ],
+            "output": "COVERED_REIMBURSABLE",
+            "legal_basis": "Section 53"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.compensation_calculation",
+        "name": "E97_PublicHealthcareCosts",
+        "description": "Public healthcare costs (\u00a754)",
+        "hit_policy": "UNIQUE",
+        "input_variables": [
+          "care.type",
+          "patient.fee"
+        ],
+        "output_variable": "cost_coverage",
+        "legal_source": "Section 54",
+        "rules": [
+          {
+            "inputs": [
+              "any",
+              "patient_fee"
+            ],
+            "output": "PATIENT_FEE_COVERED",
+            "legal_basis": "Section 54"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.compensation_calculation",
+        "name": "E98_FullCostPayment",
+        "description": "Full cost payment (\u00a755)",
+        "hit_policy": "UNIQUE",
+        "input_variables": [
+          "care.provided",
+          "authority.reported"
+        ],
+        "output_variable": "payment_type",
+        "legal_source": "Section 55",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              true
+            ],
+            "output": "FULL_COST",
+            "legal_basis": "Section 55(1)"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.compensation_calculation",
+        "name": "E99_MedicineCosts",
+        "description": "Medicine costs (\u00a758)",
+        "hit_policy": "UNIQUE",
+        "input_variables": [
+          "medicine.prescribed",
+          "pharmacy.type"
+        ],
+        "output_variable": "cost_coverage",
+        "legal_source": "Section 58",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              "any"
+            ],
+            "output": "COVERED",
+            "legal_basis": "Section 58"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E100_RightToCompensation",
+        "description": "Right to compensation details (\u00a760)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "claim.submitted",
+          "damage.proven",
+          "liability.established"
+        ],
+        "output_variable": "right_status",
+        "legal_source": "Section 60",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              true,
+              true
+            ],
+            "output": "RIGHT_ESTABLISHED",
+            "legal_basis": "Section 60"
+          },
+          {
+            "inputs": [
+              true,
+              false,
+              "any"
+            ],
+            "output": "RIGHT_NOT_ESTABLISHED",
+            "legal_basis": "Section 60"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E101_ClaimApplicationDetails",
+        "description": "Claim application details (\u00a761)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "application.form",
+          "documentation",
+          "timeliness"
+        ],
+        "output_variable": "application_status",
+        "legal_source": "Section 61",
+        "rules": [
+          {
+            "inputs": [
+              "complete",
+              "complete",
+              "timely"
+            ],
+            "output": "ACCEPTED",
+            "legal_basis": "Section 61"
+          },
+          {
+            "inputs": [
+              "incomplete",
+              "any",
+              "any"
+            ],
+            "output": "ADDITIONAL_NEEDED",
+            "legal_basis": "Section 61"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.time_limits",
+        "name": "E102_ClaimDecisionDeadline",
+        "description": "Claim decision deadline (\u00a762)",
+        "hit_policy": "UNIQUE",
+        "input_variables": [
+          "claim.complexity",
+          "injury.type"
+        ],
+        "output_variable": "deadline_days",
+        "legal_source": "Section 62",
+        "rules": [
+          {
+            "inputs": [
+              "simple",
+              "property"
+            ],
+            "output": "30_DAYS",
+            "legal_basis": "Section 62"
+          },
+          {
+            "inputs": [
+              "any",
+              "personal"
+            ],
+            "output": "90_DAYS",
+            "legal_basis": "Section 62"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E103_AdvancePaymentDetails",
+        "description": "Advance payment details (\u00a763)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "damage.likely",
+          "injury.severity",
+          "claim.amount"
+        ],
+        "output_variable": "advance_eligibility",
+        "legal_source": "Section 63",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              "severe",
+              "any"
+            ],
+            "output": "ADVANCE_MANDATORY",
+            "legal_basis": "Section 63(1)"
+          },
+          {
+            "inputs": [
+              true,
+              "moderate",
+              "estimated"
+            ],
+            "advance": "ADVANCE_DISCRETIONARY",
+            "legal_basis": "Section 63(2)"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E104_InvestigationObligation",
+        "description": "Investigation obligation (\u00a765)",
+        "hit_policy": "UNIQUE",
+        "input_variables": [
+          "investigation.completed",
+          "evidence.gathered"
+        ],
+        "output_variable": "investigation_status",
+        "legal_source": "Section 65",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              true
+            ],
+            "output": "INVESTIGATION_COMPLETE",
+            "legal_basis": "Section 65"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E105_RecoveryDetails",
+        "description": "Recovery from third party details (\u00a766)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "insurer.paid",
+          "third_party.liable",
+          "third_party.asset"
+        ],
+        "output_variable": "recovery_rule",
+        "legal_source": "Section 66",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              true,
+              true
+            ],
+            "output": "RECOVERY_EXERCISED",
+            "legal_basis": "Section 66(1)"
+          },
+          {
+            "inputs": [
+              true,
+              true,
+              false
+            ],
+            "output": "RECOVERY_NOT_POSSIBLE",
+            "legal_basis": "Section 66"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E106_SubrogationDetails",
+        "description": "Subrogation details (\u00a768)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "insurer.paid",
+          "third_party.responsible",
+          "recovery.possible"
+        ],
+        "output_variable": "subrogation_rule",
+        "legal_source": "Section 68",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              true,
+              true
+            ],
+            "output": "SUBROGATION_EXERCISED",
+            "legal_basis": "Section 68(1)"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E107_CostsHandling",
+        "description": "Costs of claims handling (\u00a769)",
+        "hit_policy": "UNIQUE",
+        "input_variables": [
+          "handling.costs",
+          "claim.processed"
+        ],
+        "output_variable": "cost_bearer",
+        "legal_source": "Section 69",
+        "rules": [
+          {
+            "inputs": [
+              "reasonable",
+              true
+            ],
+            "output": "INSURER_BEARS",
+            "legal_basis": "Section 69"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E108_InsolvencyProtection",
+        "description": "Insolvency protection details (\u00a777)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "insurer.insolvent",
+          "policy.active",
+          "claim.pending"
+        ],
+        "output_variable": "protection_mechanism",
+        "legal_source": "Section 77",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              true,
+              true
+            ],
+            "output": "GUARANTEE_FUND",
+            "legal_basis": "Section 77(1)"
+          },
+          {
+            "inputs": [
+              true,
+              true,
+              false
+            ],
+            "output": "TRANSFER_TO_ANOTHER",
+            "legal_basis": "Section 77(2)"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E109_InsuranceCourtAppeal",
+        "description": "Appeal to Insurance Court (\u00a785)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "decision.appealable",
+          "appeal.filed",
+          "deadline.met"
+        ],
+        "output_variable": "appeal_status",
+        "legal_source": "Section 85",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              true,
+              true
+            ],
+            "output": "APPEAL_ACCEPTED",
+            "legal_basis": "Section 85"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.premium_calculation",
+        "name": "E110_DamageHistoryYears",
+        "description": "Damage history years impact (\u00a720)",
+        "hit_policy": "UNIQUE",
+        "input_variables": [
+          "history.years",
+          "vehicle.type"
+        ],
+        "output_variable": "history_adjustment",
+        "legal_source": "Section 20",
+        "rules": [
+          {
+            "inputs": [
+              5,
+              "private"
+            ],
+            "output": "NO_LOADING",
+            "legal_basis": "Section 20"
+          },
+          {
+            "inputs": [
+              0,
+              "any"
+            ],
+            "output": "FULL_LOADING",
+            "legal_basis": "Section 20"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.premium_calculation",
+        "name": "E111_ClaimLoading",
+        "description": "Claim-based loading (\u00a720)",
+        "hit_policy": "UNIQUE",
+        "input_variables": [
+          "claims.last_5_years",
+          "vehicle.type"
+        ],
+        "output_variable": "loading_percentage",
+        "legal_source": "Section 20",
+        "rules": [
+          {
+            "inputs": [
+              0,
+              "any"
+            ],
+            "output": "NO_LOADING",
+            "legal_basis": "Section 20"
+          },
+          {
+            "inputs": [
+              1,
+              "any"
+            ],
+            "output": "50_PERCENT_LOADING",
+            "legal_basis": "Section 20"
+          },
+          {
+            "inputs": [
+              3,
+              "any"
+            ],
+            "output": "100_PERCENT_LOADING",
+            "legal_basis": "Section 20"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.premium_calculation",
+        "name": "E112_RefundMinAmount",
+        "description": "Minimum refund amount (\u00a723)",
+        "hit_policy": "UNIQUE",
+        "input_variables": [
+          "refund.amount"
+        ],
+        "output_variable": "refund_status",
+        "legal_source": "Section 23",
+        "rules": [
+          {
+            "inputs": [
+              ">8"
+            ],
+            "output": "REFUND_PROCESSED",
+            "legal_basis": "Section 23(2)"
+          },
+          {
+            "inputs": [
+              "<=8"
+            ],
+            "output": "NO_REFUND",
+            "legal_basis": "Section 23(2)"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.premium_calculation",
+        "name": "E113_PaymentDueDate",
+        "description": "Premium payment due (\u00a724)",
+        "hit_policy": "UNIQUE",
+        "input_variables": [
+          "payment.due_date",
+          "payment.made"
+        ],
+        "output_variable": "payment_status",
+        "legal_source": "Section 24",
+        "rules": [
+          {
+            "inputs": [
+              "passed",
+              false
+            ],
+            "output": "OVERDUE",
+            "legal_basis": "Section 24(1)"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.premium_calculation",
+        "name": "E114_LiabilityContinues",
+        "description": "Liability continues despite non-payment (\u00a725)",
+        "hit_policy": "UNIQUE",
+        "input_variables": [
+          "premium.unpaid",
+          "liability.continues"
+        ],
+        "output_variable": "status",
+        "legal_source": "Section 25",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              true
+            ],
+            "output": "LIABILITY_CONTINUES",
+            "legal_basis": "Section 25(1)"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.premium_calculation",
+        "name": "E115_LimitationsPremium",
+        "description": "Premium limitations (\u00a726)",
+        "hit_policy": "UNIQUE",
+        "input_variables": [
+          "claim.year",
+          "billing.year"
+        ],
+        "output_variable": "limitation_status",
+        "legal_source": "Section 26",
+        "rules": [
+          {
+            "inputs": [
+              ">5",
+              "any"
+            ],
+            "output": "TIME_BARRED",
+            "legal_basis": "Section 26"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.compensation_calculation",
+        "name": "E116_DisabilityPercentage",
+        "description": "Disability compensation percentage (\u00a735)",
+        "hit_policy": "UNIQUE",
+        "input_variables": [
+          "disability.percentage",
+          "affects_work"
+        ],
+        "output_variable": "compensation_type",
+        "legal_source": "Section 35",
+        "rules": [
+          {
+            "inputs": [
+              "1-10",
+              true
+            ],
+            "output": "LOW_DISABILITY",
+            "legal_basis": "Section 35(2)"
+          },
+          {
+            "inputs": [
+              "11-30",
+              true
+            ],
+            "output": "MEDIUM_DISABILITY",
+            "legal_basis": "Section 35(2)"
+          },
+          {
+            "inputs": [
+              "31-100",
+              true
+            ],
+            "output": "HIGH_DISABILITY",
+            "legal_basis": "Section 35(2)"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.compensation_calculation",
+        "name": "E117_DeathCompensationType",
+        "description": "Death compensation types (\u00a736-38)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "survivor.relationship",
+          "deceased.income",
+          "survivor.dependent"
+        ],
+        "output_variable": "compensation_type",
+        "legal_source": "Sections 36-38",
+        "rules": [
+          {
+            "inputs": [
+              "spouse",
+              true,
+              true
+            ],
+            "output": "SPOUSE_PENSION_LUMP",
+            "legal_basis": "Section 36(1)"
+          },
+          {
+            "inputs": [
+              "child",
+              "any",
+              true
+            ],
+            "output": "CHILD_PENSION",
+            "legal_basis": "Section 36(2)"
+          },
+          {
+            "inputs": [
+              "dependent",
+              false,
+              true
+            ],
+            "output": "LUMP_SUM",
+            "legal_basis": "Section 38"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.compensation_calculation",
+        "name": "E118_WorkAccidentCoordination",
+        "description": "Work accident coordination details (\u00a736)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "has_work_insurance",
+          "injury.type",
+          "owner.type"
+        ],
+        "output_variable": "coordination_rule",
+        "legal_source": "Section 36",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              "personal",
+              "any"
+            ],
+            "output": "WORK_INSURANCE_FIRST",
+            "legal_basis": "Section 36"
+          },
+          {
+            "inputs": [
+              false,
+              "personal",
+              "any"
+            ],
+            "output": "TRAFFIC_INSURANCE_ONLY",
+            "legal_basis": "Section 36"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E119_ClaimFiling",
+        "description": "Who can file claim (\u00a760)",
+        "hit_policy": "COLLECT",
+        "input_variables": [
+          "claimant.relationship",
+          "claimant.legal_capacity"
+        ],
+        "output_variable": "filing_right",
+        "legal_source": "Section 60",
+        "rules": [
+          {
+            "inputs": [
+              "injured",
+              true
+            ],
+            "output": "CAN_FILE",
+            "legal_basis": "Section 60"
+          },
+          {
+            "inputs": [
+              "representative",
+              true
+            ],
+            "output": "CAN_FILE_VIA",
+            "legal_basis": "Section 60"
+          },
+          {
+            "inputs": [
+              "heir",
+              true
+            ],
+            "output": "CAN_FILE_HEIR",
+            "legal_basis": "Section 60"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E120_DecisionContent",
+        "description": "Decision content requirements (\u00a762)",
+        "hit_policy": "COLLECT",
+        "input_variables": [
+          "decision.includes",
+          "decision.amount"
+        ],
+        "output_variable": "decision_validity",
+        "legal_source": "Section 62",
+        "rules": [
+          {
+            "inputs": [
+              "reasoning_amount",
+              "specified"
+            ],
+            "output": "VALID_DECISION",
+            "legal_basis": "Section 62"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E121_PaymentMethod",
+        "description": "Payment method (\u00a762a)",
+        "hit_policy": "UNIQUE",
+        "input_variables": [
+          "recipient.account",
+          "decision.final"
+        ],
+        "output_variable": "payment_execution",
+        "legal_source": "Section 62a",
+        "rules": [
+          {
+            "inputs": [
+              "valid_account",
+              true
+            ],
+            "output": "PAYMENT_INITIATED",
+            "legal_basis": "Section 62a"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E122_MedicalExaminationRequired",
+        "description": "Medical examination when required (\u00a772)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "injury.type",
+          "examination.requested"
+        ],
+        "output_variable": "examination_status",
+        "legal_source": "Section 72",
+        "rules": [
+          {
+            "inputs": [
+              "personal",
+              true
+            ],
+            "output": "EXAMINATION_MANDATORY",
+            "legal_basis": "Section 72(1)"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E123_InsuranceRegister",
+        "description": "Insurance register content (\u00a776)",
+        "hit_policy": "COLLECT",
+        "input_variables": [
+          "register.contains",
+          "vehicle.registered"
+        ],
+        "output_variable": "register_content",
+        "legal_source": "Section 76",
+        "rules": [
+          {
+            "inputs": [
+              "insurance_policy",
+              true
+            ],
+            "output": "REGISTERED",
+            "legal_basis": "Section 76"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E124_DrivingSchoolCoverage",
+        "description": "Driving school special coverage (\u00a789)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "vehicle.driving_school",
+          "instruction.type"
+        ],
+        "output_variable": "coverage_type",
+        "legal_source": "Section 89",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              "instruction"
+            ],
+            "output": "SPECIAL_COVERAGE",
+            "legal_basis": "Section 89"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E125_IntlTransportCoverage",
+        "description": "International transport coverage (\u00a790)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "permit.type",
+          "country.destination"
+        ],
+        "output_variable": "coverage_type",
+        "legal_source": "Section 90",
+        "rules": [
+          {
+            "inputs": [
+              "international_permit",
+              "any"
+            ],
+            "output": "INTL_COVERAGE",
+            "legal_basis": "Section 90"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E126_Definition_RegisteredKeeper",
+        "description": "Definition: Registered keeper (\u00a72)",
+        "hit_policy": "UNIQUE",
+        "input_variables": [
+          "vehicle.registered",
+          "person.holder"
+        ],
+        "output_variable": "keeper_definition",
+        "legal_source": "Section 2",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              "registered_person"
+            ],
+            "output": "KEEPER_IS_REGISTERED",
+            "legal_basis": "Section 2(8)"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E127_Definition_PermanentLocation",
+        "description": "Definition: Permanent location (\u00a72)",
+        "hit_policy": "UNIQUE",
+        "input_variables": [
+          "vehicle.plate",
+          "vehicle.insurance_card",
+          "person.residence"
+        ],
+        "output_variable": "location_definition",
+        "legal_source": "Section 2",
+        "rules": [
+          {
+            "inputs": [
+              "finnish_plate",
+              "any",
+              "any"
+            ],
+            "output": "LOCATION_IS_FINLAND",
+            "legal_basis": "Section 2(9)"
+          },
+          {
+            "inputs": [
+              "no_plate",
+              "none",
+              "finland"
+            ],
+            "output": "LOCATION_IS_FINLAND",
+            "legal_basis": "Section 2(9)"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E128_Definition_GreenCard",
+        "description": "Definition: Green card system (\u00a72)",
+        "hit_policy": "UNIQUE",
+        "input_variables": [
+          "country.system_member",
+          "card.valid"
+        ],
+        "output_variable": "green_card_status",
+        "legal_source": "Section 2",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              true
+            ],
+            "output": "GREEN_CARD_VALID",
+            "legal_basis": "Section 2(15-16)"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E129_ImportFromEEA",
+        "description": "Importing vehicle from EEA (\u00a76a)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "vehicle.imported_from",
+          "registration.country",
+          "insurance.country_choice"
+        ],
+        "output_variable": "insurance_option",
+        "legal_source": "Section 6a",
+        "rules": [
+          {
+            "inputs": [
+              "EEA",
+              "origin_country",
+              "Finland"
+            ],
+            "output": "CAN_CHOOSE_FINLAND",
+            "legal_basis": "Section 6a"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E130_BorderTrafficInsuranceScope",
+        "description": "Border traffic insurance scope (\u00a77)",
+        "hit_policy": "COLLECT",
+        "input_variables": [
+          "vehicle.permanent_country",
+          "green_card",
+          "accident.country"
+        ],
+        "output_variable": "coverage_scope",
+        "legal_source": "Section 7",
+        "rules": [
+          {
+            "inputs": [
+              "Non-EEA",
+              false,
+              "Finland"
+            ],
+            "output": "MUST_INSURE",
+            "legal_basis": "Section 7(1)"
+          },
+          {
+            "inputs": [
+              "Non-EEA",
+              true,
+              "any"
+            ],
+            "output": "GREEN_CARD_OK",
+            "legal_basis": "Section 7(2)"
+          },
+          {
+            "inputs": [
+              "Non-EEA",
+              false,
+              [
+                "Sweden",
+                "Norway"
+              ]
+            ],
+            "output": "INJURY_ONLY",
+            "legal_basis": "Section 7(3)"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E131_VehicleIdentificationRequirement",
+        "description": "Vehicle identification requirement (\u00a710)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "vehicle.registered",
+          "vehicle.identified",
+          "notification.days"
+        ],
+        "output_variable": "identification_rule",
+        "legal_source": "Section 10",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              false,
+              ">7"
+            ],
+            "output": "LIABILITY_EXPIRES",
+            "legal_basis": "Section 10(3)"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E132_InsuranceDocumentContent",
+        "description": "Insurance document content (\u00a711)",
+        "hit_policy": "COLLECT",
+        "input_variables": [
+          "document.contains",
+          "terms.provided"
+        ],
+        "output_variable": "document_validity",
+        "legal_source": "Section 11",
+        "rules": [
+          {
+            "inputs": [
+              "key_terms",
+              true
+            ],
+            "output": "VALID_DOCUMENT",
+            "legal_basis": "Section 11(1)"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E133_CancellationConditions",
+        "description": "Cancellation conditions (\u00a716)",
+        "hit_policy": "COLLECT",
+        "input_variables": [
+          "cancellation.reason",
+          "new_insurance.exists",
+          "theft.reported"
+        ],
+        "output_variable": "cancellation_allowed",
+        "legal_source": "Section 16",
+        "rules": [
+          {
+            "inputs": [
+              "new_insurer",
+              true,
+              "any"
+            ],
+            "output": "CANCELLATION_ALLOWED",
+            "legal_basis": "Section 16(1)"
+          },
+          {
+            "inputs": [
+              "theft",
+              "any",
+              true
+            ],
+            "output": "CANCELLATION_ALLOWED",
+            "legal_basis": "Section 16(1)"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E134_InsurerObligationToProvide",
+        "description": "Insurer obligation to provide (\u00a717)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "vehicle.type",
+          "insurer.licensed",
+          "insurer.authorized"
+        ],
+        "output_variable": "obligation_status",
+        "legal_source": "Section 17",
+        "rules": [
+          {
+            "inputs": [
+              "covered_type",
+              true,
+              true
+            ],
+            "output": "MUST_PROVIDE",
+            "legal_basis": "Section 17(2)"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E135_DamageHistoryContent",
+        "description": "Damage history content (\u00a719)",
+        "hit_policy": "COLLECT",
+        "input_variables": [
+          "history.vehicles",
+          "history.claims",
+          "history.period"
+        ],
+        "output_variable": "history_content",
+        "legal_source": "Section 19",
+        "rules": [
+          {
+            "inputs": [
+              "covered",
+              "paid",
+              "<=5_years"
+            ],
+            "output": "HISTORY_PROVIDED",
+            "legal_basis": "Section 19(1)"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E136_DamageHistoryTransfer",
+        "description": "Damage history transfer (\u00a721)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "policy.new_company",
+          "history.exists",
+          "request.submitted"
+        ],
+        "output_variable": "transfer_rule",
+        "legal_source": "Section 21",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              true,
+              true
+            ],
+            "output": "MUST_TRANSFER",
+            "legal_basis": "Section 21"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.compensation_calculation",
+        "name": "E137_StrictLiability",
+        "description": "Strict liability principle (\u00a731)",
+        "hit_policy": "UNIQUE",
+        "input_variables": [
+          "accident.occurred",
+          "vehicle.insured",
+          "driver.fault"
+        ],
+        "output_variable": "liability_basis",
+        "legal_source": "Section 31",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              true,
+              "any"
+            ],
+            "output": "STRICT_LIABILITY",
+            "legal_basis": "Section 31"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.compensation_calculation",
+        "name": "E138_InsurerLiabilityPeriod",
+        "description": "Insurer liability period (\u00a732)",
+        "hit_policy": "UNIQUE",
+        "input_variables": [
+          "policy.active",
+          "accident.date"
+        ],
+        "output_variable": "liability_status",
+        "legal_source": "Section 32",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              "within_term"
+            ],
+            "output": "INSURER_LIABLE",
+            "legal_basis": "Section 32(1)"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.compensation_calculation",
+        "name": "E139_WorkAccidentTypes",
+        "description": "Work accident act types (\u00a736)",
+        "hit_policy": "COLLECT",
+        "input_variables": [
+          "injured.occupation",
+          "insurance.type"
+        ],
+        "output_variable": "coordination_type",
+        "legal_source": "Section 36",
+        "rules": [
+          {
+            "inputs": [
+              "employee",
+              "tya"
+            ],
+            "output": "TYA_COORDINATION",
+            "legal_basis": "Section 36"
+          },
+          {
+            "inputs": [
+              "farmer",
+              "myela"
+            ],
+            "output": "MYELA_COORDINATION",
+            "legal_basis": "Section 36"
+          },
+          {
+            "inputs": [
+              "athlete",
+              "sport"
+            ],
+            "output": "SPORT_COORDINATION",
+            "legal_basis": "Section 36"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.compensation_calculation",
+        "name": "E140_AssistingInjuredCompensation",
+        "description": "Assisting injured compensation (\u00a739)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "person.assisting",
+          "person.is_professional",
+          "damage.type"
+        ],
+        "output_variable": "coverage_rule",
+        "legal_source": "Section 39",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              false,
+              "any"
+            ],
+            "output": "COVERED",
+            "legal_basis": "Section 39(1)"
+          },
+          {
+            "inputs": [
+              true,
+              true,
+              "any"
+            ],
+            "output": "NOT_COVERED",
+            "legal_basis": "Section 39(2)"
+          }
+        ]
+      },
+      {
+        "category": "negative_claims.conditional_compensation",
+        "name": "N29_CompetitionRules",
+        "description": "Competition rules (\u00a741a)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "driver.competing",
+          "rules.followed",
+          "license.valid"
+        ],
+        "output_variable": "coverage_rule",
+        "legal_source": "Section 41a",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              true,
+              true
+            ],
+            "output": "COVERED",
+            "legal_basis": "Section 41a(2)"
+          },
+          {
+            "inputs": [
+              true,
+              false,
+              "any"
+            ],
+            "output": "NOT_COVERED",
+            "legal_basis": "Section 41a(1)"
+          }
+        ]
+      },
+      {
+        "category": "negative_claims.conditional_compensation",
+        "name": "N30_OutsideFinlandExceptions",
+        "description": "Outside Finland exceptions (\u00a745)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "vehicle.home_country",
+          "accident.country",
+          "victim.home_country"
+        ],
+        "output_variable": "coverage_rule",
+        "legal_source": "Section 45",
+        "rules": [
+          {
+            "inputs": [
+              "Finland",
+              "EEA",
+              "Finland"
+            ],
+            "output": "COVERED_GUARANTEE",
+            "legal_basis": "Section 45(1)"
+          },
+          {
+            "inputs": [
+              "Finland",
+              "Non-EEA",
+              "Finland"
+            ],
+            "output": "NOT_COVERED",
+            "legal_basis": "Section 45"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.compensation_calculation",
+        "name": "E141_MedicalCarePublicConditions",
+        "description": "Medical care public conditions (\u00a753)",
+        "hit_policy": "COLLECT",
+        "input_variables": [
+          "care.provider.public",
+          "care.necessary",
+          "social_security"
+        ],
+        "output_variable": "coverage_eligibility",
+        "legal_source": "Section 53",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              true,
+              true
+            ],
+            "output": "COVERED_PUBLIC",
+            "legal_basis": "Section 53"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.compensation_calculation",
+        "name": "E142_HealthcareProviderTypes",
+        "description": "Healthcare provider types (\u00a754)",
+        "hit_policy": "COLLECT",
+        "input_variables": [
+          "provider.type",
+          "service.type"
+        ],
+        "output_variable": "reimbursement_rate",
+        "legal_source": "Section 54",
+        "rules": [
+          {
+            "inputs": [
+              "municipal",
+              "healthcare"
+            ],
+            "output": "CUSTOMER_FEE_ONLY",
+            "legal_basis": "Section 54(1)"
+          },
+          {
+            "inputs": [
+              "private",
+              "healthcare"
+            ],
+            "output": "REFUNDABLE",
+            "legal_basis": "Section 54"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E143_ReportingRequirements",
+        "description": "Health unit reporting requirements (\u00a756)",
+        "hit_policy": "COLLECT",
+        "input_variables": [
+          "report.includes",
+          "timeliness",
+          "content.complete"
+        ],
+        "output_variable": "reporting_validity",
+        "legal_source": "Section 56",
+        "rules": [
+          {
+            "inputs": [
+              "patient_ids",
+              "immediate",
+              true
+            ],
+            "output": "VALID_REPORT",
+            "legal_basis": "Section 56"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E144_MediatorInvolvement",
+        "description": "Mediator involvement (\u00a770)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "claim.disputed",
+          "mediation.requested"
+        ],
+        "output_variable": "mediation_approach",
+        "legal_source": "Section 70",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              true
+            ],
+            "output": "MEDIATOR_CAN_BE_USED",
+            "legal_basis": "Section 70"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E145_PersonalInjuryProcessing",
+        "description": "Personal injury processing (\u00a771)",
+        "hit_policy": "UNIQUE",
+        "input_variables": [
+          "injury.type",
+          "processing.special"
+        ],
+        "output_variable": "processing_rule",
+        "legal_source": "Section 71",
+        "rules": [
+          {
+            "inputs": [
+              "personal",
+              true
+            ],
+            "output": "SPECIAL_PROCESSING",
+            "legal_basis": "Section 71"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E146_SupervisionAuthority",
+        "description": "Supervision authority (\u00a775)",
+        "hit_policy": "UNIQUE",
+        "input_variables": [
+          "authority.name",
+          "supervision.type"
+        ],
+        "output_variable": "authority_scope",
+        "legal_source": "Section 75",
+        "rules": [
+          {
+            "inputs": [
+              "Finanssivalvonta",
+              "financial"
+            ],
+            "output": "FIVA_SUPERVISES",
+            "legal_basis": "Section 75"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E147_Definition_EEA",
+        "description": "Definition: EEA state (\u00a72)",
+        "hit_policy": "UNIQUE",
+        "input_variables": [
+          "country.member EEA"
+        ],
+        "output_variable": "eea_status",
+        "legal_source": "Section 2",
+        "rules": [
+          {
+            "inputs": [
+              true
+            ],
+            "output": "EEA_STATE",
+            "legal_basis": "Section 2(12)"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E148_Definition_ThirdCountry",
+        "description": "Definition: Third country (\u00a72)",
+        "hit_policy": "UNIQUE",
+        "input_variables": [
+          "country.member EEA"
+        ],
+        "output_variable": "country_status",
+        "legal_source": "Section 2",
+        "rules": [
+          {
+            "inputs": [
+              false
+            ],
+            "output": "THIRD_COUNTRY",
+            "legal_basis": "Section 2(13)"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E149_Definition_NationalBureau",
+        "description": "Definition: National bureau (\u00a72)",
+        "hit_policy": "UNIQUE",
+        "input_variables": [
+          "country.bureau member"
+        ],
+        "output_variable": "bureau_status",
+        "legal_source": "Section 2",
+        "rules": [
+          {
+            "inputs": [
+              true
+            ],
+            "output": "NATIONAL_BUREAU_EXISTS",
+            "legal_basis": "Section 2(14)"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E150_Definition_GreenCardSystem",
+        "description": "Definition: Green card system (\u00a72)",
+        "hit_policy": "UNIQUE",
+        "input_variables": [
+          "system.international"
+        ],
+        "output_variable": "system_status",
+        "legal_source": "Section 2",
+        "rules": [
+          {
+            "inputs": [
+              true
+            ],
+            "output": "GREEN_CARD_SYSTEM",
+            "legal_basis": "Section 2(15)"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E151_Definition_GuaranteeBody",
+        "description": "Definition: Guarantee body (\u00a72)",
+        "hit_policy": "UNIQUE",
+        "input_variables": [
+          "body.article10"
+        ],
+        "output_variable": "body_status",
+        "legal_source": "Section 2",
+        "rules": [
+          {
+            "inputs": [
+              true
+            ],
+            "output": "GUARANTEE_BODY",
+            "legal_basis": "Section 2(17)"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E152_Definition_TransferInsurance",
+        "description": "Definition: Transfer insurance (\u00a72)",
+        "hit_policy": "UNIQUE",
+        "input_variables": [
+          "vehicle.transfer_permit"
+        ],
+        "output_variable": "insurance_type",
+        "legal_source": "Section 2",
+        "rules": [
+          {
+            "inputs": [
+              true
+            ],
+            "output": "TRANSFER_INSURANCE",
+            "legal_basis": "Section 2(18)"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E153_Definition_TrafficRoute",
+        "description": "Definition: Traffic route (\u00a72)",
+        "hit_policy": "COLLECT",
+        "input_variables": [
+          "area.type"
+        ],
+        "output_variable": "route_status",
+        "legal_source": "Section 2",
+        "rules": [
+          {
+            "inputs": [
+              "public_road"
+            ],
+            "output": "TRAFFIC_ROUTE",
+            "legal_basis": "Section 2(19)"
+          },
+          {
+            "inputs": [
+              "street"
+            ],
+            "output": "TRAFFIC_ROUTE",
+            "legal_basis": "Section 2(19)"
+          },
+          {
+            "inputs": [
+              "parking_area_public"
+            ],
+            "output": "TRAFFIC_ROUTE",
+            "legal_basis": "Section 2(19)"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E154_Definition_RentedEScooter",
+        "description": "Definition: Rented e-scooter (\u00a72)",
+        "hit_policy": "UNIQUE",
+        "input_variables": [
+          "vehicle.escooter",
+          "rental.business",
+          "rented.available_public"
+        ],
+        "output_variable": "vehicle_definition",
+        "legal_source": "Section 2",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              true,
+              true
+            ],
+            "output": "RENTED_E_SCOOTER",
+            "legal_basis": "Section 2(22)"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E155_MandatoryProvisions",
+        "description": "Mandatory nature of provisions (\u00a73)",
+        "hit_policy": "UNIQUE",
+        "input_variables": [
+          "contract.contrary_to_law",
+          "party.damaged"
+        ],
+        "output_variable": "contract_validity",
+        "legal_source": "Section 3",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              true
+            ],
+            "output": "CONTRACT_VOID",
+            "legal_basis": "Section 3"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E156_MotorInsuranceCentre",
+        "description": "Motor Insurance Centre role (\u00a74)",
+        "hit_policy": "UNIQUE",
+        "input_variables": [
+          "centre.funded",
+          "centre.administered"
+        ],
+        "output_variable": "centre_status",
+        "legal_source": "Section 4",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              true
+            ],
+            "output": "CENTRE_OPERATIONAL",
+            "legal_basis": "Section 4"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E157_InsuranceContractActApplication",
+        "description": "Insurance Contract Act application (\u00a74a)",
+        "hit_policy": "COLLECT",
+        "input_variables": [
+          "section.applied"
+        ],
+        "output_variable": "application_status",
+        "legal_source": "Section 4a",
+        "rules": [
+          {
+            "inputs": [
+              "3"
+            ],
+            "output": "APPLIES",
+            "legal_basis": "Section 4a"
+          },
+          {
+            "inputs": [
+              "4b"
+            ],
+            "output": "APPLIES",
+            "legal_basis": "Section 4a"
+          },
+          {
+            "inputs": [
+              "5a"
+            ],
+            "output": "APPLIES",
+            "legal_basis": "Section 4a"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E158_ConsumerProtectionApplication",
+        "description": "Consumer Protection Act application (\u00a74b)",
+        "hit_policy": "UNIQUE",
+        "input_variables": [
+          "policyholder.consumer"
+        ],
+        "output_variable": "application_status",
+        "legal_source": "Section 4b",
+        "rules": [
+          {
+            "inputs": [
+              true
+            ],
+            "output": "CONSUMER_PROTECTION_APPLIES",
+            "legal_basis": "Section 4b"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E159_JointLiability",
+        "description": "Joint liability (\u00a76)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "multiple_obligors",
+          "obligation.type"
+        ],
+        "output_variable": "liability_type",
+        "legal_source": "Section 6",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              "insurance"
+            ],
+            "output": "JOINT_AND_SEVERAL",
+            "legal_basis": "Section 6(1)"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E160_InformationToAuthority",
+        "description": "Information to Transport Agency (\u00a79)",
+        "hit_policy": "COLLECT",
+        "input_variables": [
+          "info.type",
+          "timeliness"
+        ],
+        "output_variable": "info_rule",
+        "legal_source": "Section 9",
+        "rules": [
+          {
+            "inputs": [
+              "new_policy"
+            ],
+            "output": "WITHIN_7_DAYS",
+            "legal_basis": "Section 9(1)"
+          },
+          {
+            "inputs": [
+              "premium_default"
+            ],
+            "output": "REPORT_OBLIGATION",
+            "legal_basis": "Section 9(2)"
+          },
+          {
+            "inputs": [
+              "removal_from_traffic"
+            ],
+            "output": "REPORT_OBLIGATION",
+            "legal_basis": "Section 9(3)"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.compensation_calculation",
+        "name": "E161_AnimalDamage",
+        "description": "Animal damage compensation (\u00a737)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "animal.type",
+          "animal.supervised",
+          "driver.fault"
+        ],
+        "output_variable": "coverage_rule",
+        "legal_source": "Section 37",
+        "rules": [
+          {
+            "inputs": [
+              "pet",
+              false,
+              "any"
+            ],
+            "output": "NOT_COVERED",
+            "legal_basis": "Section 37(4)"
+          },
+          {
+            "inputs": [
+              "wild_animal",
+              "no_fault"
+            ],
+            "output": "COVERED",
+            "legal_basis": "Section 37(4)"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.compensation_calculation",
+        "name": "E162_TheftGuaranteeFund",
+        "description": "Theft - Guarantee Fund coverage (\u00a741)",
+        "hit_policy": "UNIQUE",
+        "input_variables": [
+          "theft.terminated_policy",
+          "damage.type"
+        ],
+        "output_variable": "fund_coverage",
+        "legal_source": "Section 41",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              "personal"
+            ],
+            "output": "GUARANTEE_FUND_PAYS",
+            "legal_basis": "Section 41(2)"
+          },
+          {
+            "inputs": [
+              true,
+              "property"
+            ],
+            "output": "NOT_COVERED",
+            "legal_basis": "Section 41(1)"
+          }
+        ]
+      },
+      {
+        "category": "negative_claims.conditional_compensation",
+        "name": "N31_ExemptVehicleTypes",
+        "description": "Exempt vehicle types (\u00a743)",
+        "hit_policy": "COLLECT",
+        "input_variables": [
+          "vehicle.category",
+          "damage.type"
+        ],
+        "output_variable": "coverage_rule",
+        "legal_source": "Section 43",
+        "rules": [
+          {
+            "inputs": [
+              "diplomatic",
+              "personal"
+            ],
+            "output": "COVERED_GUARANTEE",
+            "legal_basis": "Section 43(3)"
+          },
+          {
+            "inputs": [
+              "military",
+              "personal"
+            ],
+            "output": "COVERED_GUARANTEE",
+            "legal_basis": "Section 43(3)"
+          },
+          {
+            "inputs": [
+              "diplomatic",
+              "property"
+            ],
+            "output": "NOT_COVERED",
+            "legal_basis": "Section 43(2)"
+          }
+        ]
+      },
+      {
+        "category": "negative_claims.conditional_compensation",
+        "name": "N32_UnknownVehicleCoverage",
+        "description": "Unknown vehicle coverage (\u00a744)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "vehicle.identified",
+          "damage.type",
+          "police.report"
+        ],
+        "output_variable": "coverage_rule",
+        "legal_source": "Section 44",
+        "rules": [
+          {
+            "inputs": [
+              false,
+              "personal",
+              true
+            ],
+            "output": "COVERED_GUARANTEE",
+            "legal_basis": "Section 44(1)"
+          },
+          {
+            "inputs": [
+              false,
+              "property",
+              true
+            ],
+            "output": "COVERED_GUARANTEE",
+            "legal_basis": "Section 44(2)"
+          },
+          {
+            "inputs": [
+              false,
+              "any",
+              false
+            ],
+            "output": "NOT_COVERED",
+            "legal_basis": "Section 44"
+          }
+        ]
+      },
+      {
+        "category": "negative_claims.conditional_compensation",
+        "name": "N33_NoInsuranceExceptions",
+        "description": "No insurance exceptions (\u00a746)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "no_insurance",
+          "victim.relationship",
+          "victim.knew_uninsured"
+        ],
+        "output_variable": "coverage_rule",
+        "legal_source": "Section 46",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              "passenger_owner",
+              true
+            ],
+            "output": "NOT_COVERED",
+            "legal_basis": "Section 46(2)"
+          },
+          {
+            "inputs": [
+              true,
+              "passenger_owner",
+              false
+            ],
+            "output": "COVERED_GUARANTEE",
+            "legal_basis": "Section 46(1)"
+          },
+          {
+            "inputs": [
+              true,
+              "third_party",
+              "any"
+            ],
+            "output": "COVERED_GUARANTEE",
+            "legal_basis": "Section 46(1)"
+          }
+        ]
       }
     ],
     "metadata": {
@@ -3525,7 +6272,7 @@
         "Flowable DMN"
       ],
       "law_reference": "Liikennevakuutuslaki 460/2016",
-      "rules_count": 103,
+      "rules_count": 199,
       "variable_naming_convention": "entity.attribute format (e.g., vehicle.vehicleType, driver.bloodAlcoholLevel)",
       "hierarchy_summary": {
         "eligibility": {
