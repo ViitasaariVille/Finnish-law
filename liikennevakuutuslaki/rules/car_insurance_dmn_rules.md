@@ -522,6 +522,44 @@ Claim Received
 **§57:** Insurer has right to direct patient to specific facility via maksusitoumus.
 **§59:** Non-emergency private care requires maksusitoumus for full coverage.
 
+---
+
+## §33: Multi-Vehicle Accident Liability
+
+### 2.2b Multi-Vehicle Liability Determination (§33)
+
+#### MULTI-001: Multi-Vehicle Liability Determination (§33)
+
+| accident.vehiclesInvolved | fault.determined | fault.vehicles | victim.contribution | Output |
+|--------------------------|-----------------|---------------|--------------------|--------|
+| >1 | true | single | none | **SingleVehicleLiable** |
+| >1 | true | single | present | **ApportionedLiability** |
+| >1 | true | multiple | any | **JointSeveralLiability** |
+| >1 | false | unknown | any | **AllVehiclesPotentiallyLiable** |
+
+**§33(1):** "Vastuu vahingosta on ajoneuvon omistajalla, haltijalla, kuljettajalla tai matkustajalla, joka on aiheuttanut vahingon tuottamuksestaan..."
+
+#### MULTI-002: Personal Injury Priority Rule (§33)
+
+| victim.location | victim.vehicleChoice | Output |
+|----------------|---------------------|--------|
+| passenger | any_vehicle_in_accident | **ThatVehicle_PaysFull** |
+| driver | own_vehicle | **OwnVehicle_PaysFull** |
+| third_party | chooses_vehicle | **ChosenVehicle_PaysFull** |
+
+**§33(3):** "Henkilövahinko korvataan täysimääräisesti siltä vakuutukselta, jossa vahinkoa kärsinyt on ollut matkustajana tai kuljettajana, taikka vahinkoa kärsineen valitsemalta vakuutukselta."
+
+#### MULTI-003: Apportionment Basis (§33)
+
+| fault.factors | victim.contribution | Output |
+|-------------|--------------------|--------|
+| negligence | none | **FullLiability** |
+| traffic_violation | none | **FullLiability** |
+| vehicle_defect | none | **FullLiability** |
+| any | present | **Reduced_ByContribution** |
+
+**§33(2):** "Jos vahinko on johtunut useamman kuin yhden 1 momentissa tarkoitetun henkilön tuottamuksesta, vastuu jaetaan heidän keskensä..."
+
 #### E6: Lost Wages Compensation (§34)
 
 | person.incomeType | person.netMonthlyIncome | person.annualIncome | injury.workAbilityLostDays | Output |
@@ -806,7 +844,7 @@ insurerShare = (insurerPremiumIncome / totalPremiumIncome) × amountOverThreshol
 
 ---
 
-### 0.3 Policy Termination (§16)
+### 0.4 Policy Termination (§16)
 
 #### TERM-001: Policyholder Termination Rights (§16(1))
 
@@ -847,6 +885,40 @@ insurerShare = (insurerPremiumIncome / totalPremiumIncome) × amountOverThreshol
 | true | false | any | any | **NormalPremium** |
 
 **§22:** "Jos vakuutettua ajoneuvoa on käytetty liikenteessä sinä aikana, jona se on ollut ilmoitettuna rekisteriin liikennekäytöstä poistetuksi, vakuutuksenottajan on suoritettava vakuutusyhtiölle vakuutusehdoissa määritelty enintään kolminkertainen vakuutusmaksu."
+
+#### PREM-001: Premium Refund on Early Termination (§23)
+
+| policy.terminationDate | premium.paidForFullTerm | premium.earned | refund.amount | Output |
+|-----------------------|----------------------|---------------|---------------|--------|
+| before_term | true | pro_rata | >8 | **RefundDue** |
+| before_term | true | pro_rata | ≤8 | **NoRefund_Minimum** |
+| before_term | false | actual | any | **NoRefund_AlreadyAdjusted** |
+| at_term | any | N/A | any | **NoRefund** |
+
+**§23:** "Jos vakuutus päättyy sovittua ajankohtaa aikaisemmin, vakuutusyhtiöllä on oikeus vakuutusmaksuun vain siltä ajalta, jonka sen vastuu on ollut voimassa."
+
+#### PREM-002: Late Payment Interest (§24)
+
+| payment.status | payment.dueDate | payment.actualDate | amount | Output |
+|---------------|-----------------|-------------------|--------|--------|
+| overdue | known | known | any | **InterestDue** |
+| overdue | known | not_received | any | **InterestFromDueDate** |
+| on_time | any | any | any | **NoInterest** |
+| early | any | any | any | **NoInterest** |
+
+**§24:** "Vakuutusmaksulle, jota ei ole suoritettu määräaikana, peritään viivästysajalta korkolain 4 §:n 1 momentissa tarkoitetun korkokannan mukainen vuotuinen viivästyskorko."
+
+#### PREM-003: Liability Continuation When Premium Unpaid (§25)
+
+| premium.paid | premium.overdue | premium.overdueAmount | insurer.liability | Output |
+|-------------|-----------------|----------------------|-------------------|--------|
+| false | true | >0 | **Continues** | **FullCoverage** |
+| false | false | 0 | **Continues** | **FullCoverage** |
+| true | any | 0 | **Continues** | **FullCoverage** |
+
+**§25(1):** "Vakuutusyhtiön vastuu ei lakkaa, vaikka vakuutusmaksua ei olisikaan määräaikana suoritettu."
+
+**§25(2):** "Vakuutusmaksu viivästyskorkoineen on suoraan ulosottokelpoinen."
 
 #### P7: Premium Claim Statute of Limitations (§26)
 
@@ -923,7 +995,44 @@ totalPenalty = basePenalty × multiplier (max 3× base)
 
 ---
 
+### 2.10b Policyholder Violation Consequences (§§14-15)
+
+#### VIOL-001: Disclosure Obligation Violation Consequences (§14)
+
+| violation.type | violation.intent | higherPremium.wouldHaveApplied | insurer.action | Output |
+|---------------|------------------|-------------------------------|----------------|--------|
+| disclosure | intentional | true | RetroactiveCharge | **HigherPremium_Due** |
+| disclosure | grossNegligence | true | RetroactiveCharge | **HigherPremium_Due** |
+| disclosure | any | false | NoAction | **NoPremiumAdjustment** |
+| wrongPolicyholder | intentional | N/A | Termination+BothLiable | **Termination_14Days** |
+| wrongPolicyholder | N/A | N/A | N/A | **BothLiableForPremium** |
+
+**§14:** "Jos vakuutuksenottaja on tahallisesti tai törkeästä huolimattomuudesta laiminlyönyt tiedonantovelvollisuuden... vakuutusyhtiöllä on oikeus periä korkeampi vakuutusmaksu takautuvasti."
+
+#### VIOL-002: Risk Increase Notification Failure Consequences (§15)
+
+| notification.failure | failure.intent | higherPremium.wouldApply | Output |
+|---------------------|----------------|-------------------------|--------|
+| true | intentional | true | **RetroactivePremiumIncrease** |
+| true | nonMinorNegligence | true | **RetroactivePremiumIncrease** |
+| true | minorNegligence | any | **NoConsequence** |
+| false | N/A | N/A | **NoViolation** |
+
+**§15:** "Jos vakuutuksenottaja on tahallisesti tai huolimattomuudesta... laiminlyönyt velvollisuuden ilmoittaa vaaran lisääntymisestä... vakuutusyhtiöllä on oikeus periä korkeampi vakuutusmaksu takautuvasti."
+
+---
+
 ### 2.11 Mandatory Opinion Requirements (§66)
+
+#### BOARD-001: Traffic Damage Board Authority (§64)
+
+| entity.type | authority.purpose | dispute.stage | Output |
+|------------|------------------|---------------|--------|
+| Liikennevahinkolautakunta | Opinion | PreLitigation | **CanIssueOpinion** |
+| Liikennevahinkolautakunta | Opinion | Court | **AdvisoryOnly** |
+| Liikennevahinkolautakunta | Mediation | any | **CanMediate** |
+
+**§64:** "Liikennevahinkolautakunta voi antaa lausuntoja... Yleistä etua koskevissa asioissa lautakunta voi antaa lausunnon myös oma-aloitteisesti."
 
 #### MOP-001: Mandatory Liikennevahinkolautakunta Opinion Triggers (§66)
 
