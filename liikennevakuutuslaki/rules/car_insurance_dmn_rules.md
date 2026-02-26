@@ -62,9 +62,19 @@ Claim Received
 
 #### N1: Unauthorized Use (§49)
 
-| vehicle.usedWithoutPermission | vehicle.ownerConsent | driver.isAuthorized | Output |
-|------------------------------|----------------------|-------------------|--------|
-| true | false | false | **NOT_COVERED** |
+| vehicle.usedWithoutPermission | victim.knewUnauthorized | specialReason.exists | Output |
+|------------------------------|------------------------|---------------------|--------|
+| true | false | N/A | **NOT_COVERED** |
+| true | true | false | **NOT_COVERED** |
+| true | true | true | **COVERED_SpecialReason** |
+
+**§49:** "Jos liikennevahinko on aiheutunut vahinkoa kärsineen ollessa luvattomasti käyttöön otetussa ajoneuvossa ja vakuutusyhtiö voi osoittaa hänen tienneen ajoneuvon käyttöönoton luvattomuudesta, hänelle suoritetaan korvausta ajoneuvon vakuutuksesta vain erityisestä syystä."
+
+**Examples of "Special Reason" (erityinen syy):**
+- Emergency situation
+- Coercion/duress
+- Minor without capacity to understand
+- Other compelling circumstances
 
 #### N2: Insanity/Emergency (§50)
 
@@ -72,6 +82,29 @@ Claim Received
 |----------------|-------------------|---------------------|--------|
 | true | false | false | **NOT_COVERED** |
 | false | true | false | **NOT_COVERED** |
+
+#### N2a: Work Performance Damage (§42)
+
+| vehicle.isStationary | person.performingWork | person.relationshipToVehicle | damage.targetProperty | Output |
+|--------------------|---------------------|---------------------------|---------------------|--------|
+| true | true | Owner | InsuredVehicle | **NOT_COVERED** |
+| true | true | Driver | InsuredVehicle | **NOT_COVERED** |
+| true | true | any | WorkTargetProperty | **NOT_COVERED** |
+| true | true | any | OtherVehicleInvolved | **NOT_COVERED** |
+| true | false | any | any | **COVERED** |
+| false | any | any | any | **COVERED** |
+
+**§42:** "Vakuutuksesta ei korvata vahinkoa, joka on aiheutunut: 1) ajoneuvon ollessa liikkumattomana ajoneuvon omistajalle, kuljettajalle tai muulle henkilölle, joka suorittaa tässä tarkoitettua työtä; eikä 2) työsuorituksen kohteena olevalle omaisuudelle taikka tähän toimintaan osalliselle toiselle ajoneuvolle."
+
+**Excluded Scenarios:**
+- Vehicle owner injured while working on their own stationary vehicle
+- Driver injured while performing work on the stationary vehicle
+- Damage to the property being worked on
+- Damage to another vehicle involved in the work activity
+
+**Covered Scenarios:**
+- Injuries to third parties
+- Damage to property not involved in the work
 
 #### N3: Theft Property Damage (§41)
 
@@ -151,11 +184,15 @@ Claim Received
 
 #### N10: Victim Contribution (§47)
 
-| victim.causedDamage | victim.contributionDegree | damage.damageType | Output |
-|--------------------|--------------------------|-------------------|--------|
-| true | Negligence | PropertyDamage | **50_PERCENT** |
-| true | Slight | any | **75_PERCENT** |
-| true | Moderate | any | **50_PERCENT** |
+| victim.causedDamage | victim.contributionDegree | compensation.type | damage.damageType | Output |
+|--------------------|--------------------------|-------------------|-------------------|--------|
+| true | Negligence | Rehabilitation | any | **COVERED_100** |
+| true | GrossNegligence | Rehabilitation | any | **COVERED_100** |
+| true | Slight | any | PropertyDamage | **75_PERCENT** |
+| true | Moderate | any | PropertyDamage | **50_PERCENT** |
+| true | Negligence | any | PropertyDamage | **50_PERCENT** |
+
+**§47(3):** "Liikennevakuutuslain perusteella korvattavasta kuntoutuksesta annetun lain mukaisiin korvauksiin ei tehdä 1 momentissa tarkoitettua vähennystä. Jos korvaus evätään kokonaan, ei kuntoutustakaan korvata."
 
 #### N11: Alcohol Impairment (§48)
 
@@ -163,12 +200,17 @@ Claim Received
 - Blood ≥1.2‰ OR Breath ≥0.53 mg/L: Significant reduction/denial
 - Blood 0.5-1.19‰ OR Breath 0.22-0.52 mg/L: Proportional reduction
 
-| driver.bloodAlcoholLevel | driver.breathAlcoholLevel | driver.contributionDegree | victim.isAtFault | Output |
-|--------------------------|--------------------------|--------------------------|-----------------|--------|
-| >=1.2_permille | any | PartialFault | false | **50_PERCENT** |
-| any | >=0.53_mg_per_L | PartialFault | false | **50_PERCENT** |
-| 0.5-1.19_permille | 0.22-0.52_mg_per_L | PartialFault | false | **75_PERCENT** |
-| 0.5-1.19_permille | 0.22-0.52_mg_per_L | SoleFault | false | **NOT_COVERED** |
+| driver.bloodAlcoholLevel | driver.breathAlcoholLevel | driver.contributionDegree | compensation.type | victim.isAtFault | Output |
+|--------------------------|--------------------------|--------------------------|-------------------|-----------------|--------|
+| >=1.2_permille | any | PartialFault | Rehabilitation | false | **COVERED_100** |
+| any | >=0.53_mg_per_L | PartialFault | Rehabilitation | false | **COVERED_100** |
+| 0.5-1.19_permille | 0.22-0.52_mg_per_L | PartialFault | Rehabilitation | false | **COVERED_100** |
+| >=1.2_permille | any | PartialFault | any | false | **50_PERCENT** |
+| any | >=0.53_mg_per_L | PartialFault | any | false | **50_PERCENT** |
+| 0.5-1.19_permille | 0.22-0.52_mg_per_L | PartialFault | any | false | **75_PERCENT** |
+| 0.5-1.19_permille | 0.22-0.52_mg_per_L | SoleFault | any | false | **NOT_COVERED** |
+
+**§48(3):** "Liikennevakuutuslain perusteella korvattavasta kuntoutuksesta annetun lain mukaisiin korvauksiin ei tehdä 1 ja 2 momenteissa tarkoitettua vähennystä."
 
 **Drug Impairment (§48):**
 - "Kykynsä tehtävän vaatimiin suorituksiin on huonontunut muun huumaavan aineen kuin alkoholin vaikutuksesta"
@@ -378,7 +420,7 @@ Claim Received
 | property.type | property.marketValue | damage.severity | Output |
 |---------------|---------------------|-----------------|--------|
 | Vehicle | any | TotalLoss | **MarketValue** |
-| Vehicle | any | PartialDamage | **RepairCost** |
+| Vehicle | PartialDamage | any | **RepairCost** |
 | ThirdPartyProperty | any | any | **ActualValue** |
 | Clothing | any | any | **ReplacementValue** |
 
@@ -388,6 +430,29 @@ Claim Received
 |-------------------|--------|
 | <= 5,000,000 EUR | **FullCompensation** |
 | > 5,000,000 EUR | **ProRataDistribution** |
+
+#### E8a: Loss of Use / Vehicle Downtime (§37)
+
+| vehicle.damage.severity | vehicle.repair.days | vehicle.repair.isOngoing | rental.substitutionAvailable | Output |
+|-----------------------|--------------------|-------------------------|-----------------------------|--------|
+| TotalLoss | any | N/A | any | **LossOfUse_UpToReasonablePeriod** |
+| PartialDamage | ≤30 days | true | true | **RentalCovered** |
+| PartialDamage | ≤30 days | true | false | **LossOfUse_UpToRepairDays** |
+| PartialDamage | >30 days | true | any | **LossOfUse_ExtendedReview** |
+| PartialDamage | any | false | any | **NoLossOfUse** |
+| NoDamage | any | any | any | **NotApplicable** |
+
+**§37:** "Ajoneuvolle aiheutuneena vahinkona korvataan korjauskustannus tai sitä vastaava määrä. Ajoneuvon arvon alentumista ei korvata."
+
+**Loss of Use Coverage:**
+- While vehicle is being repaired or awaiting repair
+- Maximum reasonable period based on repair complexity
+- Substitution vehicle (rental) if available and reasonable
+- Not covered if damage is minimal or repair is delayed unreasonably
+
+**Variables:**
+- `vehicle.repair.days`: Estimated or actual repair duration
+- `rental.substitutionAvailable`: Whether rental vehicle is available
 
 ---
 
@@ -492,14 +557,22 @@ insurerShare = (insurerPremiumIncome / totalPremiumIncome) × amountOverThreshol
 
 #### T1: Claim Filing Deadline (§61)
 
-| claim.knowledgeDate | claim.submissionDate | Output |
-|---------------------|----------------------|--------|
-| known | within 3 years of knowledge | **ValidClaim** |
-| known | after 3 years of knowledge | **TimeBarred** |
-| unknown | within 10 years of accident | **ValidClaim** |
-| unknown | after 10 years of accident | **AbsolutelyTimeBarred** |
+| claim.knowledgeDate | claim.submissionDate | accident.date | specialReason.exists | Output |
+|---------------------|----------------------|---------------|---------------------|--------|
+| known | within 3 years of knowledge | any | any | **ValidClaim** |
+| known | after 3 years of knowledge | within 10 years | true | **ProcessUnderException** |
+| known | after 3 years of knowledge | within 10 years | false | **TimeBarred** |
+| known | any | after 10 years | any | **AbsolutelyTimeBarred** |
+| unknown | within 10 years of accident | any | any | **ValidClaim** |
+| unknown | after 10 years of accident | any | any | **AbsolutelyTimeBarred** |
 
-**§61:** Korvausvaatimus on esitettävä kolmen vuoden kuluessa siitä, kun korvauksen hakija on saanut tietää vahinkotapahtumasta. Korvausvaatimus on joka tapauksessa esitettävä kymmenen vuoden kuluessa vahinkoseuraamuksen aiheutumisesta.
+**§61:** Korvausvaatimus on esitettävä kolmen vuoden kuluessa siitä, kun korvauksen hakija on saanut tietää vahinkotapahtumasta. Korvausvaatimus on joka tapauksessa esitettävä kymmenen vuoden kuluessa vahinkoseuraamuksen aiheutumisesta. Erityisen painavasta syystä korvausvaatimus voidaan käsitellä myös määräajan jälkeen.
+
+**Examples of "Special Reason" (erityisen painava syy):**
+- Military service
+- Prolonged unconsciousness
+- Minority with no legal guardian
+- Other compelling circumstances preventing timely filing
 
 #### T2: Investigation Start Deadline (§62)
 
@@ -662,9 +735,12 @@ All variables follow `entity.attribute` format matching the business ontology:
 | certificate.requested | certificate.requestDate | certificate.responseDate | policy.endDate | yearsSinceEnd | Output |
 |---------------------|------------------------|-------------------------|----------------|---------------|--------|
 | true | any | ≤15 days from request | any | ≤5 | **Compliant** |
-| true | any | >15 days from request | any | ≤5 | **CertificateDelayed** |
+| true | any | >15 days from request | any | ≤5 | **CertificateDelayed** (15-day deadline violated) |
 | true | any | any | any | >5 | **NotRequired** (5-year statute) |
 | true | any | any | unknown | any | **ProvideIfAvailable** |
+| false | any | any | any | any | **NotRequested** |
+
+**§19:** "Vakuutusyhtiön on toimitettava todistus vakuutuksenottajalle **15 päivän kuluessa pyynnöstä**. Vakuutusyhtiöllä ei kuitenkaan ole velvollisuutta antaa todistusta vakuutuksesta, jonka päättymisestä on kulunut yli viisi vuotaa."
 
 **Required Certificate Contents (§19):**
 1. Policy validity period (voimassaoloaika)
@@ -726,6 +802,77 @@ newMinimum = Round(newMinimum, nearest cent)
 - `palkkakerroin.value`: Annual wage coefficient from Työeläkelaki
 - `paymentDelay.cause`: Normal | VictimCaused | ForceMajeure
 - `lautakunta.reviewActive`: Boolean
+
+#### P6: Recipient Notification Obligation (§68)
+
+| decision.notificationObligationStated | change.occurred | change.affectsCompensation | notification.timeliness | Output |
+|--------------------------------------|-----------------|----------------------------|------------------------|--------|
+| true | true | true | Immediate | **Compliant** |
+| true | true | true | Delayed | **NonCompliant** |
+| true | true | false | any | **NoObligation** |
+| false | any | any | any | **NoObligation** |
+
+**§68:** "Korvauksensaaja on velvollinen viipymättä ja oma-aloitteisesti ilmoittamaan vahingonkorvauslain 5 luvun 2, 2 d, 4 ja 4 b §:n sekä liikennevakuutuslain perusteella korvattavasta kuntoutuksesta annetun lain nojalla korvausta maksavalle vakuutusyhtiölle korvaukseen vaikuttavista muutoksista edellyttäen, että tästä velvollisuudesta on mainittu korvauspäätöksessä."
+
+**Reportable Changes:**
+- Employment status changes
+- Recovery/improvement in condition
+- Return to work
+- Receipt of other compensation
+- Change in disability status
+
+---
+
+## SECTION 4: RECOURSE & RECOVERY RULES
+
+### 4.1 Insurer Subrogation
+
+#### R1: Insurer Subrogation Rights (§73)
+
+| thirdParty.type | damage.causeIntentional | damage.causedByGrossNegligence | driver.bloodAlcoholLevel | subrogation.applies |
+|-----------------|------------------------|--------------------------------|-----------------------|---------------------|
+| Individual | true | any | any | **Yes** |
+| Individual | false | true | any | **Yes** |
+| Individual | false | false | >= 1.2‰ | **Yes** |
+| Individual | false | false | < 1.2‰ | **No** |
+| Employee | true | any | any | **Yes** |
+| Employee | false | true | any | **Yes** |
+| VehicleOwner | true | any | any | **Yes** |
+| VehicleOwner | false | true | any | **Yes** |
+| VehicleDriver | true | any | any | **Yes** |
+| VehicleDriver | false | true | any | **Yes** |
+| Passenger | true | any | any | **Yes** |
+| Passenger | false | true | any | **Yes** |
+| Corporation | any | any | any | **Yes** |
+
+**§73:** "Vahinkoa kärsineen oikeus vaatia kolmannelta henkilöltä korvaus määrän, jonka vakuutusyhtiö on hänelle suorittanut, siirtyy vakuutusyhtiölle. Jos kolmas henkilö on yksityishenkilö...oikeus siirtyy kuitenkin vain, jos hän on aiheuttanut vakuutustapahtuman tahallisesti tai törkeästä huolimattomuudesta tai jos kuljettaja on aiheuttanut vahingon kuljettaessaan ajoneuvoa 48 §:n 1 momentissa tarkoitetuissa olosuhteissa."
+
+**Subrogation Limitations:**
+- For individuals: Only if intentional, gross negligence, or §48(1) alcohol/drug impairment
+- For corporations/businesses: Full subrogation applies
+- For employees: Only if intentional or gross negligence
+
+### 4.2 Traffic Insurance Centre Recourse
+
+#### R2: Centre Recourse Rights (§74)
+
+| payment.scenario | vehicle.homeCountry | insurer.identifiable | accident.locationCountry | recourse.target | recourse.applies |
+|------------------|--------------------|----------------------|--------------------------|-----------------|---------------------|
+| Uninsured_Vehicle | Finland | N/A | any | Finnish_Guarantee_Fund | **Yes** |
+| Unknown_Insurer | EEA | false | any | Vehicle_HomeCountry_Fund | **Yes** |
+| Unknown_Vehicle | any | false | EEA | AccidentLocation_Fund | **Yes** |
+| Unknown_Vehicle | any | false | Non-EEA | AccidentLocation_Fund | **Yes** |
+| ThirdCountry_Vehicle | Non-EEA | any | any | AccidentLocation_Fund | **Yes** |
+| Insurance_Obligation_Neglected | Finland | any | any | Finnish_Guarantee_Fund | **Yes** |
+
+**§74:** "Liikennevakuutuskeskuksella on oikeus vaatia takaisin 71 §:n perusteella maksamansa korvaus sen ETA-valtion korvauselimeltä, jossa vakuutussopimuksen tehneen vakuutusyhtiön toimipaikka on."
+
+**Recourse Scenarios:**
+1. Vehicle doesn't require insurance → National fund of vehicle's home country
+2. Insurer unidentifiable → Fund of vehicle's home country
+3. Vehicle unidentified → Fund of accident location
+4. Third-country vehicle → Fund of accident location
+5. Insurance obligation neglected → Fund of vehicle's home country
 
 ---
 
