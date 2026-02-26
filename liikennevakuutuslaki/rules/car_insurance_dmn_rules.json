@@ -2,8 +2,8 @@
   "model": {
     "name": "Finnish Traffic Insurance DMN",
     "namespace": "https://liikennevakuutus-fi/dmn/traffic-insurance",
-    "version": "1.2",
-    "description": "Hierarchical DMN business rules for Liikennevakuutuslaki (460/2016) - Full Rule Structure",
+    "version": "1.3",
+    "description": "Hierarchical DMN business rules for Liikennevakuutuslaki (460/2016) - Negative Claims First",
     "based_on": "Liikennevakuutuslaki (Traffic Insurance Act) 460/2016",
     "source": "https://www.finlex.fi/fi/lainsaadanto/2016/460",
     "hierarchy": {

@@ -6,7 +6,17 @@
 
 ## HIERARCHY OVERVIEW
 
-### Level 1: ELIGIBILITY (Positive - What IS Covered)
+### Level 1: NEGATIVE CLAIMS (What is NOT Covered - Check FIRST)
+
+| Category | Decisions | Sections |
+|----------|-----------|----------|
+| Full Denial | N1-N9 | §§41, 41a, 43, 44, 46-50 |
+| Reduced Compensation | N10-N11 | §§47-48 |
+| Conditional Compensation | N12-N17 | §§41, 41a, 43, 44, 46, 48 |
+
+**Total: 17 negative claim decisions**
+
+### Level 2: ELIGIBILITY (Positive - What IS Covered)
 
 | Category | Decisions | Sections |
 |----------|-----------|----------|
@@ -18,163 +28,37 @@
 
 **Total: 13 eligibility decisions**
 
-### Level 2: NEGATIVE CLAIMS (What is NOT Covered)
+---
 
-| Category | Decisions | Sections |
-|----------|-----------|----------|
-| Full Denial | N1-N9 | §§41, 41a, 43, 44, 46-50 |
-| Reduced Compensation | N10-N11 | §§47-48 |
-| Conditional Compensation | N12-N17 | §§41, 41a, 43, 44, 46, 48 |
+## DECISION FLOW DIAGRAM
 
-**Total: 17 negative claim decisions**
+```
+Claim Received
+       │
+       ▼
+┌─────────────────────┐
+│ 1. NEGATIVE CLAIMS │───→ N1-N17
+│ (Exclusions,        │     Full Denial
+│  Denials,          │     Reduced Compensation
+│  Reductions)       │     Conditional
+└──────────┬──────────┘
+           │ Pass (No exclusion)
+           ▼
+┌─────────────────────┐
+│ 2. ELIGIBILITY     │───→ E1-E13
+│ (Coverage, Calc,   │     Coverage Determination
+│  Benefits, Time)   │     Compensation Calculation
+└──────────┬──────────┘
+           │ Eligible
+           ▼
+    COMPENSATION PAID
+```
 
 ---
 
-## SECTION 1: ELIGIBILITY RULES
+## SECTION 1: NEGATIVE CLAIMS RULES (Check First)
 
-### 1.1 Coverage Determination
-
-#### E1: Vehicle Insurance Requirement (§5)
-
-| vehicle.registrationCountry | vehicle.requiresInsurance | vehicle.vehicleType | Output |
-|----------------------------|---------------------------|---------------------|--------|
-| FI | true | MotorVehicle | **MandatoryTrafficInsurance** |
-| FI | true | Trailer | **MandatoryTrafficInsurance** |
-| EEA | true | any | CheckRegistrationCountry |
-| Non-EEA | true | any | **MandatoryTrafficInsurance** |
-
-#### E2: Damage Coverage (§§12-16)
-
-| damage.damageType | damage.isPersonalInjury | damage.isPropertyDamage | Output |
-|-------------------|-------------------------|------------------------|--------|
-| PersonalInjury | true | false | **COVERED_100** |
-| PersonalInjury | true | true | **COVERED_100** |
-| PropertyDamage | false | true | **COVERED_100** |
-| VehicleDamage | false | true | **COVERED_100** |
-| EnvironmentalDamage | false | true | **COVERED_100** |
-
-#### E3: International Coverage (§§10-11)
-
-| accident.locationCountry | greenCard.valid | vehicle.registeredCountry | Output |
-|--------------------------|-----------------|-------------------------|--------|
-| Finland | any | FI | **FullCoverage** |
-| EEA | true | any | **FullCoverage_GreenCard** |
-| EEA | false | any | LimitedCoverage_BureauGuarantee |
-| Non-EEA | any | any | CheckBilateralAgreement |
-
-#### E4: Insurance Obligation Liable Party (§6)
-
-| person.owner.exists | person.holder.exists | vehicle.ownershipTransferred | Output |
-|---------------------|----------------------|------------------------------|--------|
-| true | true | true | **OwnerAndHolderJointlyLiable** |
-| true | false | true | **OwnerLiable** |
-| false | true | true | **HolderLiable** |
-| true | false | false | **OwnerLiableFromOwnership** |
-
----
-
-### 1.2 Compensation Calculation
-
-#### E5: Medical Expense Compensation (§§53-59)
-
-| medicalExpense.treatmentType | medicalExpense.isNecessary | medicalExpense.providerType | Output |
-|------------------------------|---------------------------|---------------------------|--------|
-| Emergency | true | public | **100_PERCENT** |
-| Emergency | true | private | **100_PERCENT_REIMBURSEMENT** |
-| Surgery | true | any | **100_PERCENT** |
-| Medicines | true | pharmacy | **100_PERCENT** |
-| Rehabilitation | true | any | **100_PERCENT** |
-| DentalTreatment | true | any | **100_PERCENT** |
-| Prosthesis | true | any | **100_PERCENT** |
-| TravelToTreatment | true | any | **100_PERCENT** |
-
-#### E6: Lost Wages Compensation (§34)
-
-| person.incomeType | person.netMonthlyIncome | person.annualIncome | injury.workAbilityLostDays | Output |
-|-------------------|------------------------|---------------------|----------------------------|--------|
-| Employed | any | null | any | Calculate_NetMonthly/30×Days |
-| SelfEmployed | null | any | any | Calculate_Annual/365×Days |
-| Unemployed | any | null | any | **Minimum_36.90_PerDay** |
-| Student | any | null | any | StudentGrant_Adjustment |
-
-#### E7: Pain and Suffering Compensation (§35)
-
-| injury.isPermanent | injury.permanentDisabilityPercentage | painSuffering.level | Output |
-|-------------------|---------------------------------------|---------------------|--------|
-| true | 1-10_PERCENT | moderate | Scale_1_10_Percent |
-| true | 11-20_PERCENT | moderate | Scale_11_20_Percent |
-| true | 21-50_PERCENT | significant | Scale_21_50_Percent |
-| true | 51-100_PERCENT | severe | Scale_51_100_Percent |
-| false | null | any | TemporaryPain_Scale |
-
-#### E8: Property Damage Compensation (§3)
-
-| property.type | property.marketValue | damage.severity | Output |
-|---------------|---------------------|-----------------|--------|
-| Vehicle | any | TotalLoss | **MarketValue** |
-| Vehicle | any | PartialDamage | **RepairCost** |
-| ThirdPartyProperty | any | any | **ActualValue** |
-| Clothing | any | any | **ReplacementValue** |
-
----
-
-### 1.3 Benefit Entitlement
-
-#### E9: Death Compensation (§§36-38)
-
-| deceased.hasIncome | survivor.relationship | survivor.isDependent | Output |
-|-------------------|----------------------|---------------------|--------|
-| true | Spouse | true | **SpousePension_Plus_LumpSum** |
-| true | Child | true | **ChildPension** |
-| false | Dependent | true | **LumpSum** |
-| any | Parent | true | FuneralExpenses_Plus_Compensation |
-
-#### E10: Disability Compensation (§35)
-
-| injury.permanentDisabilityPercentage | injury.affectsWorkAbility | person.ageAtInjury | Output |
-|--------------------------------------|---------------------------|-------------------|--------|
-| 1-10_PERCENT | true | any | **DisabilityPension_Low** |
-| 11-30_PERCENT | true | any | **DisabilityPension_Medium** |
-| 31-100_PERCENT | true | any | **DisabilityPension_High** |
-
----
-
-### 1.4 Premium Calculation
-
-#### E11: Premium Calculation (§§89-92)
-
-| vehicle.vehicleType | driver.age | claim.historyClaimCount | vehicle.usagePurpose | Output |
-|--------------------|------------|------------------------|---------------------|--------|
-| PrivateCar | over_25 | 0 | Private | **BasePremium** |
-| PrivateCar | under_25 | 0 | Private | BasePremium×1.5 |
-| PrivateCar | any | positive | any | BasePremium+ClaimLoading |
-| Commercial | any | any | Commercial | **CommercialRate** |
-
----
-
-### 1.5 Time Limits
-
-#### E12: Claim Time Limit (§74)
-
-| claim.damageType | accident.date | claim.submissionDate | Output |
-|------------------|---------------|----------------------|--------|
-| PersonalInjury | any | any | Within_3_Years_From_Injury |
-| PropertyDamage | any | within_1_year | Within_1_Year_From_Accident |
-| PropertyDamage | any | after_1_year | **ClaimTimeBarred** |
-
-#### E13: Insolvency Protection (§77)
-
-| insuranceCompany.status | insurance.policyActive | claim.isPending | Output |
-|------------------------|----------------------|-----------------|--------|
-| Insolvent | true | true | **FinnishGuaranteeFund_Pays** |
-| Insolvent | true | false | TransferToAnotherInsurer |
-| Healthy | true | true | NormalClaimsProcess |
-
----
-
-## SECTION 2: NEGATIVE CLAIMS RULES
-
-### 2.1 Full Denial
+### 1.1 Full Denial
 
 #### N1: Unauthorized Use (§49)
 
@@ -236,7 +120,7 @@
 
 ---
 
-### 2.2 Reduced Compensation
+### 1.2 Reduced Compensation
 
 #### N10: Victim Contribution (§47)
 
@@ -256,7 +140,7 @@
 
 ---
 
-### 2.3 Conditional Compensation
+### 1.3 Conditional Compensation
 
 #### N12: Theft Personal Injury (§41)
 
@@ -303,29 +187,145 @@
 
 ---
 
-## DECISION FLOW DIAGRAM
+## SECTION 2: ELIGIBILITY RULES (Check After Negative Claims)
 
-```
-Claim Received
-       │
-       ▼
-┌─────────────────────┐
-│ Check Eligibility  │───→ E1-E13
-│ (Coverage, Calc,   │
-│  Benefits, Time)   │
-└──────────┬──────────┘
-           │ Eligible
-           ▼
-┌─────────────────────┐
-│ Check Negative     │───→ N1-N17
-│ Claims             │
-│ (Denial, Reduce,   │
-│  Conditional)      │
-└──────────┬──────────┘
-           │ Approved
-           ▼
-    COMPENSATION PAID
-```
+### 2.1 Coverage Determination
+
+#### E1: Vehicle Insurance Requirement (§5)
+
+| vehicle.registrationCountry | vehicle.requiresInsurance | vehicle.vehicleType | Output |
+|----------------------------|---------------------------|---------------------|--------|
+| FI | true | MotorVehicle | **MandatoryTrafficInsurance** |
+| FI | true | Trailer | **MandatoryTrafficInsurance** |
+| EEA | true | any | CheckRegistrationCountry |
+| Non-EEA | true | any | **MandatoryTrafficInsurance** |
+
+#### E2: Damage Coverage (§§12-16)
+
+| damage.damageType | damage.isPersonalInjury | damage.isPropertyDamage | Output |
+|-------------------|-------------------------|------------------------|--------|
+| PersonalInjury | true | false | **COVERED_100** |
+| PersonalInjury | true | true | **COVERED_100** |
+| PropertyDamage | false | true | **COVERED_100** |
+| VehicleDamage | false | true | **COVERED_100** |
+| EnvironmentalDamage | false | true | **COVERED_100** |
+
+#### E3: International Coverage (§§10-11)
+
+| accident.locationCountry | greenCard.valid | vehicle.registeredCountry | Output |
+|--------------------------|-----------------|-------------------------|--------|
+| Finland | any | FI | **FullCoverage** |
+| EEA | true | any | **FullCoverage_GreenCard** |
+| EEA | false | any | LimitedCoverage_BureauGuarantee |
+| Non-EEA | any | any | CheckBilateralAgreement |
+
+#### E4: Insurance Obligation Liable Party (§6)
+
+| person.owner.exists | person.holder.exists | vehicle.ownershipTransferred | Output |
+|---------------------|----------------------|------------------------------|--------|
+| true | true | true | **OwnerAndHolderJointlyLiable** |
+| true | false | true | **OwnerLiable** |
+| false | true | true | **HolderLiable** |
+| true | false | false | **OwnerLiableFromOwnership** |
+
+---
+
+### 2.2 Compensation Calculation
+
+#### E5: Medical Expense Compensation (§§53-59)
+
+| medicalExpense.treatmentType | medicalExpense.isNecessary | medicalExpense.providerType | Output |
+|------------------------------|---------------------------|---------------------------|--------|
+| Emergency | true | public | **100_PERCENT** |
+| Emergency | true | private | **100_PERCENT_REIMBURSEMENT** |
+| Surgery | true | any | **100_PERCENT** |
+| Medicines | true | pharmacy | **100_PERCENT** |
+| Rehabilitation | true | any | **100_PERCENT** |
+| DentalTreatment | true | any | **100_PERCENT** |
+| Prosthesis | true | any | **100_PERCENT** |
+| TravelToTreatment | true | any | **100_PERCENT** |
+
+#### E6: Lost Wages Compensation (§34)
+
+| person.incomeType | person.netMonthlyIncome | person.annualIncome | injury.workAbilityLostDays | Output |
+|-------------------|------------------------|---------------------|----------------------------|--------|
+| Employed | any | null | any | Calculate_NetMonthly/30×Days |
+| SelfEmployed | null | any | any | Calculate_Annual/365×Days |
+| Unemployed | any | null | any | **Minimum_36.90_PerDay** |
+| Student | any | null | any | StudentGrant_Adjustment |
+
+#### E7: Pain and Suffering Compensation (§35)
+
+| injury.isPermanent | injury.permanentDisabilityPercentage | painSuffering.level | Output |
+|-------------------|---------------------------------------|---------------------|--------|
+| true | 1-10_PERCENT | moderate | Scale_1_10_Percent |
+| true | 11-20_PERCENT | moderate | Scale_11_20_Percent |
+| true | 21-50_PERCENT | significant | Scale_21_50_Percent |
+| true | 51-100_PERCENT | severe | Scale_51_100_Percent |
+| false | null | any | TemporaryPain_Scale |
+
+#### E8: Property Damage Compensation (§3)
+
+| property.type | property.marketValue | damage.severity | Output |
+|---------------|---------------------|-----------------|--------|
+| Vehicle | any | TotalLoss | **MarketValue** |
+| Vehicle | any | PartialDamage | **RepairCost** |
+| ThirdPartyProperty | any | any | **ActualValue** |
+| Clothing | any | any | **ReplacementValue** |
+
+---
+
+### 2.3 Benefit Entitlement
+
+#### E9: Death Compensation (§§36-38)
+
+| deceased.hasIncome | survivor.relationship | survivor.isDependent | Output |
+|-------------------|----------------------|---------------------|--------|
+| true | Spouse | true | **SpousePension_Plus_LumpSum** |
+| true | Child | true | **ChildPension** |
+| false | Dependent | true | **LumpSum** |
+| any | Parent | true | FuneralExpenses_Plus_Compensation |
+
+#### E10: Disability Compensation (§35)
+
+| injury.permanentDisabilityPercentage | injury.affectsWorkAbility | person.ageAtInjury | Output |
+|--------------------------------------|---------------------------|-------------------|--------|
+| 1-10_PERCENT | true | any | **DisabilityPension_Low** |
+| 11-30_PERCENT | true | any | **DisabilityPension_Medium** |
+| 31-100_PERCENT | true | any | **DisabilityPension_High** |
+
+---
+
+### 2.4 Premium Calculation
+
+#### E11: Premium Calculation (§§89-92)
+
+| vehicle.vehicleType | driver.age | claim.historyClaimCount | vehicle.usagePurpose | Output |
+|--------------------|------------|------------------------|---------------------|--------|
+| PrivateCar | over_25 | 0 | Private | **BasePremium** |
+| PrivateCar | under_25 | 0 | Private | BasePremium×1.5 |
+| PrivateCar | any | positive | any | BasePremium+ClaimLoading |
+| Commercial | any | any | Commercial | **CommercialRate** |
+
+---
+
+### 2.5 Time Limits
+
+#### E12: Claim Time Limit (§74)
+
+| claim.damageType | accident.date | claim.submissionDate | Output |
+|------------------|---------------|----------------------|--------|
+| PersonalInjury | any | any | Within_3_Years_From_Injury |
+| PropertyDamage | any | within_1_year | Within_1_Year_From_Accident |
+| PropertyDamage | any | after_1_year | **ClaimTimeBarred** |
+
+#### E13: Insolvency Protection (§77)
+
+| insuranceCompany.status | insurance.policyActive | claim.isPending | Output |
+|------------------------|----------------------|-----------------|--------|
+| Insolvent | true | true | **FinnishGuaranteeFund_Pays** |
+| Insolvent | true | false | TransferToAnotherInsurer |
+| Healthy | true | true | NormalClaimsProcess |
 
 ---
 
@@ -338,12 +338,12 @@ All variables follow `entity.attribute` format matching the business ontology:
 | **vehicle** | registrationCountry, requiresInsurance, vehicleType, isExempt, exemptType, usedWithoutPermission, ownerConsent, isUnknown, theft.reported |
 | **driver** | isAuthorized, isInsane, inEmergency, isResponsible, isCompetitionParticipant, licenseValid, bloodAlcoholLevel, contributionDegree |
 | **damage** | damageType, isPersonalInjury, isPropertyDamage, severity |
-| **person** | incomeType, netMonthlyIncome, annualIncome, ageAtInjury |
 | **injury** | isPermanent, permanentDisabilityPercentage, workAbilityLostDays, affectsWorkAbility |
 | **insurance** | policyStatus, exists, obligationMet |
-| **claim** | damageType, submissionDate, isPending |
+| **person** | incomeType, netMonthlyIncome, annualIncome, ageAtInjury |
 | **survivor** | relationship, isDependent |
 | **accident** | locationCountry, occurredAfterTheft |
+| **claim** | damageType, submissionDate, isPending |
 | **greenCard** | valid |
 | **police** | reportFiled |
 | **event** | isAuthorized |
@@ -354,6 +354,7 @@ All variables follow `entity.attribute` format matching the business ontology:
 
 - **Law**: Liikennevakuutuslaki (Traffic Insurance Act) 460/2016
 - **Source**: finlex.fi/fi/lainsaadanto/2016/460
-- **Version**: 1.2 (Complete Hierarchical)
-- **Total Decisions**: 30 (13 Eligibility + 17 Negative Claims)
+- **Version**: 1.3 (Negative Claims First)
+- **Total Decisions**: 30 (17 Negative Claims + 13 Eligibility)
+- **Decision Order**: Negative Claims → Eligibility → Compensation
 - **Variable Convention**: entity.attribute (ontology-aligned)
