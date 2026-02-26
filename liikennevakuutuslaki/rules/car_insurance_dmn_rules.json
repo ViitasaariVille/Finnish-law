@@ -2,7 +2,7 @@
   "model": {
     "name": "Finnish Traffic Insurance DMN",
     "namespace": "https://liikennevakuutus-fi/dmn/traffic-insurance",
-    "version": "1.4",
+    "version": "1.9",
     "description": "Hierarchical DMN business rules for Liikennevakuutuslaki (460/2016) - Negative Claims First",
     "based_on": "Liikennevakuutuslaki (Traffic Insurance Act) 460/2016",
     "source": "https://www.finlex.fi/fi/lainsaadanto/2016/460",
@@ -1785,6 +1785,1733 @@
             "source_text": "Vain henkil\u00f6vahinko"
           }
         ]
+      },
+      {
+        "category": "eligibility.compensation_calculation",
+        "name": "E8e_IndexAdjustment",
+        "description": "Index adjustment of continuous compensations (\u00a735)",
+        "hit_policy": "UNIQUE",
+        "input_variables": [
+          "compensation.type",
+          "compensation.amount",
+          "year"
+        ],
+        "output_variable": "adjusted_amount",
+        "legal_source": "Section 35",
+        "rules": [
+          {
+            "inputs": [
+              "continuous",
+              "any",
+              "any"
+            ],
+            "output": "Adjusted_By_WorkPensionIndex",
+            "legal_basis": "Section 35(1)",
+            "source_text": "Ty\u00f6el\u00e4keindeksill\u00e4 tarkistus"
+          }
+        ]
+      },
+      {
+        "category": "negative_claims.full_denial",
+        "name": "N22_PropertyExclusions",
+        "description": "Certain property damages not compensated (\u00a740)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "damage.vehicle",
+          "damage.connectedVehicle",
+          "damage.ownerProperty"
+        ],
+        "output_variable": "compensation_decision",
+        "legal_source": "Section 40",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              true,
+              "any"
+            ],
+            "output": "NOT_COVERED",
+            "legal_basis": "Section 40(1)",
+            "source_text": "Ajoneuvolle itselleen"
+          },
+          {
+            "inputs": [
+              true,
+              false,
+              true
+            ],
+            "output": "NOT_COVERED",
+            "legal_basis": "Section 40(2)",
+            "source_text": "Omistajan muu omaisuus"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.compensation_calculation",
+        "name": "E15b_RailTrafficLiability",
+        "description": "Division with rail traffic liability (\u00a752)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "accident.involvesRailVehicle",
+          "fault.rail",
+          "fault.road"
+        ],
+        "output_variable": "liability_division",
+        "legal_source": "Section 52",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              "sole",
+              "no_fault"
+            ],
+            "output": "RailTraffic_Fully_Liable",
+            "legal_basis": "Section 52(1)",
+            "source_text": "Yksinomaan raideliikenne"
+          },
+          {
+            "inputs": [
+              true,
+              "shared",
+              "shared"
+            ],
+            "output": "Proportional_Division",
+            "legal_basis": "Section 52(1)",
+            "source_text": "Molemmilla tuottamus"
+          },
+          {
+            "inputs": [
+              true,
+              "no_fault",
+              "sole"
+            ],
+            "output": "RoadTraffic_Fully_Liable",
+            "legal_basis": "Section 52(1)",
+            "source_text": "Yksinomaan tieliikenne"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E17_HealthUnitReporting",
+        "description": "Public health unit reporting obligation (\u00a756)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "healthUnit.reported",
+          "patientInfo.provided",
+          "timeliness"
+        ],
+        "output_variable": "reporting_status",
+        "legal_source": "Section 56",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              true,
+              "timely"
+            ],
+            "output": "Reporting_Complete",
+            "legal_basis": "Section 56",
+            "source_text": "Ilmoitus tehty"
+          },
+          {
+            "inputs": [
+              true,
+              false,
+              "any"
+            ],
+            "output": "Reporting_Incomplete",
+            "legal_basis": "Section 56",
+            "source_text": "Puutteellinen ilmoitus"
+          },
+          {
+            "inputs": [
+              false,
+              "any",
+              "any"
+            ],
+            "output": "Reporting_Missing",
+            "legal_basis": "Section 56",
+            "source_text": "Ilmoitus puuttuu"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E18_InsurerFacilityChoice",
+        "description": "Insurer right to direct to facility (\u00a757)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "insurer.authorization",
+          "facility.approved",
+          "treatment.type"
+        ],
+        "output_variable": "authorization",
+        "legal_source": "Section 57",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              true,
+              "planned_treatment"
+            ],
+            "output": "Authorization_Granted",
+            "legal_basis": "Section 57",
+            "source_text": "Maksusitoumus annettu"
+          },
+          {
+            "inputs": [
+              false,
+              "any",
+              "any"
+            ],
+            "output": "No_Authorization_Required",
+            "legal_basis": "Section 57",
+            "source_text": "Ei maksusitoumusta"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.compensation_calculation",
+        "name": "E19_TravelCosts",
+        "description": "Travel costs compensation (\u00a759)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "travel.reason",
+          "travel.distance",
+          "travel.mode"
+        ],
+        "output_variable": "compensation_amount",
+        "legal_source": "Section 59",
+        "rules": [
+          {
+            "inputs": [
+              "medical_appointment",
+              "any",
+              "any"
+            ],
+            "output": "COVERED_Kela_Rate",
+            "legal_basis": "Section 59",
+            "source_text": "Kelan matkakorvausk\u00e4yt\u00e4nn\u00f6n mukaan"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E20_ClaimRightToCompensation",
+        "description": "Right to compensation and claims procedure (\u00a760)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "claim.filed",
+          "claim.documentation",
+          "damage.verified"
+        ],
+        "output_variable": "claim_status",
+        "legal_source": "Section 60",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              "complete",
+              true
+            ],
+            "output": "Claim_Accepted",
+            "legal_basis": "Section 60",
+            "source_text": "Korvaus hyv\u00e4ksytty"
+          },
+          {
+            "inputs": [
+              true,
+              "incomplete",
+              "any"
+            ],
+            "output": "Additional_Info_Required",
+            "legal_basis": "Section 60",
+            "source_text": "Lis\u00e4tietoja pyydetty"
+          },
+          {
+            "inputs": [
+              true,
+              "complete",
+              false
+            ],
+            "output": "Claim_Denied",
+            "legal_basis": "Section 60",
+            "source_text": "Korvaus ev\u00e4tty"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.time_limits",
+        "name": "E21_ClaimDecisionTime",
+        "description": "Decision on compensation time limits (\u00a762)",
+        "hit_policy": "UNIQUE",
+        "input_variables": [
+          "claim.type",
+          "claim.complexity",
+          "days_elapsed"
+        ],
+        "output_variable": "decision_deadline",
+        "legal_source": "Section 62",
+        "rules": [
+          {
+            "inputs": [
+              "property_damage",
+              "simple",
+              "any"
+            ],
+            "output": "30_Days",
+            "legal_basis": "Section 62",
+            "source_text": "30 p\u00e4iv\u00e4\u00e4"
+          },
+          {
+            "inputs": [
+              "personal_injury",
+              "any",
+              "any"
+            ],
+            "output": "90_Days",
+            "legal_basis": "Section 62",
+            "source_text": "90 p\u00e4iv\u00e4\u00e4"
+          },
+          {
+            "inputs": [
+              "complex",
+              "any",
+              ">90"
+            ],
+            "output": "180_Days",
+            "legal_basis": "Section 62",
+            "source_text": "180 p\u00e4iv\u00e4\u00e4"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.compensation_calculation",
+        "name": "E22_AdvancePayment",
+        "description": "Advance payment (\u00a763)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "damage.likely",
+          "claim.amount_estimated",
+          "injury.severity"
+        ],
+        "output_variable": "advance_eligibility",
+        "legal_source": "Section 63",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              "any",
+              "severe"
+            ],
+            "output": "Advance_Payment_Required",
+            "legal_basis": "Section 63(1)",
+            "source_text": "Edunvalvontamaksu"
+          },
+          {
+            "inputs": [
+              true,
+              "any",
+              "moderate"
+            ],
+            "output": "Advance_Payment_Consider",
+            "legal_basis": "Section 63(2)",
+            "source_text": "Harkittava"
+          },
+          {
+            "inputs": [
+              false,
+              "any",
+              "any"
+            ],
+            "output": "No_Advance",
+            "legal_basis": "Section 63",
+            "source_text": "Ei ennakkomaksua"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E23_Subrogation",
+        "description": "Subrogation to injured party's rights (\u00a768)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "insurer.paid",
+          "third_party.liable",
+          "recovery.possible"
+        ],
+        "output_variable": "subrogation_right",
+        "legal_source": "Section 68",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              true,
+              true
+            ],
+            "output": "Subrogation_Exercise",
+            "legal_basis": "Section 68(1)",
+            "source_text": "Subrogaatio k\u00e4ytett\u00e4viss\u00e4"
+          },
+          {
+            "inputs": [
+              true,
+              false,
+              "any"
+            ],
+            "output": "No_Subrogation",
+            "legal_basis": "Section 68",
+            "source_text": "Ei subrogaatiota"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.premium_calculation",
+        "name": "E24_DamageHistoryEffect",
+        "description": "Damage history impact on premium (\u00a720)",
+        "hit_policy": "UNIQUE",
+        "input_variables": [
+          "damage.history.years",
+          "claim.count",
+          "vehicle.type"
+        ],
+        "output_variable": "premium_adjustment",
+        "legal_source": "Section 20",
+        "rules": [
+          {
+            "inputs": [
+              5,
+              0,
+              "any"
+            ],
+            "output": "No_Loading",
+            "legal_basis": "Section 20",
+            "source_text": "Ei korotusta"
+          },
+          {
+            "inputs": [
+              0,
+              1,
+              "any"
+            ],
+            "output": "Loading_50_Percent",
+            "legal_basis": "Section 20",
+            "source_text": "50% korotus"
+          },
+          {
+            "inputs": [
+              0,
+              3,
+              "any"
+            ],
+            "output": "Loading_100_Percent",
+            "legal_basis": "Section 20",
+            "source_text": "100% korotus"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.premium_calculation",
+        "name": "E25_IncreasedPremiumRemoval",
+        "description": "Increased premium during removal from traffic (\u00a722)",
+        "hit_policy": "UNIQUE",
+        "input_variables": [
+          "vehicle.registeredAsRemoved",
+          "vehicle.usedDuringRemoval",
+          "premium.type"
+        ],
+        "output_variable": "premium_calculation",
+        "legal_source": "Section 22",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              true,
+              "standard"
+            ],
+            "output": "Triple_Premium",
+            "legal_basis": "Section 22",
+            "source_text": "Kolminkertainen maksu"
+          },
+          {
+            "inputs": [
+              true,
+              false,
+              "any"
+            ],
+            "output": "Normal_Premium",
+            "legal_basis": "Section 22",
+            "source_text": "Normaali maksu"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.premium_calculation",
+        "name": "E26_PremiumRefund",
+        "description": "Premium refund upon termination (\u00a723)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "insurance.terminated",
+          "premium.paid",
+          "coverage.days"
+        ],
+        "output_variable": "refund_amount",
+        "legal_source": "Section 23",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              "excess",
+              "any"
+            ],
+            "output": "Refund_Excess",
+            "legal_basis": "Section 23(1)",
+            "source_text": "Liikaa maksettu palautetaan"
+          },
+          {
+            "inputs": [
+              true,
+              "any",
+              "any"
+            ],
+            "output": "Proportional_Refund",
+            "legal_basis": "Section 23(2)",
+            "source_text": "Suhteellinen palautus"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E27_DrivingSchoolVehicles",
+        "description": "Driving school vehicles (\u00a789)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "vehicle.type",
+          "drivingSchool.licensed",
+          "instruction.type"
+        ],
+        "output_variable": "insurance_requirement",
+        "legal_source": "Section 89",
+        "rules": [
+          {
+            "inputs": [
+              "DrivingSchool",
+              true,
+              "instruction"
+            ],
+            "output": "Special_Coverage",
+            "legal_basis": "Section 89",
+            "source_text": "Erityiskatteet"
+          },
+          {
+            "inputs": [
+              "any",
+              "any",
+              "any"
+            ],
+            "output": "Standard_Coverage",
+            "legal_basis": "Section 5",
+            "source_text": "Tavallinen vakuutus"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.premium_calculation",
+        "name": "E28_LatePaymentInterest",
+        "description": "Late payment interest (\u00a724)",
+        "hit_policy": "UNIQUE",
+        "input_variables": [
+          "payment.overdue",
+          "days_late"
+        ],
+        "output_variable": "interest_amount",
+        "legal_source": "Section 24",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              ">0"
+            ],
+            "output": "Interest_Applied",
+            "legal_basis": "Section 24(1)",
+            "source_text": "Viiv\u00e4styskorko"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.premium_calculation",
+        "name": "E29_PenaltyFee",
+        "description": "Penalty fee for no insurance (\u00a728)",
+        "hit_policy": "UNIQUE",
+        "input_variables": [
+          "insurance.obligationViolated",
+          "premium.equivalent"
+        ],
+        "output_variable": "penalty_amount",
+        "legal_source": "Section 28",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              "any"
+            ],
+            "output": "Up_To_3x_Premium",
+            "legal_basis": "Section 28(1)",
+            "source_text": "Enint\u00e4\u00e4n 3-kertainen"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.premium_calculation",
+        "name": "E30_VehicleUsageBan",
+        "description": "Vehicle usage ban (\u00a730)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "insurance.obligationViolated",
+          "vehicle.usedInTraffic"
+        ],
+        "output_variable": "ban_status",
+        "legal_source": "Section 30",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              true
+            ],
+            "output": "Usage_Banned",
+            "legal_basis": "Section 30(1)",
+            "source_text": "K\u00e4ytt\u00f6kielto"
+          },
+          {
+            "inputs": [
+              false,
+              "any"
+            ],
+            "output": "No_Ban",
+            "legal_basis": "Section 30",
+            "source_text": "Ei k\u00e4ytt\u00f6kieltoa"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E31_RecoveryFromThirdParty",
+        "description": "Recovery from liable third party (\u00a766)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "insurer.paid",
+          "thirdParty.liable"
+        ],
+        "output_variable": "recovery_right",
+        "legal_source": "Section 66",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              true
+            ],
+            "output": "Recovery_Possible",
+            "legal_basis": "Section 66",
+            "source_text": "Takaisinperint\u00e4"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E32_RecoveryFromClaimant",
+        "description": "Recovery from policyholder or injured (\u00a767)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "fraud.determined",
+          "misrepresentation.found"
+        ],
+        "output_variable": "recovery_right",
+        "legal_source": "Section 67",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              "any"
+            ],
+            "output": "Full_Recovery",
+            "legal_basis": "Section 67",
+            "source_text": "T\u00e4ysi takaisinperint\u00e4"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E33_ClaimsHandlingCosts",
+        "description": "Cost of claims handling (\u00a769)",
+        "hit_policy": "UNIQUE",
+        "input_variables": [
+          "claim.processing.required"
+        ],
+        "output_variable": "cost_bearer",
+        "legal_source": "Section 69",
+        "rules": [
+          {
+            "inputs": [
+              true
+            ],
+            "output": "Insurer_Bears_Cost",
+            "legal_basis": "Section 69",
+            "source_text": "Vakuutusyhti\u00f6 vastaa"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E34_GuaranteeFundRecourse",
+        "description": "Right of recourse to guarantee fund (\u00a779)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "fund.paid",
+          "liable.party"
+        ],
+        "output_variable": "recourse_right",
+        "legal_source": "Section 79",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              "identified"
+            ],
+            "output": "Recourse_Exercised",
+            "legal_basis": "Section 79",
+            "source_text": "Takautumisoikeus"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E35_VictimFinancialSupport",
+        "description": "Financial support for victim (\u00a782)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "victim.financialHardship",
+          "compensation.delayed"
+        ],
+        "output_variable": "support_eligibility",
+        "legal_source": "Section 82",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              true
+            ],
+            "output": "Interim_Support",
+            "legal_basis": "Section 82",
+            "source_text": "V\u00e4liaikainen tuki"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E36_Supervision",
+        "description": "Supervision (\u00a775)",
+        "hit_policy": "UNIQUE",
+        "input_variables": [
+          "insurer.licensed"
+        ],
+        "output_variable": "supervision_status",
+        "legal_source": "Section 75",
+        "rules": [
+          {
+            "inputs": [
+              true
+            ],
+            "output": "Under_Supervision",
+            "legal_basis": "Section 75",
+            "source_text": "Finanssivalvonnan alainen"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E37_InsuranceRegister",
+        "description": "Register of traffic insurance (\u00a776)",
+        "hit_policy": "UNIQUE",
+        "input_variables": [
+          "vehicle.registered",
+          "insurance.active"
+        ],
+        "output_variable": "register_status",
+        "legal_source": "Section 76",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              true
+            ],
+            "output": "Registered_Active",
+            "legal_basis": "Section 76",
+            "source_text": "Rekisteriss\u00e4 voimassa"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E38_MedicalExamination",
+        "description": "Medical examination obligation (\u00a772)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "injury.personal",
+          "examination.completed"
+        ],
+        "output_variable": "examination_status",
+        "legal_source": "Section 72",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              false
+            ],
+            "output": "Examination_Required",
+            "legal_basis": "Section 72(1)",
+            "source_text": "Tarkastus vaaditaan"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E39_InsuranceMediator",
+        "description": "Insurance mediator (\u00a770)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "claim.disputed",
+          "mediator.used"
+        ],
+        "output_variable": "mediation_status",
+        "legal_source": "Section 70",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              true
+            ],
+            "output": "Mediation_Used",
+            "legal_basis": "Section 70",
+            "source_text": "Sovittelun k\u00e4ytetty"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E40_ClaimApplication",
+        "description": "Application for compensation (\u00a761)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "application.submitted",
+          "documentation.complete"
+        ],
+        "output_variable": "application_status",
+        "legal_source": "Section 61",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              true
+            ],
+            "output": "Application_Accepted",
+            "legal_basis": "Section 61",
+            "source_text": "Hakemus vastaanotettu"
+          },
+          {
+            "inputs": [
+              true,
+              false
+            ],
+            "output": "Additional_Docs_Required",
+            "legal_basis": "Section 61",
+            "source_text": "Lis\u00e4dokumentit vaaditaan"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E41_ClaimPayment",
+        "description": "Payment of compensation (\u00a762a)",
+        "hit_policy": "UNIQUE",
+        "input_variables": [
+          "decision.issued",
+          "payment.method"
+        ],
+        "output_variable": "payment_status",
+        "legal_source": "Section 62a",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              "bank_transfer"
+            ],
+            "output": "Payment_Processing",
+            "legal_basis": "Section 62a",
+            "source_text": "Maksu k\u00e4ynniss\u00e4"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E42_RightToInformation",
+        "description": "Right to information (\u00a764)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "information.requested",
+          "claim.related"
+        ],
+        "output_variable": "information_status",
+        "legal_source": "Section 64",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              true
+            ],
+            "output": "Information_Provided",
+            "legal_basis": "Section 64",
+            "source_text": "Tiedot annettu"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E43_ObligationToInvestigate",
+        "description": "Obligation to provide information and investigate (\u00a765)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "investigation.completed",
+          "evidence.gathered"
+        ],
+        "output_variable": "investigation_status",
+        "legal_source": "Section 65",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              true
+            ],
+            "output": "Investigation_Complete",
+            "legal_basis": "Section 65",
+            "source_text": "Selvitys valmis"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E44_AppealToInsuranceCourt",
+        "description": "Appeal to Insurance Court (\u00a785)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "decision.appealed",
+          "appeal.filed"
+        ],
+        "output_variable": "appeal_status",
+        "legal_source": "Section 85",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              true
+            ],
+            "output": "Appeal_Accepted",
+            "legal_basis": "Section 85",
+            "source_text": "Valitus hyv\u00e4ksytty"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E45_AppealProcedure",
+        "description": "Appeal procedure (\u00a786)",
+        "hit_policy": "UNIQUE",
+        "input_variables": [
+          "appeal.submitted",
+          "deadline.met"
+        ],
+        "output_variable": "procedure_status",
+        "legal_source": "Section 86",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              true
+            ],
+            "output": "Procedure_Followed",
+            "legal_basis": "Section 86",
+            "source_text": "Menettely noudatettu"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E46_EuropeanSmallClaims",
+        "description": "European small claims procedure (\u00a787)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "claim.value",
+          "eu_member"
+        ],
+        "output_variable": "procedure_eligibility",
+        "legal_source": "Section 87",
+        "rules": [
+          {
+            "inputs": [
+              "<5000",
+              true
+            ],
+            "output": "Small_Claims_Available",
+            "legal_basis": "Section 87",
+            "source_text": "Eurooppalainen pienmenettely"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E47_ServiceOfDocuments",
+        "description": "Service of documents (\u00a780)",
+        "hit_policy": "UNIQUE",
+        "input_variables": [
+          "document.type",
+          "recipient.located"
+        ],
+        "output_variable": "service_method",
+        "legal_source": "Section 80",
+        "rules": [
+          {
+            "inputs": [
+              "legal",
+              true
+            ],
+            "output": "Service_Completed",
+            "legal_basis": "Section 80",
+            "source_text": "Toimitus suoritettu"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E48_InternationalExchange",
+        "description": "Information exchange with other countries (\u00a783)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "request.country",
+          "data.exchanged"
+        ],
+        "output_variable": "exchange_status",
+        "legal_source": "Section 83",
+        "rules": [
+          {
+            "inputs": [
+              "EEA",
+              true
+            ],
+            "output": "Data_Exchanged",
+            "legal_basis": "Section 83",
+            "source_text": "Tietojen vaihto"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E49_VehicleRecords",
+        "description": "Vehicle records (\u00a792)",
+        "hit_policy": "UNIQUE",
+        "input_variables": [
+          "register.maintained",
+          "vehicle.registered"
+        ],
+        "output_variable": "record_status",
+        "legal_source": "Section 92",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              true
+            ],
+            "output": "Records_Complete",
+            "legal_basis": "Section 92",
+            "source_text": "Tiedot yll\u00e4pidetty"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E50_NotificationRegistration",
+        "description": "Notification of vehicle registration (\u00a793)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "registration.notified",
+          "authority.received"
+        ],
+        "output_variable": "notification_status",
+        "legal_source": "Section 93",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              true
+            ],
+            "output": "Notification_Complete",
+            "legal_basis": "Section 93",
+            "source_text": "Ilmoitus vastaanotettu"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E51_VehicleInTraffic",
+        "description": "Scope - what constitutes traffic (\u00a71)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "vehicle.location",
+          "vehicle.purpose",
+          "road_type"
+        ],
+        "output_variable": "traffic_determination",
+        "legal_source": "Section 1",
+        "rules": [
+          {
+            "inputs": [
+              "road",
+              "transportation",
+              "public"
+            ],
+            "output": "In_Traffic",
+            "legal_basis": "Section 1",
+            "source_text": "Liikenteess\u00e4"
+          },
+          {
+            "inputs": [
+              "private_area",
+              "other",
+              "any"
+            ],
+            "output": "Not_In_Traffic",
+            "legal_basis": "Section 1",
+            "source_text": "Ei liikenteess\u00e4"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E52_VehicleIdentification",
+        "description": "Vehicle identification in insurance contract (\u00a710)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "vehicle.identified",
+          "registration.match"
+        ],
+        "output_variable": "identification_status",
+        "legal_source": "Section 10",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              true
+            ],
+            "output": "Properly_Identified",
+            "legal_basis": "Section 10",
+            "source_text": "Asianmukaisesti yksil\u00f6ity"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E53_InsuranceDocument",
+        "description": "Insurance document and terms (\u00a711)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "document.provided",
+          "terms.accepted"
+        ],
+        "output_variable": "document_status",
+        "legal_source": "Section 11",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              true
+            ],
+            "output": "Document_Provided",
+            "legal_basis": "Section 11",
+            "source_text": "Vakuutuskirja annettu"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E54_InsuranceValidityPeriod",
+        "description": "Insurance validity period (\u00a712)",
+        "hit_policy": "UNIQUE",
+        "input_variables": [
+          "policy.startDate",
+          "policy.endDate",
+          "policy.terminated"
+        ],
+        "output_variable": "validity_period",
+        "legal_source": "Section 12",
+        "rules": [
+          {
+            "inputs": [
+              "set",
+              "future",
+              false
+            ],
+            "output": "Valid_Period",
+            "legal_basis": "Section 12",
+            "source_text": "Voimassa kauden"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E55_BreachOfDutyToInform",
+        "description": "Breach of duty to inform (\u00a714)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "information.withheld",
+          "intentional",
+          "premium.affected"
+        ],
+        "output_variable": "remedy",
+        "legal_source": "Section 14",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              true,
+              true
+            ],
+            "output": "Retroactive_Premium",
+            "legal_basis": "Section 14(1)",
+            "source_text": "Takautuva maksu"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E56_IncreasedRiskNotification",
+        "description": "Failure to notify increased risk (\u00a715)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "risk.increased",
+          "notification.made",
+          "premium.impact"
+        ],
+        "output_variable": "premium_adjustment",
+        "legal_source": "Section 15",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              false,
+              true
+            ],
+            "output": "Retroactive_Increase",
+            "legal_basis": "Section 15",
+            "source_text": "Takautuva korotus"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E57_CancellationRight",
+        "description": "Right to cancel insurance (\u00a716)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "cancellation.requested",
+          "newInsurance.exists",
+          "theft.reported"
+        ],
+        "output_variable": "cancellation_allowed",
+        "legal_source": "Section 16",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              true,
+              "any"
+            ],
+            "output": "Cancellation_Approved",
+            "legal_basis": "Section 16(1)",
+            "source_text": "Irtisanominen hyv\u00e4ksytty"
+          },
+          {
+            "inputs": [
+              true,
+              false,
+              true
+            ],
+            "output": "Cancellation_Approved_Theft",
+            "legal_basis": "Section 16(1)",
+            "source_text": "Irtisanominen anastuksen vuoksi"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E58_OwnerHolderChange",
+        "description": "Change of owner or holder (\u00a718)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "ownership.transferred",
+          "insurance.transferred",
+          "days.within7"
+        ],
+        "output_variable": "liability_status",
+        "legal_source": "Section 18",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              false,
+              true
+            ],
+            "output": "Original_Insurance_Covers",
+            "legal_basis": "Section 18",
+            "source_text": "Alkuper\u00e4inen vakuutus korvaa 7 pv"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E59_DamageHistoryTransfer",
+        "description": "Transfer of damage history to another insurer (\u00a721)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "policy.transferred",
+          "history.available",
+          "transfer.requested"
+        ],
+        "output_variable": "transfer_status",
+        "legal_source": "Section 21",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              true,
+              true
+            ],
+            "output": "History_Transferred",
+            "legal_basis": "Section 21",
+            "source_text": "Historia siirretty"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.compensation_calculation",
+        "name": "E60_DamageRegardlessTort",
+        "description": "Compensation regardless of tort liability (\u00a731)",
+        "hit_policy": "UNIQUE",
+        "input_variables": [
+          "accident.occurred",
+          "vehicle.insured",
+          "tort.liable"
+        ],
+        "output_variable": "compensation_basis",
+        "legal_source": "Section 31",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              true,
+              "any"
+            ],
+            "output": "Strict_Liability",
+            "legal_basis": "Section 31",
+            "source_text": "Korvataan ilman tuottamusta"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.compensation_calculation",
+        "name": "E61_LiabilityForTrafficDamage",
+        "description": "Liability for traffic damage (\u00a732)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "policy.active",
+          "accident.date"
+        ],
+        "output_variable": "liability_status",
+        "legal_source": "Section 32",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              "within_term"
+            ],
+            "output": "Insurer_Liable",
+            "legal_basis": "Section 32(1)",
+            "source_text": "Vakuutusyhti\u00f6 vastaa"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.compensation_calculation",
+        "name": "E62_MedicalConditions",
+        "description": "Conditions for medical care compensation (\u00a753)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "care.necessary",
+          "care.provider.approved"
+        ],
+        "output_variable": "compensation_eligibility",
+        "legal_source": "Section 53",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              true
+            ],
+            "output": "Medical_Care_Covered",
+            "legal_basis": "Section 53",
+            "source_text": "Sairaanhoito korvataan"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.premium_calculation",
+        "name": "E63_LiabilityContinues",
+        "description": "Liability continuation despite non-payment (\u00a725)",
+        "hit_policy": "UNIQUE",
+        "input_variables": [
+          "premium.unpaid",
+          "liability.continues"
+        ],
+        "output_variable": "liability_status",
+        "legal_source": "Section 25",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              true
+            ],
+            "output": "Liability_Continues",
+            "legal_basis": "Section 25(1)",
+            "source_text": "Vastuu jatkuu"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.premium_calculation",
+        "name": "E64_StatuteOfLimitations",
+        "description": "Statute of limitations on premium (\u00a726)",
+        "hit_policy": "UNIQUE",
+        "input_variables": [
+          "premium.claim.year",
+          "claim.year"
+        ],
+        "output_variable": "limitations_status",
+        "legal_source": "Section 26",
+        "rules": [
+          {
+            "inputs": [
+              ">5",
+              "any"
+            ],
+            "output": "Time_Barred",
+            "legal_basis": "Section 26",
+            "source_text": "Vanhentunut"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.premium_calculation",
+        "name": "E65_PaymentEquivalent",
+        "description": "Payment corresponding to premium (\u00a727)",
+        "hit_policy": "UNIQUE",
+        "input_variables": [
+          "obligation.violated",
+          "premium.reasonable"
+        ],
+        "output_variable": "payment_due",
+        "legal_source": "Section 27",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              true
+            ],
+            "output": "Reasonable_Payment",
+            "legal_basis": "Section 27",
+            "source_text": "Kohtuullinen maksu"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.premium_calculation",
+        "name": "E66_PenaltyFeeDetermination",
+        "description": "Determination of penalty fee (\u00a729)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "violation.duration",
+          "violation.intentional",
+          "penalty.determined"
+        ],
+        "output_variable": "penalty_status",
+        "legal_source": "Section 29",
+        "rules": [
+          {
+            "inputs": [
+              ">0",
+              "any",
+              true
+            ],
+            "output": "Penalty_Determined",
+            "legal_basis": "Section 29",
+            "source_text": "Laiminly\u00f6ntimaksu m\u00e4\u00e4r\u00e4tty"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.compensation_calculation",
+        "name": "E67_PersonalInjuryCompensation",
+        "description": "Personal injury compensation basis (\u00a734)",
+        "hit_policy": "UNIQUE",
+        "input_variables": [
+          "injury.type",
+          "basis.law"
+        ],
+        "output_variable": "compensation_basis",
+        "legal_source": "Section 34",
+        "rules": [
+          {
+            "inputs": [
+              "any",
+              "vahingonkorvauslaki"
+            ],
+            "output": "Based_On_Law",
+            "legal_basis": "Section 34",
+            "source_text": "Vahingonkorvauslain mukaan"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.compensation_calculation",
+        "name": "E68_PropertyDamageBasis",
+        "description": "Property damage compensation basis (\u00a737)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "property.damaged",
+          "repair.possible"
+        ],
+        "output_variable": "compensation_method",
+        "legal_source": "Section 37",
+        "rules": [
+          {
+            "inputs": [
+              "vehicle",
+              true
+            ],
+            "output": "Repair_Cost",
+            "legal_basis": "Section 37(2)",
+            "source_text": "Korjauskustannus"
+          },
+          {
+            "inputs": [
+              "vehicle",
+              false
+            ],
+            "output": "Market_Value",
+            "legal_basis": "Section 37(3)",
+            "source_text": "K\u00e4yp\u00e4 arvo"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E69_AuthorityRegulations",
+        "description": "Authority to issue regulations (\u00a781)",
+        "hit_policy": "UNIQUE",
+        "input_variables": [
+          "authority.empowered",
+          "regulation.issued"
+        ],
+        "output_variable": "regulation_status",
+        "legal_source": "Section 81",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              true
+            ],
+            "output": "Regulation_In_Force",
+            "legal_basis": "Section 81",
+            "source_text": "M\u00e4\u00e4r\u00e4ys voimassa"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E70_IntlTransportVehicles",
+        "description": "Vehicles in international transport (\u00a790)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "vehicle.intlTransport",
+          "permit.valid"
+        ],
+        "output_variable": "coverage_type",
+        "legal_source": "Section 90",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              true
+            ],
+            "output": "International_Coverage",
+            "legal_basis": "Section 90",
+            "source_text": "Kansainv\u00e4linen vakuutus"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E71_DocumentationRequirements",
+        "description": "Insurance documentation requirements (\u00a791)",
+        "hit_policy": "UNIQUE",
+        "input_variables": [
+          "documentation.maintained",
+          "requirements.met"
+        ],
+        "output_variable": "compliance_status",
+        "legal_source": "Section 91",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              true
+            ],
+            "output": "Requirements_Met",
+            "legal_basis": "Section 91",
+            "source_text": "Vaatimukset t\u00e4ytetty"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E72_MilitaryVehicles",
+        "description": "Military vehicles (\u00a791a)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "vehicle.military",
+          "vehicle.insured"
+        ],
+        "output_variable": "coverage_status",
+        "legal_source": "Section 91a",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              false
+            ],
+            "output": "Exempt_Military",
+            "legal_basis": "Section 91a",
+            "source_text": "Sotilasajoneuvo vapautettu"
+          },
+          {
+            "inputs": [
+              true,
+              true
+            ],
+            "output": "Covered",
+            "legal_basis": "Section 91a",
+            "source_text": "Vakuutettu"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E73_Penalties",
+        "description": "Penalties (\u00a794)",
+        "hit_policy": "UNIQUE",
+        "input_variables": [
+          "offense.type",
+          "penalty.imposed"
+        ],
+        "output_variable": "penalty_status",
+        "legal_source": "Section 94",
+        "rules": [
+          {
+            "inputs": [
+              "no_insurance",
+              "any"
+            ],
+            "output": "Penalty_Applies",
+            "legal_basis": "Section 94",
+            "source_text": "Rangaistus"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E74_ProcessingClaims",
+        "description": "Special provisions on processing claims (\u00a773)",
+        "hit_policy": "UNIQUE",
+        "input_variables": [
+          "claim.special",
+          "processing.special"
+        ],
+        "output_variable": "processing_method",
+        "legal_source": "Section 73",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              true
+            ],
+            "output": "Special_Processing",
+            "legal_basis": "Section 73",
+            "source_text": "Erityinen k\u00e4sittely"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E75_IntlAgreements",
+        "description": "International agreements (\u00a778)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "agreement.applies",
+          "country.party"
+        ],
+        "output_variable": "agreement_status",
+        "legal_source": "Section 78",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              true
+            ],
+            "output": "Agreement_Applies",
+            "legal_basis": "Section 78",
+            "source_text": "Kansainv\u00e4linen sopimus"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E76_PrivateContracts",
+        "description": "Private law contracts (\u00a795)",
+        "hit_policy": "UNIQUE",
+        "input_variables": [
+          "contract.type",
+          "law.applicable"
+        ],
+        "output_variable": "contract_status",
+        "legal_source": "Section 95",
+        "rules": [
+          {
+            "inputs": [
+              "private",
+              "finland"
+            ],
+            "output": "Finnish_Law",
+            "legal_basis": "Section 95",
+            "source_text": "Suomen lain mukaan"
+          }
+        ]
       }
     ],
     "metadata": {
@@ -1798,7 +3525,7 @@
         "Flowable DMN"
       ],
       "law_reference": "Liikennevakuutuslaki 460/2016",
-      "rules_count": 40,
+      "rules_count": 103,
       "variable_naming_convention": "entity.attribute format (e.g., vehicle.vehicleType, driver.bloodAlcoholLevel)",
       "hierarchy_summary": {
         "eligibility": {
