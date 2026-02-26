@@ -339,7 +339,7 @@ Claim Received
 
 ### 2.1 Coverage Determination
 
-### 0.2 Border Traffic Insurance (§7)
+### 0.3 Border Traffic Insurance (§7)
 
 #### BORDER-001: Third-Country Vehicle Border Insurance (§7)
 
@@ -553,7 +553,7 @@ Claim Received
 | property.type | property.marketValue | damage.severity | Output |
 |---------------|---------------------|-----------------|--------|
 | Vehicle | any | TotalLoss | **MarketValue** |
-| Vehicle | PartialDamage | any | **RepairCost** |
+| Vehicle | any | PartialDamage | **RepairCost** |
 | ThirdPartyProperty | any | any | **ActualValue** |
 | Clothing | any | any | **ReplacementValue** |
 
@@ -697,7 +697,7 @@ Claim Received
 
 ---
 
-### 2.7 Large Loss Distribution System (§75)
+### 2.8 Large Loss Distribution System (§75)
 
 #### S1: Large Loss Distribution System (§75)
 
