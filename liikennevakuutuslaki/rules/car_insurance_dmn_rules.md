@@ -538,16 +538,21 @@ Claim Received
 
 #### E12c: Court Action Time Limit (§79)
 
-| decision.receiptDate | court.filingDate | daysSinceDecision | dispute.body | Output |
-|---------------------|------------------|-------------------|--------------|--------|
-| any | ≤ 1095 days (≤3 years) | ≤ 1095 | any | **TimelyFiling** |
-| any | > 1095 days | > 1095 | any | **ClaimTimeBarred** |
-| any | any | any | Vakuutuslautakunta/TrafficDamageBoard | **StatuteOfLimitationsTolled** |
-| any | any | any | ConsumerDisputeBody | **StatuteOfLimitationsTolled** |
+| decision.receiptDate | court.filingDate | daysSinceDecision | dispute.body | tolling.previouslyExtended | Output |
+|---------------------|------------------|-------------------|--------------|---------------------------|--------|
+| any | ≤ 1095 days (≤3 years) | ≤ 1095 | any | any | **TimelyFiling** |
+| any | > 1095 days | > 1095 | any | any | **ClaimTimeBarred** |
+| any | any | any | Vakuutuslautakunta/TrafficDamageBoard | false | **StatuteOfLimitationsTolled** |
+| any | any | any | ConsumerDisputeBody | false | **StatuteOfLimitationsTolled** |
+| any | > 365 days | any | any | false | **OneYearSafetyNet_Valid** (can extend once) |
+| any | any | any | any | true | **ExtensionAlreadyUsed** |
 
-**§79:** "Kanne vakuutusyhtiön tekemän korvausta koskevan päätöksen taikka vakuutuksenottajan, vakuutetun, vahinkoa kärsineen tai muun korvaukseen oikeutetun asemaan vaikuttavan muun päätöksen johdosta on oikeuden menettämisen uhalla nostettava vakuutusyhtiötä vastaan kolmen vuoden kuluessa siitä, kun asianosainen on saanut kirjallisen tiedon vakuutusyhtiön päätöksestä ja tästä määräajasta."
+**§79 Tolling Rules:**
+- Filing with Vakuutuslautakunta/TrafficDamageBoard tolls the statute (§79(2))
+- If proceedings end prematurely, minimum 1-year deadline applies (§79(3))
+- Extension can only be used ONE TIME (§79(4))
 
-**Tolling:** Filing with Vakuutuslautakunta or TrafficDamageBoard tolls the statute of limitations
+**§79(3) 1-Year Safety Net:** "Kanneaika katsotaan katkenneeksi...Kanneaikaa voidaan pidentää tällä tavoin vain yhden kerran."
 
 #### E13: Insolvency Protection (§92)
 
@@ -641,14 +646,30 @@ insurerShare = (insurerPremiumIncome / totalPremiumIncome) × amountOverThreshol
 
 **§62:** Vakuutusyhtiön on suoritettava korvaus tai ilmoitettava, ettei korvausta suoriteta, joutuisasti ja viimeistään kuukauden kuluttua siitä, kun se on saanut riittävän selvityksen.
 
+#### T3b: Undisputed Portion Payment (§62(3))
+
+| claim.isDisputed | undisputed.amount | payment.date | documents.completeDate | Output |
+|-----------------|-------------------|--------------|----------------------|--------|
+| false | N/A | within 1 month | any | **FullPayment_Required** |
+| true | > 0 | within 1 month | complete | **UndisputedPortion_Paid** |
+| true | > 0 | after 1 month | complete | **UndisputedPortion_Delayed** |
+| true | 0 | any | any | **FullDispute_NoPartialPayment** |
+| true | > 0 | N/A | incomplete | **AwaitingCompleteDocuments** |
+
+**§62(3):** "Jos korvauksen määrä ei ole riidaton, vakuutusyhtiö on kuitenkin velvollinen suorittamaan 2 momentissa mainitussa ajassa korvauksen riidattoman osan."
+
 #### T4: Court Action Deadline (§79)
 
-| decision.notificationDate | courtAction.filingDate | Output |
-|---------------------------|------------------------|--------|
-| any | within 3 years | **ValidAction** |
-| any | after 3 years | **ActionTimeBarred** |
+| decision.notificationDate | courtAction.filingDate | tolling.active | tolling.endedPrematurely | extension.used | Output |
+|---------------------------|------------------------|---------------|------------------------|---------------|--------|
+| any | within 3 years | false | any | any | **ValidAction** |
+| any | after 3 years | false | any | any | **ActionTimeBarred** |
+| any | within 3 years | true | any | any | **Tolled_Valid** |
+| any | > 1 year after tolling ends | any | true | false | **OneYearSafetyNet_Valid** |
+| any | any | any | any | true | **ExtensionAlreadyUsed** |
 
-**§79:** Kanne on oikeuden menettämisen uhalla nostettava vakuutusyhtiötä vastaan kolmen vuoden kuluessa siitä, kun asianosainen on saanut kirjallisen tiedon vakuutusyhtiön päätöksestä.
+**§79(3) 1-Year Safety Net:** If proceedings end prematurely, deadline extends to min 1 year from end date.
+**§79(4) One-Time Limit:** This extension can only be used once.
 
 ---
 
@@ -827,6 +848,31 @@ All variables follow `entity.attribute` format matching the business ontology:
 | any | after 1 year | No | **OpinionRequestTimeBarred** |
 
 **§65:** Parties can request Liikennevahinkolautakunta opinion within 1 year of decision.
+
+#### P4b: Mandatory Liikennevahinkolautakunta Consultation (§66)
+
+| decision.type | compensation.category | disability.permanent | death.ongoing | correction.requestedByParty | Output |
+|--------------|----------------------|---------------------|---------------|---------------------------|--------|
+| Initial | ContinuousPension | Yes | N/A | N/A | **ConsultationRequired** |
+| Initial | CapitalValue | N/A | Yes | N/A | **ConsultationRequired** |
+| Initial | IncreasedCompensation | Yes | N/A | any | **ConsultationRequired** |
+| Initial | DisabilityCompensation | Severe | N/A | any | **ConsultationRequired** |
+| Correction | any | any | any | false | **ConsultationNotRequired** (no objection) |
+| Correction | any | any | any | true | **ConsultationRequired** |
+| Initial | any | No | No | N/A | **ConsultationOptional** |
+
+**Mandatory Consultation Triggers (§66):**
+- Persistent loss of earning capacity (§66(1)1)
+- Death-related continuous compensation or capital value (§66(1)1)
+- Increase/decrease of continuous compensation per Oikeusturva §5:8 (§66(1)2)
+- Severe disability compensation (§66(1)3)
+- Correction of erroneous decision against claimant's interest (§66(1)4)
+
+**§66(2):** If insurer's decision differs from Lautakunta opinion against claimant, insurer must attach opinion to decision and notify Lautakunta.
+
+**§66(3) Exceptions:** No consultation required if:
+- Error is obvious and caused by party's own conduct
+- Obvious clerical or calculation error
 
 #### P5: Delay Interest Calculation (§67)
 
