@@ -114,9 +114,11 @@ Claim Received
 
 #### N9: Drunk Driver Sole Fault (§48)
 
-| driver.bloodAlcoholLevel | driver.contributionDegree | victim.isAtFault | Output |
-|-------------------------|--------------------------|-----------------|--------|
-| >=1.2_permille | SoleFault | false | **NOT_COVERED** |
+| driver.bloodAlcoholLevel | driver.breathAlcoholLevel | driver.drugImpaired | driver.contributionDegree | victim.isAtFault | damage.damageType | Output |
+|-------------------------|--------------------------|-------------------|--------------------------|-----------------|-------------------|--------|
+| >=1.2_permille | any | false | SoleFault | false | any | **NOT_COVERED** |
+| any | >=0.53_mg_L | false | SoleFault | false | any | **NOT_COVERED** |
+| any | any | true | SoleFault | false | any | **NOT_COVERED** |
 
 ---
 
@@ -130,13 +132,17 @@ Claim Received
 | true | Slight | any | **75_PERCENT** |
 | true | Moderate | any | **50_PERCENT** |
 
-#### N11: Alcohol Impairment (§48)
+#### N11: Alcohol/Drug Impairment (§48)
 
-| driver.bloodAlcoholLevel | driver.contributionDegree | victim.isAtFault | Output |
-|--------------------------|--------------------------|-----------------|--------|
-| >=1.2_permille | PartialFault | false | **50_PERCENT** |
-| 0.5-1.19_permille | PartialFault | false | **75_PERCENT** |
-| 0.5-1.19_permille | SoleFault | false | **NOT_COVERED** |
+| driver.bloodAlcoholLevel | driver.breathAlcoholLevel | driver.drugImpaired | driver.contributionDegree | victim.isAtFault | damage.damageType | Output |
+|--------------------------|--------------------------|-------------------|--------------------------|-----------------|-------------------|--------|
+| >=1.2_permille | any | false | PartialFault | false | PersonalInjury | **50_PERCENT** |
+| any | >=0.53_mg_L | false | PartialFault | false | PersonalInjury | **50_PERCENT** |
+| any | any | true | PartialFault | false | PersonalInjury | **50_PERCENT** |
+| 0.5-1.19_permille | any | false | PartialFault | false | PersonalInjury | **75_PERCENT** |
+| any | 0.22-0.52_mg_L | false | PartialFault | false | PersonalInjury | **75_PERCENT** |
+| 0.5-1.19_permille | any | false | SoleFault | false | PersonalInjury | **NOT_COVERED** |
+| 0.5-1.19_permille | any | false | any | false | PropertyDamage | **COVERED** |
 
 ---
 
@@ -263,6 +269,13 @@ Claim Received
 | true | 21-50_PERCENT | significant | Scale_21_50_Percent |
 | true | 51-100_PERCENT | severe | Scale_51_100_Percent |
 | false | null | any | TemporaryPain_Scale |
+
+#### E7b: Index Adjustment for Continuous Compensation (§35)
+
+| compensation.type | years_elapsed | index.factor | Output |
+|------------------|---------------|--------------|--------|
+| continuous | >0 | any | **INDEX_ADJUSTED** |
+| lumpSum | any | any | **NO_ADJUSTMENT** |
 
 #### E8: Property Damage Compensation (§3)
 
@@ -749,6 +762,21 @@ All variables follow `entity.attribute` format matching the business ontology:
 |-----------|------------|--------|
 | property | simple | **30_DAYS** |
 | personal | any | **90_DAYS** |
+
+#### E69b: Investigation Start Deadline (§62)
+
+| claim.received | days_elapsed | Output |
+|---------------|--------------|--------|
+| true | <=7 | **TIMELY_START** |
+| true | >7 | **DELAYED_START** |
+
+#### E69c: Payment Deadline (§62)
+
+| claim.documentation.complete | claim.type | Output |
+|------------------------------|-----------|--------|
+| true | property | **30_DAYS** |
+| true | personal | **90_DAYS** |
+| false | any | **AWAITING_DOCS** |
 
 #### E70: Registered Rights Limitation (§62a)
 
