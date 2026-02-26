@@ -1,0 +1,49 @@
+## Gap Description
+
+DMN rules are missing liability sharing logic for accidents involving both road traffic insurance and rail traffic liability (raideliikennevastuulaki 113/1999).
+
+## Law Reference
+
+**§52 - Vastuunjako liikennevakuutuksen ja raideliikennevastuulain välillä**
+
+> Jos vahinkoa kärsineellä on oikeus saada saman vahinkotapahtuman johdosta korvausta sekä tämän lain että raideliikennevastuulain (113/1999) nojalla, vastuu vakuutusyhtiön ja raideliikennevastuulain mukaan korvausvelvollisen kesken jaetaan sen mukaan kuin ilmenneeseen huolimattomuuteen ja muihin vahingon aiheuttaneisiin seikkoihin nähden on kohtuullista.
+
+> Jos kuitenkin vahinko on aiheutunut yksinomaan tämän lain 33 §:n 1 momentissa tai raideliikennevastuulain 5 §:ssä mainitusta seikasta, korvaus jää kokonaan vahingon aiheuttaneen osapuolen suoritettavaksi.
+
+> Jos liikennevakuutusyhtiö on maksanut vahingonkorvausta yli oman osuutensa, sillä on oikeus saada raideliikennevastuulain mukaan korvausvelvolliselta, mitä se on tämän osalta maksanut.
+
+## Missing DMN Rule
+
+No decision table exists for:
+1. Determining when both rail and road liability apply
+2. Apportioning liability between rail and road carriers
+3. Subrogation rights for overpayment
+
+## Suggested Rule Structure
+
+#### RAIL-001: Rail-Road Liability Apportionment (§52)
+
+| accident.involvesRailVehicle | accident.involvesRoadVehicle | fault.railContributingFactors | fault.roadContributingFactors | Output |
+|------------------------------|------------------------------|------------------------------|------------------------------|--------|
+| true | true | Present | Present | **ProportionalSharing_ByNegligence** |
+| true | true | None | Present (§33 factors) | **RoadOnlyLiable** |
+| true | true | Present (§5 rail act) | None | **RailOnlyLiable** |
+| true | true | None | None | **Proportional_ByOtherFactors** |
+
+#### RAIL-002: Overpayment Subrogation (§52(2))
+
+| insurer.paymentAmount | insurer.apportionedShare | overpayment.exists | Output |
+|-----------------------|--------------------------|-------------------|--------|
+| any | calculatedShare | true | **Subrogation_RightToRecover** |
+| shareAmount | sameAmount | false | **NoSubrogation** |
+
+## Severity: MEDIUM
+
+This is a specialized scenario (rail + road accidents) but important for complete coverage of the Traffic Insurance Act.
+
+## Tags
+
+@VilleMoltBot for review
+
+---
+*Identified during law compliance check - February 26, 2026*
