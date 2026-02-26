@@ -24,9 +24,10 @@
 | Compensation Calculation | E5-E8 | §§3, 34-35, 54 |
 | Benefit Entitlement | E9-E10 | §§36-38 |
 | Premium Calculation | E11 | §§89-92 |
-| Time Limits | E12-E13 | §§74, 77 |
+| Time Limits | E12-E13 | §§74-77 |
+| Rail-Road Liability | E14-E15 | §52 |
 
-**Total: 13 eligibility decisions**
+**Total: 15 eligibility decisions**
 
 ---
 
@@ -45,9 +46,10 @@ Claim Received
            │ Pass (No exclusion)
            ▼
 ┌─────────────────────┐
-│ 2. ELIGIBILITY     │───→ E1-E13
+│ 2. ELIGIBILITY     │───→ E1-E15
 │ (Coverage, Calc,   │     Coverage Determination
-│  Benefits, Time)   │     Compensation Calculation
+│  Benefits, Time,   │     Compensation Calculation
+│  Rail-Road Liab.)  │     Rail-Road Apportionment
 └──────────┬──────────┘
            │ Eligible
            ▼
@@ -1242,11 +1244,39 @@ newMinimum = Round(newMinimum, nearest cent)
 
 ---
 
+## §52: Rail Traffic Liability Sharing Rules
+
+### 2.15 Rail-Road Liability Apportionment (§52)
+
+#### RAIL-001: Rail-Road Liability Apportionment (§52)
+
+| accident.involvesRailVehicle | accident.involvesRoadVehicle | fault.railContributingFactors | fault.roadContributingFactors | Output |
+|------------------------------|------------------------------|-------------------------------|-------------------------------|--------|
+| true | true | Present | Present | **ProportionalSharing_ByNegligence** |
+| true | true | None | Present | **RoadOnlyLiable** |
+| true | true | Present (§5 rail act) | None | **RailOnlyLiable** |
+| true | true | None | None | **Proportional_ByOtherFactors** |
+
+**§52(1):** "Jos vahinkoa kärsineellä on oikeus saada saman vahinkotapahtuman johdosta korvausta sekä tämän lain että raideliikennevastuulain (113/1999) nojalla, vastuu vakuutusyhtiön ja raideliikennevastuulain mukaan korvausvelvollisen kesken jaetaan sen mukaan kuin ilmenneeseen huolimattomuuteen ja muihin vahingon aiheuttaneisiin seikkoihin nähden on kohtuullista."
+
+**§52(2):** "Jos kuitenkin vahinko on aiheutunut yksinomaan tämän lain 33 §:n 1 momentissa tai raideliikennevastuulain 5 §:ssä mainitusta seikasta, korvaus jää kokonaan vahingon aiheuttaneen osapuolen suoritettavaksi."
+
+#### RAIL-002: Overpayment Subrogation (§52)
+
+| insurer.paymentAmount | insurer.apportionedShare | overpayment.exists | Output |
+|----------------------|--------------------------|-------------------|--------|
+| any | calculatedShare | true | **Subrogation_RightToRecover** |
+| shareAmount | sameAmount | false | **NoSubrogation** |
+
+**§52(3):** "Jos liikennevakuutusyhtiö on maksanut vahingonkorvausta yli oman osuutensa, sillä on oikeus saada raideliikennevastuulain mukaan korvausvelvolliselta, mitä se on tämän osalta maksanut."
+
+---
+
 ## METADATA
 
 - **Law**: Liikennevakuutuslaki (Traffic Insurance Act) 460/2016
 - **Source**: finlex.fi/fi/lainsaadanto/2016/460
-- **Version**: 1.4 (Added §17, §85, §90/§91)
-- **Total Decisions**: 33 (17 Negative Claims + 16 Eligibility)
+- **Version**: 1.5 (Added §52 Rail Traffic Liability Sharing Rules)
+- **Total Decisions**: 35 (17 Negative Claims + 18 Eligibility)
 - **Decision Order**: Negative Claims → Eligibility → Compensation
 - **Variable Convention**: entity.attribute (ontology-aligned)
