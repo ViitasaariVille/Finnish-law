@@ -1157,11 +1157,96 @@ newMinimum = Round(newMinimum, nearest cent)
 
 ---
 
+---
+
+### 2.12 Insurer Cannot Refuse Insurance (§17)
+
+#### INS-001: Mandatory Insurance Acceptance (§17)
+
+| insurer.licenseType | vehicle.vehicleType | insurer.licenseCovers | application.received | Output |
+|--------------------|--------------------|---------------------|---------------------|--------|
+| vahinkovakuutusluokka_10 | MotorVehicle | true | true | **MustAccept** |
+| vahinkovakuutusluokka_10 | Trailer | true | true | **MustAccept** |
+| vahinkovakuutusluokka_10 | any | false | true | **CannotAccept** |
+| any | any | any | false | **ApplicationNotReceived** |
+
+**§17(2):** "Vakuutusyhtiö, joka harjoittaa liikennevakuutustoimintaa, ei saa kieltäytyä antamasta ja voimassa pitämästä siltä haettua vakuutusta, jos vakuutus koskee sellaista ajoneuvoa, jota varten yhtiöllä toimilupansa sekä vahvistetun yhtiöjärjestyksensä mukaan on oikeus antaa vakuutus."
+
+**§17(3):** "Mitä 2 momentissa säädetään, ei koske raja- ja siirtoliikennevakuutuksia."
+
+**Exceptions:**
+- Border traffic insurance (§7) - separate rules
+- Transfer traffic insurance (§12(3)) - separate rules
+
+---
+
+### 2.13 Document Retention Requirements (§85)
+
+#### DOC-001: Document Retention Periods (§85)
+
+| document.type | document.category | retention.periodYears | retention.startDate | Output |
+|--------------|------------------|---------------------|-------------------|--------|
+| Policy_Documents | Voimassaolo | 100 | PolicyTermination | **Retain_100Years** |
+| PersonalInjury_Claims | Henkilövahinko | 100 | ClaimSettlement | **Retain_100Years** |
+| Appeal_Documents | Muutoksenhaku | 50 | CaseResolution | **Retain_50Years** |
+| Administrative_Documents | Toimeenpano | 10 | DocumentReceipt | **Retain_10Years** |
+
+**§85 Document Retention Requirements:**
+1) vakuutuksen voimassaoloa ja henkilövahinkoa koskevat asiakirjat vähintään 100 vuoden ajan
+2) muutoksenhakua koskevat asiakirjat vähintään 50 vuoden ajan
+3) muut tämän lain toimeenpanoa koskevat asiakirjat vähintään 10 vuoden ajan
+
+**§85(2):** "Korvausasiaa koskevan asiakirjan säilytysaika alkaa siitä, kun korvausasia on tullut vakuutusyhtiössä vireille. Vakuuttamiseen liittyvän asiakirjan säilytysaika alkaa siitä, kun asiakirja saapui vakuutusyhtiölle."
+
+---
+
+### 2.14 Customs Border Insurance Enforcement (§90/§91)
+
+#### CUST-001: Customs Border Insurance Requirement (§91)
+
+| vehicle.importType | vehicle.homeCountry | vehicle.temporaryUse | customs.controlPoint | greenCard.valid | borderInsurance.valid | Output |
+|-------------------|--------------------|--------------------|--------------------|-----------------|---------------------|--------|
+| TemporaryImport | ThirdCountry | true | BorderCrossing | false | false | **InsuranceRequired_CustomsEnforced** |
+| TemporaryImport | ThirdCountry | true | BorderCrossing | true | any | **Covered_ByGreenCard** |
+| TemporaryImport | ThirdCountry | true | BorderCrossing | false | true | **Covered_ByBorderInsurance** |
+| PermanentImport | any | false | any | any | any | **DomesticRulesApply** |
+| EEA_Import | EEA | any | any | any | any | **DomesticRulesApply** |
+
+**§91(1):** "Tulli valvoo, että kolmannesta maasta Suomeen tilapäistä käyttöä varten tuodun ajoneuvon omistaja tai haltija on täyttänyt 7 §:ssä säädetyn velvollisuutensa ottaa ajoneuvolle rajaliikennevakuutus."
+
+**§91(2):** "Jos 1 momentissa tarkoitetulla ajoneuvolla ei sitä maahan tuotaessa ole vihreää korttia tai rajaliikennevakuutusta, Tulli kantaa vakuutusmaksun siltä ajalta, jona ajoneuvoa on tarkoitus käyttää Suomessa tai muussa ETA-valtiossa, ja antaa vakuutusyhtiöiden puolesta ajoneuvolle ETA-valtioissa voimassa oleva vakuutustodistus."
+
+#### CUST-002: Customs Insurance Collection (§91)
+
+| customs.situation | vehicle.usagePeriod | payment.status | customs.action | Output |
+|------------------|-------------------|----------------|---------------|--------|
+| NoInsurance_AtImport | Known | Unpaid | Collect_PremiumForPeriod | **PremiumCollected_CertificateIssued** |
+| NoInsurance_AtImport | Unknown | Unpaid | Collect_1MonthPremium | **PremiumCollected_MonthlyCertificate** |
+| NoInsurance_Export | any | Unpaid | Collect_1MonthPremium | **PremiumCollected_ExportCertificate** |
+| Insurance_Valid | any | Paid | NoAction | **NoActionRequired** |
+
+**§91(3):** "Jos vakuutusmaksua ei ole suoritettu koko siltä ajalta kuin 2 momentissa edellytetään, Tulli kantaa ajoneuvon maastaviennin yhteydessä yhden kuukauden vakuutusmaksun ja antaa tätä koskevan uuden vakuutustodistuksen."
+
+#### CUST-003: Temporary Import from Another EEA State (§91)
+
+| vehicle.homeCountry | vehicle.importType | customs.controlPoint | insurance.status | Output |
+|--------------------|-------------------|--------------------|-----------------|--------|
+| ThirdCountry | TemporaryImport | EEA_Border | NoInsurance | **CustomsEnforcement_Required** |
+| ThirdCountry | TemporaryImport | Finland_Border | NoInsurance | **CustomsEnforcement_Required** |
+| ThirdCountry | TemporaryImport | any | ValidInsurance | **NoEnforcement** |
+| EEA | TemporaryImport | any | any | **DomesticRulesApply** |
+
+**§91(4):** "Tulli valvoo osana suorittamaansa tullivalvontaa myös, että toisesta ETA-valtiosta Suomeen tilapäistä käyttöä varten tuodulla ajoneuvolla, jonka kotipaikka on kolmannessa maassa, on voimassa oleva liikenne- tai rajaliikennevakuutus."
+
+**§91(5):** "Tulli tilittää tämän pykälän nojalla kantamansa maksut Liikennevakuutuskeskukselle."
+
+---
+
 ## METADATA
 
 - **Law**: Liikennevakuutuslaki (Traffic Insurance Act) 460/2016
 - **Source**: finlex.fi/fi/lainsaadanto/2016/460
-- **Version**: 1.3 (Negative Claims First)
-- **Total Decisions**: 30 (17 Negative Claims + 13 Eligibility)
+- **Version**: 1.4 (Added §17, §85, §90/§91)
+- **Total Decisions**: 33 (17 Negative Claims + 16 Eligibility)
 - **Decision Order**: Negative Claims → Eligibility → Compensation
 - **Variable Convention**: entity.attribute (ontology-aligned)
