@@ -454,13 +454,60 @@ Claim Received
 
 ---
 
+### 2.7 Premium Calculation Rules (§§20-28)
+
+#### P6: Traffic Removal Violation Premium (§22)
+
+| vehicle.isRemovedFromTraffic | vehicle.usedDuringTrafficRemoval | vehicle.removalPeriodDays | specialReason.exists | Output |
+|------------------------------|----------------------------------|--------------------------|---------------------|--------|
+| true | true | >0 | false | **Premium×3** |
+| true | true | >0 | true | **Premium×1** (exemption applies) |
+| false | any | any | any | **NormalPremium** |
+| true | false | any | any | **NormalPremium** |
+
+**§22:** "Jos vakuutettua ajoneuvoa on käytetty liikenteessä sinä aikana, jona se on ollut ilmoitettuna rekisteriin liikennekäytöstä poistetuksi, vakuutuksenottajan on suoritettava vakuutusyhtiölle vakuutusehdoissa määritelty enintään kolminkertainen vakuutusmaksu."
+
+#### P7: Premium Claim Statute of Limitations (§26)
+
+| invoice.sent | invoice.date | claimYearEnd | insurancePeriodEnd | yearsElapsed | Output |
+|--------------|--------------|--------------|-------------------|--------------|--------|
+| true | any | known | N/A | <5 | **ValidClaim** |
+| true | any | known | N/A | >=5 | **TimeBarred** |
+| false | N/A | N/A | known | <5 | **ValidClaim** |
+| false | N/A | N/A | known | >=5 | **TimeBarred** |
+
+**§26:** "Vakuutusmaksusaatava vanhentuu lopullisesti viiden vuoden kuluttua sitä seuraavan kalenterivuoden päättymisestä, jona se on määrätty tai maksuunpantu. Jos laskua ei ole lähetetty, vakuutusmaksusaatava vanhentuu viiden vuoden kuluttua kunkin vakuutuskauden päättymisestä."
+
+---
+
+### 1.1.1 Extended Exemptions (§8)
+
+#### N5a: Complete Vehicle Exemptions (§8)
+
+| vehicle.registrationRequired | vehicle.maxSpeed | vehicle.vehicleType | vehicle.usagePurpose | vehicle.ownerType | insurance.exemptType | Output |
+|------------------------------|------------------|---------------------|---------------------|-------------------|----------------------|--------|
+| false | ≤15 km/h | MotorWorkMachine | any | any | **Exempt** |
+| false | any | Harvester | Agriculture | any | **Exempt** |
+| false | any | Trailer | any | any | **Exempt** |
+| false | any | ChildVehicle | ChildTransport | any | **Exempt** |
+| false | any | Wheelchair | DisabledUse | any | **Exempt** |
+| false | any | any | any | any | **Exempt** |
+| any | any | any | any | FinnishState | **Exempt** |
+| any | any | any | any | OtherState | **Exempt** (diplomatic) |
+| true | any | any | any | any | TempRemovedFromTraffic | **ExemptIfNotUsed** |
+| true | any | any | any | any | PermanentlyRemoved | **Exempt** |
+
+**§8(2):** "Ajoneuvon omistajalla ja haltijalla on kuitenkin oikeus vakuuttaa 1 momentin 6, 7 ja 9 kohdassa tarkoitettu ajoneuvo."
+
+---
+
 ## VARIABLE NAMING CONVENTION
 
 All variables follow `entity.attribute` format matching the business ontology:
 
 | Entity | Attributes |
 |--------|-----------|
-| **vehicle** | registrationCountry, requiresInsurance, vehicleType, isExempt, exemptType, usedWithoutPermission, ownerConsent, isUnknown, theft.reported |
+| **vehicle** | registrationCountry, requiresInsurance, vehicleType, isExempt, exemptType, usedWithoutPermission, ownerConsent, isUnknown, theft.reported, maxSpeed, registrationRequired, usagePurpose, ownerType, isRemovedFromTraffic, usedDuringTrafficRemoval, removalPeriodDays |
 | **driver** | isAuthorized, isInsane, inEmergency, isResponsible, isCompetitionParticipant, licenseValid, bloodAlcoholLevel, contributionDegree |
 | **damage** | damageType, isPersonalInjury, isPropertyDamage, severity |
 | **injury** | isPermanent, permanentDisabilityPercentage, workAbilityLostDays, affectsWorkAbility |
@@ -472,6 +519,9 @@ All variables follow `entity.attribute` format matching the business ontology:
 | **greenCard** | valid |
 | **police** | reportFiled |
 | **event** | isAuthorized |
+| **specialReason** | exists |
+| **invoice** | sent, date |
+| **insurancePeriod** | end |
 
 ---
 
