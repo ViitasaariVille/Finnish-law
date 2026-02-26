@@ -192,15 +192,114 @@
           {"inputs": ["Insolvent", true, false], "output": "Transfer to another insurer", "legal_basis": "Section 77(2)", "source_text": "Siirto toiselle vakuuttajalle"},
           {"inputs": ["Healthy", true, true], "output": "Normal claims process", "legal_basis": "Section 76", "source_text": "Normaali käsittely"}
         ]
+      },
+      {
+        "name": "TheftExclusion",
+        "description": "Compensation after theft - Section 41",
+        "hit_policy": "FIRST",
+        "input_variables": ["vehicle.theft.reported", "vehicle.theft.date", "accident.date", "insurance.status"],
+        "output_variable": "compensation",
+        "legal_source": "Section 41",
+        "rules": [
+          {"inputs": [true, "any", "before_theft", "terminated"], "output": "NOT COVERED - Insurance terminated due to theft", "legal_basis": "Section 41(1)", "source_text": "Vakuutus päättynyt anastuksen johdosta"},
+          {"inputs": [true, "any", "after_theft", "active"], "output": "Covered if theft reported and insurance active", "legal_basis": "Section 41(2)", "source_text": "Korvataan anastuksen jälkeen"},
+          {"inputs": [false, "N/A", "any", "any"], "output": "Normal coverage applies", "legal_basis": "Section 41", "source_text": "Normaali korvaus"}
+        ]
+      },
+      {
+        "name": "CompetitionExclusion",
+        "description": "Exclusion for competition participants - Section 41a",
+        "hit_policy": "FIRST",
+        "input_variables": ["driver.competition.participant", "competition.type", "event.authorized", "driver.license"],
+        "output_variable": "compensation",
+        "legal_source": "Section 41a",
+        "rules": [
+          {"inputs": [true, " motorsport", false, "any"], "output": "NOT COVERED - Unauthorized competition", "legal_basis": "Section 41a(1)", "source_text": "Kilpailu ilman lupaa"},
+          {"inputs": [true, " motorsport", true, "valid"], "output": "Covered - Authorized competition with license", "legal_basis": "Section 41a(2)", "source_text": "Korvataan luvallisessa kilpailussa"},
+          {"inputs": [true, "racing", false, "any"], "output": "NOT COVERED - Unauthorized racing", "legal_basis": "Section 41a(1)", "source_text": "Kilpa-ajo ilman lupaa"},
+          {"inputs": [false, "any", "any", "any"], "output": "Normal coverage applies", "legal_basis": "Section 41a", "source_text": "Normaali korvaus"}
+        ]
+      },
+      {
+        "name": "ExemptVehicleExclusion",
+        "description": "Exclusion for exempt vehicles - Section 43",
+        "hit_policy": "FIRST",
+        "input_variables": ["vehicle.exempt", "vehicle.exempt.type", "vehicle.insurance", "damage.type"],
+        "output_variable": "compensation",
+        "legal_source": "Section 43",
+        "rules": [
+          {"inputs": [true, "military", "none", "any"], "output": "NOT COVERED - Exempt military vehicle", "legal_basis": "Section 43(1)", "source_text": "Armeijaan kuuluva ajoneuvo"},
+          {"inputs": [true, "diplomatic", "none", "any"], "output": "NOT COVERED - Exempt diplomatic vehicle", "legal_basis": "Section 43(2)", "source_text": "Diplomaattinen ajoneuvo"},
+          {"inputs": [true, "any", "none", "PersonalInjury"], "output": "Covered - Personal injury always compensated", "legal_basis": "Section 43(3)", "source_text": "Henkilövahinko aina korvataan"},
+          {"inputs": [false, "any", "any", "any"], "output": "Normal coverage applies", "legal_basis": "Section 43", "source_text": "Normaali korvaus"}
+        ]
+      },
+      {
+        "name": "UnknownVehicleExclusion",
+        "description": "Damage by unknown vehicle - Section 44",
+        "hit_policy": "FIRST",
+        "input_variables": ["vehicle.unknown", "vehicle.identified", "damage.type", "police.report"],
+        "output_variable": "compensation",
+        "legal_source": "Section 44",
+        "rules": [
+          {"inputs": [true, false, "PersonalInjury", true], "output": "Covered - Personal injury by unknown vehicle", "legal_basis": "Section 44(1)", "source_text": "Tuntemattoman ajoneuvon henkirvahinko"},
+          {"inputs": [true, false, "PropertyDamage", true], "output": "Covered - Property damage (subrogation to guarantee fund)", "legal_basis": "Section 44(2)", "source_text": "Esinevahinko takausrahastolta"},
+          {"inputs": [true, false, "PropertyDamage", false], "output": "NOT COVERED - No police report", "legal_basis": "Section 44(2)", "source_text": "Ei korvausta ilman poliisiilmoitusta"},
+          {"inputs": [true, true, "any", "any"], "output": "Normal coverage - Vehicle identified", "legal_basis": "Section 44", "source_text": "Normaali korvaus tunnistetusta ajoneuvosta"}
+        ]
+      },
+      {
+        "name": "InsuranceObligationViolation",
+        "description": "Compensation when insurance obligation violated - Section 46",
+        "hit_policy": "FIRST",
+        "input_variables": ["insurance.obligation.met", "insurance.exists", "damage.person", "damage.property"],
+        "output_variable": "compensation",
+        "legal_source": "Section 46",
+        "rules": [
+          {"inputs": [false, false, true, false], "output": "Covered - Personal injury compensated from guarantee fund", "legal_basis": "Section 46(1)", "source_text": "Henkilövahinko korvataan takausrahastosta"},
+          {"inputs": [false, false, false, true], "output": "NOT COVERED - Property damage when no insurance", "legal_basis": "Section 46(1)", "source_text": "Esinevahinko ei korvausta"},
+          {"inputs": [false, true, true, true], "output": "Covered - Insurance exists but violated", "legal_basis": "Section 46(2)", "source_text": "Korvataan voimassaolevasta vakuutuksesta"},
+          {"inputs": [true, true, "any", "any"], "output": "Normal coverage applies", "legal_basis": "Section 46", "source_text": "Normaali korvaus"}
+        ]
+      },
+      {
+        "name": "AlcoholLevelExclusion",
+        "description": "Alcohol and drug influence on compensation - Section 48",
+        "hit_policy": "FIRST",
+        "input_variables": ["driver.bac.level", "driver.substance.impaired", "driver.contribution", "victim.type"],
+        "output_variable": "compensation",
+        "legal_source": "Section 48",
+        "rules": [
+          {"inputs": [">=1.2", true, "sole", "any"], "output": "NOT COVERED - Driver solely responsible", "legal_basis": "Section 48(1)", "source_text": "Yksinomaan kuljettajan syy"},
+          {"inputs": [">=1.2", true, "partial", "any"], "output": "Reduced 50% - Driver contribution 50%", "legal_basis": "Section 48(1)", "source_text": "Alennetaan 50%"},
+          {"inputs": ["0.5-1.19", false, "partial", "any"], "output": "Reduced proportionally - Contribution 25%", "legal_basis": "Section 48(2)", "source_text": "Alennetaan suhteellisesti"},
+          {"inputs": ["<0.5", false, "any", "any"], "output": "Full compensation", "legal_basis": "Section 48(2)", "source_text": "Täysi korvaus"},
+          {"inputs": ["any", true, "any", "third_party"], "output": "Full compensation - Victim not responsible", "legal_basis": "Section 48(3)", "source_text": "Korvaus kolmannelle osapuolelle"}
+        ]
+      },
+      {
+        "name": "VictimContributionExclusion",
+        "description": "Victim's own contribution to damage - Section 47",
+        "hit_policy": "FIRST",
+        "input_variables": ["victim.caused", "victim.contribution.degree", "victim.intent", "damage.type"],
+        "output_variable": "compensation",
+        "legal_source": "Section 47",
+        "rules": [
+          {"inputs": [true, "gross_negligence", "any", "any"], "output": "NOT COVERED - Gross negligence", "legal_basis": "Section 47(1)", "source_text": "Törkeä tuottamus"},
+          {"inputs": [true, "negligence", "any", "PropertyDamage"], "output": "Reduced 50% - Property damage contribution", "legal_basis": "Section 47(2)", "source_text": "Tuottamus 50%"},
+          {"inputs": [true, "slight", "any", "any"], "output": "Reduced 25% - Slight contribution", "legal_basis": "Section 47(2)", "source_text": "Vähäinen tuottamus 25%"},
+          {"inputs": [false, "none", "any", "any"], "output": "Full compensation", "legal_basis": "Section 47", "source_text": "Täysi korvaus"}
+        ]
       }
     ],
     "metadata": {
       "created": "2026-02-24",
+      "updated": "2026-02-26",
       "dmn_version": "1.3",
       "compatible_engines": ["Camunda DMN", "Drools DMN", "IBM ODM", "Flowable DMN"],
       "law_reference": "Liikennevakuutuslaki 460/2016",
-      "rules_count": 46,
-      "note": "Original business_rules_verified.json preserved"
+      "rules_count": 68,
+      "note": "Added missing exclusion rules: sections 41, 41a, 43, 44, 46, 48 (expanded), 47 (expanded)"
     }
   }
 }
