@@ -1272,6 +1272,78 @@ newMinimum = Round(newMinimum, nearest cent)
 
 ---
 
+## §81: Municipality Appeal Rights
+
+### 2.15b Municipality Appeal Rights (§81)
+
+#### MUN-001: Municipality Party Status (§81)
+
+| entity.type | claim.type | municipality.providedCare | Output |
+|------------|-----------|--------------------------|--------|
+| municipality | victim_compensation | any | **NotParty** |
+| municipality | full_cost_payment | true | **CanAppeal** |
+
+**§81(1):** "Kunta tai kuntayhtymä ei ole asianosainen asiassa, joka koskee vahinkoa kärsineen oikeutta tämän lain mukaiseen korvaukseen..."
+
+**§81(2):** "Kunta tai kuntayhtymä saa hakea muutosta täyskustannusmaksua koskevaan päätökseen..."
+
+---
+
+## §82-83: Information Access Rights
+
+### 2.16 Information Access from Employers (§82)
+
+#### INFO-001: Employer Information Request (§82)
+
+| request.authority | request.purpose | request.necessary | information.type | Output |
+|------------------|-----------------|-----------------|-----------------|--------|
+| insurer | claim_processing | true | employment_details | **MustProvide** |
+| insurer | claim_processing | true | salary_payments | **MustProvide** |
+| insurer | claim_processing | true | benefits_received | **MustProvide** |
+| insurer | other | any | any | **CannotRequest** |
+| lvk | enforcement | true | uninsured_vehicles | **MustProvide** |
+
+**§82(1):** "Vakuutusyhtiöllä on oikeus saada tiedot vahinkoa kärsineen tai korvaukseen oikeutetun työsuhteista, yrittäjätyöstä ja ansioista, hänelle maksetuista etuuksista sekä muista näihin verrattavista seikoista."
+
+#### INFO-002: Medical Information Request (§82)
+
+| request.authority | request.purpose | request.necessary | patient.consent | Output |
+|------------------|-----------------|-----------------|-----------------|--------|
+| insurer | claim_processing | true | implicit | **MustProvide_MedicalRecords** |
+| insurer | claim_processing | true | explicit | **MustProvide_Full** |
+| insurer | claim_processing | false | any | **CannotRequest** |
+| lvk | enforcement | any | any | **MustProvide_Anonymous** |
+
+**§82(1):** "Lääkäriltä ja muulta terveydenhuollon ammattihenkilöistä annetussa laissa tarkoitetulta ammattihenkilöltä... tiedot potilasasiakirjoista, terveydentilasta, työkyvystä, hoidosta ja kuntoutuksesta."
+
+### 2.17 Technical Data Access (§83)
+
+#### INFO-003: Technical Connection for Data Retrieval (§83)
+
+| data.system | connection.authorized | technical_access_available | request.purpose | Output |
+|------------|---------------------|-------------------------|-----------------|--------|
+| traffic_register | true | true | enforcement | **AutomatedAccess_Granted** |
+| vehicle_registry | true | true | insurance_obligation | **AutomatedAccess_Granted** |
+| customs | true | true | border_control | **AutomatedAccess_Granted** |
+| any | false | any | any | **AccessDenied** |
+
+**§83:** "Tässä pykälässä tarkoitettuja tietoja saa hakea teknisen käyttöyhteyden avulla ilman sen suostumusta, jonka etujen suojaamiseksi salassapitovelvollisuus on säädetty."
+
+### 2.18 LVK Enforcement Information (§82(4))
+
+#### INFO-004: LVK Right to Uninsured Vehicle Data (§82)
+
+| data.category | enforcement.purpose | lvk.request | Output |
+|--------------|-------------------|-------------|--------|
+| traffic_removal | 29_section | true | **MustProvide** |
+| vehicle_modification | enforcement | true | **MustProvide** |
+| private_to_professional | license_check | true | **MustProvide** |
+| any | other | true | **CannotRequest** |
+
+**§82(4):** "Liikennevakuutuskeskuksella on oikeus... saada viranomaisilta ja vakuutusyhtiöiltä tiedot vakuuttamattomista ajoneuvoista..."
+
+---
+
 ## METADATA
 
 - **Law**: Liikennevakuutuslaki (Traffic Insurance Act) 460/2016
