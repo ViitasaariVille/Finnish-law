@@ -251,7 +251,7 @@ Claim Received
 |-------------------|------------------------|---------------------|----------------------------|--------|
 | Employed | any | null | any | Calculate_NetMonthly/30×Days |
 | SelfEmployed | null | any | any | Calculate_Annual/365×Days |
-| Unemployed | any | null | any | **Minimum_36.90_PerDay** |
+| Unemployed | any | null | any | **No_Loss_Of_Earnings** |
 | Student | any | null | any | StudentGrant_Adjustment |
 
 #### E7: Pain and Suffering Compensation (§35)
