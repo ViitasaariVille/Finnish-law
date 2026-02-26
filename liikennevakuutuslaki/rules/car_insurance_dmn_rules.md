@@ -79,6 +79,32 @@ Claim Received
 
 ---
 
+### 0.2 Liikennevakuutuskeskus (LVK) Scope and Application (§4)
+
+#### LVK-000: LVK Scope and Application (§4)
+
+| scenario.type | vehicle.homeCountry | vehicle.insuranceStatus | insurer.identifiable | lvk.appliesAs | applicableSections |
+|--------------|--------------------|----------------------|---------------------|---------------|-------------------|
+| ForeignVehicleAccident | Non-Finland | any | false | InsurerSubstitute | §32(3) |
+| ExemptVehicle | Finland | Exempt | N/A | InsurerSubstitute | §43 |
+| UnknownVehicle | any | Unknown | false | InsurerSubstitute | §44 |
+| UninsuredObligation | Finland | NoInsurance | N/A | InsurerSubstitute | §46 |
+| NormalCase | any | Insured | true | NotApplicable | N/A |
+
+**§4:** "Liikennevakuutuskeskuksesta ja sen toiminnan rahoituksesta ja hallinnosta säädetään Liikennevakuutuskeskuksesta annetussa laissa (461/2016)."
+
+**§4 Cross-Reference:** When LVK applies, provisions of §§9, 11, 12, 14, 15, 20, 24, 25, 33-39, 49-52, 55-68, 73, 79-85, 95 apply to LVK as if it were the insurer.
+
+**Key Provisions:**
+- LVK replaces insurer in specific situations
+- LVK covers damages when:
+  - Foreign vehicle causes damage in Finland (§32(3))
+  - Exempt vehicle causes damage (§43)
+  - Unknown vehicle causes damage (§44)
+  - Insurance obligation neglected (§46)
+
+---
+
 ### 1.1 Full Denial
 
 #### N1: Unauthorized Use (§49)
@@ -394,6 +420,32 @@ Claim Received
 | true | false | true | **OwnerLiable** |
 | false | true | true | **HolderLiable** |
 | true | false | false | **OwnerLiableFromOwnership** |
+
+#### OBL-001: Joint Liability of Owner and Holder (§6)
+
+| party.type | party.relationship | otherObligatedParty.exists | jointLiability.applies | Output |
+|-----------|-------------------|---------------------------|----------------------|--------|
+| Owner | RegisteredOwner | Holder | Yes | **JointlyLiable_Yhteisvastuu** |
+| Holder | RegisteredHolder | Owner | Yes | **JointlyLiable_Yhteisvastuu** |
+| Owner | RegisteredOwner | none | No | **SolelyLiable** |
+| Holder | RegisteredHolder | none | No | **SolelyLiable** |
+
+**§6(1):** "Jos vakuuttamisvelvollisia on enemmän kuin yksi, he ovat yhteisvastuussa vakuutuksen ottamisesta."
+
+**Joint Liability Rule:**
+- If both Owner AND Holder exist → both are yhteisvastuussa (jointly liable)
+- Either can be held responsible for full obligation
+- Payment by one discharges the other's obligation
+
+#### OBL-002: EEA Import Immediate Coverage (§6(2))
+
+| vehicle.importType | delivery.accepted | registration.completed | insurance.obligationStarts | effectiveDate |
+|-------------------|-------------------|----------------------|---------------------------|---------------|
+| EEAImport | true | false | Immediately | delivery.acceptanceDate |
+| EEAImport | true | true | Standard | registration.date |
+| Domestic | N/A | true | Standard | ownership.transferDate |
+
+**§6(2):** "Edellä 1 momentista poiketen toisesta ETA-maasta Suomeen tuotavan ajoneuvon vakuuttamisvelvollisuus alkaa välittömästi, kun ajoneuvon ostaja on sopimuksessa hyväksynyt ajoneuvon toimituksen, vaikka ajoneuvoa ei ole vielä rekisteröity Suomessa."
 
 #### E15: Coverage During Ownership Transfer (§18)
 
@@ -912,6 +964,43 @@ totalPenalty = basePenalty × multiplier (max 3× base)
 
 **§71:** If representative fails to respond within 3 months, victim can demand compensation from Liikennevakuutuskeskus.
 
+#### FCR-002: Representative Appointment Requirements (§69)
+
+| insurer.operatesInEEAState | representative.appointed | representative.residesInState | rep.speaksLocalLanguage | rep.contactReported | Output |
+|-------------------------|-------------------------|-------------------------------|------------------------|---------------------|--------|
+| true | true | true | true | true | **Compliant** |
+| true | false | any | any | any | **NonCompliant_MustAppoint** |
+| true | true | false | any | any | **NonCompliant_MustReside** |
+| true | true | true | false | any | **NonCompliant_Language** |
+| true | true | true | true | false | **NonCompliant_MustReport** |
+| false | any | any | any | any | **NotApplicable** |
+
+**§69:** Insurer must appoint representative in each EEA state where operating. Representative must reside/be established in that state, be able to operate in official languages, and report names/contact info to information centers.
+
+#### FCR-003: LVK Backup Liability (§71)
+
+| daysSinceClaim | representative.responded | response.justified | victim.demandedFromLVK | lvk.mustProcess |
+|---------------|------------------------|-------------------|----------------------|-----------------|
+| >90 | false | N/A | true | ProcessWithin2Months |
+| >90 | true | true | any | LVKStopsProcessing |
+| ≤90 | any | any | false | AwaitingRepresentative |
+| ≤90 | any | any | true | AwaitingRepresentative |
+
+**§71:** If representative doesn't respond within 3 months, victim can demand from LVK. LVK must act within 2 months of receiving claim. LVK stops processing if insurer/representative provides justified response.
+
+#### FCR-004: 7-Year Information Limitation (§72)
+
+| info.requested | accident.date | yearsSinceAccident | lvk.mustProvideInfo |
+|----------------|---------------|--------------------|---------------------|
+| OwnerHolderDetails | any | ≤7 | Provide |
+| InsurerDetails | any | ≤7 | Provide |
+| RepresentativeInfo | any | ≤7 | Provide |
+| OwnerHolderDetails | any | >7 | NotRequired |
+| InsurerDetails | any | >7 | NotRequired |
+| RepresentativeInfo | any | >7 | NotRequired |
+
+**§72:** LVK must provide owner/holder name and address, insurer info, and representative details. 7-year limitation: No duty to provide info for accidents >7 years ago.
+
 ---
 
 ### 2.10 Subrogation Rights (§73)
@@ -1354,6 +1443,37 @@ newMinimum = Round(newMinimum, nearest cent)
 | any | other | true | **CannotRequest** |
 
 **§82(4):** "Liikennevakuutuskeskuksella on oikeus... saada viranomaisilta ja vakuutusyhtiöiltä tiedot vakuuttamattomista ajoneuvoista..."
+
+---
+
+### 2.19 Traficom Reporting Obligations (§90)
+
+#### TRAF-001: Traficom Reporting Events (§90)
+
+| event.type | event.occurred | insurance.exists | daysSinceOwnershipChange | traficom.mustReport | lvk.notification |
+|-----------|---------------|-----------------|------------------------|-------------------|-----------------|
+| PermanentRemoval | true | any | N/A | true | ReportToLVK |
+| InsuranceTransfer | true | N/A | N/A | true | ReportToLVK |
+| OwnerHolderChange | true | true | ≤7 | true | StandardReport |
+| OwnerHolderChange | true | false | >7 | true | PenaltyAssessmentNotice |
+| TrafficUseStart | true | any | N/A | true | ReportToLVK |
+| TrafficUseEnd | true | any | N/A | true | ReportToLVK |
+
+**§90(1):** Liikenteen turvallisuusviraston on ilmoitettava Liikennevakuutuskeskukselle:
+1) ajoneuvon lopullinen poisto rekisteristä;
+2) ajoneuvon vakuutuksen siirtyminen toiseen vakuutusyhtiöön;
+3) ajoneuvon omistajan ja haltijan vaihtuminen; ja
+4) ajoneuvon liikennekäyttöön ottaminen ja liikennekäytöstä poisto.
+
+#### TRAF-002: Uninsured Vehicle Penalty Trigger (§90(2))
+
+| ownership.changed | insurance.taken | daysElapsed | traficom.action | lvk.action |
+|------------------|-----------------|-------------|----------------|------------|
+| true | false | >7 | NotifyLVK | InitiatePenaltyAssessment_§27-28 |
+| true | true | ≤7 | None | None |
+| false | any | any | None | None |
+
+**§90(2):** "Jos ajoneuvoa varten ei ole otettu vakuutusta 7 päivän kuluessa ajoneuvon omistusoikeuden alkamisesta tai hallintaoikeuden vaihtumisesta, Liikenteen turvallisuusviraston on ajoneuvoa rekisteröidessään lähetettävä ilmoitus siitä, ettei vakuutusta ole otettu Liikennevakuutuskeskukselle 27 ja 28 §:ssä tarkoitettujen maksujen määräämistä varten."
 
 ---
 
