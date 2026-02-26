@@ -2,7 +2,7 @@
   "model": {
     "name": "Finnish Traffic Insurance DMN",
     "namespace": "https://liikennevakuutus-fi/dmn/traffic-insurance",
-    "version": "1.3",
+    "version": "1.4",
     "description": "Hierarchical DMN business rules for Liikennevakuutuslaki (460/2016) - Negative Claims First",
     "based_on": "Liikennevakuutuslaki (Traffic Insurance Act) 460/2016",
     "source": "https://www.finlex.fi/fi/lainsaadanto/2016/460",
@@ -40,10 +40,46 @@
         "output_variable": "insuranceRequirement",
         "legal_source": "Section 5",
         "rules": [
-          {"inputs": ["FI", true, "MotorVehicle"], "output": "MandatoryTrafficInsurance", "legal_basis": "Section 5(1)", "source_text": "Liikenteeseen käytettäväksi tarkoitettu ajoneuvo"},
-          {"inputs": ["FI", true, "Trailer"], "output": "MandatoryTrafficInsurance", "legal_basis": "Section 5(1)", "source_text": "Perävaunu"},
-          {"inputs": ["EEA", true, "any"], "output": "CheckRegistrationCountry", "legal_basis": "Section 6a", "source_text": "EEA-maasta tuotu ajoneuvo"},
-          {"inputs": ["Non-EEA", true, "any"], "output": "MandatoryTrafficInsurance", "legal_basis": "Section 5(1)", "source_text": "Kolmannesta maasta tuotu"}
+          {
+            "inputs": [
+              "FI",
+              true,
+              "MotorVehicle"
+            ],
+            "output": "MandatoryTrafficInsurance",
+            "legal_basis": "Section 5(1)",
+            "source_text": "Liikenteeseen k\u00e4ytett\u00e4v\u00e4ksi tarkoitettu ajoneuvo"
+          },
+          {
+            "inputs": [
+              "FI",
+              true,
+              "Trailer"
+            ],
+            "output": "MandatoryTrafficInsurance",
+            "legal_basis": "Section 5(1)",
+            "source_text": "Per\u00e4vaunu"
+          },
+          {
+            "inputs": [
+              "EEA",
+              true,
+              "any"
+            ],
+            "output": "CheckRegistrationCountry",
+            "legal_basis": "Section 6a",
+            "source_text": "EEA-maasta tuotu ajoneuvo"
+          },
+          {
+            "inputs": [
+              "Non-EEA",
+              true,
+              "any"
+            ],
+            "output": "MandatoryTrafficInsurance",
+            "legal_basis": "Section 5(1)",
+            "source_text": "Kolmannesta maasta tuotu"
+          }
         ]
       },
       {
@@ -59,11 +95,56 @@
         "output_variable": "coverageStatus",
         "legal_source": "Sections 12-16",
         "rules": [
-          {"inputs": ["PersonalInjury", true, false], "output": "COVERED_100", "legal_basis": "Section 12(1)", "source_text": "Henkilövahinko"},
-          {"inputs": ["PersonalInjury", true, true], "output": "COVERED_100", "legal_basis": "Section 12(1)", "source_text": "Henkilö- ja esinevahinko"},
-          {"inputs": ["PropertyDamage", false, true], "output": "COVERED_100", "legal_basis": "Section 12(1)", "source_text": "Esinevahinko"},
-          {"inputs": ["VehicleDamage", false, true], "output": "COVERED_100", "legal_basis": "Section 12(1)", "source_text": "Ajoneuvovahinko"},
-          {"inputs": ["EnvironmentalDamage", false, true], "output": "COVERED_100", "legal_basis": "Section 12(2)", "source_text": "Ympäristövahinko"}
+          {
+            "inputs": [
+              "PersonalInjury",
+              true,
+              false
+            ],
+            "output": "COVERED_100",
+            "legal_basis": "Section 12(1)",
+            "source_text": "Henkil\u00f6vahinko"
+          },
+          {
+            "inputs": [
+              "PersonalInjury",
+              true,
+              true
+            ],
+            "output": "COVERED_100",
+            "legal_basis": "Section 12(1)",
+            "source_text": "Henkil\u00f6- ja esinevahinko"
+          },
+          {
+            "inputs": [
+              "PropertyDamage",
+              false,
+              true
+            ],
+            "output": "COVERED_100",
+            "legal_basis": "Section 12(1)",
+            "source_text": "Esinevahinko"
+          },
+          {
+            "inputs": [
+              "VehicleDamage",
+              false,
+              true
+            ],
+            "output": "COVERED_100",
+            "legal_basis": "Section 12(1)",
+            "source_text": "Ajoneuvovahinko"
+          },
+          {
+            "inputs": [
+              "EnvironmentalDamage",
+              false,
+              true
+            ],
+            "output": "COVERED_100",
+            "legal_basis": "Section 12(2)",
+            "source_text": "Ymp\u00e4rist\u00f6vahinko"
+          }
         ]
       },
       {
@@ -79,10 +160,46 @@
         "output_variable": "internationalCoverage",
         "legal_source": "Sections 10-11",
         "rules": [
-          {"inputs": ["Finland", "any", "FI"], "output": "FullCoverage", "legal_basis": "Section 10(1)", "source_text": "Suomessa"},
-          {"inputs": ["EEA", true, "any"], "output": "FullCoverage_GreenCard", "legal_basis": "Section 10(2)", "source_text": "Eta-maassa vihreällä kortilla"},
-          {"inputs": ["EEA", false, "any"], "output": "LimitedCoverage_BureauGuarantee", "legal_basis": "Section 10(3)", "source_text": "Kansainvälinen sopimus"},
-          {"inputs": ["Non-EEA", "any", "any"], "output": "CheckBilateralAgreement", "legal_basis": "Section 11", "source_text": "Kolmannet maat"}
+          {
+            "inputs": [
+              "Finland",
+              "any",
+              "FI"
+            ],
+            "output": "FullCoverage",
+            "legal_basis": "Section 10(1)",
+            "source_text": "Suomessa"
+          },
+          {
+            "inputs": [
+              "EEA",
+              true,
+              "any"
+            ],
+            "output": "FullCoverage_GreenCard",
+            "legal_basis": "Section 10(2)",
+            "source_text": "Eta-maassa vihre\u00e4ll\u00e4 kortilla"
+          },
+          {
+            "inputs": [
+              "EEA",
+              false,
+              "any"
+            ],
+            "output": "LimitedCoverage_BureauGuarantee",
+            "legal_basis": "Section 10(3)",
+            "source_text": "Kansainv\u00e4linen sopimus"
+          },
+          {
+            "inputs": [
+              "Non-EEA",
+              "any",
+              "any"
+            ],
+            "output": "CheckBilateralAgreement",
+            "legal_basis": "Section 11",
+            "source_text": "Kolmannet maat"
+          }
         ]
       },
       {
@@ -98,10 +215,46 @@
         "output_variable": "liableParty",
         "legal_source": "Section 6",
         "rules": [
-          {"inputs": [true, true, true], "output": "OwnerAndHolderJointlyLiable", "legal_basis": "Section 6(1)", "source_text": "Omistaja ja haltija yhteisvastuussa"},
-          {"inputs": [true, false, true], "output": "OwnerLiable", "legal_basis": "Section 6(1)", "source_text": "Omistaja vastaa"},
-          {"inputs": [false, true, true], "output": "HolderLiable", "legal_basis": "Section 6(1)", "source_text": "Haltija vastaa"},
-          {"inputs": [true, false, false], "output": "OwnerLiableFromOwnership", "legal_basis": "Section 6(2)", "source_text": "Omistus siirtyy"}
+          {
+            "inputs": [
+              true,
+              true,
+              true
+            ],
+            "output": "OwnerAndHolderJointlyLiable",
+            "legal_basis": "Section 6(1)",
+            "source_text": "Omistaja ja haltija yhteisvastuussa"
+          },
+          {
+            "inputs": [
+              true,
+              false,
+              true
+            ],
+            "output": "OwnerLiable",
+            "legal_basis": "Section 6(1)",
+            "source_text": "Omistaja vastaa"
+          },
+          {
+            "inputs": [
+              false,
+              true,
+              true
+            ],
+            "output": "HolderLiable",
+            "legal_basis": "Section 6(1)",
+            "source_text": "Haltija vastaa"
+          },
+          {
+            "inputs": [
+              true,
+              false,
+              false
+            ],
+            "output": "OwnerLiableFromOwnership",
+            "legal_basis": "Section 6(2)",
+            "source_text": "Omistus siirtyy"
+          }
         ]
       },
       {
@@ -117,14 +270,86 @@
         "output_variable": "compensationPercentage",
         "legal_source": "Sections 53-59",
         "rules": [
-          {"inputs": ["Emergency", true, "public"], "output": "100_PERCENT", "legal_basis": "Section 54", "source_text": "Ensiavun hoitokustannukset"},
-          {"inputs": ["Emergency", true, "private"], "output": "100_PERCENT_REIMBURSEMENT", "legal_basis": "Section 54", "source_text": "Yksityisen ensiavun kustannukset"},
-          {"inputs": ["Surgery", true, "any"], "output": "100_PERCENT", "legal_basis": "Section 54", "source_text": "Leikkaushoito"},
-          {"inputs": ["Medicines", true, "pharmacy"], "output": "100_PERCENT", "legal_basis": "Section 54", "source_text": "Lääkkeet"},
-          {"inputs": ["Rehabilitation", true, "any"], "output": "100_PERCENT", "legal_basis": "Section 54", "source_text": "Kuntoutus"},
-          {"inputs": ["DentalTreatment", true, "any"], "output": "100_PERCENT", "legal_basis": "Section 54", "source_text": "Hammasvamman hoito"},
-          {"inputs": ["Prosthesis", true, "any"], "output": "100_PERCENT", "legal_basis": "Section 54", "source_text": "Proteesi"},
-          {"inputs": ["TravelToTreatment", true, "any"], "output": "100_PERCENT", "legal_basis": "Section 54", "source_text": "Matkakustannukset"}
+          {
+            "inputs": [
+              "Emergency",
+              true,
+              "public"
+            ],
+            "output": "100_PERCENT",
+            "legal_basis": "Section 54",
+            "source_text": "Ensiavun hoitokustannukset"
+          },
+          {
+            "inputs": [
+              "Emergency",
+              true,
+              "private"
+            ],
+            "output": "100_PERCENT_REIMBURSEMENT",
+            "legal_basis": "Section 54",
+            "source_text": "Yksityisen ensiavun kustannukset"
+          },
+          {
+            "inputs": [
+              "Surgery",
+              true,
+              "any"
+            ],
+            "output": "100_PERCENT",
+            "legal_basis": "Section 54",
+            "source_text": "Leikkaushoito"
+          },
+          {
+            "inputs": [
+              "Medicines",
+              true,
+              "pharmacy"
+            ],
+            "output": "100_PERCENT",
+            "legal_basis": "Section 54",
+            "source_text": "L\u00e4\u00e4kkeet"
+          },
+          {
+            "inputs": [
+              "Rehabilitation",
+              true,
+              "any"
+            ],
+            "output": "100_PERCENT",
+            "legal_basis": "Section 54",
+            "source_text": "Kuntoutus"
+          },
+          {
+            "inputs": [
+              "DentalTreatment",
+              true,
+              "any"
+            ],
+            "output": "100_PERCENT",
+            "legal_basis": "Section 54",
+            "source_text": "Hammasvamman hoito"
+          },
+          {
+            "inputs": [
+              "Prosthesis",
+              true,
+              "any"
+            ],
+            "output": "100_PERCENT",
+            "legal_basis": "Section 54",
+            "source_text": "Proteesi"
+          },
+          {
+            "inputs": [
+              "TravelToTreatment",
+              true,
+              "any"
+            ],
+            "output": "100_PERCENT",
+            "legal_basis": "Section 54",
+            "source_text": "Matkakustannukset"
+          }
         ]
       },
       {
@@ -141,10 +366,50 @@
         "output_variable": "compensationAmount",
         "legal_source": "Section 34",
         "rules": [
-          {"inputs": ["Employed", "any", null, "any"], "output": "Calculate_NetMonthly_DividedBy30_MultipliedByDays", "legal_basis": "Section 34(1)", "source_text": "Työansion menetys"},
-          {"inputs": ["SelfEmployed", null, "any", "any"], "output": "Calculate_AnnualDividedBy365_MultipliedByDays", "legal_basis": "Section 34(2)", "source_text": "Yrittäjän ansionmenetys"},
-          {"inputs": ["Unemployed", "any", null, "any"], "output": "Minimum_36_90_PerDay", "legal_basis": "Section 34(3)", "source_text": "Työttömän ansionmenetys"},
-          {"inputs": ["Student", "any", null, "any"], "output": "StudentGrant_Adjustment", "legal_basis": "Section 34(4)", "source_text": "Opiskelijan ansionmenetys"}
+          {
+            "inputs": [
+              "Employed",
+              "any",
+              null,
+              "any"
+            ],
+            "output": "Calculate_NetMonthly_DividedBy30_MultipliedByDays",
+            "legal_basis": "Section 34(1)",
+            "source_text": "Ty\u00f6ansion menetys"
+          },
+          {
+            "inputs": [
+              "SelfEmployed",
+              null,
+              "any",
+              "any"
+            ],
+            "output": "Calculate_AnnualDividedBy365_MultipliedByDays",
+            "legal_basis": "Section 34(2)",
+            "source_text": "Yritt\u00e4j\u00e4n ansionmenetys"
+          },
+          {
+            "inputs": [
+              "Unemployed",
+              "any",
+              null,
+              "any"
+            ],
+            "output": "Minimum_36_90_PerDay",
+            "legal_basis": "Section 34(3)",
+            "source_text": "Ty\u00f6tt\u00f6m\u00e4n ansionmenetys"
+          },
+          {
+            "inputs": [
+              "Student",
+              "any",
+              null,
+              "any"
+            ],
+            "output": "StudentGrant_Adjustment",
+            "legal_basis": "Section 34(4)",
+            "source_text": "Opiskelijan ansionmenetys"
+          }
         ]
       },
       {
@@ -160,11 +425,56 @@
         "output_variable": "compensationAmount",
         "legal_source": "Section 35",
         "rules": [
-          {"inputs": [true, "1-10_PERCENT", "moderate"], "output": "Scale_1_10_Percent", "legal_basis": "Section 35(2)", "source_text": "Pysyvä haitta 1-10%"},
-          {"inputs": [true, "11-20_PERCENT", "moderate"], "output": "Scale_11_20_Percent", "legal_basis": "Section 35(2)", "source_text": "Pysyvä haitta 11-20%"},
-          {"inputs": [true, "21-50_PERCENT", "significant"], "output": "Scale_21_50_Percent", "legal_basis": "Section 35(2)", "source_text": "Pysyvä haitta 21-50%"},
-          {"inputs": [true, "51-100_PERCENT", "severe"], "output": "Scale_51_100_Percent", "legal_basis": "Section 35(2)", "source_text": "Pysyvä haitta 51-100%"},
-          {"inputs": [false, null, "any"], "output": "TemporaryPain_Scale", "legal_basis": "Section 35(1)", "source_text": "Tilapäinen kipu"}
+          {
+            "inputs": [
+              true,
+              "1-10_PERCENT",
+              "moderate"
+            ],
+            "output": "Scale_1_10_Percent",
+            "legal_basis": "Section 35(2)",
+            "source_text": "Pysyv\u00e4 haitta 1-10%"
+          },
+          {
+            "inputs": [
+              true,
+              "11-20_PERCENT",
+              "moderate"
+            ],
+            "output": "Scale_11_20_Percent",
+            "legal_basis": "Section 35(2)",
+            "source_text": "Pysyv\u00e4 haitta 11-20%"
+          },
+          {
+            "inputs": [
+              true,
+              "21-50_PERCENT",
+              "significant"
+            ],
+            "output": "Scale_21_50_Percent",
+            "legal_basis": "Section 35(2)",
+            "source_text": "Pysyv\u00e4 haitta 21-50%"
+          },
+          {
+            "inputs": [
+              true,
+              "51-100_PERCENT",
+              "severe"
+            ],
+            "output": "Scale_51_100_Percent",
+            "legal_basis": "Section 35(2)",
+            "source_text": "Pysyv\u00e4 haitta 51-100%"
+          },
+          {
+            "inputs": [
+              false,
+              null,
+              "any"
+            ],
+            "output": "TemporaryPain_Scale",
+            "legal_basis": "Section 35(1)",
+            "source_text": "Tilap\u00e4inen kipu"
+          }
         ]
       },
       {
@@ -180,10 +490,46 @@
         "output_variable": "compensationAmount",
         "legal_source": "Section 3",
         "rules": [
-          {"inputs": ["Vehicle", "any", "TotalLoss"], "output": "MarketValue", "legal_basis": "Section 3(1)", "source_text": "Ajoneuvon täysarvo"},
-          {"inputs": ["Vehicle", "any", "PartialDamage"], "output": "RepairCost", "legal_basis": "Section 3(1)", "source_text": "Korjauskustannukset"},
-          {"inputs": ["ThirdPartyProperty", "any", "any"], "output": "ActualValue", "legal_basis": "Section 3(1)", "source_text": "Esinevahinko"},
-          {"inputs": ["Clothing", "any", "any"], "output": "ReplacementValue", "legal_basis": "Section 3(2)", "source_text": "Vaatevahinko"}
+          {
+            "inputs": [
+              "Vehicle",
+              "any",
+              "TotalLoss"
+            ],
+            "output": "MarketValue",
+            "legal_basis": "Section 3(1)",
+            "source_text": "Ajoneuvon t\u00e4ysarvo"
+          },
+          {
+            "inputs": [
+              "Vehicle",
+              "any",
+              "PartialDamage"
+            ],
+            "output": "RepairCost",
+            "legal_basis": "Section 3(1)",
+            "source_text": "Korjauskustannukset"
+          },
+          {
+            "inputs": [
+              "ThirdPartyProperty",
+              "any",
+              "any"
+            ],
+            "output": "ActualValue",
+            "legal_basis": "Section 3(1)",
+            "source_text": "Esinevahinko"
+          },
+          {
+            "inputs": [
+              "Clothing",
+              "any",
+              "any"
+            ],
+            "output": "ReplacementValue",
+            "legal_basis": "Section 3(2)",
+            "source_text": "Vaatevahinko"
+          }
         ]
       },
       {
@@ -199,10 +545,46 @@
         "output_variable": "compensationType",
         "legal_source": "Sections 36-38",
         "rules": [
-          {"inputs": [true, "Spouse", true], "output": "SpousePension_Plus_LumpSum", "legal_basis": "Section 36(1)", "source_text": "Leskeneläke"},
-          {"inputs": [true, "Child", true], "output": "ChildPension", "legal_basis": "Section 36(2)", "source_text": "Lapseneläke"},
-          {"inputs": [false, "Dependent", true], "output": "LumpSum", "legal_basis": "Section 38", "source_text": "Kertakorvaus"},
-          {"inputs": [any, "Parent", true], "output": "FuneralExpenses_Plus_Compensation", "legal_basis": "Section 38", "source_text": "Vanhemmille korvaus"}
+          {
+            "inputs": [
+              true,
+              "Spouse",
+              true
+            ],
+            "output": "SpousePension_Plus_LumpSum",
+            "legal_basis": "Section 36(1)",
+            "source_text": "Leskenel\u00e4ke"
+          },
+          {
+            "inputs": [
+              true,
+              "Child",
+              true
+            ],
+            "output": "ChildPension",
+            "legal_basis": "Section 36(2)",
+            "source_text": "Lapsenel\u00e4ke"
+          },
+          {
+            "inputs": [
+              false,
+              "Dependent",
+              true
+            ],
+            "output": "LumpSum",
+            "legal_basis": "Section 38",
+            "source_text": "Kertakorvaus"
+          },
+          {
+            "inputs": [
+              "any",
+              "Parent",
+              true
+            ],
+            "output": "FuneralExpenses_Plus_Compensation",
+            "legal_basis": "Section 38",
+            "source_text": "Vanhemmille korvaus"
+          }
         ]
       },
       {
@@ -218,9 +600,36 @@
         "output_variable": "compensationType",
         "legal_source": "Section 35",
         "rules": [
-          {"inputs": ["1-10_PERCENT", true, "any"], "output": "DisabilityPension_Low", "legal_basis": "Section 35(2)", "source_text": "Matala työkyvyttömyyseläke"},
-          {"inputs": ["11-30_PERCENT", true, "any"], "output": "DisabilityPension_Medium", "legal_basis": "Section 35(2)", "source_text": "Keskinkertainen työkyvyttömyyseläke"},
-          {"inputs": ["31-100_PERCENT", true, "any"], "output": "DisabilityPension_High", "legal_basis": "Section 35(2)", "source_text": "Korkea työkyvyttömyyseläke"}
+          {
+            "inputs": [
+              "1-10_PERCENT",
+              true,
+              "any"
+            ],
+            "output": "DisabilityPension_Low",
+            "legal_basis": "Section 35(2)",
+            "source_text": "Matala ty\u00f6kyvytt\u00f6myysel\u00e4ke"
+          },
+          {
+            "inputs": [
+              "11-30_PERCENT",
+              true,
+              "any"
+            ],
+            "output": "DisabilityPension_Medium",
+            "legal_basis": "Section 35(2)",
+            "source_text": "Keskinkertainen ty\u00f6kyvytt\u00f6myysel\u00e4ke"
+          },
+          {
+            "inputs": [
+              "31-100_PERCENT",
+              true,
+              "any"
+            ],
+            "output": "DisabilityPension_High",
+            "legal_basis": "Section 35(2)",
+            "source_text": "Korkea ty\u00f6kyvytt\u00f6myysel\u00e4ke"
+          }
         ]
       },
       {
@@ -237,10 +646,50 @@
         "output_variable": "premiumAmount",
         "legal_source": "Sections 89-92",
         "rules": [
-          {"inputs": ["PrivateCar", "over_25", 0, "Private"], "output": "BasePremium", "legal_basis": "Section 89", "source_text": "Perusvakuutusmaksu"},
-          {"inputs": ["PrivateCar", "under_25", 0, "Private"], "output": "BasePremium_Times_1_5", "legal_basis": "Section 90", "source_text": "Nuori kuljettaja"},
-          {"inputs": ["PrivateCar", "any", "positive", "any"], "output": "BasePremium_Plus_ClaimLoading", "legal_basis": "Section 91", "source_text": "Korotusmaksu"},
-          {"inputs": ["Commercial", "any", "any", "Commercial"], "output": "CommercialRate", "legal_basis": "Section 92", "source_text": "Kaupallinen ajoneuvo"}
+          {
+            "inputs": [
+              "PrivateCar",
+              "over_25",
+              0,
+              "Private"
+            ],
+            "output": "BasePremium",
+            "legal_basis": "Section 89",
+            "source_text": "Perusvakuutusmaksu"
+          },
+          {
+            "inputs": [
+              "PrivateCar",
+              "under_25",
+              0,
+              "Private"
+            ],
+            "output": "BasePremium_Times_1_5",
+            "legal_basis": "Section 90",
+            "source_text": "Nuori kuljettaja"
+          },
+          {
+            "inputs": [
+              "PrivateCar",
+              "any",
+              "positive",
+              "any"
+            ],
+            "output": "BasePremium_Plus_ClaimLoading",
+            "legal_basis": "Section 91",
+            "source_text": "Korotusmaksu"
+          },
+          {
+            "inputs": [
+              "Commercial",
+              "any",
+              "any",
+              "Commercial"
+            ],
+            "output": "CommercialRate",
+            "legal_basis": "Section 92",
+            "source_text": "Kaupallinen ajoneuvo"
+          }
         ]
       },
       {
@@ -256,9 +705,36 @@
         "output_variable": "timeLimitStatus",
         "legal_source": "Section 74",
         "rules": [
-          {"inputs": ["PersonalInjury", "any", "any"], "output": "Within_3_Years_From_Injury", "legal_basis": "Section 74(1)", "source_text": "Henkilövahinko 3 vuotta"},
-          {"inputs": ["PropertyDamage", "any", "within_1_year"], "output": "Within_1_Year_From_Accident", "legal_basis": "Section 74(2)", "source_text": "Esinevahinko 1 vuosi"},
-          {"inputs": ["PropertyDamage", "any", "after_1_year"], "output": "ClaimTimeBarred", "legal_basis": "Section 74(2)", "source_text": "Määräaika umpeutunut"}
+          {
+            "inputs": [
+              "PersonalInjury",
+              "any",
+              "any"
+            ],
+            "output": "Within_3_Years_From_Injury",
+            "legal_basis": "Section 74(1)",
+            "source_text": "Henkil\u00f6vahinko 3 vuotta"
+          },
+          {
+            "inputs": [
+              "PropertyDamage",
+              "any",
+              "within_1_year"
+            ],
+            "output": "Within_1_Year_From_Accident",
+            "legal_basis": "Section 74(2)",
+            "source_text": "Esinevahinko 1 vuosi"
+          },
+          {
+            "inputs": [
+              "PropertyDamage",
+              "any",
+              "after_1_year"
+            ],
+            "output": "ClaimTimeBarred",
+            "legal_basis": "Section 74(2)",
+            "source_text": "M\u00e4\u00e4r\u00e4aika umpeutunut"
+          }
         ]
       },
       {
@@ -274,9 +750,36 @@
         "output_variable": "protection_mechanism",
         "legal_source": "Section 77",
         "rules": [
-          {"inputs": ["Insolvent", true, true], "output": "FinnishGuaranteeFund_Pays", "legal_basis": "Section 77(1)", "source_text": "Suomen vakuutusrahasto"},
-          {"inputs": ["Insolvent", true, false], "output": "TransferToAnotherInsurer", "legal_basis": "Section 77(2)", "source_text": "Siirto toiselle vakuuttajalle"},
-          {"inputs": ["Healthy", true, true], "output": "NormalClaimsProcess", "legal_basis": "Section 76", "source_text": "Normaali käsittely"}
+          {
+            "inputs": [
+              "Insolvent",
+              true,
+              true
+            ],
+            "output": "FinnishGuaranteeFund_Pays",
+            "legal_basis": "Section 77(1)",
+            "source_text": "Suomen vakuutusrahasto"
+          },
+          {
+            "inputs": [
+              "Insolvent",
+              true,
+              false
+            ],
+            "output": "TransferToAnotherInsurer",
+            "legal_basis": "Section 77(2)",
+            "source_text": "Siirto toiselle vakuuttajalle"
+          },
+          {
+            "inputs": [
+              "Healthy",
+              true,
+              true
+            ],
+            "output": "NormalClaimsProcess",
+            "legal_basis": "Section 76",
+            "source_text": "Normaali k\u00e4sittely"
+          }
         ]
       },
       {
@@ -292,7 +795,16 @@
         "output_variable": "compensation_decision",
         "legal_source": "Section 49",
         "rules": [
-          {"inputs": [true, false, false], "output": "NOT_COVERED", "legal_basis": "Section 49(1)", "source_text": "Luvattomasti käyttöön otettu ajoneuvo"}
+          {
+            "inputs": [
+              true,
+              false,
+              false
+            ],
+            "output": "NOT_COVERED",
+            "legal_basis": "Section 49(1)",
+            "source_text": "Luvattomasti k\u00e4ytt\u00f6\u00f6n otettu ajoneuvo"
+          }
         ]
       },
       {
@@ -308,8 +820,26 @@
         "output_variable": "compensation_decision",
         "legal_source": "Section 50",
         "rules": [
-          {"inputs": [true, false, false], "output": "NOT_COVERED", "legal_basis": "Section 50(1)", "source_text": "Syyntakeettomuus"},
-          {"inputs": [false, true, false], "output": "NOT_COVERED", "legal_basis": "Section 50(2)", "source_text": "Pakkotila"}
+          {
+            "inputs": [
+              true,
+              false,
+              false
+            ],
+            "output": "NOT_COVERED",
+            "legal_basis": "Section 50(1)",
+            "source_text": "Syyntakeettomuus"
+          },
+          {
+            "inputs": [
+              false,
+              true,
+              false
+            ],
+            "output": "NOT_COVERED",
+            "legal_basis": "Section 50(2)",
+            "source_text": "Pakkotila"
+          }
         ]
       },
       {
@@ -326,7 +856,17 @@
         "output_variable": "compensation_decision",
         "legal_source": "Section 41",
         "rules": [
-          {"inputs": [true, true, "terminated", "PropertyDamage"], "output": "NOT_COVERED", "legal_basis": "Section 41(1)", "source_text": "Omaisuusvahinko anastuksen johdosta"}
+          {
+            "inputs": [
+              true,
+              true,
+              "terminated",
+              "PropertyDamage"
+            ],
+            "output": "NOT_COVERED",
+            "legal_basis": "Section 41(1)",
+            "source_text": "Omaisuusvahinko anastuksen johdosta"
+          }
         ]
       },
       {
@@ -342,8 +882,26 @@
         "output_variable": "compensation_decision",
         "legal_source": "Section 41a",
         "rules": [
-          {"inputs": [true, false, "any"], "output": "NOT_COVERED", "legal_basis": "Section 41a(1)", "source_text": "Kilpailu ilman lupaa"},
-          {"inputs": [true, true, false], "output": "NOT_COVERED", "legal_basis": "Section 41a(2)", "source_text": "Kilpailu ilman voimassa olevaa lupaa"}
+          {
+            "inputs": [
+              true,
+              false,
+              "any"
+            ],
+            "output": "NOT_COVERED",
+            "legal_basis": "Section 41a(1)",
+            "source_text": "Kilpailu ilman lupaa"
+          },
+          {
+            "inputs": [
+              true,
+              true,
+              false
+            ],
+            "output": "NOT_COVERED",
+            "legal_basis": "Section 41a(2)",
+            "source_text": "Kilpailu ilman voimassa olevaa lupaa"
+          }
         ]
       },
       {
@@ -359,9 +917,36 @@
         "output_variable": "compensation_decision",
         "legal_source": "Section 43",
         "rules": [
-          {"inputs": [true, "Military", "PropertyDamage"], "output": "NOT_COVERED", "legal_basis": "Section 43(1)", "source_text": "Armeijaan kuuluva ajoneuvo"},
-          {"inputs": [true, "Diplomatic", "PropertyDamage"], "output": "NOT_COVERED", "legal_basis": "Section 43(2)", "source_text": "Diplomaattinen ajoneuvo"},
-          {"inputs": [true, "Government", "PropertyDamage"], "output": "NOT_COVERED", "legal_basis": "Section 43(2)", "source_text": "Valtion ajoneuvo"}
+          {
+            "inputs": [
+              true,
+              "Military",
+              "PropertyDamage"
+            ],
+            "output": "NOT_COVERED",
+            "legal_basis": "Section 43(1)",
+            "source_text": "Armeijaan kuuluva ajoneuvo"
+          },
+          {
+            "inputs": [
+              true,
+              "Diplomatic",
+              "PropertyDamage"
+            ],
+            "output": "NOT_COVERED",
+            "legal_basis": "Section 43(2)",
+            "source_text": "Diplomaattinen ajoneuvo"
+          },
+          {
+            "inputs": [
+              true,
+              "Government",
+              "PropertyDamage"
+            ],
+            "output": "NOT_COVERED",
+            "legal_basis": "Section 43(2)",
+            "source_text": "Valtion ajoneuvo"
+          }
         ]
       },
       {
@@ -377,7 +962,16 @@
         "output_variable": "compensation_decision",
         "legal_source": "Section 44",
         "rules": [
-          {"inputs": [true, false, "PropertyDamage"], "output": "NOT_COVERED", "legal_basis": "Section 44(2)", "source_text": "Tuntematon ajoneuvo ilman poliisiilmoitusta"}
+          {
+            "inputs": [
+              true,
+              false,
+              "PropertyDamage"
+            ],
+            "output": "NOT_COVERED",
+            "legal_basis": "Section 44(2)",
+            "source_text": "Tuntematon ajoneuvo ilman poliisiilmoitusta"
+          }
         ]
       },
       {
@@ -393,7 +987,16 @@
         "output_variable": "compensation_decision",
         "legal_source": "Section 46",
         "rules": [
-          {"inputs": [false, false, "PropertyDamage"], "output": "NOT_COVERED", "legal_basis": "Section 46(1)", "source_text": "Esinevahinko ilman vakuutusta"}
+          {
+            "inputs": [
+              false,
+              false,
+              "PropertyDamage"
+            ],
+            "output": "NOT_COVERED",
+            "legal_basis": "Section 46(1)",
+            "source_text": "Esinevahinko ilman vakuutusta"
+          }
         ]
       },
       {
@@ -408,7 +1011,15 @@
         "output_variable": "compensation_decision",
         "legal_source": "Section 47",
         "rules": [
-          {"inputs": [true, "GrossNegligence"], "output": "NOT_COVERED", "legal_basis": "Section 47(1)", "source_text": "Törkeä tuottamus"}
+          {
+            "inputs": [
+              true,
+              "GrossNegligence"
+            ],
+            "output": "NOT_COVERED",
+            "legal_basis": "Section 47(1)",
+            "source_text": "T\u00f6rke\u00e4 tuottamus"
+          }
         ]
       },
       {
@@ -424,7 +1035,16 @@
         "output_variable": "compensation_decision",
         "legal_source": "Section 48",
         "rules": [
-          {"inputs": [">=1.2_permille", "SoleFault", false], "output": "NOT_COVERED", "legal_basis": "Section 48(1)", "source_text": "Yksinomaan kuljettajan syy"}
+          {
+            "inputs": [
+              ">=1.2_permille",
+              "SoleFault",
+              false
+            ],
+            "output": "NOT_COVERED",
+            "legal_basis": "Section 48(1)",
+            "source_text": "Yksinomaan kuljettajan syy"
+          }
         ]
       },
       {
@@ -440,9 +1060,36 @@
         "output_variable": "compensation_percentage",
         "legal_source": "Section 47",
         "rules": [
-          {"inputs": [true, "Negligence", "PropertyDamage"], "output": "50_PERCENT", "legal_basis": "Section 47(2)", "source_text": "Tuottamus 50%"},
-          {"inputs": [true, "Slight", "any"], "output": "75_PERCENT", "legal_basis": "Section 47(2)", "source_text": "Vähäinen tuottamus 25% alennus"},
-          {"inputs": [true, "Moderate", "any"], "output": "50_PERCENT", "legal_basis": "Section 47(2)", "source_text": "Kohtuullinen tuottamus 50% alennus"}
+          {
+            "inputs": [
+              true,
+              "Negligence",
+              "PropertyDamage"
+            ],
+            "output": "50_PERCENT",
+            "legal_basis": "Section 47(2)",
+            "source_text": "Tuottamus 50%"
+          },
+          {
+            "inputs": [
+              true,
+              "Slight",
+              "any"
+            ],
+            "output": "75_PERCENT",
+            "legal_basis": "Section 47(2)",
+            "source_text": "V\u00e4h\u00e4inen tuottamus 25% alennus"
+          },
+          {
+            "inputs": [
+              true,
+              "Moderate",
+              "any"
+            ],
+            "output": "50_PERCENT",
+            "legal_basis": "Section 47(2)",
+            "source_text": "Kohtuullinen tuottamus 50% alennus"
+          }
         ]
       },
       {
@@ -458,9 +1105,36 @@
         "output_variable": "compensation_percentage",
         "legal_source": "Section 48",
         "rules": [
-          {"inputs": [">=1.2_permille", "PartialFault", false], "output": "50_PERCENT", "legal_basis": "Section 48(1)", "source_text": "Korkea alkoholipitoisuus 50% alennus"},
-          {"inputs": ["0.5-1.19_permille", "PartialFault", false], "output": "75_PERCENT", "legal_basis": "Section 48(2)", "source_text": "Kohtalainen alkoholipitoisuus"},
-          {"inputs": ["0.5-1.19_permille", "SoleFault", false], "output": "NOT_COVERED", "legal_basis": "Section 48(2)", "source_text": "Kohtalainen BAC yksinomainen syy"}
+          {
+            "inputs": [
+              ">=1.2_permille",
+              "PartialFault",
+              false
+            ],
+            "output": "50_PERCENT",
+            "legal_basis": "Section 48(1)",
+            "source_text": "Korkea alkoholipitoisuus 50% alennus"
+          },
+          {
+            "inputs": [
+              "0.5-1.19_permille",
+              "PartialFault",
+              false
+            ],
+            "output": "75_PERCENT",
+            "legal_basis": "Section 48(2)",
+            "source_text": "Kohtalainen alkoholipitoisuus"
+          },
+          {
+            "inputs": [
+              "0.5-1.19_permille",
+              "SoleFault",
+              false
+            ],
+            "output": "NOT_COVERED",
+            "legal_basis": "Section 48(2)",
+            "source_text": "Kohtalainen BAC yksinomainen syy"
+          }
         ]
       },
       {
@@ -477,8 +1151,28 @@
         "output_variable": "compensation_decision",
         "legal_source": "Section 41",
         "rules": [
-          {"inputs": [true, true, "active", "PersonalInjury"], "output": "COVERED", "legal_basis": "Section 41(2)", "source_text": "Henkilövahinko anastuksen jälkeen"},
-          {"inputs": [false, "any", "active", "any"], "output": "COVERED", "legal_basis": "Section 41", "source_text": "Normaali korvaus"}
+          {
+            "inputs": [
+              true,
+              true,
+              "active",
+              "PersonalInjury"
+            ],
+            "output": "COVERED",
+            "legal_basis": "Section 41(2)",
+            "source_text": "Henkil\u00f6vahinko anastuksen j\u00e4lkeen"
+          },
+          {
+            "inputs": [
+              false,
+              "any",
+              "active",
+              "any"
+            ],
+            "output": "COVERED",
+            "legal_basis": "Section 41",
+            "source_text": "Normaali korvaus"
+          }
         ]
       },
       {
@@ -495,9 +1189,39 @@
         "output_variable": "compensation_decision",
         "legal_source": "Section 41a",
         "rules": [
-          {"inputs": [true, true, true, "PersonalInjury"], "output": "COVERED", "legal_basis": "Section 41a(2)", "source_text": "Henkilövahinko luvallisessa kilpailussa"},
-          {"inputs": [true, true, true, "PropertyDamage"], "output": "COVERED", "legal_basis": "Section 41a(2)", "source_text": "Omaisuusvahinko kilpailussa"},
-          {"inputs": [false, "any", "any", "any"], "output": "COVERED", "legal_basis": "Section 41a", "source_text": "Normaali korvaus"}
+          {
+            "inputs": [
+              true,
+              true,
+              true,
+              "PersonalInjury"
+            ],
+            "output": "COVERED",
+            "legal_basis": "Section 41a(2)",
+            "source_text": "Henkil\u00f6vahinko luvallisessa kilpailussa"
+          },
+          {
+            "inputs": [
+              true,
+              true,
+              true,
+              "PropertyDamage"
+            ],
+            "output": "COVERED",
+            "legal_basis": "Section 41a(2)",
+            "source_text": "Omaisuusvahinko kilpailussa"
+          },
+          {
+            "inputs": [
+              false,
+              "any",
+              "any",
+              "any"
+            ],
+            "output": "COVERED",
+            "legal_basis": "Section 41a",
+            "source_text": "Normaali korvaus"
+          }
         ]
       },
       {
@@ -512,7 +1236,15 @@
         "output_variable": "compensation_decision",
         "legal_source": "Section 43",
         "rules": [
-          {"inputs": [true, "PersonalInjury"], "output": "COVERED", "legal_basis": "Section 43(3)", "source_text": "Henkilövahinko aina korvataan"}
+          {
+            "inputs": [
+              true,
+              "PersonalInjury"
+            ],
+            "output": "COVERED",
+            "legal_basis": "Section 43(3)",
+            "source_text": "Henkil\u00f6vahinko aina korvataan"
+          }
         ]
       },
       {
@@ -528,8 +1260,26 @@
         "output_variable": "compensation_decision",
         "legal_source": "Section 44",
         "rules": [
-          {"inputs": [true, true, "PersonalInjury"], "output": "COVERED", "legal_basis": "Section 44(1)", "source_text": "Tuntemattoman ajoneuvon henkilövahinko"},
-          {"inputs": [true, true, "PropertyDamage"], "output": "COVERED_GuaranteeFund", "legal_basis": "Section 44(2)", "source_text": "Esinevahinko takausrahastolta"}
+          {
+            "inputs": [
+              true,
+              true,
+              "PersonalInjury"
+            ],
+            "output": "COVERED",
+            "legal_basis": "Section 44(1)",
+            "source_text": "Tuntemattoman ajoneuvon henkil\u00f6vahinko"
+          },
+          {
+            "inputs": [
+              true,
+              true,
+              "PropertyDamage"
+            ],
+            "output": "COVERED_GuaranteeFund",
+            "legal_basis": "Section 44(2)",
+            "source_text": "Esinevahinko takausrahastolta"
+          }
         ]
       },
       {
@@ -544,8 +1294,24 @@
         "output_variable": "compensation_decision",
         "legal_source": "Section 46",
         "rules": [
-          {"inputs": [false, "PersonalInjury"], "output": "COVERED_GuaranteeFund", "legal_basis": "Section 46(1)", "source_text": "Henkilövahinko takausrahastosta"},
-          {"inputs": [true, "any"], "output": "COVERED", "legal_basis": "Section 46(2)", "source_text": "Korvataan voimassaolevasta vakuutuksesta"}
+          {
+            "inputs": [
+              false,
+              "PersonalInjury"
+            ],
+            "output": "COVERED_GuaranteeFund",
+            "legal_basis": "Section 46(1)",
+            "source_text": "Henkil\u00f6vahinko takausrahastosta"
+          },
+          {
+            "inputs": [
+              true,
+              "any"
+            ],
+            "output": "COVERED",
+            "legal_basis": "Section 46(2)",
+            "source_text": "Korvataan voimassaolevasta vakuutuksesta"
+          }
         ]
       },
       {
@@ -561,9 +1327,463 @@
         "output_variable": "compensation_decision",
         "legal_source": "Section 48",
         "rules": [
-          {"inputs": [">=1.2_permille", "ThirdParty", false], "output": "COVERED", "legal_basis": "Section 48(3)", "source_text": "Korvaus kolmannelle osapuolelle"},
-          {"inputs": ["0.5-1.19_permille", "ThirdParty", false], "output": "COVERED", "legal_basis": "Section 48(3)", "source_text": "Korvaus kolmannelle osapuolelle"},
-          {"inputs": ["<0.5_permille", "any", false], "output": "COVERED", "legal_basis": "Section 48(2)", "source_text": "Täysi korvaus"}
+          {
+            "inputs": [
+              ">=1.2_permille",
+              "ThirdParty",
+              false
+            ],
+            "output": "COVERED",
+            "legal_basis": "Section 48(3)",
+            "source_text": "Korvaus kolmannelle osapuolelle"
+          },
+          {
+            "inputs": [
+              "0.5-1.19_permille",
+              "ThirdParty",
+              false
+            ],
+            "output": "COVERED",
+            "legal_basis": "Section 48(3)",
+            "source_text": "Korvaus kolmannelle osapuolelle"
+          },
+          {
+            "inputs": [
+              "<0.5_permille",
+              "any",
+              false
+            ],
+            "output": "COVERED",
+            "legal_basis": "Section 48(2)",
+            "source_text": "T\u00e4ysi korvaus"
+          }
+        ]
+      },
+      {
+        "category": "negative_claims.full_denial",
+        "name": "N18_WorkPerformanceDamages",
+        "description": "Work performance damages - Full denial (\u00a742)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "accident.occurredDuringWork",
+          "vehicle.wasStationary",
+          "injured.personRole"
+        ],
+        "output_variable": "compensation_decision",
+        "legal_source": "Section 42",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              true,
+              "owner_or_holder"
+            ],
+            "output": "NOT_COVERED",
+            "legal_basis": "Section 42(1)",
+            "source_text": "Kuormauksen aikana omistajalle"
+          },
+          {
+            "inputs": [
+              true,
+              true,
+              "worker"
+            ],
+            "output": "NOT_COVERED",
+            "legal_basis": "Section 42(1)",
+            "source_text": "Ty\u00f6t\u00e4 suorittavalle"
+          },
+          {
+            "inputs": [
+              true,
+              true,
+              "property_work"
+            ],
+            "output": "NOT_COVERED",
+            "legal_basis": "Section 42(2)",
+            "source_text": "Kaivamisesta aiheutunut"
+          }
+        ]
+      },
+      {
+        "category": "negative_claims.conditional_compensation",
+        "name": "N19_EScooterCompensation",
+        "description": "Hired e-scooter driver injuries - Limited coverage (\u00a734a)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "vehicle.vehicleType",
+          "vehicle.isHired",
+          "damage.damageType"
+        ],
+        "output_variable": "compensation_decision",
+        "legal_source": "Section 34a",
+        "rules": [
+          {
+            "inputs": [
+              "EScooter",
+              true,
+              "PersonalInjury"
+            ],
+            "output": "COVERED_LIMITED_MEDICAL",
+            "legal_basis": "Section 34a",
+            "source_text": "Vuokrattu e-scoutter - vain sairaanhoito"
+          },
+          {
+            "inputs": [
+              "EScooter",
+              false,
+              "PersonalInjury"
+            ],
+            "output": "COVERED_100",
+            "legal_basis": "Section 34",
+            "source_text": "Oma e-scoutter"
+          },
+          {
+            "inputs": [
+              "EScooter",
+              true,
+              "PropertyDamage"
+            ],
+            "output": "NOT_COVERED",
+            "legal_basis": "Section 34a",
+            "source_text": "Vuokratun omaisuusvahinko"
+          }
+        ]
+      },
+      {
+        "category": "negative_claims.conditional_compensation",
+        "name": "N20_OutsideFinland",
+        "description": "Damages outside Finland - Conditional (\u00a745)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "accident.locationCountry",
+          "vehicle.permanentLocation",
+          "victim.residenceCountry"
+        ],
+        "output_variable": "compensation_decision",
+        "legal_source": "Section 45",
+        "rules": [
+          {
+            "inputs": [
+              "EEA",
+              "Finland",
+              "Finland"
+            ],
+            "output": "COVERED",
+            "legal_basis": "Section 45(1)",
+            "source_text": "ETA-valtiosta"
+          },
+          {
+            "inputs": [
+              "Non-EEA",
+              "Finland",
+              "Finland"
+            ],
+            "output": "NOT_COVERED",
+            "legal_basis": "Section 45",
+            "source_text": "Kolmannesta maasta"
+          },
+          {
+            "inputs": [
+              "EEA",
+              "Finland",
+              "Finland"
+            ],
+            "output": "COVERED_GUARANTEE_FUND",
+            "legal_basis": "Section 45(2)",
+            "source_text": "Tuntematon ETA"
+          }
+        ]
+      },
+      {
+        "category": "negative_claims.conditional_compensation",
+        "name": "N21_AssistingInjured",
+        "description": "Damages from assisting injured person (\u00a739)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "person.assistingInjured",
+          "person.isProfessionalRescuer"
+        ],
+        "output_variable": "compensation_decision",
+        "legal_source": "Section 39",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              false
+            ],
+            "output": "COVERED",
+            "legal_basis": "Section 39(1)",
+            "source_text": "Avustanut - korvataan"
+          },
+          {
+            "inputs": [
+              true,
+              true
+            ],
+            "output": "NOT_COVERED",
+            "legal_basis": "Section 39(2)",
+            "source_text": "Ammattimainen - ei korvata"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.compensation_calculation",
+        "name": "E8b_MultiVehicleLiability",
+        "description": "Liability in multi-vehicle accidents (\u00a733)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "accident.vehicleCount",
+          "vehicleA.fault",
+          "vehicleB.fault",
+          "damage.damageType"
+        ],
+        "output_variable": "liability_allocation",
+        "legal_source": "Section 33",
+        "rules": [
+          {
+            "inputs": [
+              2,
+              "no_fault",
+              "sole_fault",
+              "any"
+            ],
+            "output": "VehicleB_Sole_Liable",
+            "legal_basis": "Section 33(1)",
+            "source_text": "Toisen tuottamus"
+          },
+          {
+            "inputs": [
+              2,
+              "shared",
+              "shared",
+              "any"
+            ],
+            "output": "Shared_Liability",
+            "legal_basis": "Section 33(2)",
+            "source_text": "Molemmilla tuottamus"
+          },
+          {
+            "inputs": [
+              2,
+              "any",
+              "any",
+              "PersonalInjury"
+            ],
+            "output": "Passenger_Vehicle_Liable",
+            "legal_basis": "Section 33(3)",
+            "source_text": "Matkustajan ajoneuvo"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.compensation_calculation",
+        "name": "E8c_VehicleCombinationLiability",
+        "description": "Liability for vehicle combinations (\u00a739a)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "vehicle.isCombination",
+          "vehicle.towingIdentified",
+          "damage.exceedsMaximum"
+        ],
+        "output_variable": "liable_insurer",
+        "legal_source": "Section 39a",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              true,
+              false
+            ],
+            "output": "Towing_Vehicle_Insurer",
+            "legal_basis": "Section 39a(1)",
+            "source_text": "Vetoajoneuvon vakuuttaja"
+          },
+          {
+            "inputs": [
+              true,
+              false,
+              false
+            ],
+            "output": "Trailer_Insurer",
+            "legal_basis": "Section 39a(2)",
+            "source_text": "Per\u00e4vaunun vakuuttaja"
+          },
+          {
+            "inputs": [
+              true,
+              "any",
+              true
+            ],
+            "output": "Excess_From_Other",
+            "legal_basis": "Section 39a(3)",
+            "source_text": "Ylimenev\u00e4 osa toisesta"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.compensation_calculation",
+        "name": "E8d_WorkAccidentCoordination",
+        "description": "Coordination with occupational accident (\u00a736)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "injured.hasOccupationalInsurance",
+          "damage.damageType"
+        ],
+        "output_variable": "primary_insurer",
+        "legal_source": "Section 36",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              "PersonalInjury"
+            ],
+            "output": "Occupational_First",
+            "legal_basis": "Section 36",
+            "source_text": "Ty\u00f6tapaturma ensin"
+          },
+          {
+            "inputs": [
+              false,
+              "PersonalInjury"
+            ],
+            "output": "Traffic_Insurance_Full",
+            "legal_basis": "Section 36",
+            "source_text": "Liikennevakuutus"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.compensation_calculation",
+        "name": "E14_MaximumPropertyDamage",
+        "description": "Maximum property damage compensation (\u00a738)",
+        "hit_policy": "UNIQUE",
+        "input_variables": [
+          "propertyDamage.amount",
+          "claimant.count"
+        ],
+        "output_variable": "compensation_cap",
+        "legal_source": "Section 38",
+        "rules": [
+          {
+            "inputs": [
+              ">=5000000",
+              1
+            ],
+            "output": "MAX_5000000",
+            "legal_basis": "Section 38(1)",
+            "source_text": "Enint\u00e4\u00e4n 5M\u20ac"
+          },
+          {
+            "inputs": [
+              ">=5000000",
+              ">1"
+            ],
+            "output": "Proportional",
+            "legal_basis": "Section 38(2)",
+            "source_text": "Suhteellinen jako"
+          },
+          {
+            "inputs": [
+              "<5000000",
+              "any"
+            ],
+            "output": "Full_Compensation",
+            "legal_basis": "Section 38(1)",
+            "source_text": "T\u00e4ysi korvaus"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.compensation_calculation",
+        "name": "E15_InsurerLiabilityDistribution",
+        "description": "Distribution of liability between insurers (\u00a751)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "multipleInsurers",
+          "cause.specificVehicle",
+          "fault.distribution"
+        ],
+        "output_variable": "liability_share",
+        "legal_source": "Section 51",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              "none",
+              "shared"
+            ],
+            "output": "Joint_Several_Proportional",
+            "legal_basis": "Section 51(1)",
+            "source_text": "Yhteisvastuu"
+          },
+          {
+            "inputs": [
+              true,
+              "identified",
+              "sole"
+            ],
+            "output": "Specific_Vehicle_Sole",
+            "legal_basis": "Section 51(2)",
+            "source_text": "Yksinomainen syy"
+          },
+          {
+            "inputs": [
+              true,
+              "any",
+              "any"
+            ],
+            "output": "Investigate",
+            "legal_basis": "Section 51",
+            "source_text": "Selvitett\u00e4v\u00e4"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "E16_BorderTrafficInsurance",
+        "description": "Border traffic insurance (\u00a77)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "vehicle.permanentLocation",
+          "vehicle.hasGreenCard",
+          "accident.location"
+        ],
+        "output_variable": "insurance_requirement",
+        "legal_source": "Section 7",
+        "rules": [
+          {
+            "inputs": [
+              "Non-EEA",
+              false,
+              "Finland"
+            ],
+            "output": "Border_Insurance_Required",
+            "legal_basis": "Section 7(1)",
+            "source_text": "Rajaliikennevakuutus"
+          },
+          {
+            "inputs": [
+              "Non-EEA",
+              true,
+              "any"
+            ],
+            "output": "GreenCard_Accepted",
+            "legal_basis": "Section 7(2)",
+            "source_text": "Vihre\u00e4 kortti"
+          },
+          {
+            "inputs": [
+              "Non-EEA",
+              false,
+              [
+                "Sweden",
+                "Norway"
+              ]
+            ],
+            "output": "Covered_Injury_Only",
+            "legal_basis": "Section 7(3)",
+            "source_text": "Vain henkil\u00f6vahinko"
+          }
         ]
       }
     ],
@@ -571,9 +1791,14 @@
       "created": "2026-02-24",
       "updated": "2026-02-26",
       "dmn_version": "1.3",
-      "compatible_engines": ["Camunda DMN", "Drools DMN", "IBM ODM", "Flowable DMN"],
+      "compatible_engines": [
+        "Camunda DMN",
+        "Drools DMN",
+        "IBM ODM",
+        "Flowable DMN"
+      ],
       "law_reference": "Liikennevakuutuslaki 460/2016",
-      "rules_count": 45,
+      "rules_count": 40,
       "variable_naming_convention": "entity.attribute format (e.g., vehicle.vehicleType, driver.bloodAlcoholLevel)",
       "hierarchy_summary": {
         "eligibility": {
