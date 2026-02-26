@@ -835,7 +835,7 @@ insurerShare = (insurerPremiumIncome / totalPremiumIncome) × amountOverThreshol
 
 ---
 
-### 2.8 Premium Calculation Rules (§§20-28)
+### 2.9 Premium Calculation Rules (§§20-28)
 
 #### P6: Traffic Removal Violation Premium (§22)
 
@@ -861,7 +861,7 @@ insurerShare = (insurerPremiumIncome / totalPremiumIncome) × amountOverThreshol
 
 ---
 
-### 2.8 Penalty Rules (§§27-28)
+### 2.10 Penalty Rules (§§27-28)
 
 #### P8: Insurance Obligation Failure Penalty (§27)
 
@@ -923,7 +923,7 @@ totalPenalty = basePenalty × multiplier (max 3× base)
 
 ---
 
-### 2.8 Mandatory Opinion Requirements (§66)
+### 2.11 Mandatory Opinion Requirements (§66)
 
 #### MOP-001: Mandatory Liikennevahinkolautakunta Opinion Triggers (§66)
 
@@ -946,7 +946,7 @@ totalPenalty = basePenalty × multiplier (max 3× base)
 
 ---
 
-### 2.9 Foreign Claims Representative Rules (§70)
+### 2.12 Foreign Claims Representative Rules (§70)
 
 #### FCR-001: Foreign Representative 3-Month Deadline (§70)
 
@@ -1003,7 +1003,7 @@ totalPenalty = basePenalty × multiplier (max 3× base)
 
 ---
 
-### 2.10 Subrogation Rights (§73)
+### 2.13 Subrogation Rights (§73)
 
 #### SUB-001: Insurer Subrogation - Individual vs Corporation (§73)
 
@@ -1030,7 +1030,7 @@ totalPenalty = basePenalty × multiplier (max 3× base)
 
 ---
 
-### 2.11 Liikennevakuutuskeskus Recourse (§74)
+### 2.14 Liikennevakuutuskeskus Recourse (§74)
 
 #### LVK-001: LVK Recourse Scenarios (§74)
 
@@ -1376,7 +1376,7 @@ newMinimum = Round(newMinimum, nearest cent)
 
 ## §81: Municipality Appeal Rights
 
-### 2.15b Municipality Appeal Rights (§81)
+### 2.16 Municipality Appeal Rights (§81)
 
 #### MUN-001: Municipality Party Status (§81)
 
@@ -1481,7 +1481,7 @@ newMinimum = Round(newMinimum, nearest cent)
 
 - **Law**: Liikennevakuutuslaki (Traffic Insurance Act) 460/2016
 - **Source**: finlex.fi/fi/lainsaadanto/2016/460
-- **Version**: 1.5 (Added §52 Rail Traffic Liability Sharing Rules)
-- **Total Decisions**: 35 (17 Negative Claims + 18 Eligibility)
+- **Version**: 1.6 (Fixed section numbering, added §81, §82-83, §90)
+- **Total Decisions**: 91 decision tables
 - **Decision Order**: Negative Claims → Eligibility → Compensation
 - **Variable Convention**: entity.attribute (ontology-aligned)
