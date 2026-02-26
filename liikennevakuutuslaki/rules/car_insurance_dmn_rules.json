@@ -2,7 +2,7 @@
   "model": {
     "name": "Finnish Traffic Insurance DMN",
     "namespace": "https://liikennevakuutus-fi/dmn/traffic-insurance",
-    "version": "2.4",
+    "version": "2.5.2",
     "description": "Hierarchical DMN business rules for Liikennevakuutuslaki (460/2016) - Negative Claims First",
     "based_on": "Liikennevakuutuslaki (Traffic Insurance Act) 460/2016",
     "source": "https://www.finlex.fi/fi/lainsaadanto/2016/460",
@@ -93,7 +93,7 @@
           "damage.isPropertyDamage"
         ],
         "output_variable": "coverageStatus",
-        "legal_source": "Sections 12-16",
+        "legal_source": "Section 31",
         "rules": [
           {
             "inputs": [
@@ -6259,6 +6259,507 @@
             "legal_basis": "Section 46(1)"
           }
         ]
+      },
+      {
+        "category": "eligibility.compensation_calculation",
+        "name": "CC33_VehicleToVehicleLiability",
+        "description": "Liability in two or more vehicle accidents (\u00a733)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "accident.vehicles",
+          "fault.determined",
+          "victim.vehicle"
+        ],
+        "output_variable": "liability_rule",
+        "legal_source": "Section 33",
+        "rules": [
+          {
+            "inputs": [
+              "two_vehicles",
+              "first_vehicle_fault",
+              "second_vehicle"
+            ],
+            "output": "NOT_COVERED_BY_FIRST",
+            "legal_basis": "Section 33(1)",
+            "source_text": "Ei korvata ensiksi mainitun ajoneuvon vakuutuksesta"
+          },
+          {
+            "inputs": [
+              "two_vehicles",
+              "second_vehicle_fault",
+              "first_vehicle"
+            ],
+            "output": "NOT_COVERED_BY_SECOND",
+            "legal_basis": "Section 33(1)",
+            "source_text": "Ei korvata toisen ajoneuvon vakuutuksesta"
+          },
+          {
+            "inputs": [
+              "two_vehicles",
+              "both_fault",
+              "any"
+            ],
+            "output": "SHARED_LIABILITY",
+            "legal_basis": "Section 33(2)",
+            "source_text": "Jaetaan tuottamuksen mukaan"
+          },
+          {
+            "inputs": [
+              "rail_involved",
+              "any",
+              "any"
+            ],
+            "output": "RAIL_INSURER_PAYS",
+            "legal_basis": "Section 33(3)",
+            "source_text": "Kiskoliikenneajoneuvon vakuutus"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.compensation_calculation",
+        "name": "CC39_RescuerCompensation",
+        "description": "Compensation for helping injured persons (\u00a739)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "person.helped",
+          "helper.is_professional",
+          "damage.type"
+        ],
+        "output_variable": "coverage_eligibility",
+        "legal_source": "Section 39",
+        "rules": [
+          {
+            "inputs": [
+              true,
+              false,
+              "personal"
+            ],
+            "output": "COVERED",
+            "legal_basis": "Section 39(1)",
+            "source_text": "Ensiavun antaneelle"
+          },
+          {
+            "inputs": [
+              true,
+              false,
+              "property"
+            ],
+            "output": "COVERED",
+            "legal_basis": "Section 39(1)",
+            "source_text": "Omaisuusvahinko"
+          },
+          {
+            "inputs": [
+              true,
+              true,
+              "any"
+            ],
+            "output": "NOT_COVERED",
+            "legal_basis": "Section 39(2)",
+            "source_text": "Pelastustointa ammattimaisesti hoitavalle"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "CD45_OutsideFinlandCompensation",
+        "description": "Compensation for accidents outside Finland (\u00a745)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "accident.country",
+          "vehicle.home_country",
+          "victim.residence"
+        ],
+        "output_variable": "coverage_rule",
+        "legal_source": "Section 45",
+        "rules": [
+          {
+            "inputs": [
+              "EEA_not_Finland",
+              "Finland",
+              "Finland"
+            ],
+            "output": "COVERED_BY_GUARANTEE",
+            "legal_basis": "Section 45(1)",
+            "source_text": "Liikennevakuutuskeskus korvaa"
+          },
+          {
+            "inputs": [
+              "third_country",
+              "Finland",
+              "Finland"
+            ],
+            "output": "NOT_COVERED",
+            "legal_basis": "Section 45",
+            "source_text": "Ei korvata kolmannessa maassa"
+          },
+          {
+            "inputs": [
+              "EEA",
+              "other_EEA",
+              "Finland"
+            ],
+            "output": "COVERED_BY_LOCAL_OR_FINNISH",
+            "legal_basis": "Section 45(3-4)",
+            "source_text": "Valinnan mahdollisuus"
+          }
+        ]
+      },
+      {
+        "category": "negative_claims.full_denial",
+        "name": "EXC50_InsanityAndNecessityExemption",
+        "description": "Exemption for insanity and necessity (\u00a750)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "victim.age",
+          "victim.mental_state",
+          "victim.emergency_action",
+          "victim.defensive_action"
+        ],
+        "output_variable": "exemption_status",
+        "legal_source": "Section 50",
+        "rules": [
+          {
+            "inputs": [
+              "<12",
+              "any",
+              "any",
+              "any"
+            ],
+            "output": "NOT_APPLY_EXEMPTION",
+            "legal_basis": "Section 50",
+            "source_text": "Alle 12-vuotias"
+          },
+          {
+            "inputs": [
+              "any",
+              "insane",
+              "any",
+              "any"
+            ],
+            "output": "NOT_APPLY_EXEMPTION",
+            "legal_basis": "Section 50(1)",
+            "source_text": "Syyntakeeton"
+          },
+          {
+            "inputs": [
+              "any",
+              "any",
+              true,
+              "any"
+            ],
+            "output": "NOT_APPLY_EXEMPTION",
+            "legal_basis": "Section 50(2)",
+            "source_text": "Ensiavun antaminen"
+          },
+          {
+            "inputs": [
+              "any",
+              "any",
+              "any",
+              true
+            ],
+            "output": "NOT_APPLY_EXEMPTION",
+            "legal_basis": "Section 50(2)",
+            "source_text": "Puolustuspakko"
+          }
+        ]
+      },
+      {
+        "category": "negative_claims.reduced_compensation",
+        "name": "EXC48_AlcoholImpairmentFixed",
+        "description": "Alcohol impairment - FIXED language (\u00a748)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "driver.bac_permille",
+          "driver.substance",
+          "injury.type"
+        ],
+        "output_variable": "compensation_rule",
+        "legal_source": "Section 48",
+        "rules": [
+          {
+            "inputs": [
+              ">=1.2",
+              "any",
+              "personal"
+            ],
+            "output": "ONLY_OTHER_FACTORS",
+            "legal_basis": "Section 48(1)",
+            "source_text": "Vain silt\u00e4 osin kuin muut olosuhteet ovat vaikuttaneet"
+          },
+          {
+            "inputs": [
+              ">=0.5",
+              "<1.2",
+              "personal"
+            ],
+            "output": "PROPORTIONAL_REDUCTION",
+            "legal_basis": "Section 48(2)",
+            "source_text": "Alennetaan osuuden mukaan"
+          },
+          {
+            "inputs": [
+              "any",
+              "narcotic",
+              "personal"
+            ],
+            "output": "PROPORTIONAL_REDUCTION",
+            "legal_basis": "Section 48(2)",
+            "source_text": "Huumaavan aineen vaikutus"
+          },
+          {
+            "inputs": [
+              "<0.5",
+              "none",
+              "any"
+            ],
+            "output": "FULL_COVERED",
+            "legal_basis": "Section 48",
+            "source_text": "T\u00e4ysi korvaus"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.coverage_determination",
+        "name": "CD05_VehiclesToInsureFixed",
+        "description": "Vehicles requiring insurance - FIXED (\u00a75)",
+        "hit_policy": "COLLECT",
+        "input_variables": [
+          "vehicle.permanent_location",
+          "vehicle.type",
+          "exemption.applies"
+        ],
+        "output_variable": "insurance_required",
+        "legal_source": "Section 5",
+        "rules": [
+          {
+            "inputs": [
+              "Finland",
+              "covered_type",
+              false
+            ],
+            "output": "MUST_INSURE",
+            "legal_basis": "Section 5(1)",
+            "source_text": "Suomessa vakuutettava"
+          },
+          {
+            "inputs": [
+              "Finland",
+              "covered_type",
+              true
+            ],
+            "output": "EXEMPT",
+            "legal_basis": "Section 5",
+            "source_text": "Poikkeus"
+          },
+          {
+            "inputs": [
+              "EEA_not_Finland",
+              "any",
+              false
+            ],
+            "output": "MAY_INSURE_FINLAND",
+            "legal_basis": "Section 5(2)",
+            "source_text": "Voidaan vakuuttaa Suomessa"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.claims_handling",
+        "name": "CLM006_BoardRecommendationMandatory",
+        "description": "MANDATORY board recommendation for certain claims (\u00a766)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "claim.type",
+          "injury.severity",
+          "decision.changed"
+        ],
+        "output_variable": "board_request_required",
+        "legal_source": "Section 66",
+        "rules": [
+          {
+            "inputs": [
+              "permanent_loss_earnings",
+              "any",
+              "any"
+            ],
+            "output": "MUST_REQUEST",
+            "legal_basis": "Section 66(1)1",
+            "source_text": "Pyydett\u00e4v\u00e4 MANDATORY"
+          },
+          {
+            "inputs": [
+              "death_benefit",
+              "any",
+              "any"
+            ],
+            "output": "MUST_REQUEST",
+            "legal_basis": "Section 66(1)1",
+            "source_text": "Pyydett\u00e4v\u00e4 MANDATORY"
+          },
+          {
+            "inputs": [
+              "increase_continue_claim",
+              "any",
+              "any"
+            ],
+            "output": "MUST_REQUEST",
+            "legal_basis": "Section 66(1)2",
+            "source_text": "Korotusta MANDATORY"
+          },
+          {
+            "inputs": [
+              "severe_disability",
+              "any",
+              "any"
+            ],
+            "output": "MUST_REQUEST",
+            "legal_basis": "Section 66(1)3",
+            "source_text": "Vaikea vamma MANDATORY"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.claims_handling",
+        "name": "CLM005_DelayedCompensationSeparated",
+        "description": "Delayed compensation - SEPARATED rules (\u00a767)",
+        "hit_policy": "FIRST",
+        "input_variables": [
+          "compensation.type",
+          "delay.reason",
+          "insurer.fault"
+        ],
+        "output_variable": "penalty_rule",
+        "legal_source": "Section 67",
+        "rules": [
+          {
+            "inputs": [
+              "personal_injury",
+              "any",
+              false
+            ],
+            "output": "ENHANCED_INTEREST",
+            "legal_basis": "Section 67(1)",
+            "source_text": "Korotettu korvaus (viiv\u00e4styskorotus)"
+          },
+          {
+            "inputs": [
+              "property_damage",
+              "any",
+              false
+            ],
+            "output": "STANDARD_INTEREST",
+            "legal_basis": "Section 67(1)",
+            "source_text": "Viiv\u00e4styskorko"
+          },
+          {
+            "inputs": [
+              "any",
+              "claimant_fault",
+              true
+            ],
+            "output": "NO_PENALTY",
+            "legal_basis": "Section 67(2)",
+            "source_text": "Ei viiv\u00e4styskorotusta"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.information_rights",
+        "name": "IR84_RightToInformation",
+        "description": "Right to information from insurers (\u00a784)",
+        "hit_policy": "COLLECT",
+        "input_variables": [
+          "information.type",
+          "requester.legitimate_interest"
+        ],
+        "output_variable": "information_provided",
+        "legal_source": "Section 84",
+        "rules": [
+          {
+            "inputs": [
+              "policy_coverage",
+              true
+            ],
+            "output": "MUST_PROVIDE",
+            "legal_basis": "Section 84(1)",
+            "source_text": "Oikeus saada tietoja"
+          },
+          {
+            "inputs": [
+              "claim_status",
+              true
+            ],
+            "output": "MUST_PROVIDE",
+            "legal_basis": "Section 84(2)",
+            "source_text": "Korvausasian tiedot"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.administrative",
+        "name": "AD88_InformationToCentre",
+        "description": "Obligation to provide info to Liikennevakuutuskeskus (\u00a788)",
+        "hit_policy": "COLLECT",
+        "input_variables": [
+          "information.type",
+          "timeliness"
+        ],
+        "output_variable": "obligation_status",
+        "legal_source": "Section 88",
+        "rules": [
+          {
+            "inputs": [
+              "subrogation_info",
+              "required"
+            ],
+            "output": "MUST_PROVIDE",
+            "legal_basis": "Section 88(1)",
+            "source_text": "Takautumisoikeutta varten"
+          },
+          {
+            "inputs": [
+              "statistics",
+              "annual"
+            ],
+            "output": "MUST_PROVIDE",
+            "legal_basis": "Section 88(2)",
+            "source_text": "Tilastotietojenanto"
+          }
+        ]
+      },
+      {
+        "category": "eligibility.insurance_matters",
+        "name": "IM91b_InsolvencyDuties",
+        "description": "Insolvency handling duties (\u00a791b)",
+        "hit_policy": "COLLECT",
+        "input_variables": [
+          "insolvency.type",
+          "action.required"
+        ],
+        "output_variable": "duty_status",
+        "legal_source": "Section 91b",
+        "rules": [
+          {
+            "inputs": [
+              "domestic_insurer",
+              "notify_authorities"
+            ],
+            "output": "MUST_NOTIFY_EEA_BODIES",
+            "legal_basis": "Section 91b(1)",
+            "source_text": "Ilmoitettava muille ETA-valtioille"
+          },
+          {
+            "inputs": [
+              "any_insolvency",
+              "coordinate_claims"
+            ],
+            "output": "MUST_COORDINATE",
+            "legal_basis": "Section 91b(2)",
+            "source_text": "Yhteisty\u00f6velvollisuus"
+          }
+        ]
       }
     ],
     "metadata": {
@@ -6272,7 +6773,7 @@
         "Flowable DMN"
       ],
       "law_reference": "Liikennevakuutuslaki 460/2016",
-      "rules_count": 199,
+      "rules_count": 210,
       "variable_naming_convention": "entity.attribute format (e.g., vehicle.vehicleType, driver.bloodAlcoholLevel)",
       "hierarchy_summary": {
         "eligibility": {
