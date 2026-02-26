@@ -424,12 +424,32 @@ Claim Received
 | ThirdPartyProperty | any | any | **ActualValue** |
 | Clothing | any | any | **ReplacementValue** |
 
-**Maximum Compensation (§38):** €5,000,000 per insurance policy
+#### E8b: Property Damage Maximum Cap (§38)
 
-| totalClaimsAmount | Output |
-|-------------------|--------|
-| <= 5,000,000 EUR | **FullCompensation** |
-| > 5,000,000 EUR | **ProRataDistribution** |
+| totalClaimsAmount | cap | ratio | Output |
+|-------------------|-----|-------|--------|
+| ≤ €5,000,000 | €5,000,000 | ≤ 100% | **FullCompensation** |
+| > €5,000,000 | €5,000,000 | > 100% | **ProRataDistribution** |
+
+**§38:** "Esinevahinkona korvataan enintään 5 000 000 euroa kutakin vahingosta vastuussa olevaa liikennevakuutusta kohden."
+
+#### E8c: Pro-Rata Distribution (§38(2))
+
+| claim.amount | totalClaims | cap | calculation | payout |
+|--------------|-------------|-----|-------------|--------|
+| any | any | €5,000,000 | claim.amount / totalClaims × cap | **proRataAmount** |
+
+**§38(2):** "Jos 1 momentissa tarkoitettu enimmäismäärä ei riitä täyteen korvaukseen, jaetaan maksettava korvaus korvattavien vahinkojen suuruuden osoittamassa suhteessa."
+
+#### E8d: Late Claimant Protection (§38(3))
+
+| claimant.filedLate | claimant.hasRight | payouts.finalized | originalRatio | Output |
+|-------------------|-------------------|------------------|---------------|--------|
+| true | true | false | any | **FullProRataShare_Guaranteed** |
+| true | true | true | ≤ original share | **AdditionalPayment_EvenIfExceedsCap** |
+| false | any | any | any | **StandardProcessing** |
+
+**§38(3):** "Jos korvausvaatimusten tultua ratkaistuiksi osoittautuu, että jollakulla, joka ei ole vielä saanut korvausta, on siihen oikeus, korvataan hänen vahinkonsa siinäkin tapauksessa, että korvauksen enimmäismäärä siten ylittyy. Korvauksen määrä ei kuitenkaan saa tällöin ylittää sitä suhteellista osuutta korvauksista, jonka korvaukseen oikeutettu olisi saanut, jos hän olisi alun perin ollut korvauksensaajien joukossa."
 
 #### E8a: Loss of Use / Vehicle Downtime (§37)
 
@@ -492,15 +512,44 @@ Claim Received
 
 ### 2.5 Time Limits
 
-#### E12: Claim Time Limit (§74)
+#### E12: Claim Filing Time Limit (§61)
 
-| claim.damageType | accident.date | claim.submissionDate | Output |
-|------------------|---------------|----------------------|--------|
-| PersonalInjury | any | any | Within_3_Years_From_Injury |
-| PropertyDamage | any | within_1_year | Within_1_Year_From_Accident |
-| PropertyDamage | any | after_1_year | **ClaimTimeBarred** |
+| claim.knowledgeDate | claim.submissionDate | daysSinceKnowledge | daysSinceDamage | Output |
+|---------------------|---------------------|---------------------|-----------------|--------|
+| known | any | ≤ 1095 (≤3 years) | any | **ValidClaim** |
+| known | any | > 1095 (>3 years) | any | **TimeBarred** |
+| unknown | any | N/A | ≤ 3650 (≤10 years) | **ValidClaim** |
+| unknown | any | N/A | > 3650 (>10 years) | **AbsolutelyTimeBarred** |
 
-#### E13: Insolvency Protection (§77)
+**§61:** "Korvausvaatimus on esitettävä vakuutusyhtiölle kolmen vuoden kuluessa siitä, kun korvauksen hakija on saanut tietää vahinkotapahtumasta ja siitä aiheutuneesta vahinkoseuraamuksesta. Korvausvaatimus on joka tapauksessa esitettävä kymmenen vuoden kuluessa vahinkoseuraamuksen aiheutumisesta."
+
+**Exception:** "Erityisen painava syy" (particularly weighty reason) - claim can be processed after deadline
+
+#### E12b: Claim Deadline (§62)
+
+ Investigation| claim.filingDate | daysElapsed | output.required | Output |
+|------------------|-------------|-----------------|--------|
+| any | ≤ 7 days | Investigation | **InvestigationStarted** |
+| any | ≤ 30 days | Payment | **PaymentDue** |
+| any | ≤ 90 days | ResponseOnDispute | **ResponseDue** |
+| any | > 30 days | Payment | **PaymentOverdue** |
+
+**§62:** "Vakuutusyhtiön on aloitettava korvausasian selvittäminen viipymättä ja viimeistään seitsemän arkipäivän kuluessa vireilletulosta."
+
+#### E12c: Court Action Time Limit (§79)
+
+| decision.receiptDate | court.filingDate | daysSinceDecision | dispute.body | Output |
+|---------------------|------------------|-------------------|--------------|--------|
+| any | ≤ 1095 days (≤3 years) | ≤ 1095 | any | **TimelyFiling** |
+| any | > 1095 days | > 1095 | any | **ClaimTimeBarred** |
+| any | any | any | Vakuutuslautakunta/TrafficDamageBoard | **StatuteOfLimitationsTolled** |
+| any | any | any | ConsumerDisputeBody | **StatuteOfLimitationsTolled** |
+
+**§79:** "Kanne vakuutusyhtiön tekemän korvausta koskevan päätöksen taikka vakuutuksenottajan, vakuutetun, vahinkoa kärsineen tai muun korvaukseen oikeutetun asemaan vaikuttavan muun päätöksen johdosta on oikeuden menettämisen uhalla nostettava vakuutusyhtiötä vastaan kolmen vuoden kuluessa siitä, kun asianosainen on saanut kirjallisen tiedon vakuutusyhtiön päätöksestä ja tästä määräajasta."
+
+**Tolling:** Filing with Vakuutuslautakunta or TrafficDamageBoard tolls the statute of limitations
+
+#### E13: Insolvency Protection (§92)
 
 | insuranceCompany.status | insurance.policyActive | claim.isPending | Output |
 |------------------------|----------------------|-----------------|--------|
