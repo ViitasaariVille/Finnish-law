@@ -58,6 +58,25 @@ Claim Received
 
 ## SECTION 1: NEGATIVE CLAIMS RULES (Check First)
 
+### 0.1 Contract Validity - Mandatory Provisions (§3)
+
+#### VAL-001: Mandatory Nature of Provisions (§3)
+
+| contract.term.deviatesFromLaw | party.affected | term.detrimentalToParty | Output |
+|------------------------------|----------------|------------------------|--------|
+| true | Policyholder | true | **VOID** |
+| true | Insured | true | **VOID** |
+| true | Victim | true | **VOID** |
+| true | EntitledParty | true | **VOID** |
+| false | any | any | **VALID** |
+| true | any | false | **VALID** |
+
+**§3:** "Sopimusehto, joka poikkeaa tämän lain säännöksistä vakuutuksenottajan, vakuutetun, vahinkoa kärsineen tai muun korvaukseen oikeutetun vahingoksi, on mitätön."
+
+**Purpose:** Any contract term that deviates from mandatory provisions to the detriment of protected parties is automatically void.
+
+---
+
 ### 1.1 Full Denial
 
 #### N1: Unauthorized Use (§49)
@@ -255,6 +274,21 @@ Claim Received
 | false | PersonalInjury | **COVERED_GuaranteeFund** |
 | true | any | **COVERED** |
 
+#### N19: Rescue Assistance Coverage (§39)
+
+| person.renderedAid | rescue.professional | damage.type | Output |
+|-------------------|---------------------|-------------|--------|
+| true | false | PersonalInjury | **COVERED** |
+| true | false | PropertyDamage | **COVERED** |
+| true | true | any | **NOT_COVERED** |
+| false | any | any | **N/A** |
+
+**§39:** "Jos joku on liikenneonnettomuuden seurauksena joutunut sellaiseen tilaan, että hänelle on välttämätöntä heti antaa ensiapua tai kuljettaa hänet saamaan hoitoa, liikennevahingosta vastuussa oleva vakuutusyhtiö on velvollinen korvaamaan vahinkoa kärsinyttä auttaneelle henkilölle auttamisesta aiheutuneen välittömän henkilö- ja esinevahingon."
+
+**Exception:** "Vahinkoja, jotka ovat aiheutuneet pelastustointa ammattimaisesti hoitavalle henkilölle tai tähän toimintaan liittyvälle omaisuudelle, ei kuitenkaan korvata."
+
+---
+
 #### N17: Third Party Victim (§48)
 
 **Third parties are protected from alcohol-based reductions (§48):**
@@ -276,6 +310,38 @@ Claim Received
 ## SECTION 2: ELIGIBILITY RULES (Check After Negative Claims)
 
 ### 2.1 Coverage Determination
+
+### 0.2 Border Traffic Insurance (§7)
+
+#### BORDER-001: Third-Country Vehicle Border Insurance (§7)
+
+| vehicle.homeCountry | greenCard.valid | lvk.commitment | accident.location | Output |
+|--------------------|-----------------|----------------|-------------------|--------|
+| ThirdCountry | false | false | Finland | **InsuranceRequired_BorderTraffic** |
+| ThirdCountry | false | false | Sweden | **InsuranceRequired_BorderTraffic** |
+| ThirdCountry | false | false | Norway | **InsuranceRequired_BorderTraffic** |
+| ThirdCountry | false | false | any | **InsuranceNotRequired** |
+| ThirdCountry | true | any | any | **Covered_ByGreenCard** |
+| ThirdCountry | any | true | any | **Covered_ByLVK** |
+| EEA | N/A | N/A | any | **Covered_ByEEA** |
+| Finland | N/A | N/A | any | **DomesticRules** |
+
+**BORDER-002: Driver Injury Coverage Limitation (§7(3))**
+
+| vehicle.homeCountry | accident.location | damage.type | Output |
+|--------------------|-------------------|-------------|--------|
+| ThirdCountry | Finland | PersonalInjury_Driver | **COVERED** |
+| ThirdCountry | Sweden | PersonalInjury_Driver | **COVERED** |
+| ThirdCountry | Norway | PersonalInjury_Driver | **COVERED** |
+| ThirdCountry | any | PersonalInjury_Driver | **NOT_COVERED** |
+| ThirdCountry | any | PropertyDamage | **COVERED** |
+| ThirdCountry | any | PersonalInjury_Passenger | **COVERED** |
+
+**§7:** "Sen, joka tuo Suomeen tilapäistä käyttöä varten ajoneuvon, jonka pysyvä kotipaikka on kolmannessa maassa, tulee ottaa tälle ajoneuvolle rajaliikennevakuutus."
+
+**§7(3):** "Ajoneuvon rajaliikennevakuutuksesta korvataan tämän ajoneuvon kuljettajalle aiheutunut henkilövahinko vain, jos vahinkotapahtuma on sattunut Suomessa, Ruotsissa tai Norjassa."
+
+---
 
 #### E1: Vehicle Insurance Requirement (§5)
 
@@ -670,6 +736,35 @@ insurerShare = (insurerPremiumIncome / totalPremiumIncome) × amountOverThreshol
 
 **§79(3) 1-Year Safety Net:** If proceedings end prematurely, deadline extends to min 1 year from end date.
 **§79(4) One-Time Limit:** This extension can only be used once.
+
+---
+
+### 0.3 Policy Termination (§16)
+
+#### TERM-001: Policyholder Termination Rights (§16(1))
+
+| termination.reason | newInsurance.exists | theft.reported | Output |
+|-------------------|---------------------|----------------|--------|
+| NewInsurance | true | N/A | **TerminationAllowed** |
+| Theft | N/A | true | **TerminationAllowed** |
+| any | false | false | **TerminationDenied** |
+
+**§16(1):** "Vakuutuksenottajalla, jonka vakuuttamisvelvollisuus ei ole päättynyt, on oikeus irtisanoa rekisteröidyn ajoneuvon vakuutus ainoastaan silloin, kun vakuutuksenottaja on ottanut vakuutuksen toisesta vakuutusyhtiöstä tai ajoneuvo on anastettu ja siitä on tehty ilmoitus poliisille ja vakuutusyhtiölle."
+
+#### TERM-002: Automatic Termination Events (§16(2))
+
+| termination.event | Output |
+|-------------------|--------|
+| PermanentRemoval | **Terminates_Immediate** |
+| OwnershipTransfer | **Terminates_Immediate** |
+| HolderReturnsToOwner | **Terminates_Immediate** |
+| NewInsuranceTaken | **Terminates_Immediate** |
+
+**§16(2):** "Vakuutuksen voimassaolo päättyy ilmoituksessa mainittuna päivänä" when:
+1) ajoneuvo on poistettu lopullisesti liikennekäytöstä
+2) ajoneuvo on siirtynyt oikeustoimen johdosta muulle uudelle omistajalle tai haltijalle
+3) ajoneuvon hallinta palautuu omistajalle tai hallinta siirtyy uudelle haltijalle
+4) vakuutus on otettu toisesta vakuutusyhtiöstä
 
 ---
 
