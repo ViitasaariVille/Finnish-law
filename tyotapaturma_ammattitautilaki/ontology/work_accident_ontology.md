@@ -939,6 +939,20 @@
 - **Description**: Causal connection between work accident/occupational disease and the damage/injury
 - **Legal Basis**: §16, §19, §30
 - **Attributes**:
+  - **causationType** (§16): enum [direct_causation, substantial_contribution, aggravation, acceleration]
+    - direct_causation: Suora syy-yhteys
+    - substantial_contribution: Olennainen myötävaikuttaminen
+    - aggravation: Taudin paheneminen
+    - acceleration: Taudin puhkeaminen
+  - **causationStrength** (§16): enum [probable, possible, unlikely, no_connection]
+    - probable: Todennäköinen
+    - possible: Mahdollinen
+    - unlikely: Epätodennäköinen
+    - no_connection: Ei syy-yhteyttä
+  - **burdenOfProof** (§16): enum [balance_of_probabilities, reasonable_certainty, medical_consensus]
+  - **temporalConnection** (boolean): §16 - injury occurred during work time or work-related activity
+  - **spatialConnection** (boolean): §16 - injury occurred at workplace or work-mandated location
+  - **medicalEvidenceLevel** (enum): [conclusive, supportive, suggestive, insufficient]
   - connectionType: enum [direct_cause, contributing_cause, aggravation]
   - medicalFindings (string): §16 - lääketieteelliset löydökset ja havainnot
   - causationMechanism (string): §16 - vahingon sattumistapa (how injury occurred)
@@ -1176,6 +1190,18 @@
 - **Legal Basis**: §242-243
 - **Attributes**: decisionDate, decisionType, reasoning, appealInstructions
 - **decisionType values**: upheld, reversed, remanded, dismissed
+
+### DistributionSystem (Jakojärjestelmä)
+- **Legal Basis**: §231
+- **Description**: System for sharing costs among insurance institutions when multiple insurers are involved or costs need redistribution based on collective risk
+- **Attributes**:
+  - **distributionType** (enum): [proportional, risk_based, claim_specific, periodic_balancing]
+  - **participatingInsurers**: array of references to InsuranceCompany
+  - **costPool**: MonetaryAmount - shared pool of costs to distribute
+  - **distributionKey**: object - method for allocating costs
+  - **settlementPeriod**: period - time period for settlement
+  - **distributionAmount**: MonetaryAmount - total amount to be distributed
+  - **settlementDate**: date - when settlement is finalized
 
 ### SelfCorrection (Oma muutos)
 - **Description**: Insurance company's right to self-correct decisions
