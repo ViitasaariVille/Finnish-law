@@ -268,6 +268,42 @@
       "rdfs:subClassOf": {
         "@id": "liikenne:Compensation"
       }
+    },
+    {
+      "@id": "liikenne:AccidentDay",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Day of accident",
+      "rdfs:label@fi": "Vahinkopäivä"
+    },
+    {
+      "@id": "liikenne:Student",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Student",
+      "rdfs:label@fi": "Opiskelija",
+      "rdfs:subClassOf": {
+        "@id": "liikenne:Person"
+      }
+    },
+    {
+      "@id": "liikenne:Guardian",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Guardian",
+      "rdfs:label@fi": "Edunvalvoja",
+      "rdfs:subClassOf": {
+        "@id": "liikenne:Person"
+      }
+    },
+    {
+      "@id": "liikenne:CompensationStatusChange",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Compensation status change",
+      "rdfs:label@fi": "Korvausasian muutos"
+    },
+    {
+      "@id": "liikenne:SurvivorPensionAdjustment",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Survivor pension adjustment",
+      "rdfs:label@fi": "Leskeneläkeoikaisu"
     }
   ]
 }
