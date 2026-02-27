@@ -48,6 +48,11 @@
   - otherEntrepreneurWork (muu yrittäjätyö) - §111.2.5
   - witnesses (todistajat) - §111.2.3
   - employerNotification (työnantajan ilmoitus) - reference to EmployerNotification
+  - **Pension Status** (per §56.4, §60, §73-74):
+    - receivesOldAgePension (boolean) - receiving old-age pension at time of accident (§56.4, §60, §73)
+    - receivesDisabilityPension (boolean) - receiving disability pension at time of accident (§56.4, §74)
+    - pensionStartDate (date) - when pension started (§56.4, §74)
+    - pensionType (enum) - [old_age, disability, partial_disability, survivor]
 
 ### Beneficiary (Edunsaaja)
 - **Description**: Person entitled to family pension (perhe-eläke) after death - legal term per §99-109
@@ -561,6 +566,24 @@
   - **Waiting Days**: 3
   - **Application**: Applies from accident day onwards; compensation starts from day 4 of incapacity
 - **NegligenceReduction (Myötävaikutus vähennys)**: §61
+  - **negligenceType values**: alcohol_drugs, medication_misuse, safety_violation, gross_negligence, criminal_conduct
+  - **reductionPercentage**: max 50% per §61
+  - **isReductionApplied**: boolean
+
+### NegligenceReduction (Myötävaikutus)
+- **Legal Basis**: §61
+- **Description**: Reduction of daily allowance due to injured party's own contribution to the accident
+- **Attributes**:
+  - **negligenceType**: enum [alcohol_drugs, medication_misuse, safety_violation, gross_negligence, criminal_conduct]
+    - **alcohol_drugs** (§61.1): Being under influence of alcohol or drugs
+    - **medication_misuse** (§61.1): Medication misuse
+    - **safety_violation** (§61.2): Intentional or grossly negligent violation of work safety regulations
+    - **gross_negligence** (§61.3): Gross negligence
+    - **criminal_conduct** (§61.3): Criminal conduct
+  - **reductionPercentage**: number - max 50% per §61
+  - **isReductionApplied**: boolean
+  - **severity**: enum [minor, moderate, severe] - affects reduction amount
+  - **evidenceRequired**: documentation of negligence
 
 ### WaitingPeriod (Odotusaika)
 - **Legal Basis**: §56.3
@@ -575,9 +598,6 @@
 - **Related Entities**:
   - DailyAllowance: hasWaitingPeriod relationship
   - Injury: affects workCapacityDuringWaitingPeriod
-  - **negligenceType values**: alcohol_drugs, safety_violation, gross_negligence, criminal
-  - **reductionPercentage**: max 50% per §61
-  - **isReductionApplied**: boolean
 - **Relation to MedicalCertificate**: Requires medical certification of incapacity
 
 ### DisabilityPension
