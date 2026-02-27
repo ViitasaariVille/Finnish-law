@@ -262,7 +262,7 @@
     - **householdTasks**: enum array [cleaning, laundry, shopping, childcare]
     - **maxDurationDays**: 365 (1 year from accident)
   - **PropertyDamageApplication** (§54):
-    - **itemTypes**: enum array [glasses, hearing_aid, dental_prosthesis, support, prosthetic, clothing, ring]
+    - **itemTypes**: enum array [glasses, hearing_aid, dental_prosthesis, support, prosthetic, clothing, ring, artificial_limb, artificial_joint, artificial_organ, support_binder, support_vest, corset]
 
 ### Notification (Ilmoitus)
 - **Description**: Formal notification of accident
@@ -437,6 +437,20 @@
   - **Waiting Days**: 3
   - **Application**: Applies from accident day onwards; compensation starts from day 4 of incapacity
 - **NegligenceReduction (Myötävaikutus vähennys)**: §61
+
+### WaitingPeriod (Odotusaika)
+- **Legal Basis**: §56.3
+- **Description**: Mandatory waiting period before daily allowance payments begin. Daily allowance is not paid for the first 3 consecutive days of incapacity (excluding the accident day).
+- **Attributes**:
+  - **waitingDays**: number - fixed at 3 per §56.3
+  - **waitingPeriodStart**: date - when waiting period begins (accident day)
+  - **paymentStartDate**: date - day 4, when payments begin
+  - **isSatisfied**: boolean - whether 3 consecutive days of incapacity occurred
+  - **consecutiveDaysRequired**: number - always 3 per law
+  - **excludesAccidentDay**: boolean - waiting period starts from day after accident
+- **Related Entities**:
+  - DailyAllowance: hasWaitingPeriod relationship
+  - Injury: affects workCapacityDuringWaitingPeriod
   - **negligenceType values**: alcohol_drugs, safety_violation, gross_negligence, criminal
   - **reductionPercentage**: max 50% per §61
   - **isReductionApplied**: boolean
