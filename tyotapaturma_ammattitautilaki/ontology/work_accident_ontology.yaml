@@ -616,33 +616,3 @@ relationships:
   type: handles_appeals_from
   legal_basis: §237
   note: ''
-enums:
-  pensionStatus:
-  - none
-  - old_age_pension
-  - early_old_age_pension
-  - partial_disability_pension
-  - disability_pension
-  - survivor_pension
-  - unemployment_pension
-  - farmers_pension
-  workLocationType:
-  - at_work
-  - workplace_area
-  - outside_workplace
-  - special_circumstances
-  - at_home
-  - undefined_location
-  decisionType:
-  - grant
-  - deny
-  - partial
-  providerType:
-  - public
-  - private
-  - occupational_health
-  exemptionReason:
-  - none
-  - below_threshhold_1200
-  - state_employer
-  - other_statutory_exemption
