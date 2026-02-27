@@ -12,7 +12,7 @@
       "@type": "owl:Ontology",
       "rdfs:label": "Finnish Car Insurance Ontology",
       "rdfs:comment": "RDF representation of the Finnish Traffic Insurance Act (Liikennevakuutuslaki 460/2016)",
-      "owl:versionInfo": "1.0"
+      "owl:versionInfo": "1.1"
     },
     {
       "@id": "liikenne:Vehicle",
@@ -421,6 +421,156 @@
       "@type": "rdfs:Class",
       "rdfs:label": "Negligence type enumeration",
       "rdfs:label@fi": "Huolimattomuustyyppilista"
+    },
+    {
+      "@id": "liikenne:CrossBorderWork",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Cross-border work activity",
+      "rdfs:label@fi": "Rajat ylittävä työ",
+      "rdfs:comment": "Work performed in another EU/EEA country under EU coordination rules (§13-14, §46-47)",
+      "rdfs:subClassOf": {
+        "@id": "liikenne:Person"
+      }
+    },
+    {
+      "@id": "liikenne:EUCoordination",
+      "@type": "rdfs:Class",
+      "rdfs:label": "EU social security coordination",
+      "rdfs:label@fi": "EU-koordinaatio",
+      "rdfs:comment": "EU coordination of social security benefits under Regulation (EC) No 883/2004 (§13-14, §46-47)",
+      "rdfs:subClassOf": {
+        "@id": "liikenne:LegalEntity"
+      }
+    },
+    {
+      "@id": "liikenne:IncomeOffset",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Income offset for survivor's pension means testing",
+      "rdfs:label@fi": "Tulopoistuma leskeneläkkeen huomioimisessa",
+      "rdfs:comment": "Income considered in widow's pension means testing under §107",
+      "rdfs:subClassOf": {
+        "@id": "liikenne:Compensation"
+      }
+    },
+    {
+      "@id": "liikenne:CompensationReview",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Compensation review for changed circumstances",
+      "rdfs:label@fi": "Korvauksen tarkistaminen olosuhteiden muuttuessa",
+      "rdfs:comment": "Review of compensation when injured party's circumstances change (§137, §245)",
+      "rdfs:subClassOf": {
+        "@id": "liikenne:CompensationStatusChange"
+      }
+    },
+    {
+      "@id": "liikenne:IndexAdjustment",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Annual index adjustment of compensation",
+      "rdfs:label@fi": "Korvauksen vuotuinen indeksitarkistus",
+      "rdfs:comment": "Annual adjustment of compensation amounts based on index (§268-269)",
+      "rdfs:subClassOf": {
+        "@id": "liikenne:Compensation"
+      }
+    },
+    {
+      "@id": "liikenne:KorvauslautakunnanLausunto",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Compensation Board Opinion",
+      "rdfs:label@fi": "Korvauslautakunnan lausunto",
+      "rdfs:comment": "Opinion from the Compensation Board regarding claims (§123)",
+      "rdfs:subClassOf": {
+        "@id": "liikenne:Claim"
+      }
+    },
+    {
+      "@id": "liikenne:Laiminlyöntimaksu",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Negligence fine",
+      "rdfs:label@fi": "Laiminlyöntimaksu",
+      "rdfs:comment": "Fine for failure to take out mandatory insurance (§182-183)",
+      "rdfs:subClassOf": {
+        "@id": "liikenne:Compensation"
+      }
+    },
+    {
+      "@id": "liikenne:Yhteistakuumaksu",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Joint guarantee premium",
+      "rdfs:label@fi": "Yhteistakuumaksu",
+      "rdfs:comment": "Joint guarantee premium for motor liability insurance (§230)",
+      "rdfs:subClassOf": {
+        "@id": "liikenne:Compensation"
+      }
+    },
+    {
+      "@id": "liikenne:Lisävakuutusmaksu",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Additional insurance premium",
+      "rdfs:label@fi": "Lisävakuutusmaksu",
+      "rdfs:comment": "Additional premium for supplementary insurance coverage (§229)",
+      "rdfs:subClassOf": {
+        "@id": "liikenne:Compensation"
+      }
+    },
+    {
+      "@id": "liikenne:VakuutusmaksuaVastaavaMaksu",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Insurance premium equivalent payment",
+      "rdfs:label@fi": "Vakuutusmaksua vastaava maksu",
+      "rdfs:comment": "Payment equivalent to insurance premium (§181)",
+      "rdfs:subClassOf": {
+        "@id": "liikenne:Compensation"
+      }
+    },
+    {
+      "@id": "liikenne:Työsuojelurahasto",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Occupational Safety Fund",
+      "rdfs:label@fi": "Työsuojelurahasto",
+      "rdfs:comment": "Finnish Occupational Safety Fund institution (§233)",
+      "rdfs:subClassOf": {
+        "@id": "liikenne:LegalEntity"
+      }
+    },
+    {
+      "@id": "liikenne:Työsuojelumaksu",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Occupational safety fee",
+      "rdfs:label@fi": "Työsuojelumaksu",
+      "rdfs:comment": "Fee payable to Occupational Safety Fund (§233)",
+      "rdfs:subClassOf": {
+        "@id": "liikenne:Compensation"
+      }
+    },
+    {
+      "@id": "liikenne:InterimPayment",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Interim payment",
+      "rdfs:label@fi": "Ennakkomaksu",
+      "rdfs:comment": "Interim/advance payment of compensation (§138)",
+      "rdfs:subClassOf": {
+        "@id": "liikenne:Compensation"
+      }
+    },
+    {
+      "@id": "liikenne:CircumventionDetermination",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Circumvention determination",
+      "rdfs:label@fi": "Kiertämisen toteamus",
+      "rdfs:comment": "Determination of insurance circumvention (§186)",
+      "rdfs:subClassOf": {
+        "@id": "liikenne:Claim"
+      }
+    },
+    {
+      "@id": "liikenne:CompensationRightLoss",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Loss of compensation right",
+      "rdfs:label@fi": "Korvausoikeuden menetys",
+      "rdfs:comment": "Loss or forfeiture of compensation right (§185)",
+      "rdfs:subClassOf": {
+        "@id": "liikenne:Compensation"
+      }
     }
   ]
 }
