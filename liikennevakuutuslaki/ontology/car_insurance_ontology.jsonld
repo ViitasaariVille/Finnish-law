@@ -304,6 +304,123 @@
       "@type": "rdfs:Class",
       "rdfs:label": "Survivor pension adjustment",
       "rdfs:label@fi": "Leskeneläkeoikaisu"
+    },
+    {
+      "@id": "liikenne:Court",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Court",
+      "rdfs:label@fi": "Tuomioistuin"
+    },
+    {
+      "@id": "liikenne:DistrictCourt",
+      "@type": "rdfs:Class",
+      "rdfs:label": "District court",
+      "rdfs:label@fi": "Käräjäoikeus",
+      "rdfs:subClassOf": {
+        "@id": "liikenne:Court"
+      }
+    },
+    {
+      "@id": "liikenne:AppealCourt",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Court of appeal",
+      "rdfs:label@fi": "Hovioikeus",
+      "rdfs:subClassOf": {
+        "@id": "liikenne:Court"
+      }
+    },
+    {
+      "@id": "liikenne:SupremeCourt",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Supreme court",
+      "rdfs:label@fi": "Korkein oikeus",
+      "rdfs:subClassOf": {
+        "@id": "liikenne:Court"
+      }
+    },
+    {
+      "@id": "liikenne:AppealProcess",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Appeal process",
+      "rdfs:label@fi": "Muutoksenhaku"
+    },
+    {
+      "@id": "liikenne:StateTreasury",
+      "@type": "rdfs:Class",
+      "rdfs:label": "State Treasury",
+      "rdfs:label@fi": "Valtiokonttori",
+      "rdfs:subClassOf": {
+        "@id": "liikenne:LegalEntity"
+      }
+    },
+    {
+      "@id": "liikenne:Employer",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Employer",
+      "rdfs:label@fi": "Työnantaja",
+      "rdfs:subClassOf": {
+        "@id": "liikenne:LegalEntity"
+      }
+    },
+    {
+      "@id": "liikenne:accidentType",
+      "@type": "rdf:Property",
+      "rdfs:label": "Accident type",
+      "rdfs:label@fi": "Onnettomuustyyppi",
+      "rdfs:domain": {
+        "@id": "liikenne:TrafficAccident"
+      },
+      "rdfs:range": {
+        "@id": "rdfs:Literal"
+      }
+    },
+    {
+      "@id": "liikenne:negligenceType",
+      "@type": "rdf:Property",
+      "rdfs:label": "Negligence type",
+      "rdfs:label@fi": "Huolimattomuustyyppi",
+      "rdfs:domain": {
+        "@id": "liikenne:InsuranceEvent"
+      },
+      "rdfs:range": {
+        "@id": "rdfs:Literal"
+      }
+    },
+    {
+      "@id": "liikenne:pensionStatus",
+      "@type": "rdf:Property",
+      "rdfs:label": "Pension status",
+      "rdfs:label@fi": "Eläkestatus",
+      "rdfs:domain": {
+        "@id": "liikenne:InjuredParty"
+      },
+      "rdfs:range": {
+        "@id": "rdfs:Literal"
+      }
+    },
+    {
+      "@id": "liikenne:employerExemptionStatus",
+      "@type": "rdf:Property",
+      "rdfs:label": "Employer exemption status",
+      "rdfs:label@fi": "Työnantajan vapautusstatus",
+      "rdfs:domain": {
+        "@id": "liikenne:Employer"
+      },
+      "rdfs:range": {
+        "@id": "rdfs:Literal"
+      }
+    },
+    {
+      "@id": "liikenne:AccidentTypeEnum",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Accident type enumeration",
+      "rdfs:label@fi": "Onnettomuustyyppilista"
+    },
+    {
+      "@id": "liikenne:NegligenceTypeEnum",
+      "@type": "rdfs:Class",
+      "rdfs:label": "Negligence type enumeration",
+      "rdfs:label@fi": "Huolimattomuustyyppilista"
     }
   ]
 }
