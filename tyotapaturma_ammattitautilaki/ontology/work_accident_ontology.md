@@ -541,6 +541,10 @@
   - **diagnosisDeadline**: date - PTSD/personality change requires diagnosis within 6 months of event
   - **causationRequirement**: incident must be sudden, unexpected, at work or commuting
   - **workConnection**: boolean - must be causally connected to work duties
+  - **directInvolvement** (boolean): direct involvement in event per §35.4
+  - **factualConnectionToWork** (boolean): tight factual connection to work per §35.4
+  - **activityTypeAtIncident** (enum): work_activity, commute_activity, recreational_activity, training_activity
+  - **isIntentionalThirdPartyDamage** (boolean): exception to exclusions per §35.5
 - **Subclasses**:
   - **AcuteStressReaction** (Akuutti stressireaktio): immediate reaction, short duration
   - **PTSD** (Traumaperäinen stressihäiriö): requires diagnosis within 6 months per §35
@@ -580,12 +584,16 @@
 - **Maximum Duration**: 1 year from accident date
 
 ### WaitingPeriod (Odotusaika)
-- **Description**: Waiting period before daily allowance becomes payable
+- **Description**: Waiting period before daily allowance becomes payable - structured entity for §56.3 rules
 - **Legal Basis**: §56.3
 - **Attributes**:
   - **waitingDays**: integer - fixed at 3 per §56.3
-  - **waitingPeriodStart**: date - when the waiting period begins (accident date or first day of incapacity)
-  - **paymentStartDate**: date - date when payments begin after waiting period is satisfied
+  - **waitingPeriodStartDate**: date - when the waiting period begins (accident day or first day of incapacity)
+  - **waitingPeriodEndDate**: date - day 3 of incapacity when waiting period completes
+  - **paymentStartDate**: date - date when payments begin after waiting period is satisfied (day 4)
+  - **isConsecutiveDaysRequirementMet**: boolean - whether 3 consecutive days of incapacity requirement is met
+  - **excludesAccidentDay**: boolean - true per §56.3 (accident day excluded from waiting period)
+  - **relatedDailyAllowance**: reference to DailyAllowance - the daily allowance this waiting period applies to
   - **isSatisfied**: boolean - whether the waiting period has been completed
   - **consecutiveDaysRequired**: integer - must be 3 consecutive days of incapacity
 - **Note**: Daily allowance is not paid for first 3 consecutive days of incapacity (excluding accident day)
@@ -787,6 +795,23 @@
 - **Attributes**: classificationDate, evaluator, classificationLevel
 - **classificationLevels**: 1-20 (Haittaluokka)
 - **Legal Basis**: §83-87
+
+### DisabilityCombination (Haittaluokkien yhdistäminen)
+- **Description**: Rules for combining multiple disability classes per §84 - formula for calculating combined disability when person has multiple disabilities
+- **Legal Basis**: §84
+- **Formula**: K = A + B - (A×B)/20 where A and B are individual disability class percentages
+- **Attributes**:
+  - **formula**: string - "A + B - (A×B)/20" per §84.4
+  - **disabilityA**: integer - first disability class (1-20)
+  - **disabilityB**: integer - second disability class (1-20)
+  - **combinedDisability**: integer - calculated combined disability class using formula
+  - **isPairOrgan**: boolean - exemption from formula per §84.5 for paired organs (eyes, ears, kidneys, limbs)
+  - **isCombinedVisionHearing**: boolean - exemption from formula per §84.5 for combined vision and hearing disabilities
+  - **exemptionReason**: enum [none, pair_organ, vision_hearing_combined] - reason if formula doesn't apply
+- **Exemptions per §84.5**:
+  - Paired organs (silmät, korvat, munuaiset, raajat): disabilities combined additively, not using formula
+  - Combined vision and hearing: disabilities combined additively, not using formula
+- **Related Entities**: PermanentDamageCompensation (§83-87), DisabilityClassification
 
 ### WorkCapacity (Työkyky)
 - **Description**: Work capacity assessment
