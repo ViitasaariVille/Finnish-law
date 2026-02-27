@@ -260,6 +260,49 @@
 - **Description**: Voluntary insurance for leisure time accidents
 - **Legal Basis**: Sections 199-203
 
+### EntrepreneurWorkTimeInsurance (Yrittäjän työajan vakuutus)
+- **Description**: Voluntary insurance for entrepreneurs covering work hours per §191-194
+- **Legal Basis**: §191-194
+- **Attributes**:
+  - policyHolder: reference to Entrepreneur
+  - yelInsuranceRequired: boolean - requires YEL insurance per §191
+  - coveragePeriod: period
+  - premiumCalculation: enum [flat_rate, income_based, risk_based]
+  - coveredActivities: enum array [self_employment, contracted_work, business_travel]
+  - workInjuryCoverage: boolean - covers work accidents during self-employment
+  - waitingPeriod: integer - days before coverage starts
+  - maximumDailyAllowance: MonetaryAmount
+  - maximumPeriod: integer - months of coverage
+- **Eligibility** (§191): Entrepreneur with YEL insurance can voluntarily insure work accidents
+
+### EntrepreneurFreeTimeInsurance (Yrittäjän vapaa-ajan vakuutus)
+- **Description**: Voluntary insurance for entrepreneurs covering leisure time accidents per §195-198
+- **Legal Basis**: §195-198
+- **Attributes**:
+  - policyHolder: reference to Entrepreneur
+  - yelInsuranceRequired: boolean - requires YEL insurance
+  - coverageScope: enum [finland, eu, worldwide_limited]
+  - premiumRate: number
+  - accidentCoverage: boolean - covers leisure accidents
+  - diseaseCoverage: boolean - covers occupational diseases
+  - maximumCompensation: MonetaryAmount
+  - deductible: MonetaryAmount
+- **Note**: Separate from work time insurance; covers non-work injuries
+
+### EntrepreneurInsuranceApplication (Yrittäjän vakuutushakemus)
+- **Description**: Application for entrepreneur voluntary insurance per §192, §196
+- **Legal Basis**: §192, §196
+- **Attributes**:
+  - applicationDate: date
+  - entrepreneur: reference to Entrepreneur
+  - yelInsuranceReference: reference to YELInsurance
+  - insuranceType: enum [work_time, free_time, combined]
+  - coverageRequested: string
+  - medicalInformation: string - health information per §192.2
+  - premiumOffer: MonetaryAmount
+  - acceptanceDeadline: date
+- **Requirements** (§192): Must include health information; insurer may require medical examination
+
 ### InsuranceDuration (Vakuutuksen kesto)
 - **Description**: Duration of insurance coverage period
 - **Attributes**: durationType, renewalTerms, terminationConditions
@@ -387,6 +430,43 @@
   - consequences: enum array [compensation_right_loss, employer_liability, criminal_referral]
 - **Authority**: Tapaturmavakuutuskeskus or insurance company makes determination
 - **Relation**: CircumventionDetermination → triggers → CompensationRightLoss or employer liability
+
+### BankruptcyInsuranceTermination (Vakuutuksen päättyminen konkurssissa)
+- **Description**: Insurance termination due to employer bankruptcy per §163
+- **Legal Basis**: §163
+- **Attributes**:
+  - terminationTrigger: enum [bankruptcy_filing, bankruptcy_decision]
+  - effectiveDate: date - insurance ends from bankruptcy filing date
+  - employer: reference to Employer
+  - bankruptcyEstate: reference to BankruptcyEstate
+  - policyTerminationDate: date
+  - continuationRequired: boolean - whether new insurance needed
+- **Effect**: Insurance ends when employer is declared bankrupt
+
+### BankruptcyEstateInsurance (Konkurssipesän vakuuttamisvelvollisuus)
+- **Description**: Bankruptcy estate's obligation to obtain insurance for continued work per §164
+- **Legal Basis**: §164
+- **Attributes**:
+  - estate: reference to BankruptcyEstate
+  - newInsuranceRequired: boolean - §164 requires new insurance if work continues
+  - newInsuranceDeadline: date - deadline to obtain insurance
+  - insuranceType: enum [mandatory_new, continuation]
+  - workContinuationPeriod: period - period work continues under estate
+  - complianceStatus: enum [compliant, non_compliant, pending]
+- **Condition**: If work continues for bankruptcy estate, estate must obtain new mandatory insurance
+
+### InsurerInsolvencyEffect (Vakuutusyhtiön konkurssin vaikutus)
+- **Description**: Effect of insurance company insolvency on employer insurance per §165
+- **Legal Basis**: §165
+- **Attributes**:
+  - insolvencyEventDate: date
+  - affectedEmployer: reference to Employer
+  - originalInsuranceCompany: reference to InsuranceCompany (insolvent)
+  - newInsuranceRequired: boolean
+  - notificationToEmployer: boolean
+  - coverageGapPeriod: period - any gap in coverage
+  - claimsHandling: string - how existing claims handled
+- **Effect**: Employer must obtain new insurance; existing claims may be transferred
 
 ### InsuranceTransfer (Vakuutuksen siirto)
 - **Description**: Transfer of insurance policy from one insurance company to another
@@ -1139,6 +1219,31 @@
 - **Legal Basis**: §178
 - **Attributes**: employerName, businessId, insuranceCompany, policyStartDate, policyEndDate, registrationDate
 - **Purpose**: Monitor insurance compliance, combat gray economy
+
+### SupervisionAuthority (Valvontaviranomainen)
+- **Description**: Authority responsible for supervising insurance compliance per §177-180
+- **Legal Basis**: §177-180
+- **Attributes**:
+  - authorityName: string
+  - authorityType: enum [state_treasury, accident_insurance_centre, financial_authority]
+  - supervisionPowers: enum array [inspection, fine, license_revocation, information_request]
+  - regionalJurisdiction: string
+  - annualReportingDuty: boolean - §179 requires annual reports
+- **Key Authorities**:
+  - **Tapaturmavakuutuskeskus** (Accident Insurance Centre) - §177-180: Main supervisory body for insurance compliance
+  - **Valtiokonttori** (State Treasury) - §207: Handles state employer compensation
+  - **Finanssivalvonta** (Financial Supervisory Authority) - Insurance company oversight
+
+### InsuranceRegisterMaintenance (Vakuutusrekisterin ylläpito)
+- **Description**: Maintenance and use of insurance register per §178
+- **Legal Basis**: §178
+- **Attributes**:
+  - registerUpdatedBy: reference to SupervisionAuthority
+  - updateFrequency: enum [daily, weekly, monthly]
+  - dataSources: enum array [employer_notification, insurer_report, tax_authority]
+  - employerComplianceCheck: boolean - automatic check for insurance obligation
+  - missingInsuranceAlerts: boolean - automatic alerts for uninsured employers
+- **Data Use** (§178): Register data used to monitor insurance compliance and combat uninsurance
 
 ### DelayInterest (Viivästyskorko)
 - **Description**: Interest charged for delayed payments
