@@ -118,7 +118,10 @@
   - workStartDate (työn alkamisaika) - §159.1
   - ownershipStructure (omistussuhteet) - §159.1
 - **exemptionType values**: none, below-threshold-1200, state-employer
-- **Legal Basis**: §3.2 (exemption when annual payroll <= €1,200), §3.3 (state employer exemption)
+- **Legal Basis**: 
+  - §3.2: Exemption when annual payroll ≤ €1,200
+  - §3.3: State employer exemption - compensation paid by StateTreasury (Valtiokonttori) per §207
+- **Note**: When exemptionType = state-employer, compensation is paid by StateTreasury (Valtiokonttori), not an insurance company
 
 ### Vakuutuksenottaja (PolicyHolder)
 - **Description**: Entity that takes out insurance policy (can be different from Employer)
@@ -756,7 +759,25 @@
 - **Description**: The damage event - the occurrence that causes damage/injury. This is the triggering event for insurance compensation.
 - **Attributes**:
   - **eventId**: unique identifier
-  - **eventType** (tapahtuman laatu): enum [occupational_accident, occupational_disease, commuting_accident, work_related_activity]
+  - **eventType** (tapahtuman laatu): enum [
+    occupational_accident,
+    occupational_disease,
+    commuting_accident,
+    work_related_activity,
+    work_motion_strain,        # §33: Acute muscle/tendon strain from single work movement
+    violence_damage,            # §34: Damage from assault related to work duties
+    psychological_shock         # §35: Acute stress reaction, PTSD, personality change
+    ]
+  - **specialConditionType** (§18): enum [
+    friction_blister,           # §18.1: Skin blister from friction
+    corrosive_injury,           # §18.2: Contact with corrosive substance
+    gas_vapor_inhalation,       # §18.3: Inhaling gas, vapor, or fumes
+    temperature_injury,         # §18.4: Cold/heat injury, hypothermia, burns
+    radiation_injury,           # §18.5: Radiation-induced injury
+    pressure_variation_injury   # §18.6: Significant pressure variation injury
+    ]
+  - **psychologicalShockSubtype** (§35): enum [acute_stress_reaction, ptsd, personality_change]
+  - **eventSubType**: enum [single_movement, cumulative_trauma] - distinguishes §33 from repetitive strain
   - **eventDate** (tapahtumapäivä): date - when the event occurred
   - **eventTime** (tapahtuma-aika): time
   - **eventLocation** (tapahtumapaikka): string - where the event occurred
@@ -855,8 +876,16 @@
 - Authorized to provide insurance
 
 ### StateTreasury (Valtiokonttori)
-- **Legal Basis**: Section 207
-- Pays compensation for state employees
+- **Legal Basis**: §3.3, §207
+- **Description**: Pays compensation for state employees when the State is the employer (state employees exempt from mandatory insurance per §3.3)
+- **Attributes**:
+  - institutionName: "Valtiokonttori"
+  - role: enum [compensation_payer_for_state_employees]
+  - legalBasis: "§207"
+- **Relationships**:
+  - pays_compensation_for: Employee (when employer.isStateEmployer = true)
+  - alternative_to: InsuranceCompany (for state employees)
+- **Note**: State Treasury (Valtiokonttori) is the institution responsible for compensating state employees per §207
 
 ### AccidentInsuranceCentre (Tapaturmavakuutuskeskus)
 - **Legal Basis**: Sections 209-225
