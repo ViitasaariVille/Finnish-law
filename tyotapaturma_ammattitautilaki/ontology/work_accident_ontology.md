@@ -82,7 +82,10 @@
 - **Description**: Legal party to compensation case with procedural rights
 - **Legal Basis**: §117
 - **Includes**: Vahingoittunut (InjuredParty), Edunsaaja (Beneficiary)
-- **Explicitly Excluded**: Employer, HealthcareProvider, Municipality
+- **Explicitly Excluded per §117**: Employer, HealthcareProvider, Municipality
+- **Attributes**:
+  - isExcludedParty (boolean): true if explicitly excluded from being a party per §117
+  - exclusionReason (enum): [employer, healthcare_provider, healthcare_institution, municipality, joint_municipal_authority, compensation_recipient] - per §117 exclusions
 
 ### FamilyMember (Perheenjäsen)
 - **Description**: Family member as defined for ownership calculation and benefit purposes
@@ -893,9 +896,13 @@
     gas_vapor_inhalation,       # §18.3: Inhaling gas, vapor, or fumes
     temperature_injury,         # §18.4: Cold/heat injury, hypothermia, burns
     radiation_injury,           # §18.5: Radiation-induced injury
-    pressure_variation_injury   # §18.6: Significant pressure variation injury
+    pressure_variation_injury  # §18.6: Significant pressure variation injury
     ]
+  - **exposureWindowHours** (§18): integer - max 24 hours per §18 condition
+  - **notOccupationalDisease** (§18): boolean - must be true (exclusion from occupational disease)
   - **psychologicalShockSubtype** (§35): enum [acute_stress_reaction, ptsd, personality_change]
+  - **ptsdDiagnosisWithin6Months** (boolean): §35.2 - PTSD diagnosis must be within 6 months of event
+  - **immediateInvolvement** (boolean): §35.4 - injured was immediately involved in the event
   - **eventSubType**: enum [single_movement, cumulative_trauma] - distinguishes §33 from repetitive strain
   - **workLocationType** (§21-25): enum [at_work, workplace_area, outside_workplace, special_circumstances, at_home, undefined_location]
   - **eventDate** (tapahtumapäivä): date - when the event occurred
@@ -933,6 +940,13 @@
 - **Legal Basis**: §16, §19, §30
 - **Attributes**:
   - connectionType: enum [direct_cause, contributing_cause, aggravation]
+  - medicalFindings (string): §16 - lääketieteelliset löydökset ja havainnot
+  - causationMechanism (string): §16 - vahingon sattumistapa (how injury occurred)
+  - timingRelationship (string): §16 - ajallinen yhtös
+  - priorInjuryContribution (number): §16 - aikaisempien vammojen myötävaikutus (0-100%)
+  - priorIllnessContribution (number): §16 - aikaisempien sairauksien myötävaikutus (0-100%)
+  - probableCausation (boolean): §16 - todennäköinen syy-yhteys established
+  - assessmentBasis (enum): [medical_evidence, circumstances, combined] - per §16
   - assessmentDate: date
   - assessor: string (medical expert)
   - medicalOpinion: string
