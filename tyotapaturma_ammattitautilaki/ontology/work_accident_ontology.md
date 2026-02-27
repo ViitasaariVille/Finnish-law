@@ -191,6 +191,20 @@
 - **Data Requirement**: Insurance companies must organize their statistics to provide required data to Accident Insurance Centre (§257.1-3)
 - **Attributes**: riskCategory, industryCode, occupationalCategory, accidentRate, diseaseRate
 
+### WorkAccidentRegister (Työtapaturmarekisteri)
+- **Description**: National register of work accidents and occupational diseases maintained by Tapaturmavakuutuskeskus
+- **Legal Basis**: §235
+- **Purpose**: Collects data on work accidents and occupational diseases for statistics, risk classification, and prevention
+- **Attributes**:
+  - registerId, collectionStartDate, dataProvider
+  - accidentData: annual accident count, injury type, severity, industryCode
+  - occupationalDiseaseData: disease code, exposure type, latency period
+  - statisticsPublished: boolean - annual statistics publication per §235.2
+- **Data Sources**: Insurance companies, employers (§111), healthcare providers
+- **Related Entities**:
+  - RiskClassification: Uses register data for premium calculation
+  - Tapaturmavakuutuskeskus: Register administrator
+
 ### WorkSafetyPrevention (Työturvallisuustyö)
 - **Description**: Employer's documented preventive occupational safety work considered in premium calculation
 - **Legal Basis**: §166.5
@@ -233,6 +247,22 @@
   - TravelCostApplication - §50
   - CareCostApplication - §53
   - PropertyDamageApplication - §54
+- **Enumeration Values per Claim Type**:
+  - **TravelCostApplication** (§50):
+    - **transportMethod**: enum [public_transport, private_car, special_vehicle]
+    - **accommodationRequired**: boolean
+    - **companionUsed**: boolean
+    - **rateCalculation**: enum [actual_cost, tax_free_km_allowance_50_percent]
+  - **CareCostApplication** (§51):
+    - **careLevel**: enum [perus (8.70€), korotettu (19.55€), ylin (23.41€)]
+  - **ClothingAllowanceApplication** (§52):
+    - **allowanceLevel**: enum [basic (0.58€), elevated (2.31€)]
+    - **minimumDurationMet**: boolean - requires 3 months continuous
+  - **HouseholdCostsApplication** (§53):
+    - **householdTasks**: enum array [cleaning, laundry, shopping, childcare]
+    - **maxDurationDays**: 365 (1 year from accident)
+  - **PropertyDamageApplication** (§54):
+    - **itemTypes**: enum array [glasses, hearing_aid, dental_prosthesis, support, prosthetic, clothing, ring]
 
 ### Notification (Ilmoitus)
 - **Description**: Formal notification of accident
@@ -327,8 +357,20 @@
 ### WorkMotionStrain (Työliikekipeytyminen)
 - **Legal Basis**: Section 33
 - **Description**: Acute muscle/tendon strain from single strenuous work movement (NOT repetitive)
-- **Note**: Maximum 6 weeks compensation
-- **Attributes**: strainLocation, workActivityDuringStrain, onsetDate
+- **Note**: Maximum 6 weeks (42 days) compensation per §33
+- **Attributes**: 
+  - strainLocation, workActivityDuringStrain, onsetDate
+  - **isSingleMovement**: boolean - distinguishes from repetitive strain (REQUIRED)
+  - **maximumDurationDays**: 42 - 6 weeks per §33
+  - **priorInjuryExists**: boolean - checks for prior injury (aikaisempi vamma)
+  - **priorIllnessExists**: boolean - checks for prior illness (sairaus)
+  - **exclusionApplies**: boolean - whether exclusion condition applies
+  - **exclusionReason**: enum - [prior_injury, prior_illness, tissue_damage_only_from_accident]
+  - **isCompensable**: boolean - derived attribute based on all conditions
+- **Compensability Criteria** (§33):
+  - Must be single movement (NOT repetitive)
+  - Must occur during work (§21) or approved fitness activity (§24.1.6)
+  - NOT compensable if due to prior injury, prior illness, or tissue damage that could ONLY occur from accident
 
 ### ViolenceDamage
 - **Legal Basis**: Section 34
@@ -445,6 +487,19 @@
 - **capacityLevels**: full, partial, none
 - **Legal Basis**: §63-68, §88-98
 
+### WorkCapacityReduction (Työkyvyn heikentymä)
+- **Description**: Reduction in work capacity as defined in §63 - core concept for disability pension eligibility
+- **Legal Basis**: §63-68
+- **Attributes**:
+  - **reductionPercentage**: number - minimum 10% required per §63.1
+  - **earningCapacityBefore**: MonetaryAmount - pre-injury earning capacity (adjusted with wage coefficient per TyEL §96)
+  - **earningCapacityAfter**: MonetaryAmount - post-injury earning capacity
+  - **causationVerified**: boolean - must establish connection between injury and reduced work capacity
+  - **assessmentFactors**: enum array [education, prior_activity, age, residence] - factors to consider per §63.2
+  - **wageCoefficientApplied**: number - wage coefficient (palkkakerroin) per TyEL §96
+  - **minimumThresholdMet**: boolean - at least 10% reduction AND at least 1/20 of minimum annual work income reduction per §63.1
+- **Related**: DisabilityPension (§63-68)
+
 ### Takautumisoikeus (RecourseRight)
 - **Description**: Right of recourse - insurer's right to claim compensation from liable third party
 - **Attributes**: recourseType, liableParty, claimAmount
@@ -525,8 +580,58 @@
 
 ### AccidentAppealsBoard (Tapaturma-asioiden muutoksenhakulautakunta)
 - **Legal Basis**: §237
-- **Description**: First instance appeal body for vakuutuslaitos decisions
-- **Appeal deadline**: 30 days (§241)
+- **Description**: First instance appeal body for vakuutuslait **Appeal deadline**:os decisions
+- 30 days (§241)
+- **Attributes**: boardName, jurisdiction, decisionMakingProcess
+- **Subclasses**:
+  - InsuranceCompanyDecisionAppeal (§237) - Appeal against insurance company decision
+  - PremiumAssessmentAppeal (§238) - Appeal against premium calculation
+
+### Appeal (Valitus)
+- **Description**: Formal appeal against insurance company decision
+- **Legal Basis**: §237-243
+- **Attributes**:
+  - appealType: enum [regular, premium, correction]
+  - filingDate, deadline, status
+  - groundsForAppeal: string - factual/legal basis
+  - supportingDocuments: array
+  - decisionDeadline: 30 days per §241
+- **Subclasses**:
+  - RegularAppeal (Tavallinen valitus) - §237, standard appeal against compensation decision
+  - PremiumAppeal (Maksuperustevalitus) - §238, appeal against premium assessment
+  - BaseAppeal (Perustevalitus) - §240, appeal on fundamental legal questions
+
+### AppealDecision (Valituspäätös)
+- **Description**: Decision on appeal by Accident Appeals Board or court
+- **Legal Basis**: §242-243
+- **Attributes**: decisionDate, decisionType, reasoning, appealInstructions
+- **decisionType values**: upheld, reversed, remanded, dismissed
+
+### SelfCorrection (Oma muutos)
+- **Description**: Insurance company's right to self-correct decisions
+- **Legal Basis**: §242
+- **Attributes**: originalDecisionDate, correctionDate, correctedAmount, correctionReason
+- **Trigger**: New information or error discovery
+
+### DecisionRemoval (Päätöksen poisto)
+- **Description**: Removal of incorrect decision
+- **Legal Basis**: §246
+- **Attributes**: removalReason, originalDecision, effectiveDate
+- **Conditions**: Decision was clearly incorrect, may be initiated by insurer or court
+
+### ReimbursementRight (Takaisinperintäoikeus)
+- **Description**: Right to recover overpaid compensation
+- **Legal Basis**: §247
+- **Attributes**:
+  - overpaymentAmount, originalPaymentDate, recoveryDate
+  - recoveryReason: enum [error, fraudulent_claim, changed_circumstances, deceased]
+  - recoveryProcedure: enum [voluntary, deduction, court_proceedings]
+  - statuteOfLimitations: 5 years per §247.3
+  - interestRate: reference to §152 delay interest
+- **Limitations**:
+  - Cannot recover if claimant not at fault and would cause unreasonable hardship (§247.2)
+  - Maximum recovery period: 5 years from overpayment (§247.3)
+- **Related**: DelayInterest (§152)
 
 ### ApplicationDeterminationBody (Lain soveltaminen)
 - **Legal Basis**: §7
