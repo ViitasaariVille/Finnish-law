@@ -84,7 +84,7 @@
   - witnesses (todistajat) - §111.2.3
   - employerNotification (työnantajan ilmoitus) - reference to EmployerNotification
   - **Pension Status** (per §56.4, §60, §73-74):
-    - pensionStatus: enum [none, old_age_pension, disability_pension] - §2.9, §2.10
+    - pensionStatus: enum [none, old_age_pension, early_old_age_pension, partial_disability_pension, disability_pension, survivor_pension, unemployment_pension] - §2.9-2.13
     - receivesOldAgePension (boolean) - receiving old-age pension at time of accident (§56.4, §60, §73)
     - receivesDisabilityPension (boolean) - receiving disability pension at time of accident (§56.4, §74)
     - pensionStartDate (date) - when pension started (§56.4, §74)
@@ -99,6 +99,56 @@
     - Avopuoliso (CohabitingPartner) - conditions: §100.2 continuous cohabitation, marriage-like conditions, common child or notarized support agreement, deceased not married at death
   - LapseneläkkeenSaaja (ChildPensionRecipient)
   - Dependent
+
+### PostAccidentMarriage (Vahinkotapahtuman jälkeen solmittu avioliitto)
+- **Description**: Marriage/cohabitation established after accident per §102 - affects family pension eligibility
+- **Legal Basis**: §102
+- **Attributes**:
+  - marriageDate: date
+  - accidentDate: date
+  - isPostAccident: boolean - true if marriageDate > accidentDate
+  - childBornFromMarriage: boolean - per §102
+  - marriageDurationYears: number
+  - meetsEligibilityCriteria: boolean - true if childBorn OR duration >= 3 years per §102
+  - marriageType: enum [statutory_marriage, cohabiting_partnership]
+- **Eligibility per §102**: If marriage after accident, only eligible if child from marriage OR marriage lasted 3+ years
+
+### FamilyPensionTermination (Perhe-eläkkeen päättymisen edellytykset)
+- **Description**: Conditions for family pension termination per §103
+- **Legal Basis**: §103
+- **Attributes**:
+  - pensionType: enum [widow_pension, child_pension]
+  - terminationDate: date
+  - terminationReason: enum [new_marriage, cohabitation_start, age_limit_reached, education_completed, disability_ended, adoption_completed, pension_time_limit]
+  - lumpSumPaymentRequired: boolean - per §106
+  - lumpSumAmount: MonetaryAmount
+- **Termination Reasons per §103**:
+  - Widow: new marriage (§103.2), cohabitation start (§103.2)
+  - Child: turns 18 (§103.3), stops studying (§103.3), disability ends (§103.3), adopted by other (§103.3)
+  - Special: max 3 years for pension recipients per §103.4
+
+### IntentionalKillingExclusion (Tahallisen kuoleman aiheuttamisen seuraamus)
+- **Description**: Exclusion from family pension when beneficiary intentionally caused death per §105
+- **Legal Basis**: §105
+- **Attributes**:
+  - exclusionApplies: boolean
+  - determinationDate: date
+  - intentEstablished: boolean - must be intentional, not negligent
+  - otherBeneficiariesUnaffected: boolean - per §105.2
+
+### JurisdictionResolution (Toimivaltakysymyksen ratkaiseminen)
+- **Description**: Resolution of competence disputes between insurers per §114
+- **Legal Basis**: §114
+- **Attributes**:
+  - disputeDate: date
+  - resolutionDate: date
+  - resolutionDeadline: string - viipymättä (without delay)
+  - receivingInsurer: reference to InsuranceCompany
+  - determinedCompetent: reference to InsuranceCompany
+  - determinationBody: reference to AccidentAppealsBoard
+  - status: enum [pending, submitted, determined, appealed]
+- **Rule per §114**: If insurers disagree on competence, case goes to Accident Appeals Board
+- **Rule**: Family pension not paid to person who intentionally caused death of insured
 
 ### Party (Asianosainen)
 - **Description**: Legal party to compensation case with procedural rights
