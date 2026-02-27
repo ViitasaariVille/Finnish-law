@@ -25,7 +25,14 @@
 
 ### InjuredParty
 - **Description**: Person who suffered a work accident or occupational disease
-- **Attributes**: injuryDate, injuryType, severity, medicalFindings
+- **Legal Basis**: §15-16, §111.2.1
+- **Attributes**: 
+  - injuryDate, injuryType, severity, medicalFindings
+  - personId (henkilötunnus) - REQUIRED
+  - name (nimi)
+  - contactInformation (yhteystiedot)
+  - otherEmployment (muu työsuhde) - §111.2.5
+  - otherEntrepreneurWork (muu yrittäjätyö) - §111.2.5
 
 ### Beneficiary (Edunsaaja)
 - **Description**: Person entitled to family pension (perhe-eläke) after death - legal term per §99-109
@@ -53,7 +60,13 @@
 
 ### Employer
 - **Description**: Entity with mandatory insurance obligation
-- **Attributes**: businessId, companyName, annualPayroll, isExemptFromInsurance, exemptionType, annualPayrollEUR
+- **Legal Basis**: §3, §111.2.2, §159
+- **Attributes**: 
+  - businessId, companyName, annualPayroll, isExemptFromInsurance, exemptionType, annualPayrollEUR
+  - contactInformation (yhteystiedot) - REQUIRED in notification
+  - industrySector (toimiala) - §159.1
+  - workStartDate (työn alkamisaika) - §159.1
+  - ownershipStructure (omistussuhteet) - §159.1
 - **exemptionType values**: none, below-threshold-1200, state-employer
 - **Legal Basis**: §3.2 (exemption when annual payroll <= €1,200), §3.3 (state employer exemption)
 
