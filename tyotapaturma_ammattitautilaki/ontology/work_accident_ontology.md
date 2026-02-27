@@ -49,6 +49,7 @@
   - witnesses (todistajat) - §111.2.3
   - employerNotification (työnantajan ilmoitus) - reference to EmployerNotification
   - **Pension Status** (per §56.4, §60, §73-74):
+    - pensionStatus: enum [none, old_age_pension, disability_pension] - §2.9, §2.10
     - receivesOldAgePension (boolean) - receiving old-age pension at time of accident (§56.4, §60, §73)
     - receivesDisabilityPension (boolean) - receiving disability pension at time of accident (§56.4, §74)
     - pensionStartDate (date) - when pension started (§56.4, §74)
@@ -778,6 +779,7 @@
     ]
   - **psychologicalShockSubtype** (§35): enum [acute_stress_reaction, ptsd, personality_change]
   - **eventSubType**: enum [single_movement, cumulative_trauma] - distinguishes §33 from repetitive strain
+  - **workLocationType** (§21-25): enum [at_work, workplace_area, outside_workplace, special_circumstances, at_home, undefined_location]
   - **eventDate** (tapahtumapäivä): date - when the event occurred
   - **eventTime** (tapahtuma-aika): time
   - **eventLocation** (tapahtumapaikka): string - where the event occurred
@@ -854,6 +856,90 @@
 - **Maximum**: Amount that would have been paid to estate
 - **Additional**: Reasonable transportation costs from death location to residence/home locality also covered
 - **Attributes**: amount, recipient, deathLocation, funeralDate
+
+---
+
+## 4.1. Employer Duties & Occupational Disease Factors
+
+### AccidentLogbook (Tapaturma- ja vaarailmoitusrekisteri)
+- **Description**: Employer's mandatory record of work accidents and near-misses (§267)
+- **Legal Basis**: §267
+- **Attributes**:
+  - employer: reference to Employer
+  - accidentRecords: array of AccidentRecord
+  - annualSummary: string - yearly summary submitted to Tapaturmavakuutuskeskus
+  - recordRetentionYears: integer - minimum 10 years
+- **AccidentRecord**:
+  - accidentDate: date
+  - injuredPerson: reference to InjuredParty
+  - accidentType: enum [occupational_accident, commuting_accident, near_miss]
+  - severity: enum [minor, serious, fatal, near_miss]
+  - rootCauseAnalysis: string
+  - preventiveMeasures: array of string
+  - reportedToAuthority: boolean
+  - authorityReportDate: date
+
+### WorkLocationType (Työpaikan sijainti)
+- **Description**: Classification of work location for insurance coverage determination (§21-25)
+- **Legal Basis**: §21-25
+- **Attributes**:
+  - locationCategory: enum [
+    fixed_workplace,           # §21: Regular place of work
+    mobile_work,               # §21: Work involving travel between locations
+    construction_site,        # §22: Temporary construction work site
+    remote_work,               # §23: Work from home or remote location
+    vehicle_work,              # §24: Work in or on vehicle
+    vessel_work,               # §24: Work on ship or floating platform
+    aircraft_work,             # §24: Work in aircraft
+    offshore_installations,    # §25: Oil platforms, offshore structures
+    underground_work,          # §25: Mining, tunnel work
+    hazardous_area             # §25: Areas with special risks
+    ]
+  - isInsurable: boolean
+  - coverageNotes: string
+  - relatedSections: array of string
+
+### ExposureFactor (Altistustekijä)
+- **Description**: Factor contributing to occupational disease development (§26)
+- **Legal Basis**: §26
+- **Attributes**:
+  - factorType: enum [
+    chemical_agent,            # §26.1: Chemical substances (solvents, metals, etc.)
+    biological_agent,          # §26.1: Bacteria, viruses, fungi
+    physical_factor,           # §26.2: Noise, vibration, radiation, temperature
+    ergonomic_factor,          # §26.3: Repetitive motion, posture, lifting
+    psychological_factor,     # §26.4: Stress, harassment, violence
+    dust_particle,            # §26.5: Mineral dust, asbestos, silica
+    carcinogenic_agent        # §26.6: Known carcinogens
+    ]
+  - substanceName: string - specific agent name
+  - exposureLevel: string - measured exposure amount
+  - exposureDuration: duration
+  - causalMechanism: string - how factor causes disease
+  - diseaseReference: reference to occupationalDisease
+  - thresholdLimit: string - occupational exposure limit
+  - measurementDate: date
+  - measurementMethod: string
+
+### PensionStatus (Eläkestatus)
+- **Description**: Status of pension recipient affecting compensation calculations (§2.9, §2.10, §56.4)
+- **Legal Basis**: §2.9, §2.10, §56.4
+- **Attributes**:
+  - pensionType: enum [
+    old_age_pension,          # §2.9: Vanhuuseläke - full old-age pension
+    early_old_age_pension,    # §2.9: Varhennettu vanhuuseläke - reduced old-age pension
+    disability_pension,       # §2.10: Työkyvyttömyyseläke - full disability pension
+    partial_disability_pension, # §2.10: Osatyökyvyttömyyseläke - partial disability
+    survivor_pension,         # §2.11: Perhe-eläke - surviving dependent pension
+    unemployment_pension,     # §2.12: Työttömyyseläke (phased out)
+    farmers_pension           # §2.13: Luopumiseläke (phased out)
+    ]
+  - pensionStartDate: date
+  - pensionEndDate: date (if applicable)
+  - pensionAmount: decimal
+  - isReceivingAtTimeOfAccident: boolean - §56.4
+  - affectsCompensationCalculation: boolean - certain pensions reduce daily allowance
+  - reductionPercentage: decimal - applicable reduction per §56.4
 
 ---
 
