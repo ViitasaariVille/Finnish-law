@@ -32,14 +32,22 @@
 
 ### InjuredParty
 - **Description**: Person who suffered a work accident or occupational disease
-- **Legal Basis**: §15-16, §111.2.1
+- **Legal Basis**: §15-16, §111.2
 - **Attributes**: 
-  - injuryDate, injuryType, severity, medicalFindings
+  - injuryDate (tapaturmapäivä) - §111.2.1 REQUIRED
+  - injuryType (vamman laatu) - §111.2.1 REQUIRED
+  - severity (vakavuus)
+  - medicalFindings (lääketieteelliset löydökset)
   - personId (henkilötunnus) - REQUIRED
   - name (nimi)
-  - contactInformation (yhteystiedot)
+  - contactInformation (yhteystiedot) - §111.2.1
+  - injuryCause (tapaturman syy) - §111.2.1
+  - injuryTime (tapaturman ajankohta) - §111.2.1
+  - injuryLocation (tapaturman paikka) - §111.2.1
   - otherEmployment (muu työsuhde) - §111.2.5
   - otherEntrepreneurWork (muu yrittäjätyö) - §111.2.5
+  - witnesses (todistajat) - §111.2.3
+  - employerNotification (työnantajan ilmoitus) - reference to EmployerNotification
 
 ### Beneficiary (Edunsaaja)
 - **Description**: Person entitled to family pension (perhe-eläke) after death - legal term per §99-109
@@ -342,13 +350,20 @@
 
 ## 3. Insurable Events
 
-### OccupationalAccident
+### OccupationalAccident (Työtapaturma)
 - **Legal Basis**: Sections 17-25
-- **Subclasses**:
-  - WorkplaceAccident
-  - CommuteAccident  
-  - BusinessTripAccident
-  - WorkRelatedActivityAccident
+- **Description**: Work accident defined as injury suffered in circumstances covered by the law
+- **Subclasses** (per §17-§25):
+  - **WorkplaceAccident (Työpaikkatapaturma)** - §17, injury at workplace during work
+  - **CommuteAccident (Työmatkatapaturma)** - §20, injury on journey to/from work
+  - **BusinessTripAccident (Työmatkatapaturma ja muu työliikenne)** - §22, injury during work-related travel
+  - **WorkRelatedActivityAccident** - §23-§24, sports/rehabilitation activities
+  - **SelfDefenseAccident (Itsensä puolustustyötapaturma)** - §25, self-defense and rescue operations
+- **Attributes**:
+  - accidentDate (tapaturmapäivä)
+  - accidentLocation (tapaturmapaikka)
+  - circumstances (olosuhteet)
+  - causationAssessment (syy-yhteys)
 
 ### SpecialAccidentConditions (§18)
 - **Description**: Additional injuries and illnesses considered as caused by accident under special conditions
@@ -456,6 +471,26 @@
   - **isSatisfied**: boolean - whether the waiting period has been completed
   - **consecutiveDaysRequired**: integer - must be 3 consecutive days of incapacity
 - **Note**: Daily allowance is not paid for first 3 consecutive days of incapacity (excluding accident day)
+
+### Työkyvyttömyys (Incapacity)
+- **Legal Basis**: §56
+- **Description**: Work incapacity - core concept for daily allowance eligibility. Incapacity means inability to work due to injury or disease.
+- **Attributes**:
+  - **incapacityType** (työkyvyttömyyden laatu): enum [full, partial]
+    - full: unable to perform any work
+    - partial: able to perform some work but with reduced capacity
+  - **startDate** (alkamisajankohta): date - when incapacity began
+  - **endDate** (päättymisajankohta): date - when incapacity ended (null if ongoing)
+  - **durationDays**: number - total days of incapacity
+  - **medicalCertificate** (lääketieteellinen todistus): reference to MedicalCertificate
+  - **assessmentBasis** (arviointiperuste): enum [initial, follow_up, final]
+  - **cause** (syy): enum [occupational_accident, occupational_disease, commuting_accident]
+  - **isWorkRelated** (työperäinen): boolean - whether related to work
+  - **relatedInjury** (liittyvä vamma): reference to Vahinko
+- **Related Entities**:
+  - **DailyAllowance**: Työkyvyttömyys is the basis for daily allowance compensation (§56-62)
+  - **WaitingPeriod**: 3-day waiting period before daily allowance starts (§56.3)
+  - **WorkCapacityReduction**: Used to determine degree of incapacity
 
 ### DailyAllowance
 - **Legal Basis**: Sections 56-62
@@ -598,6 +633,28 @@
   - insuranceStatus: enum [insured, uninsured, unknown]
 - **Legal Basis**: §95-96
 
+### Vahinkotapahtuma (DamageEvent)
+- **Legal Basis**: §15
+- **Description**: The damage event - the occurrence that causes damage/injury. This is the triggering event for insurance compensation.
+- **Attributes**:
+  - **eventId**: unique identifier
+  - **eventType** (tapahtuman laatu): enum [occupational_accident, occupational_disease, commuting_accident, work_related_activity]
+  - **eventDate** (tapahtumapäivä): date - when the event occurred
+  - **eventTime** (tapahtuma-aika): time
+  - **eventLocation** (tapahtumapaikka): string - where the event occurred
+  - **description** (kuvaus): string - detailed description of circumstances
+  - **insuredPerson** (vakuutettu): reference to InjuredParty
+  - **employer** (työnantaja): reference to Employer
+  - **workActivity** (työtoiminta): enum [main_work, commuting, business_trip, rehabilitation, sports]
+  - **witnesses** (todistajat): array of strings
+  - **reportedToEmployer** (ilmoitettu työnantajalle): boolean
+  - **employerNotificationDate** (työnantajan ilmoituspäivämäärä): date
+  - **insuranceNotificationDate** (vakuutuksenantajan ilmoituspäivämäärä): date
+- **Related Entities**:
+  - **Vahinko (Damage)**: The consequence of the event
+  - **SyyYhteys (CausalConnection)**: Links event to damage
+  - **InjuredParty**: The person affected
+
 ### Vahinko (Damage)
 - **Description**: Damage as a consequence of a vahinkotapahtuma (damage event) - the actual injury/illness resulting from the insured event
 - **Legal Basis**: §2.3, §15-16
@@ -692,24 +749,16 @@
 - **Description**: Advisory body for uniform compensation practice - issues recommendations and opinions
 - **NOT an appeal body** - provides expert opinions to insurers
 
-### AccidentAppealsBoard (Tapaturma-asiainratkaisulautakunta)
+### AccidentAppealsBoard (Tapaturma-asiainratkaisulautakunta / Muutoksenhakulautakunta)
 - **Legal Basis**: §237
-- **Description**: First instance appeal body for vakuutuslaitos decisions - distinct from ClaimAppealBoard
+- **Description**: First instance appeal body for vakuutuslaitos decisions - distinct from ClaimAppealBoard (§226-228)
 - **Appeal deadline**: 30 days (§241)
 - **Attributes**: 
   - boardName (Finnish: Tapaturma-asiainratkaisulautakunta)
+  - finnishName: "Tapaturma-asioiden muutoksenhakulautakunta"
   - jurisdiction
   - decisionMakingProcess
   - isDistinctFromClaimAppealBoard: boolean - true (separate body per §226-228 vs §237)
-- **Subclasses**:
-  - InsuranceCompanyDecisionAppeal (§237) - Appeal against insurance company decision
-  - PremiumAssessmentAppeal (§238) - Appeal against premium calculation
-
-### AccidentAppealsBoard (Tapaturma-asioiden muutoksenhakulautakunta)
-- **Legal Basis**: §237
-- **Description**: First instance appeal body for vakuutuslait **Appeal deadline**:os decisions
-- 30 days (§241)
-- **Attributes**: boardName, jurisdiction, decisionMakingProcess
 - **Subclasses**:
   - InsuranceCompanyDecisionAppeal (§237) - Appeal against insurance company decision
   - PremiumAssessmentAppeal (§238) - Appeal against premium calculation
