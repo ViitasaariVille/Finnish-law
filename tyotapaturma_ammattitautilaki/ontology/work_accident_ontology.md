@@ -345,6 +345,21 @@
   - maximumPeriod: integer - months of coverage
 - **Eligibility** (§191): Entrepreneur with YEL insurance can voluntarily insure work accidents
 
+### ForeignWorkVoluntaryInsurance (Ulkomaantyön vapaaehtoinen työajan vakuutus)
+- **Description**: Voluntary work-time insurance for employees working abroad per §204
+- **Legal Basis**: §204
+- **Parent**: VoluntaryWorkTimeInsurance
+- **Attributes**:
+  - insuranceType: enum [foreign_work_voluntary]
+  - tyelInsuranceRequired: boolean - requires TyEL §150.2-4 pension insurance arrangement
+  - eligibleEmployee: reference to Employee - must have TyEL coverage
+  - employingEmployer: reference to Employer - Finnish employer arranging insurance
+  - dailyAllowanceCalculationBasis: enum [sick_pay_only, employer_income_only] - §204.2
+  - annualWorkIncomeCalculation: enum [employer_income_only] - §204.2
+  - excludedSections: array [75, 76, 77, 78, 79] - §204.2 explicitly excludes §75-79
+  - incomeCalculationException: boolean - true for foreign work (different from §71-74)
+- **Note**: Differs from domestic voluntary insurance - requires TyEL (not YEL), calculates allowances solely from employing employer's income, excludes §75-79 provisions
+
 ### EntrepreneurFreeTimeInsurance (Yrittäjän vapaa-ajan vakuutus)
 - **Description**: Voluntary insurance for entrepreneurs covering leisure time accidents per §195-198
 - **Legal Basis**: §195-198
@@ -1471,6 +1486,11 @@
 ### AccidentInsuranceCentre (Tapaturmavakuutuskeskus)
 - **Legal Basis**: Sections 209-225
 - Central coordinating organization
+- **Attributes**:
+  - **§209.1 Promotion Tasks (edistämistehtävät)**:
+    - promotionTasks: enum [uniform_implementation, implementation_system_development, cooperation_insurance_companies, cooperation_authorities, recommendations, information_dissemination]
+  - **§209.2 Specific Tasks (erityistehtävät)**:
+    - specificTasks: enum [uninsured_work_claims, law_applicability_determination, notification_form_approval, delayed_claim_processing, risk_classification_maintenance, insurance_obligation_supervision, insurance_register_maintenance, penalty_payment_applications, joint_guarantee_tasks, distribution_system_tasks, occupational_safety_fee_collection, accident_register_maintenance, statistics_research, statement_form_approval, eu_coordination_residence, other_government_assigned_tasks]
 
 ### SupervisionAuthority (Vakuuttamisen valvonta)
 - **Description**: Insurance supervision authorities per §177-180
@@ -1849,9 +1869,11 @@
   - submissionDeadline: enum [14_days_after_start, january_31, 30_days_from_change, 30_days_from_termination]
   - industrySector: string - toimiala (§159.1)
   - workAmountAndQuality: string - työn määrä ja laatu (§159.1)
-  - workStartDate: date
-  - ownershipStructure: string
+  - workStartDate: date - työn alkamisaika (§159.1)
+  - ownershipStructure: string - yrityksen omistussuhteet (§159.1)
+  - workplaceSafetyDocumentation: reference - työturvallisuustyö (§159.1)
   - changeDescription: string - for change notifications (§160.2)
+  - annualPayrollReport: MonetaryAmount - for annual updates (§160.1)
 - **Rule per §159-160**: Employer must notify within specified deadlines for initial, annual, change, and termination notifications
 
 ### ForeignWorkVoluntaryInsurance (Ulkomailla tehtävä työ ja vapaaehtoinenvakuutus)
