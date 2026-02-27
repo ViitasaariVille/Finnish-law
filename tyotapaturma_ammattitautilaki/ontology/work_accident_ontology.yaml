@@ -524,7 +524,7 @@ relationships:
 - source: stateTreasury
   target: employee
   type: pays_compensation_for
-  legal_basis: ''
+  legal_basis: §207
   note: when employer.isStateEmployer = true
 - source: stateTreasury
   target: accidentInsuranceCentre
@@ -534,7 +534,7 @@ relationships:
 - source: stateTreasury
   target: insuranceCompany
   type: alternative_to
-  legal_basis: ''
+  legal_basis: §3.3, §207
   note: for state employees
 - source: occupationalAccident
   target: vahinko
