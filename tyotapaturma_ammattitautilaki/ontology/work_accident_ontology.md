@@ -317,6 +317,16 @@
   - **TravelCostApplication** (§50):
     - **transportMethod**: enum [public_transport, private_car, special_vehicle]
     - **accommodationRequired**: boolean
+
+### InvestigationObligation (Selvittämisvelvollisuus)
+- **Description**: Insurance company's legal investigation obligations per §119-120
+- **Legal Basis**: §119, §120
+- **Attributes**:
+  - investigationStartDeadline: integer - 7 working days per §119
+  - rehabilitationAssessmentDeadline: integer - 3 months per §120
+  - rehabilitationAssessmentInterval: integer - 3 months per §120
+  - isInvestigationStarted: boolean
+  - investigationStartDate: date
     - **companionUsed**: boolean
     - **rateCalculation**: enum [actual_cost, tax_free_km_allowance_50_percent]
   - **CareCostApplication** (§51):
@@ -1152,6 +1162,19 @@
   - InsuranceCompanyDecisionAppeal (§237) - Appeal against insurance company decision
   - PremiumAssessmentAppeal (§238) - Appeal against premium calculation
 
+### AppealChain (Muutoksenhaku)
+- **Description**: Structured hierarchy of appeal bodies per §237-243
+- **Legal Basis**: §237-243
+- **Attributes**:
+  - currentLevel: enum [accident_appeals_board, insurance_court, supreme_court]
+  - nextLevelAvailable: boolean
+  - appealDeadlineDays: integer - 30 days for first instance (§241)
+  - supremeCourtDeadlineDays: integer - 60 days for Supreme Court (§241)
+- **Appeal Progression**:
+  1. AccidentAppealsBoard (§237) - 30 days
+  2. InsuranceCourt (§227) - 30 days  
+  3. SupremeCourt (Korkein oikeus) - 60 days with permission
+
 ### InsuranceCourt (Vakuutusoikeus)
 - **Legal Basis**: §227
 - **Description**: Appellate court for insurance decisions, hears appeals from Accident Appeals Board decisions
@@ -1175,11 +1198,15 @@
 - **Description**: Formal appeal against insurance company decision
 - **Legal Basis**: §237-243
 - **Attributes**:
-  - appealType: enum [regular, premium, correction]
+  - appealType: enum [regular, premium, correction, base_appeal]
   - filingDate, deadline, status
   - groundsForAppeal: string - factual/legal basis
   - supportingDocuments: array
-  - decisionDeadline: 30 days per §241
+  - decisionDeadline: enum [
+      {type: regular, days: 30, legalBasis: "§241.1"},
+      {type: supreme_court_leave, days: 60, legalBasis: "§241.4"},
+      {type: base_appeal, days: 730, legalBasis: "§240"}
+    ]
 - **Subclasses**:
   - RegularAppeal (Tavallinen valitus) - §237, standard appeal against compensation decision
   - PremiumAppeal (Maksuperustevalitus) - §238, appeal against premium assessment
