@@ -46,6 +46,9 @@
   - injuryLocation (tapaturman paikka) - §111.2.1
   - otherEmployment (muu työsuhde) - §111.2.5
   - otherEntrepreneurWork (muu yrittäjätyö) - §111.2.5
+  - receivesOldAgePension (vanhuuseläke) - §56.4, §60, §73
+  - receivesDisabilityPension (työkyvyttömyyseläke) - §56.4, §74
+  - pensionStartDate (eläkkeen alkamisajankohta) - §56.4, §74
   - witnesses (todistajat) - §111.2.3
   - employerNotification (työnantajan ilmoitus) - reference to EmployerNotification
   - **Pension Status** (per §56.4, §60, §73-74):
@@ -756,7 +759,7 @@
 - **Description**: The damage event - the occurrence that causes damage/injury. This is the triggering event for insurance compensation.
 - **Attributes**:
   - **eventId**: unique identifier
-  - **eventType** (tapahtuman laatu): enum [occupational_accident, occupational_disease, commuting_accident, work_related_activity]
+  - **eventType** (tapahtuman laatu): enum [occupational_accident, occupational_disease, commuting_accident, work_related_activity, work_motion_strain, violence_damage, psychological_shock]
   - **eventDate** (tapahtumapäivä): date - when the event occurred
   - **eventTime** (tapahtuma-aika): time
   - **eventLocation** (tapahtumapaikka): string - where the event occurred
