@@ -182,6 +182,23 @@
 - **rateType values**: fixed-rate, percentage, hybrid
 - **Legal Basis**: §161-168
 
+### RiskClassification (Riskiluokitus)
+- **Description**: Classification system for work accident and occupational disease risk maintained by Accident Insurance Centre
+- **Legal Basis**: §171
+- **Purpose**: Used for premium calculation for table-based employers (taulustomaksuperusteinen vakuutuksenottaja)
+- **Based On**: Information from the Work Accident and Occupational Disease Register (§235) regarding industry or work performed
+- **Maintained By**: Tapaturmavakuutuskeskus (Accident Insurance Centre)
+- **Data Requirement**: Insurance companies must organize their statistics to provide required data to Accident Insurance Centre (§257.1-3)
+- **Attributes**: riskCategory, industryCode, occupationalCategory, accidentRate, diseaseRate
+
+### WorkSafetyPrevention (Työturvallisuustyö)
+- **Description**: Employer's documented preventive occupational safety work considered in premium calculation
+- **Legal Basis**: §166.5
+- **Application**: Only applies to table-based employers (taulustomaksuperusteinen vakuutuksenottaja)
+- **Purpose**: Employer documented preventive safety work is taken into account when determining insurance premium
+- **Note**: For experience-rated employers (erikoismaksuperusteinen), claims and full cost charges are already considered in premium
+- **Attributes**: documentationDate, safetyMeasures, trainingPrograms, riskAssessment, incidentHistory
+
 ---
 
 ## 2.1. Procedural Documentation
@@ -249,6 +266,19 @@
   - BusinessTripAccident
   - WorkRelatedActivityAccident
 
+### SpecialAccidentConditions (§18)
+- **Description**: Additional injuries and illnesses considered as caused by accident under special conditions
+- **Legal Basis**: §18
+- **Conditions**: Exposure to causative factor must occur within max 1 day before injury/illness appears; not occupational disease
+- **Types**:
+  - FrictionBlister (Hankauksen aiheuttama ihon hiertymä) - §18.1
+  - CorrosiveInjury (Syövyttävän aineen kosketus) - §18.2
+  - GasVaporInhalation (Kaasun, höyryn tai huurun hengittäminen) - §18.3
+  - TemperatureInjury (Paleltuma, hypotermia, palovamma, lämpösairaus) - §18.4
+    - **Condition**: Caused by abnormal thermal environment
+  - RadiationInjury (Säteilyn aiheuttama vamma tai sairaus) - §18.5
+  - PressureVariationInjury (Huomattava fysikaalisen paineen vaihtelu) - §18.6
+
 ### OccupationalDisease
 - **Legal Basis**: Sections 26-32
 - **Attributes**: diseaseCode, exposureDuration, latencyPeriod
@@ -257,6 +287,21 @@
   - YlaraajanJannetulehdus (UpperLimbTendonInflammation) - §28, condition: repetitive, unusual upper limb movements
   - Rannekanavaoireyhtyma (CarpalTunnelSyndrome) - §29, condition: repetitive, forceful, wrist-bending movements
   - TyostaAiheutunutPaheneminen (WorkRelatedDeterioration) - §30, essential worsening of pre-existing condition
+
+### PreExistingConditionDeterioration (Olemassa olevan tilan paheneminen)
+- **Description**: Significant worsening of pre-existing injury or illness due to work accident or occupational disease
+- **Legal Basis**: §19 (accident-related), §30 (occupational disease-related)
+- **Subclasses**:
+  - AccidentRelatedDeterioration (Tapaturman aiheuttama paheneminen) - §19
+    - **Description**: Essential worsening of non-work-related injury/illness caused by work accident
+    - **Conditions**: Accident causation mechanism, energy intensity, timing relationship, pre-existing condition contribution
+    - **Maximum Duration**: 6 months from accident (may be extended if recovery delayed by treatment choices/waiting)
+    - **Causation Threshold**: Not paid if accident had only minor causal contribution
+  - OccupationalDiseaseRelatedDeterioration (Ammattitaudista aiheutunut paheneminen) - §30
+    - **Description**: Essential worsening of pre-existing condition primarily caused by occupational exposure to physical, chemical, or biological factors
+    - **Conditions**: Same exposure factor as the pre-existing condition; compensated for duration of essential worsening
+    - **Causation**: Must be probable that exposure was the primary cause
+- **Attributes**: causationAssessment, preExistingCondition, worseningDegree, duration, causalContribution
 
 ### WorkMotionStrain (Työliikekipeytyminen)
 - **Legal Basis**: Section 33
@@ -308,6 +353,11 @@
 ### DailyAllowance
 - **Legal Basis**: Sections 56-62
 - **Maximum Duration**: 1 year from accident date
+- **WaitingPeriod (Odotusaika)**: 3 consecutive days (§56.3)
+  - **Description**: Daily allowance is not paid for the first 3 consecutive days of incapacity (excluding the accident day)
+  - **Legal Basis**: §56.3
+  - **Waiting Days**: 3
+  - **Application**: Applies from accident day onwards; compensation starts from day 4 of incapacity
 
 ### DisabilityPension
 - **Legal Basis**: Sections 63-68
@@ -320,26 +370,26 @@
 - **Legal Basis**: Sections 83-87
 - **Classes**: 1-20 based on severity
 - **Base Amount**: €12,440
-- **Haittaluokka (DisabilityClass) Enumeration**:
+- **Haittaluokka (DisabilityClass) Enumeration** (per §86):
   - Class 1: 1.15%
   - Class 2: 2.27%
-  - Class 3: 3.42%
-  - Class 4: 4.60%
-  - Class 5: 5.80%
-  - Class 6: 7.03%
-  - Class 7: 8.28%
-  - Class 8: 9.55%
-  - Class 9: 9.55%
+  - Class 3: 3.36%
+  - Class 4: 4.42%
+  - Class 5: 5.45%
+  - Class 6: 6.45%
+  - Class 7: 7.42%
+  - Class 8: 8.36%
+  - Class 9: 9.27%
   - Class 10: 10.15%
   - Class 11: 13%
   - Class 12: 16%
-  - Class 13: 20%
-  - Class 14: 25%
-  - Class 15: 30%
-  - Class 16: 35%
-  - Class 17: 40%
-  - Class 18: 45%
-  - Class 19: 52%
+  - Class 13: 19%
+  - Class 14: 22%
+  - Class 15: 25%
+  - Class 16: 32%
+  - Class 17: 39%
+  - Class 18: 46%
+  - Class 19: 53%
   - Class 20: 60%
 
 ### DisabilityClassification (Haittaluokitus)
@@ -369,6 +419,15 @@
 ### DeathCompensation
 - **Legal Basis**: Sections 99-109
 - **Includes**: SurvivorsPension, FuneralExpenses
+
+### FuneralExpenses (Hautausapu)
+- **Description**: Compensation for funeral expenses and transportation of deceased
+- **Legal Basis**: §109
+- **Amount**: €4,760
+- **Payment To**: Deceased's estate (kuolinpesä) if funeral costs paid from estate; otherwise to those who arranged funeral
+- **Maximum**: Amount that would have been paid to estate
+- **Additional**: Reasonable transportation costs from death location to residence/home locality also covered
+- **Attributes**: amount, recipient, deathLocation, funeralDate
 
 ---
 
