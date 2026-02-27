@@ -312,6 +312,51 @@
 - **Subclasses**:
   - EmployeeNotification (§110) - to employer
   - EmployerNotification (§111) - to insurer, 10 working days deadline
+  - HealthcareNotification (§112.3) - healthcare provider's notification to insurer
+
+### HealthcareNotification (Terveydenhuollon ilmoitus)
+- **Description**: Healthcare provider's notification to insurance company per §112.3 - triggers claim filing automatically
+- **Legal Basis**: §112.3, §41
+- **Attributes**:
+  - notificationDate: date - when healthcare notified insurer
+  - treatmentStartDate: date - when treatment began
+  - injuryType: enum [physical_injury, occupational_disease, psychological_injury]
+  - employerName: string - employer name for claim filing purposes
+  - injuredPartyName: string - name of injured party
+  - injuryDescription: string - brief description of injury/disease
+- **Relationships**:
+  - injuredParty: InjuredParty
+  - insuranceCompany: InsuranceCompany
+  - employer: Employer
+  - healthcareProvider: HealthcareProvider
+- **Triggers**: Automatic claim filing per §112.3 - must include injured party identification and employer information
+
+### AnnualWorkIncome (Vuosityöansio)
+- **Description**: Annual work income basis for compensation calculation - fundamental to entire compensation system
+- **Legal Basis**: §71-82
+- **Attributes**:
+  - baseAmount: monetary amount - §71.1 previous year earnings
+  - comparisonPeriodAmount: monetary amount - §71.2 3-year average
+  - comparisonPeriodUsed: boolean - whether 3-year average was applied
+  - deviationPercentage: number - >20% triggers comparison period per §71.2
+  - permanentChangeApplied: boolean - §72 permanent earnings change
+  - wageCoefficient: number - §63.3, §71 TyEL wage coefficient (palkkakerroin)
+  - minimumThresholdApplied: boolean - §79 €13,680 minimum threshold
+  - excludedIncomeTypes: enum array - §81-82 excluded income types
+  - calculationMethod: enum [standard, comparison_period, permanent_change, student_estimate, pupil_minimum, young_person]
+  - incomeType: enum [employee, entrepreneur, student, pupil, young_worker]
+- **Calculation Methods** (§71-78):
+  - standard (§71.1): Previous year earnings as base
+  - comparison_period (§71.2): 3-year average when deviation >20%
+  - permanent_change (§72): Adjustment for permanent earnings change
+  - student_estimate (§76): Estimated future earnings for students
+  - pupil_minimum (§77): 2x minimum annual earnings for school pupils
+  - young_person (§78): Special rules for young workers
+- **Related Entities**:
+  - DailyAllowance (§56-62) - uses AnnualWorkIncome for rate calculation
+  - DisabilityPension (§63-68) - uses AnnualWorkIncome for pension calculation
+  - FamilyPension (§99-109) - uses deceased's AnnualWorkIncome
+  - PermanentDamageCompensation (§83-87) - may reference AnnualWorkIncome
 
 ### CompensationDecision (Korvauspäätös)
 - **Description**: Written decision on compensation
@@ -555,6 +600,59 @@
 
 ### RehabilitationAllowance
 - **Legal Basis**: Sections 69, 88-98
+
+### ServiceResidence (Palveluasuminen)
+- **Description**: Service residence compensation for severely injured persons under §93
+- **Legal Basis**: §93
+- **Attributes**:
+  - **dailyAllowance**: number - Fixed at €46.82 per day per §93
+  - **eligibility**: enum [vaikeasti_vahingoittunut] - Severely injured only
+  - **startDate**: date
+  - **endDate**: date
+  - **serviceProvider**: string - Provider of service residence
+- **Note**: Only for "vaikeasti vahingoittunut" (severely injured) per §93
+
+### DailyActivityAid (Päivittäisissä toiminnoissa tarvittava apuväline)
+- **Description**: Aids for daily activities for severely injured persons under §94 (non-medical aids)
+- **Legal Basis**: §94
+- **Attributes**:
+  - **aidType**: enum [mobility, hearing, vision, speech, daily_living, other]
+  - **costAmount**: number - Actual cost (reimbursed if reasonable and necessary)
+  - **necessity**: boolean - Required for daily activities
+  - **exclusionReference**: reference - Not applicable if covered under §37.3 (medical rehabilitation aids)
+- **Note**: Different from §37.3 medical rehabilitation aids
+
+### HomeModification (Asunnonmuutostyöt)
+- **Description**: Home modification works and equipment for severely injured persons under §95
+- **Legal Basis**: §95
+- **Attributes**:
+  - **modificationType**: enum [structural, bathroom, kitchen, accessibility, safety, other]
+  - **costAmount**: number - Actual cost (reimbursed if reasonable and necessary)
+  - **frequencyLimit**: string - "Max once per 5 years" per §95
+  - **outPatientCarePossible**: boolean - Not applicable if outpatient care not possible
+  - **permanentResidence**: boolean - Must be permanent residence
+- **Note**: §95 states compensation is for permanent residence modifications, max once per 5 years
+
+### InterpretationServices (Tulkkauspalvelut)
+- **Description**: Interpretation services for persons with severe sensory disabilities under §96
+- **Legal Basis**: §96
+- **Attributes**:
+  - **serviceType**: enum [visual_impairment, hearing_impairment, speech_impairment]
+  - **maxAmount**: number - Capped at Kela's interpretation service rate
+  - **eligibility**: enum [vaikea_nakovamma, vaikea_kuulovamma, vaikea_puhevamma]
+  - **necessity**: boolean - Required due to injury-related disability
+- **Note**: For severe vision, hearing, or speech disabilities caused by the injury
+
+### FamilyMemberAdaptationTraining (Omaisen sopeutumisvalmennus)
+- **Description**: Family member participation in adaptation training under §97
+- **Legal Basis**: §97
+- **Attributes**:
+  - **familyMember**: FamilyMember - Family member who participated
+  - **trainingType**: string - Type of adaptation training
+  - **travelCosts**: TravelCost[] - Reimbursable travel costs per §97
+  - **accommodationCosts**: AccommodationCost[] - Reimbursable accommodation per §97
+  - **incomeLoss**: number - Compensation for lost earnings per §97
+- **Note**: Covers family member or person actually caring for injured party
 
 ### PermanentDamageCompensation
 - **Legal Basis**: Sections 83-87
