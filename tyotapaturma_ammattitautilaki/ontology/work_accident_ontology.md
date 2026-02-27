@@ -358,6 +358,10 @@
   - **Legal Basis**: §56.3
   - **Waiting Days**: 3
   - **Application**: Applies from accident day onwards; compensation starts from day 4 of incapacity
+- **NegligenceReduction (Myötävaikutus vähennys)**: §61
+  - **negligenceType values**: alcohol_drugs, safety_violation, gross_negligence, criminal
+  - **reductionPercentage**: max 50% per §61
+  - **isReductionApplied**: boolean
 
 ### DisabilityPension
 - **Legal Basis**: Sections 63-68
@@ -415,6 +419,26 @@
 - **Attributes**: causationType, liabilityBasis, faultLevel
 - **causationType values**: direct, indirect, contributory
 - **Legal Basis**: §95-96
+
+### StatisticHistory (Tilastohistoria)
+- **Description**: Statistical history data for insurance transfers per §167
+- **Legal Basis**: §167
+- **Attributes**: payrollData, accidentEventData, compensationData, yearsCovered, sourceInsuranceCompany, targetInsuranceCompany
+- **yearsCovered**: 5 years per §167
+- **Purpose**: Required when transferring insurance or requesting offers with payroll >€150,000
+
+### InsuranceRegister (Vakuutusrekisteri)
+- **Description**: Insurance register maintained by Tapaturmavakuutuskeskus for compliance monitoring
+- **Legal Basis**: §178
+- **Attributes**: employerName, businessId, insuranceCompany, policyStartDate, policyEndDate, registrationDate
+- **Purpose**: Monitor insurance compliance, combat gray economy
+
+### DelayInterest (Viivästyskorko)
+- **Description**: Interest charged for delayed payments
+- **Legal Basis**: §152 (compensation delay), §172 (premium delay)
+- **Attributes**: interestType, baseAmount, delayStartDate, interestRate, minimumThreshold
+- **interestType values**: compensation_delay, premium_delay
+- **minimumThreshold**: €7.28 per §152.4
 
 ### DeathCompensation
 - **Legal Basis**: Sections 99-109
