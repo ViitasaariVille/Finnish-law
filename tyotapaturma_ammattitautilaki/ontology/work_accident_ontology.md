@@ -1840,3 +1840,35 @@
   - excludedActivities: array - defined per §201
   - requiresAlternativeCoverage: boolean
 - **Rule per §201**: Certain activities excluded from free time insurance coverage
+
+### EmployerInsuranceNotification (Työnantajan vakuutusilmoitusvelvollisuus)
+- **Description**: Employer notification obligations for insurance per §159-160
+- **Legal Basis**: §159-160
+- **Attributes**:
+  - notificationType: enum [initial_application, annual_update, change_notification, termination_notification]
+  - submissionDeadline: enum [14_days_after_start, january_31, 30_days_from_change, 30_days_from_termination]
+  - industrySector: string - toimiala (§159.1)
+  - workAmountAndQuality: string - työn määrä ja laatu (§159.1)
+  - workStartDate: date
+  - ownershipStructure: string
+  - changeDescription: string - for change notifications (§160.2)
+- **Rule per §159-160**: Employer must notify within specified deadlines for initial, annual, change, and termination notifications
+
+### ForeignWorkVoluntaryInsurance (Ulkomailla tehtävä työ ja vapaaehtoinenvakuutus)
+- **Description**: Voluntary insurance for employees working abroad per §204
+- **Legal Basis**: §204
+- **Attributes**:
+  - workLocation: string - country where work performed
+  - workDuration: period - duration of foreign assignment
+  - voluntaryInsuranceType: enum [foreign_assignment, temporary_abroad]
+  - employerArrangedCoverage: boolean
+  - portabilityRules: string - EU/EEA coordination per §204
+- **Rule per §204**: Voluntary insurance may be arranged for work outside Finland
+
+### TapaturmavakuutuskeskusTask (Tapaturmavakuutuskeskuksen tehtävät)
+- **Description**: Tasks and responsibilities of Accident Insurance Centre per §209
+- **Legal Basis**: §209
+- **Attributes**:
+  - taskType: enum [cost_distribution, member_management, appeals_administration, claim_coordination, accident_prevention]
+  - relatedParties: array - insurance companies, AccidentAppealsBoard
+- **Tasks per §209**: Cost distribution, member management, appeals administration, claim coordination
