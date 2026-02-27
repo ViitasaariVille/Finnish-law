@@ -22,9 +22,22 @@
 ### Student (Opiskelija)
 - **Description**: Person whose primary occupation is studying
 - **Legal Basis**: §70, §76, §77
-- **Attributes**: studentType, studyProgram, enrollmentDate, expectedGraduationDate, isFullTime, actualEarningsAtInjury
-- **studentType values**: higher_education, vocational, basic_secondary
-- **Related Compensation**: §70 (full incapacity if injury prevents studying), §76 (future earnings estimate), §77 (minimum 2x for pupils)
+- **Attributes**: 
+  - studentType: enum [higher_education, vocational, basic_secondary]
+  - studyProgram, enrollmentDate, expectedGraduationDate
+  - isFullTime: boolean
+  - actualEarningsAtInjury: MonetaryAmount
+  - **Special Earnings Rules per §76, §77**:
+    - **estimatedEarnings3YearsPostGraduation** (decimal): §76 for vocational students - estimated earnings 3 years after graduation
+    - **isWithinOneYearOfCompletion** (boolean): §76 - applies within 1 year of study completion
+    - **studyCompletionStatus** (enum): [ongoing, completed_within_year, completed_over_year_ago]
+    - **minimumEarningsMultiplier** (decimal): §77 - 2.0x basic amount for pupils (€13,680 × 2)
+    - **educationLevel** (enum): [basic_secondary, vocational, higher_education]
+    - **actualEarningsCalculationMethod** (enum): [estimated_future, pupil_minimum, actual_earnings]
+- **Related Compensation**: 
+  - §70: Full incapacity if injury prevents studying
+  - §76: Future earnings estimate for vocational students
+  - §77: Minimum 2x basic amount (€13,680 × 2) for pupils
 
 ### Entrepreneur  
 - **Description**: Self-employed person with YEL insurance
@@ -409,7 +422,16 @@
 - **Description**: Work accident defined as injury suffered in circumstances covered by the law
 - **Subclasses** (per §17-§25):
   - **WorkplaceAccident (Työpaikkatapaturma)** - §17, injury at workplace during work
-  - **CommuteAccident (Työmatkatapaturma)** - §20, injury on journey to/from work
+  - **CommuteAccident (Työmatkatapaturma)** - §20, §23, injury on journey to/from work
+    - **isCustomaryRoute** (boolean): §23.1 - must be "tavanomainen" (customary) commute between home and work
+    - **hasDeviation** (boolean): whether route deviated from direct path
+    - **deviationReason** (enum): [childcare, grocery_shopping, other_comparable, none] - §23.1 minor deviations allowed
+    - **deviationDurationMinutes** (int): duration of deviation
+    - **isMealBreak** (boolean): §23.2 - normal meal breaks near workplace included
+    - **isRestBreak** (boolean): §23.2 - rest breaks near workplace included
+    - **proximityToWorkplace** (enum): [near_area, normal_route, other] - §23.2 area near workplace
+    - **routeStartLocation**: string - typically home
+    - **routeEndLocation**: string - typically workplace
   - **BusinessTripAccident (Työmatkatapaturma ja muu työliikenne)** - §22, injury during work-related travel
   - **WorkRelatedActivityAccident** - §23-§24, sports/rehabilitation activities
   - **SelfDefenseAccident (Itsensä puolustustyötapaturma)** - §25, self-defense and rescue operations
@@ -441,6 +463,19 @@
   - Rannekanavaoireyhtyma (CarpalTunnelSyndrome) - §29, condition: repetitive, forceful, wrist-bending movements
   - TyostaAiheutunutPaheneminen (WorkRelatedDeterioration) - §30, essential worsening of pre-existing condition
 
+### OccupationalDiseaseManifestation (Ammattitaudin ilmenemisaika)
+- **Legal Basis**: §31
+- **Description**: Date when occupational disease manifested - determines claim filing deadlines and insurance liability
+- **Attributes**:
+  - **manifestationDate** (date): date when disease first manifested per §31 (first medical exam for symptoms)
+  - **firstMedicalExaminationDate** (date): date injured first sought medical examination for symptoms
+  - **symptomOnsetDate** (date): date symptoms first appeared
+  - **diagnosisDate** (date): date of formal diagnosis
+  - **isManifestationDateSpecial** (boolean): whether "special reason" applies per §31
+  - **specialReasonDescription** (text): explanation if special reason applies
+  - **manifestationBasis** (enum): [first_medical_exam, symptom_onset, diagnosis_date] - basis for determination
+- **Note**: Per §31, manifestation date is when injured first sought medical examination for symptoms (unless special reason requires different date)
+
 ### PreExistingConditionDeterioration (Olemassa olevan tilan paheneminen)
 - **Description**: Significant worsening of pre-existing injury or illness due to work accident or occupational disease
 - **Legal Basis**: §19 (accident-related), §30 (occupational disease-related)
@@ -454,7 +489,15 @@
     - **Description**: Essential worsening of pre-existing condition primarily caused by occupational exposure to physical, chemical, or biological factors
     - **Conditions**: Same exposure factor as the pre-existing condition; compensated for duration of essential worsening
     - **Causation**: Must be probable that exposure was the primary cause
-- **Attributes**: causationAssessment, preExistingCondition, worseningDegree, duration, causalContribution
+- **Attributes**: 
+  - causationAssessment, preExistingCondition, worseningDegree, duration
+  - **deteriorationType** (enum): [accident_related, occupational_disease_related] - per §19 or §30
+  - **maxDurationMonths** (int): 6 for accident-related per §19.2, null for occupational disease
+  - **isExtended** (boolean): whether extension beyond 6 months granted
+  - **extensionReason** (enum): [treatment_choice_delay, waiting_delay, none] - per §19.2
+  - **extensionGrantedDate** (date): when extension was granted
+  - **accidentDate** (date): for calculating 6-month deadline per §19.2
+  - **sixMonthDeadlineDate** (date): deadline 6 months from accident
 
 ### WorkMotionStrain (Työliikekipeytyminen)
 - **Legal Basis**: Section 33
@@ -475,12 +518,33 @@
   - NOT compensable if due to prior injury, prior illness, or tissue damage that could ONLY occur from accident
 
 ### ViolenceDamage
-- **Legal Basis**: Section 34
-- **Condition**: Must be related to work duties
+- **Legal Basis**: §34
+- **Description**: Damage from assault or intentional act by another person - must be related to work duties
+- **Attributes**:
+  - causationType: enum [assault, intentional_act, threat]
+  - liabilityBasis: enum [work_related, third_party_liable]
+  - faultLevel: enum [intentional, negligent, unknown]
+  - **exclusionType** (§34.2-34.3): enum [none, family_related, private_life, commute_activity, recreational_activity]
+  - **isWorkRelatedCausation** (boolean): whether primarily related to work duties
+  - **locationType** (enum): [workplace, commute_route, recreational_venue, other]
+  - **primaryCauseRelation** (enum): [work_duty, family_relation, private_life, unknown]
+- **Exclusions per §34.2-34.3**:
+  - NOT covered if act primarily relates to family relations or private life
+  - NOT covered if occurred during commute breaks (§23.2) or recreational activities (§24.1 paragraphs 2-8) unless intentional third-party damage related to work duties
 
 ### PsychologicalShock
-- **Legal Basis**: Section 35
+- **Legal Basis**: §35
+- **Description**: Psychological injury from shock or fear caused by work-related incident
 - **Subclasses**: AcuteStressReaction, PTSD, PersonalityChange
+- **Preconditions per §35**:
+  - **diagnosisRequired**: boolean - must be diagnosed by qualified professional
+  - **diagnosisDeadline**: date - PTSD/personality change requires diagnosis within 6 months of event
+  - **causationRequirement**: incident must be sudden, unexpected, at work or commuting
+  - **workConnection**: boolean - must be causally connected to work duties
+- **Subclasses**:
+  - **AcuteStressReaction** (Akuutti stressireaktio): immediate reaction, short duration
+  - **PTSD** (Traumaperäinen stressihäiriö): requires diagnosis within 6 months per §35
+  - **PersonalityChange** (Persoonallisuuden muutos): requires diagnosis within 6 months per §35
 
 ---
 
@@ -623,7 +687,21 @@
 - **Note**: Applies to full disability pension, not partial
 
 ### RehabilitationAllowance
-- **Legal Basis**: Sections 69, 88-98
+- **Legal Basis**: §69, §88-98
+- **Description**: Compensation during rehabilitation to replace lost earnings
+- **Attributes**:
+  - **phase** (enum): [first_year, after_first_year] - §69.2
+  - **calculationBasis** (enum): [daily_allowance_full, disability_pension_full, partial_capacity_based]
+  - **includesVacationPeriods** (boolean): §69.3 - includes vacation periods during education
+  - **vacationPeriodStart** (date): start of vacation period
+  - **vacationPeriodEnd** (date): end of vacation period
+  - **preventsSuitableWork** (boolean): whether rehabilitation prevents suitable work
+  - **firstYearEndDate** (date): end of first year of rehabilitation
+  - **yearlyAmount** (MonetaryAmount): full amount regardless of capacity reduction per §69.2
+- **Calculation Rules per §69.2**:
+  - First year: Full daily allowance regardless of capacity reduction
+  - After first year: Full disability pension amount regardless of capacity
+  - Exception: If rehabilitation doesn't prevent suitable work → calculated per §56-57 or §63-64
 
 ### ServiceResidence (Palveluasuminen)
 - **Description**: Service residence compensation for severely injured persons under §93
@@ -728,6 +806,21 @@
   - **wageCoefficientApplied**: number - wage coefficient (palkkakerroin) per TyEL §96
   - **minimumThresholdMet**: boolean - at least 10% reduction AND at least 1/20 of minimum annual work income reduction per §63.1
 - **Related**: DisabilityPension (§63-68)
+
+### PartialWorkCapacity (Osittainen työkyky)
+- **Legal Basis**: §57, §64
+- **Description**: Partial work capacity calculation for daily allowance and disability pension - earnings reduction percentage rounded to nearest 5%
+- **Attributes**:
+  - **earningsReductionPercentage**: number - rounded to nearest 5% per §57, §64
+  - **preAccidentEarnings**: MonetaryAmount - earnings before accident
+  - **postAccidentEarnings**: MonetaryAmount - earnings after accident (with reduced capacity)
+  - **comparisonMethod**: enum [same_employer, comparable_work, estimated_capacity] - how earnings compared
+  - **appliesToDailyAllowance**: boolean - §57 applies to daily allowance
+  - **appliesToDisabilityPension**: boolean - §64 applies to disability pension
+  - **partialDisabilityType**: enum [earning_reduction, capacity_reduction] - type of partial disability
+  - **roundingMethod**: enum [nearest_5, upward] - rounding per law
+- **Calculation**: (preAccidentEarnings - postAccidentEarnings) / preAccidentEarnings * 100, rounded to nearest 5%
+- **Related Entities**: DailyAllowance (§57), DisabilityPension (§64), WorkCapacity
 
 ### Takautumisoikeus (RecourseRight)
 - **Description**: Right of recourse - insurer's right to claim compensation from liable third party
@@ -851,11 +944,21 @@
 ### FuneralExpenses (Hautausapu)
 - **Description**: Compensation for funeral expenses and transportation of deceased
 - **Legal Basis**: §109
-- **Amount**: €4,760
-- **Payment To**: Deceased's estate (kuolinpesä) if funeral costs paid from estate; otherwise to those who arranged funeral
-- **Maximum**: Amount that would have been paid to estate
-- **Additional**: Reasonable transportation costs from death location to residence/home locality also covered
-- **Attributes**: amount, recipient, deathLocation, funeralDate
+- **Base Amount**: €4,760
+- **Payment To** (§109.2): Deceased's estate (kuolinpesä) if funeral costs paid from estate; otherwise to those who arranged funeral up to estate amount
+- **Additional**: Reasonable transportation costs from death location to residence/home locality also covered (§109.3)
+- **Attributes**: 
+  - amount: MonetaryAmount - base €4,760
+  - recipient: string
+  - **recipientType** (enum): [deceased_estate, funeral_arranger, other]
+  - **paymentSource** (enum): [estate_funds, third_party]
+  - **maxPayableAmount** (MonetaryAmount): limited to estate amount per §109.2
+  - **transportationCostsCovered** (boolean): §109.3
+  - **deathLocation** (string): where death occurred
+  - **homeLocality** (string): deceased's home locality
+  - **transportationCostAmount** (MonetaryAmount): reasonable transportation costs
+  - **totalFuneralCosts** (MonetaryAmount): total cost of funeral
+  - **estateAmount** (MonetaryAmount): estate amount for max calculation
 
 ---
 
