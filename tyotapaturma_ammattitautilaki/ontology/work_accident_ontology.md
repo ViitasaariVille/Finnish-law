@@ -63,6 +63,7 @@
   - medicalFindings (lääketieteelliset löydökset)
 - **Relationships**:
   - **suffers** → OccupationalAccident (§15-16)
+  - **dies** → DeathCompensation (§99) - creates survivor rights
   - **files** → ClaimApplication (§128)
 
 ### ClaimantObligation (Korvausasian selvittämiseen myötävaikuttaminen)
@@ -99,6 +100,9 @@
 ### Beneficiary (Edunsaaja)
 - **Description**: Person entitled to family pension (perhe-eläke) after death - legal term per §99-109
 - **Legal Basis**: §99-109
+- **Relationships**:
+  - **receives** → DeathCompensation (§99-109)
+  - **is_dependent_of** → InjuredParty (§99-109)
 - **Subclasses**: 
   - Leski (WidowEquivalent)
     - Aviopuoliso (StatutorySpouse)
@@ -1365,6 +1369,9 @@
 ### DeathCompensation
 - **Legal Basis**: Sections 99-109
 - **Includes**: SurvivorsPension, FuneralExpenses
+- **Relationships**:
+  - **includes** → SurvivorsPension (§100-102)
+  - **includes** → FuneralExpenses (§109)
 
 ### FuneralExpenses (Hautausapu)
 - **Description**: Compensation for funeral expenses and transportation of deceased
