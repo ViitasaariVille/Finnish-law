@@ -88,6 +88,31 @@
 - **Legal Basis**: Sections 36-49
 - **Subclasses**: PublicHealthcare, PrivateHealthcare, ForeignHealthcare, Medicine
 
+### TravelAndAccommodationCosts
+- **Legal Basis**: Section 50
+- **Description**: Transportation costs for treatment and accommodation costs when treatment requires overnight stay away from home
+- **Subclasses**: TransportationCosts, AccommodationCosts
+
+### CareAllowance (Hoitotuki)
+- **Legal Basis**: Section 51
+- **Description**: Compensation provided when injured party requires care assistance
+- **Levels**:
+  - Perus (Basic): 8,70€/day
+  - Korotettu (Elevated): 19,55€/day
+  - Ylin (Highest): 23,41€/day
+
+### ClothingAllowance (Vaatelisä)
+- **Legal Basis**: Section 52
+- **Description**: Compensation for clothing damage due to treatment/prosthetics
+- **Levels**:
+  - Basic: 0,58€/day
+  - Elevated: 2,31€/day
+
+### HouseholdAdditionalCosts (Kodinhoidon lisäkustannukset)
+- **Legal Basis**: Section 53
+- **Description**: Covers additional costs for household management due to injury
+- **Maximum Duration**: 1 year from accident date
+
 ### DailyAllowance
 - **Legal Basis**: Sections 56-62
 - **Maximum Duration**: 1 year from accident date
