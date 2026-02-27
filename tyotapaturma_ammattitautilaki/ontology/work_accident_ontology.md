@@ -699,6 +699,10 @@
   4. UnemploymentFund - unemployment benefit recovery (§141)
   5. PensionInstitution - pension recovery (§140)
   6. Municipality - social care recovery (§143)
+  7. Kansaneläkelaitos - study grant recovery (opintotuki)
+  8. DebtCollection - ulosottoviranomainen debt collection
+  5. PensionInstitution - pension recovery (§140)
+  6. Municipality - social care recovery (§143)
   7. Kansaneläkelaitos - study grant recovery
   8. EnforcementAuthority - debt collection
 
@@ -1450,16 +1454,19 @@
 - Authorized to provide insurance
 
 ### StateTreasury (Valtiokonttori)
-- **Legal Basis**: §3.3, §207
+- **Legal Basis**: §3.3, §207, §212, §213
 - **Description**: Pays compensation for state employees when the State is the employer (state employees exempt from mandatory insurance per §3.3)
 - **Attributes**:
   - institutionName: "Valtiokonttori"
   - role: enum [compensation_payer_for_state_employees]
+  - memberOfAccidentCentre: boolean - true per §212 (member of Tapaturmavakuutuskeskus)
+  - participatesInCostDistribution: boolean - true per §213
   - legalBasis: "§207"
 - **Relationships**:
   - pays_compensation_for: Employee (when employer.isStateEmployer = true)
+  - member_of: AccidentInsuranceCentre (§212)
   - alternative_to: InsuranceCompany (for state employees)
-- **Note**: State Treasury (Valtiokonttori) is the institution responsible for compensating state employees per §207
+- **Note**: State Treasury participates in cost distribution system per §213
 
 ### AccidentInsuranceCentre (Tapaturmavakuutuskeskus)
 - **Legal Basis**: Sections 209-225
@@ -1755,3 +1762,81 @@
 
 - **Geographical**: Finland primarily, extended to EU/agreement countries
 - **Personal Scope**: Employees, entrepreneurs (voluntary), certain other groups
+### PrisonSentenceSuspension (Vankeusrangaistuksen vaikutus korvaukseen)
+- **Description**: Suspension of income loss compensation during prison sentence per §144
+- **Legal Basis**: §144
+- **Attributes**:
+  - suspensionTrigger: enum [one_month_imprisonment]
+  - suspensionStartDate: date
+  - canWorkInPrison: boolean - per työsopimuslaki
+  - canDoPrisonWork: boolean - per §144
+  - dependentsContinueEligible: array - aviopuoliso, avopuoliso, <18 children per §144.2
+  - requiresApplicationForContinuation: boolean
+- **Rule per §144**: Payment suspended during prison sentence; may continue if prisoner has dependents
+
+### ClaimDelayConsequence (Korvausasian käsittelyajasta aiheutuva korvaus)
+- **Description**: Consequences of unreasonable delay in claim processing per §146-147
+- **Legal Basis**: §146-147
+- **Attributes**:
+  - delayPeriod: period - time from claim filing to processing
+  - isUnreasonable: boolean - per §146
+  - compensationAmount: MonetaryAmount - interest on delayed payment
+  - interestRate: decimal - statutory interest rate per §147
+- **Rule**: Claimant entitled to compensation if processing unreasonably delayed
+
+### RehabilitationInterruption (Kuntoutuksen keskeytys)
+- **Description**: Rules for rehabilitation interruption per §149
+- **Legal Basis**: §149
+- **Attributes**:
+  - interruptionReason: enum [claimant_refusal, health_condition, other]
+  - interruptionDate: date
+  - resumptionDate: date
+  - benefitSuspensionDays: integer
+- **Rule per §149**: Benefits may be interrupted if claimant doesn't cooperate with rehabilitation
+
+### ForeignWorkIncomeCalculation (Ulkomaantyöstä saadun tulon laskeminen)
+- **Description**: Income calculation for work performed abroad per §168
+- **Legal Basis**: §168
+- **Attributes**:
+  - workLocation: string - country where work performed
+  - foreignIncome: MonetaryAmount - original foreign income
+  - exchangeRate: decimal - EUR conversion rate
+  - convertedEarnings: MonetaryAmount - converted to EUR per §168
+  - calculationDate: date
+- **Rule**: Foreign work income converted to EUR using appropriate exchange rate
+
+### VoluntaryInsuranceRestriction (Vapaaehtoisuuden rajoitukset)
+- **Description**: Restrictions on voluntary insurance per §187
+- **Legal Basis**: §187
+- **Attributes**:
+  - restrictionType: enum [mandatory_workers, certain_occupations]
+  - affectedParties: string - who cannot voluntarily insure per §187
+  - requiredMandatoryInstead: boolean
+- **Rule per §187**: Certain groups cannot voluntarily insure; mandatory insurance required
+
+### EntrepreneurNotificationDeadline (Yrittäjän ilmoitusaika)
+- **Description**: Deadline for entrepreneur insurance notification per §195
+- **Legal Basis**: §195
+- **Attributes**:
+  - notificationDeadlineDays: integer - days from business start per §195
+  - lateNotificationConsequences: string
+  - retroactiveCoverageAllowed: boolean
+- **Rule**: Entrepreneur must notify within deadline specified in §195
+
+### EmployeeFreeTimeInsurance (Työntekijän vapaa-ajan vakuutus)
+- **Description**: Employee free time insurance coverage per §199
+- **Legal Basis**: §199
+- **Attributes**:
+  - coverageType: enum [leisure_accident, extra_coverage]
+  - employerPaysContribution: boolean - per §199
+  - voluntaryParticipation: boolean
+- **Rule per §199**: Employer may arrange free time insurance for employees
+
+### FreeTimeInsuranceExclusion (Vapaa-ajan vakuutuksen poissulkeminen)
+- **Description**: Exclusions from free time insurance per §201
+- **Legal Basis**: §201
+- **Attributes**:
+  - exclusionApplies: boolean
+  - excludedActivities: array - defined per §201
+  - requiresAlternativeCoverage: boolean
+- **Rule per §201**: Certain activities excluded from free time insurance coverage
