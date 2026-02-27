@@ -861,6 +861,25 @@
   - InsuranceCompanyDecisionAppeal (§237) - Appeal against insurance company decision
   - PremiumAssessmentAppeal (§238) - Appeal against premium calculation
 
+### InsuranceCourt (Vakuutusoikeus)
+- **Legal Basis**: §227
+- **Description**: Appellate court for insurance decisions, hears appeals from Accident Appeals Board decisions
+- **Attributes**:
+  - courtName: "Vakuutusoikeus"
+  - courtType: appellate
+  - jurisdiction: insurance_matters
+  - appealDeadlineDays: 30 (per §241 for board appeals)
+- **Appeal Chain**: Insurance Company → Accident Appeals Board (§237) → Insurance Court (§227) → Supreme Court
+
+### DistrictCourt (Käräjäoikeus)
+- **Legal Basis**: §228
+- **Description**: First instance court for certain disputes under the law
+- **Attributes**:
+  - courtName: "Käräjäoikeus"
+  - courtType: first_instance
+  - jurisdiction: general_disputes
+- **Note**: Some cases may go directly to District Court rather than through administrative boards
+
 ### Appeal (Valitus)
 - **Description**: Formal appeal against insurance company decision
 - **Legal Basis**: §237-243
