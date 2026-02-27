@@ -60,8 +60,19 @@
 ### FamilyMember (Perheenjäsen)
 - **Description**: Family member as defined for ownership calculation and benefit purposes
 - **Legal Basis**: §9, §100
-- **Attributes**: relationshipType, sharesHousehold, relationshipStartDate, isForOwnershipCalculation, isForBenefitPurposes
-- **relationshipType values**: spouse, cohabiting_partner, direct_ascendant, direct_descendant
+- **Attributes**: 
+  - relationshipType: enum [spouse, cohabiting_partner, direct_ascendant, direct_descendant]
+  - sharesHousehold: boolean
+  - relationshipStartDate: date
+  - isForOwnershipCalculation: boolean
+  - isForBenefitPurposes: boolean
+  - ownershipPercentage: number - percentage of company ownership (0-100)
+  - maxOwnership30Percent: boolean - individual cannot exceed 30% ownership per §9.1
+  - familyMaxOwnership50Percent: boolean - family total cannot exceed 50% ownership per §9.1
+  - ownershipCalculationDate: date - date when ownership was calculated
+- **Ownership Rules** (§9.1):
+  - Individual family member: maximum 30%
+  - Total family ownership: maximum 50%
 - **Related Rules**: Max 30% individual ownership, max 50% family ownership (§9.1)
 
 ### ClaimFilingDeadline (Korvausasian vireille saattamisen määräaika)
@@ -85,6 +96,10 @@
 - **Legal Basis**: §3, §111.2.2, §159
 - **Attributes**: 
   - businessId, companyName, annualPayroll, isExemptFromInsurance, exemptionType, annualPayrollEUR
+  - exemptionReason: enum [none, below_threshhold_1200, state_employer, other_statutory_exemption]
+  - exemptionStartDate: date - when exemption became effective
+  - exemptionEndDate: date - when exemption ends (null if ongoing)
+  - exemptionDocumentation: reference to documentation supporting exemption
   - contactInformation (yhteystiedot) - REQUIRED in notification
   - industrySector (toimiala) - §159.1
   - workStartDate (työn alkamisaika) - §159.1
@@ -213,6 +228,24 @@
 - **Note**: For experience-rated employers (erikoismaksuperusteinen), claims and full cost charges are already considered in premium
 - **Attributes**: documentationDate, safetyMeasures, trainingPrograms, riskAssessment, incidentHistory
 
+### Omavastuu (EmployerSelfResponsibility)
+- **Description**: Employer's own responsibility share of insurance premiums per §184
+- **Legal Basis**: §184
+- **Purpose**: Employers participate in bearing the costs of work accidents and occupational diseases through a mandatory self-responsibility component
+- **Attributes**:
+  - selfResponsibilityType: enum [fixed_amount, percentage_based, combined]
+  - baseAmount: fixed base per §184.1 (€1,250 minimum)
+  - percentageRate: percentage of premium (§184.1)
+  - calculationYear: year for which self-responsibility is calculated
+  - employerCategory: enum [table_based, experience_rated, new_employer]
+  - reductionApplied: boolean - reductions may apply for good safety record
+  - documentation: reference to required documentation
+- **Application** (§184.1): 
+  - Mandatory component in premium calculation
+  - Minimum €1,250 or percentage of premium, whichever is higher
+  - Purpose: Incentivize workplace safety
+- **Note**: Different rules apply to table-based (taulustomaksuperusteinen) vs experience-rated (erikoismaksuperusteinen) employers
+
 ### InsuranceTransfer (Vakuutuksen siirto)
 - **Description**: Transfer of insurance policy from one insurance company to another
 - **Legal Basis**: §162
@@ -262,7 +295,7 @@
     - **householdTasks**: enum array [cleaning, laundry, shopping, childcare]
     - **maxDurationDays**: 365 (1 year from accident)
   - **PropertyDamageApplication** (§54):
-    - **itemTypes**: enum array [glasses, hearing_aid, dental_prosthesis, support, prosthetic, clothing, ring]
+    - **itemTypes**: enum array [glasses, hearing_aid, dental_prosthesis, support, prosthetic, clothing, ring, artificial_limb, artificial_joint, artificial_organ, support_binder, support_vest, corset]
 
 ### Notification (Ilmoitus)
 - **Description**: Formal notification of accident
@@ -413,6 +446,17 @@
 - **Description**: Covers additional costs for household management due to injury
 - **Maximum Duration**: 1 year from accident date
 
+### WaitingPeriod (Odotusaika)
+- **Description**: Waiting period before daily allowance becomes payable
+- **Legal Basis**: §56.3
+- **Attributes**:
+  - **waitingDays**: integer - fixed at 3 per §56.3
+  - **waitingPeriodStart**: date - when the waiting period begins (accident date or first day of incapacity)
+  - **paymentStartDate**: date - date when payments begin after waiting period is satisfied
+  - **isSatisfied**: boolean - whether the waiting period has been completed
+  - **consecutiveDaysRequired**: integer - must be 3 consecutive days of incapacity
+- **Note**: Daily allowance is not paid for first 3 consecutive days of incapacity (excluding accident day)
+
 ### DailyAllowance
 - **Legal Basis**: Sections 56-62
 - **Maximum Duration**: 1 year from accident date
@@ -437,6 +481,20 @@
   - **Waiting Days**: 3
   - **Application**: Applies from accident day onwards; compensation starts from day 4 of incapacity
 - **NegligenceReduction (Myötävaikutus vähennys)**: §61
+
+### WaitingPeriod (Odotusaika)
+- **Legal Basis**: §56.3
+- **Description**: Mandatory waiting period before daily allowance payments begin. Daily allowance is not paid for the first 3 consecutive days of incapacity (excluding the accident day).
+- **Attributes**:
+  - **waitingDays**: number - fixed at 3 per §56.3
+  - **waitingPeriodStart**: date - when waiting period begins (accident day)
+  - **paymentStartDate**: date - day 4, when payments begin
+  - **isSatisfied**: boolean - whether 3 consecutive days of incapacity occurred
+  - **consecutiveDaysRequired**: number - always 3 per law
+  - **excludesAccidentDay**: boolean - waiting period starts from day after accident
+- **Related Entities**:
+  - DailyAllowance: hasWaitingPeriod relationship
+  - Injury: affects workCapacityDuringWaitingPeriod
   - **negligenceType values**: alcohol_drugs, safety_violation, gross_negligence, criminal
   - **reductionPercentage**: max 50% per §61
   - **isReductionApplied**: boolean
@@ -445,6 +503,20 @@
 ### DisabilityPension
 - **Legal Basis**: Sections 63-68
 - **Requirement**: Minimum 10% work capacity reduction
+
+### Kertakorotus (PensionIncrease)
+- **Description**: One-time increase to disability pension per §67
+- **Legal Basis**: §67
+- **Attributes**:
+  - increasePercentage: 20% (twenty percent increase per §67.1)
+  - baseAmount: reference to base disability pension
+  - effectiveDate: date when increase begins
+  - reason: enum [age_60, age_65, vocational_rehabilitation_failure]
+  - applicationDate: date of application
+- **Conditions** (§67.1): 
+  - Recipient has reached age 60, OR
+  - Recipient has reached age 65 with no vocational rehabilitation opportunity
+- **Note**: Applies to full disability pension, not partial
 
 ### RehabilitationAllowance
 - **Legal Basis**: Sections 69, 88-98
@@ -502,15 +574,57 @@
 
 ### Takautumisoikeus (RecourseRight)
 - **Description**: Right of recourse - insurer's right to claim compensation from liable third party
-- **Attributes**: recourseType, liableParty, claimAmount
-- **recourseType values**: subrogation, contribution, indemnification
+- **Attributes**: 
+  - recourseType: enum [subrogation, contribution, indemnification]
+  - liableParty: reference to DamageCauser
+  - claimAmount: monetary amount
+  - exclusionApplies: boolean
+  - exclusionReason: enum [none, employer_liability_excluded, intentional_self_injury, unrelated_third_party]
+- **Exclusion Logic**:
+  - **NOT applicable** when: Employer is liable (§93.1 - employer cannot claim from themselves)
+  - **NOT applicable** for: Intentional self-injury by injured party (§94)
+  - **NOT applicable** when: Third party is not legally liable for the damage
+  - **Applies** when: Third party (other than employer) is liable for damage causing the insured event
 - **Legal Basis**: §95-96
 
 ### DamageCauser (Vahingonaiheuttaja)
-- **Description**: Party causing the damage/accident
-- **Attributes**: causationType, liabilityBasis, faultLevel
-- **causationType values**: direct, indirect, contributory
+- **Description**: Party causing the damage/accident - distinct from employer who may be liable but not necessarily the causer
+- **Attributes**: 
+  - causationType: enum [direct, indirect, contributory]
+  - liabilityBasis: enum [strict_liability, fault_based, contractual, statutory]
+  - faultLevel: enum [none, slight, moderate, gross, intentional]
+  - partyType: enum [employer, third_party, colleague, self, unknown]
+  - isIdentified: boolean
+  - insuranceStatus: enum [insured, uninsured, unknown]
 - **Legal Basis**: §95-96
+
+### Vahinko (Damage)
+- **Description**: Damage as a consequence of a vahinkotapahtuma (damage event) - the actual injury/illness resulting from the insured event
+- **Legal Basis**: §2.3, §15-16
+- **Attributes**:
+  - damageType: enum [physical_injury, occupational_disease, psychological_injury, death]
+  - severity: enum [minor, moderate, severe, total]
+  - bodyPartAffected: string
+  - medicalDiagnosis: string
+  - causationToEvent: reference to SyyYhteys
+  - manifestationDate: date
+  - isPermanent: boolean
+- **Causal Chain**: Vahinkotapahtuma (Event) → Vahinko (Damage) → Korvaus (Compensation)
+- **Related**: §83-87 (disability classification depends on damage consequence)
+
+### SyyYhteys (CausalConnection)
+- **Description**: Causal connection between work accident/occupational disease and the damage/injury
+- **Legal Basis**: §16, §19, §30
+- **Attributes**:
+  - connectionType: enum [direct_cause, contributing_cause, aggravation]
+  - assessmentDate: date
+  - assessor: string (medical expert)
+  - medicalOpinion: string
+  - workContribution: number (percentage 0-100)
+  - preExistingCondition: boolean
+  - deteriorationType: reference to PreExistingConditionDeterioration
+- **Assessment Criteria** (§16): Damage must be caused by work accident or occupational disease
+- **Required for**: All compensation claims except funeral expenses
 
 ### StatisticHistory (Tilastohistoria)
 - **Description**: Statistical history data for insurance transfers per §167
@@ -577,6 +691,19 @@
 - **Legal Basis**: Sections 226-228
 - **Description**: Advisory body for uniform compensation practice - issues recommendations and opinions
 - **NOT an appeal body** - provides expert opinions to insurers
+
+### AccidentAppealsBoard (Tapaturma-asiainratkaisulautakunta)
+- **Legal Basis**: §237
+- **Description**: First instance appeal body for vakuutuslaitos decisions - distinct from ClaimAppealBoard
+- **Appeal deadline**: 30 days (§241)
+- **Attributes**: 
+  - boardName (Finnish: Tapaturma-asiainratkaisulautakunta)
+  - jurisdiction
+  - decisionMakingProcess
+  - isDistinctFromClaimAppealBoard: boolean - true (separate body per §226-228 vs §237)
+- **Subclasses**:
+  - InsuranceCompanyDecisionAppeal (§237) - Appeal against insurance company decision
+  - PremiumAssessmentAppeal (§238) - Appeal against premium calculation
 
 ### AccidentAppealsBoard (Tapaturma-asioiden muutoksenhakulautakunta)
 - **Legal Basis**: §237
@@ -660,6 +787,8 @@
   - **adjustmentFactor**: Annual adjustment factor per §231.4
   - **advanceEstimate**: Preliminary estimate per §231.4
   - **finalSettlement**: Final settlement amounts per §231.5
+  - **largeDamageThreshold**: €8.4 million per §231.1 (threshold for extraordinary cost distribution)
+  - **largeDamagePool**: Separate pool for costs exceeding threshold
 - **Related Entities**:
   - **Tapaturmavakuutuskeskus**: System administrator
   - **InsuranceCompany**: System participants
