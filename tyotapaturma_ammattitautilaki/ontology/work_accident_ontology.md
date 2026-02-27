@@ -199,6 +199,27 @@
 - **Note**: For experience-rated employers (erikoismaksuperusteinen), claims and full cost charges are already considered in premium
 - **Attributes**: documentationDate, safetyMeasures, trainingPrograms, riskAssessment, incidentHistory
 
+### InsuranceTransfer (Vakuutuksen siirto)
+- **Description**: Transfer of insurance policy from one insurance company to another
+- **Legal Basis**: §162
+- **Attributes**:
+  - **transferRequestDate**: Date of transfer request
+  - **effectiveTransferDate**: Date when transfer takes effect
+  - **previousInsuranceCompany**: Company being transferred from
+  - **newInsuranceCompany**: Company being transferred to
+  - **policyNumber**: Insurance policy being transferred
+  - **transferReason**: Reason for transfer
+  - **statisticalHistoryProvided**: Boolean - whether §167 statistics provided
+  - **statisticalHistoryYears**: Number of years of history (typically 5 years per §167)
+  - **payrollData**: Payroll information for transferred policy
+  - **accidentData**: Historical accident data
+  - **compensationData**: Historical compensation data
+  - **deliveryDeadline**: 14 days from final transfer date per §162
+  - **transferType**: Type of transfer (full_portfolio, partial, merger_division)
+- **Requirements**: 
+  - Statistical history must be provided within 14 days (§162.1)
+  - Must include complete payroll and compensation data for 5 years (§167)
+
 ---
 
 ## 2.1. Procedural Documentation
@@ -353,6 +374,21 @@
 ### DailyAllowance
 - **Legal Basis**: Sections 56-62
 - **Maximum Duration**: 1 year from accident date
+- **Attributes**:
+  - **startDate**: First day of incapacity
+  - **endDate**: Last day of incapacity or 1 year max
+  - **dailyRate**: Daily compensation amount (§57-59)
+  - **waitingDays**: 3 consecutive days (§56.3)
+  - **waitingPeriodStart**: Date waiting period begins
+  - **paymentStartDate**: Date payments begin after waiting period
+  - **maximumDurationDays**: 365 days from accident date
+  - **isExtended**: Boolean - whether extended beyond 1 year per §60
+  - **extensionReason**: Reason for extension if applicable
+  - **incomeCalculation**: Method for calculating daily rate (§57-59)
+  - **baseSalary**: Injured party's regular earnings
+  - **variablePay**: Overtime, bonuses included in calculation
+  - **deductions**: Tax and other deductions
+  - **paymentFrequency**: How often paid (monthly, bi-weekly)
 - **WaitingPeriod (Odotusaika)**: 3 consecutive days (§56.3)
   - **Description**: Daily allowance is not paid for the first 3 consecutive days of incapacity (excluding the accident day)
   - **Legal Basis**: §56.3
@@ -362,6 +398,7 @@
   - **negligenceType values**: alcohol_drugs, safety_violation, gross_negligence, criminal
   - **reductionPercentage**: max 50% per §61
   - **isReductionApplied**: boolean
+- **Relation to MedicalCertificate**: Requires medical certification of incapacity
 
 ### DisabilityPension
 - **Legal Basis**: Sections 63-68
@@ -502,7 +539,30 @@
 
 ### DistrictCourt (Käräjäoikeus)
 - **Legal Basis**: Section 228
-- First instance court for disputes
+- **First instance court for disputes
+
+### DistributionSystem (Jakojarjestelma)
+- **Description**: Shared risk distribution system among insurance companies for workers' compensation
+- **Legal Basis**: §231
+- **Purpose**: System for distributing claims costs and administrative responsibilities among insurance companies
+- **Attributes**:
+  - **systemType**: Type of distribution system (risk_pool, administrative_pool, combined)
+  - **participantCompanies**: List of participating insurance companies
+  - **companyShares**: Each company's share of system costs
+  - **distributionKey**: Method for allocating costs (premium_share, claims_share,混合)
+  - **annualContribution**: Annual payment to/from system per company
+  - **systemBalance**: Current system surplus/deficit
+  - **adjustmentFactor**: Annual adjustment factor per §231.4
+  - **advanceEstimate**: Preliminary estimate per §231.4
+  - **finalSettlement**: Final settlement amounts per §231.5
+- **Related Entities**:
+  - **Tapaturmavakuutuskeskus**: System administrator
+  - **InsuranceCompany**: System participants
+  - **InsuranceTransfer**: Affects system participation (§231.4)
+- **Calculations**:
+  - Risk-based distribution of claims
+  - Administrative cost sharing
+  - Annual reconciliation process
 
 ---
 
