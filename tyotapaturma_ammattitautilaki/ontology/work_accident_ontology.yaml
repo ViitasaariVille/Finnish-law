@@ -579,7 +579,7 @@ relationships:
 - source: compensationDecision
   target: insuranceCompany
   type: issued_by
-  legal_basis: ''
+  legal_basis: §124
   note: ''
 - source: healthcareProvider
   target: insuranceCompany
