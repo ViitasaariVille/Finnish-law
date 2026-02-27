@@ -65,6 +65,8 @@
   - **suffers** → OccupationalAccident (§15-16)
   - **dies** → DeathCompensation (§99) - creates survivor rights
   - **files** → ClaimApplication (§128)
+  - **receives_treatment_from** → HealthcareProvider (§36-49)
+  - **is_entitled_to** → MedicalCareCompensation (§36-49)
 
 ### ClaimantObligation (Korvausasian selvittämiseen myötävaikuttaminen)
 - **Description**: Injured party's obligations to cooperate in claim processing per §130-134
@@ -324,6 +326,9 @@
 - **Attributes**: providerType, authorization, region
 - **providerType values**: public, private, occupational-health
 - **Legal Basis**: §36-49, §252
+- **Relationships**:
+  - **submits_claim_to** → InsuranceCompany (§41)
+  - **provides** → Treatment
 - **Subclasses**:
   - PublicHealthcareUnit (Julkinen terveydenhuollon toimintayksikkö) - §252
   - PrivateHealthcareProvider (Yksityinen palveluntarjoaja)
@@ -699,6 +704,8 @@
 - **Description**: Insurance company commitment to pay for treatment
 - **Legal Basis**: §42, §45
 - **Purpose**: Directs injured to specific healthcare provider
+- **Relationships**:
+  - **authorizes** → Treatment (§42, §45)
 
 ### InterimPayment (Ennakko)
 - **Description**: Advance payment of compensation before formal decision per §138
@@ -908,6 +915,8 @@
 
 ### MedicalCareCompensation
 - **Legal Basis**: Sections 36-49
+- **Relationships**:
+  - **covers** → Treatment (§36-49)
 - **Subclasses**: PublicHealthcare, PrivateHealthcare, ForeignHealthcare, Medicine
 
 ### TravelAndAccommodationCosts
@@ -1497,6 +1506,8 @@
 - **Relationships**:
   - **insures** → Employee (§3)
   - **has_contract_with** → Employer (§156-160)
+  - **approves** → Treatment (§42, §45)
+  - **issues** → PaymentCommitment (§42, §45)
 - Authorized to provide insurance
 
 ### StateTreasury (Valtiokonttori)
