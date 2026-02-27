@@ -136,6 +136,26 @@
   - intentEstablished: boolean - must be intentional, not negligent
   - otherBeneficiariesUnaffected: boolean - per §105.2
 
+### IncomeAdjustment (Leskeneläkkeen tulosovitus)
+- **Description**: Income adjustment for widow's pension per §107
+- **Legal Basis**: §107
+- **Attributes**:
+  - adjustmentPercentage: number - 30% of income exceeding threshold per §107
+  - thresholdMultiplier: number - 2.15 × minimum earnings = €29,412
+  - incomeTypes: enum [work_income, pension_income]
+  - adjustmentStartMonth: integer - 13th month after death per §107
+
+### LumpSumPayment (Kertasuoritus)
+- **Description**: Lump sum payment on widow's pension termination per §106
+- **Legal Basis**: §106
+- **Attributes**:
+  - triggerReason: enum [new_marriage, cohabitation_start]
+  - amount: MonetaryAmount - lastMonthlyPayment × 36 months
+  - lastMonthlyPayment: MonetaryAmount
+  - otherPensionOffset: MonetaryAmount - exception per §106
+- **Rule per §106**: 3 years of pension paid as lump sum when widow remarries or starts cohabiting
+- **Rule per §107**: Widow's pension reduced by 30% of income exceeding 2.15× minimum
+
 ### JurisdictionResolution (Toimivaltakysymyksen ratkaiseminen)
 - **Description**: Resolution of competence disputes between insurers per §114
 - **Legal Basis**: §114
@@ -1517,12 +1537,14 @@
 
 ### AppealChain (Muutoksenhaku)
 - **Description**: Structured hierarchy of appeal bodies per §237-243
-- **Legal Basis**: §237-243
+- **Legal Basis**: §237-243, §241
 - **Attributes**:
   - currentLevel: enum [accident_appeals_board, insurance_court, supreme_court]
   - nextLevelAvailable: boolean
   - appealDeadlineDays: integer - 30 days for first instance (§241)
-  - supremeCourtDeadlineDays: integer - 60 days for Supreme Court (§241)
+  - supremeCourtDeadlineDays: integer - 60 days for Supreme Court (§241.4)
+  - lateFilingAllowed: boolean - per §241.2 with painava syy (weighty reason)
+  - additionalEvidenceDeadline: integer - max 60 days per §241.5
 - **Appeal Progression**:
   1. AccidentAppealsBoard (§237) - 30 days
   2. InsuranceCourt (§227) - 30 days  
@@ -1579,6 +1601,25 @@
   - **participatingInsurers**: array of references to InsuranceCompany
   - **costPool**: MonetaryAmount - shared pool of costs to distribute
   - **distributionKey**: object - method for allocating costs
+
+### MajorDamageThreshold (Suurvahinkoraja)
+- **Description**: Major damage threshold per §231.7-8
+- **Legal Basis**: §231.7-8
+- **Attributes**:
+  - thresholdAmount: MonetaryAmount - €75,000,000 per §231.7
+  - excessDistribution: string - how costs exceeding threshold are distributed
+- **Rule**: Events with compensation >€75M trigger special distribution rules per §231.8
+
+### RehabilitationTravelCosts (Kuntoutuksen matka- ja majoituskustannukset)
+- **Description**: Travel and accommodation costs for rehabilitation per §98
+- **Legal Basis**: §98
+- **Attributes**:
+  - costType: enum [rehabilitation_travel, aid_procurement_travel, family_training_travel]
+  - transportMethod: string
+  - accommodationRequired: boolean
+  - companionCostsCovered: boolean - if companion necessary
+  - privateCarRate: number - 50% of tax-free km allowance per §98
+- **Note**: Different from §50 medical travel costs
   - **settlementPeriod**: period - time period for settlement
   - **distributionAmount**: MonetaryAmount - total amount to be distributed
   - **settlementDate**: date - when settlement is finalized
