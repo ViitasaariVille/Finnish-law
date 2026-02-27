@@ -191,6 +191,20 @@
 - **Data Requirement**: Insurance companies must organize their statistics to provide required data to Accident Insurance Centre (§257.1-3)
 - **Attributes**: riskCategory, industryCode, occupationalCategory, accidentRate, diseaseRate
 
+### WorkAccidentRegister (Työtapaturmarekisteri)
+- **Description**: National register of work accidents and occupational diseases maintained by Tapaturmavakuutuskeskus
+- **Legal Basis**: §235
+- **Purpose**: Collects data on work accidents and occupational diseases for statistics, risk classification, and prevention
+- **Attributes**:
+  - registerId, collectionStartDate, dataProvider
+  - accidentData: annual accident count, injury type, severity, industryCode
+  - occupationalDiseaseData: disease code, exposure type, latency period
+  - statisticsPublished: boolean - annual statistics publication per §235.2
+- **Data Sources**: Insurance companies, employers (§111), healthcare providers
+- **Related Entities**:
+  - RiskClassification: Uses register data for premium calculation
+  - Tapaturmavakuutuskeskus: Register administrator
+
 ### WorkSafetyPrevention (Työturvallisuustyö)
 - **Description**: Employer's documented preventive occupational safety work considered in premium calculation
 - **Legal Basis**: §166.5
@@ -566,8 +580,58 @@
 
 ### AccidentAppealsBoard (Tapaturma-asioiden muutoksenhakulautakunta)
 - **Legal Basis**: §237
-- **Description**: First instance appeal body for vakuutuslaitos decisions
-- **Appeal deadline**: 30 days (§241)
+- **Description**: First instance appeal body for vakuutuslait **Appeal deadline**:os decisions
+- 30 days (§241)
+- **Attributes**: boardName, jurisdiction, decisionMakingProcess
+- **Subclasses**:
+  - InsuranceCompanyDecisionAppeal (§237) - Appeal against insurance company decision
+  - PremiumAssessmentAppeal (§238) - Appeal against premium calculation
+
+### Appeal (Valitus)
+- **Description**: Formal appeal against insurance company decision
+- **Legal Basis**: §237-243
+- **Attributes**:
+  - appealType: enum [regular, premium, correction]
+  - filingDate, deadline, status
+  - groundsForAppeal: string - factual/legal basis
+  - supportingDocuments: array
+  - decisionDeadline: 30 days per §241
+- **Subclasses**:
+  - RegularAppeal (Tavallinen valitus) - §237, standard appeal against compensation decision
+  - PremiumAppeal (Maksuperustevalitus) - §238, appeal against premium assessment
+  - BaseAppeal (Perustevalitus) - §240, appeal on fundamental legal questions
+
+### AppealDecision (Valituspäätös)
+- **Description**: Decision on appeal by Accident Appeals Board or court
+- **Legal Basis**: §242-243
+- **Attributes**: decisionDate, decisionType, reasoning, appealInstructions
+- **decisionType values**: upheld, reversed, remanded, dismissed
+
+### SelfCorrection (Oma muutos)
+- **Description**: Insurance company's right to self-correct decisions
+- **Legal Basis**: §242
+- **Attributes**: originalDecisionDate, correctionDate, correctedAmount, correctionReason
+- **Trigger**: New information or error discovery
+
+### DecisionRemoval (Päätöksen poisto)
+- **Description**: Removal of incorrect decision
+- **Legal Basis**: §246
+- **Attributes**: removalReason, originalDecision, effectiveDate
+- **Conditions**: Decision was clearly incorrect, may be initiated by insurer or court
+
+### ReimbursementRight (Takaisinperintäoikeus)
+- **Description**: Right to recover overpaid compensation
+- **Legal Basis**: §247
+- **Attributes**:
+  - overpaymentAmount, originalPaymentDate, recoveryDate
+  - recoveryReason: enum [error, fraudulent_claim, changed_circumstances, deceased]
+  - recoveryProcedure: enum [voluntary, deduction, court_proceedings]
+  - statuteOfLimitations: 5 years per §247.3
+  - interestRate: reference to §152 delay interest
+- **Limitations**:
+  - Cannot recover if claimant not at fault and would cause unreasonable hardship (§247.2)
+  - Maximum recovery period: 5 years from overpayment (§247.3)
+- **Related**: DelayInterest (§152)
 
 ### ApplicationDeterminationBody (Lain soveltaminen)
 - **Legal Basis**: §7
