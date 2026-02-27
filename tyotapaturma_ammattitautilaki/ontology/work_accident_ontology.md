@@ -19,6 +19,13 @@
 - **Description**: Person working in employment relationship under employment contract, public service, or similar
 - **Legal Basis**: Section 8
 
+### Student (Opiskelija)
+- **Description**: Person whose primary occupation is studying
+- **Legal Basis**: §70, §76, §77
+- **Attributes**: studentType, studyProgram, enrollmentDate, expectedGraduationDate, isFullTime, actualEarningsAtInjury
+- **studentType values**: higher_education, vocational, basic_secondary
+- **Related Compensation**: §70 (full incapacity if injury prevents studying), §76 (future earnings estimate), §77 (minimum 2x for pupils)
+
 ### Entrepreneur  
 - **Description**: Self-employed person with YEL insurance
 - **Legal Basis**: Sections 188-190
@@ -49,6 +56,21 @@
 - **Legal Basis**: §117
 - **Includes**: Vahingoittunut (InjuredParty), Edunsaaja (Beneficiary)
 - **Explicitly Excluded**: Employer, HealthcareProvider, Municipality
+
+### FamilyMember (Perheenjäsen)
+- **Description**: Family member as defined for ownership calculation and benefit purposes
+- **Legal Basis**: §9, §100
+- **Attributes**: relationshipType, sharesHousehold, relationshipStartDate, isForOwnershipCalculation, isForBenefitPurposes
+- **relationshipType values**: spouse, cohabiting_partner, direct_ascendant, direct_descendant
+- **Related Rules**: Max 30% individual ownership, max 50% family ownership (§9.1)
+
+### ClaimFilingDeadline (Korvausasian vireille saattamisen määräaika)
+- **Description**: Time limit for filing compensation claim
+- **Legal Basis**: §116
+- **Attributes**: standardDeadlineYears, standardDeadlineStarts, occupationalDiseaseDeadlineStarts, lateFilingPermitted, lateFilingConditions
+- **standardDeadlineYears**: 5
+- **standardDeadlineStarts**: accidentDate (työtapaturma) OR firstMedicalAssessmentDate (ammattitauti)
+- **lateFilingConditions**: not_claimants_fault, unreasonable_to_deny (§116.2)
 
 ### VakuuttamatonTyo (UninsuredWork)
 - **Description**: Work performed without mandatory insurance coverage
