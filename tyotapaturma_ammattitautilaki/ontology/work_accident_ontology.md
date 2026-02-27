@@ -19,22 +19,58 @@
 - **Description**: Person working in employment relationship under employment contract, public service, or similar
 - **Legal Basis**: Section 8
 
+### Student (Opiskelija)
+- **Description**: Person whose primary occupation is studying
+- **Legal Basis**: §70, §76, §77
+- **Attributes**: studentType, studyProgram, enrollmentDate, expectedGraduationDate, isFullTime, actualEarningsAtInjury
+- **studentType values**: higher_education, vocational, basic_secondary
+- **Related Compensation**: §70 (full incapacity if injury prevents studying), §76 (future earnings estimate), §77 (minimum 2x for pupils)
+
 ### Entrepreneur  
 - **Description**: Self-employed person with YEL insurance
 - **Legal Basis**: Sections 188-190
 
 ### InjuredParty
 - **Description**: Person who suffered a work accident or occupational disease
-- **Attributes**: injuryDate, injuryType, severity, medicalFindings
+- **Legal Basis**: §15-16, §111.2.1
+- **Attributes**: 
+  - injuryDate, injuryType, severity, medicalFindings
+  - personId (henkilötunnus) - REQUIRED
+  - name (nimi)
+  - contactInformation (yhteystiedot)
+  - otherEmployment (muu työsuhde) - §111.2.5
+  - otherEntrepreneurWork (muu yrittäjätyö) - §111.2.5
 
-### Survivor
-- **Description**: Family member entitled to benefits after death
+### Beneficiary (Edunsaaja)
+- **Description**: Person entitled to family pension (perhe-eläke) after death - legal term per §99-109
+- **Legal Basis**: §99-109
 - **Subclasses**: 
   - Leski (WidowEquivalent)
     - Aviopuoliso (StatutorySpouse)
     - Avopuoliso (CohabitingPartner) - conditions: §100.2 continuous cohabitation, marriage-like conditions, common child or notarized support agreement, deceased not married at death
   - LapseneläkkeenSaaja (ChildPensionRecipient)
   - Dependent
+
+### Party (Asianosainen)
+- **Description**: Legal party to compensation case with procedural rights
+- **Legal Basis**: §117
+- **Includes**: Vahingoittunut (InjuredParty), Edunsaaja (Beneficiary)
+- **Explicitly Excluded**: Employer, HealthcareProvider, Municipality
+
+### FamilyMember (Perheenjäsen)
+- **Description**: Family member as defined for ownership calculation and benefit purposes
+- **Legal Basis**: §9, §100
+- **Attributes**: relationshipType, sharesHousehold, relationshipStartDate, isForOwnershipCalculation, isForBenefitPurposes
+- **relationshipType values**: spouse, cohabiting_partner, direct_ascendant, direct_descendant
+- **Related Rules**: Max 30% individual ownership, max 50% family ownership (§9.1)
+
+### ClaimFilingDeadline (Korvausasian vireille saattamisen määräaika)
+- **Description**: Time limit for filing compensation claim
+- **Legal Basis**: §116
+- **Attributes**: standardDeadlineYears, standardDeadlineStarts, occupationalDiseaseDeadlineStarts, lateFilingPermitted, lateFilingConditions
+- **standardDeadlineYears**: 5
+- **standardDeadlineStarts**: accidentDate (työtapaturma) OR firstMedicalAssessmentDate (ammattitauti)
+- **lateFilingConditions**: not_claimants_fault, unreasonable_to_deny (§116.2)
 
 ### VakuuttamatonTyo (UninsuredWork)
 - **Description**: Work performed without mandatory insurance coverage
@@ -46,7 +82,13 @@
 
 ### Employer
 - **Description**: Entity with mandatory insurance obligation
-- **Attributes**: businessId, companyName, annualPayroll, isExemptFromInsurance, exemptionType, annualPayrollEUR
+- **Legal Basis**: §3, §111.2.2, §159
+- **Attributes**: 
+  - businessId, companyName, annualPayroll, isExemptFromInsurance, exemptionType, annualPayrollEUR
+  - contactInformation (yhteystiedot) - REQUIRED in notification
+  - industrySector (toimiala) - §159.1
+  - workStartDate (työn alkamisaika) - §159.1
+  - ownershipStructure (omistussuhteet) - §159.1
 - **exemptionType values**: none, below-threshold-1200, state-employer
 - **Legal Basis**: §3.2 (exemption when annual payroll <= €1,200), §3.3 (state employer exemption)
 
@@ -106,7 +148,11 @@
 - **Description**: Healthcare service provider
 - **Attributes**: providerType, authorization, region
 - **providerType values**: public, private, occupational-health
-- **Legal Basis**: §36-49
+- **Legal Basis**: §36-49, §252
+- **Subclasses**:
+  - PublicHealthcareUnit (Julkinen terveydenhuollon toimintayksikkö) - §252
+  - PrivateHealthcareProvider (Yksityinen palveluntarjoaja)
+  - RehabilitationProvider (Kuntoutuspalveluntarjoaja) - §89
 
 ## 2. Insurance Types
 
@@ -143,7 +189,32 @@
 ### ClaimApplication (Korvaushakemus)
 - **Description**: Application for compensation
 - **Attributes**: submissionDate, completeness, attachments
-- **Legal Basis**: §111
+- **Legal Basis**: §128
+- **Subclasses**:
+  - WageCompensationApplication - §48-49
+  - TravelCostApplication - §50
+  - CareCostApplication - §53
+  - PropertyDamageApplication - §54
+
+### Notification (Ilmoitus)
+- **Description**: Formal notification of accident
+- **Legal Basis**: §110-113
+- **Attributes**: notificationDate, notificationType, deadlineStatus
+- **Subclasses**:
+  - EmployeeNotification (§110) - to employer
+  - EmployerNotification (§111) - to insurer, 10 working days deadline
+
+### CompensationDecision (Korvauspäätös)
+- **Description**: Written decision on compensation
+- **Legal Basis**: §124-127
+- **Attributes**: decisionDate, decisionType, amount, reasoning, appealInstructions
+- **decisionType values**: grant, deny, partial
+- **Deadline**: 30 days from sufficient documentation (§127)
+
+### PaymentCommitment (Maksusitoumus)
+- **Description**: Insurance company commitment to pay for treatment
+- **Legal Basis**: §42, §45
+- **Purpose**: Directs injured to specific healthcare provider
 
 ### MedicalCertificate (Lääketieteellinen todistus)
 - **Description**: Medical certificate documenting injury or disease
@@ -271,6 +342,30 @@
   - Class 19: 52%
   - Class 20: 60%
 
+### DisabilityClassification (Haittaluokitus)
+- **Description**: System for classifying permanent damage/disability
+- **Attributes**: classificationDate, evaluator, classificationLevel
+- **classificationLevels**: 1-20 (Haittaluokka)
+- **Legal Basis**: §83-87
+
+### WorkCapacity (Työkyky)
+- **Description**: Work capacity assessment
+- **Attributes**: assessmentDate, capacityPercentage, assessmentBasis
+- **capacityLevels**: full, partial, none
+- **Legal Basis**: §63-68, §88-98
+
+### Takautumisoikeus (RecourseRight)
+- **Description**: Right of recourse - insurer's right to claim compensation from liable third party
+- **Attributes**: recourseType, liableParty, claimAmount
+- **recourseType values**: subrogation, contribution, indemnification
+- **Legal Basis**: §95-96
+
+### DamageCauser (Vahingonaiheuttaja)
+- **Description**: Party causing the damage/accident
+- **Attributes**: causationType, liabilityBasis, faultLevel
+- **causationType values**: direct, indirect, contributory
+- **Legal Basis**: §95-96
+
 ### DeathCompensation
 - **Legal Basis**: Sections 99-109
 - **Includes**: SurvivorsPension, FuneralExpenses
@@ -305,7 +400,18 @@
 
 ### ClaimAppealBoard (Tapaturma-asiain korvauslautakunta)
 - **Legal Basis**: Sections 226-228
-- Dispute resolution
+- **Description**: Advisory body for uniform compensation practice - issues recommendations and opinions
+- **NOT an appeal body** - provides expert opinions to insurers
+
+### AccidentAppealsBoard (Tapaturma-asioiden muutoksenhakulautakunta)
+- **Legal Basis**: §237
+- **Description**: First instance appeal body for vakuutuslaitos decisions
+- **Appeal deadline**: 30 days (§241)
+
+### ApplicationDeterminationBody (Lain soveltaminen)
+- **Legal Basis**: §7
+- **Description**: Determines if law applies to specific work
+- **Function**: Ratkaisee lain soveltamisesta
 
 ### InsuranceCourt (Vakuutusoikeus)
 - **Legal Basis**: Section 227
