@@ -42,6 +42,10 @@
 ### MandatoryInsurance
 - **Description**: Compulsory insurance that employers must obtain
 - **Legal Basis**: Section 3
+- **Applies to**: Private employers with annual payroll > €1,200
+- **Exemptions** (§3(2)-(3)):
+  - Employers with annual payroll ≤ €1,200 (no insurance obligation)
+  - State employers (compensation paid from state funds via Valtiokonttori)
 
 ### VoluntaryWorkTimeInsurance
 - **Description**: Voluntary insurance for entrepreneurs covering work hours
@@ -79,6 +83,9 @@
 ### PsychologicalShock
 - **Legal Basis**: Section 35
 - **Subclasses**: AcuteStressReaction, PTSD, PersonalityChange
+- **Requirements for PTSD/PersonalityChange** (§35(2)): Diagnosis within 6 months of the event
+- **Direct involvement** (§35(3)): Must be directly involved in the event
+- **Activity exclusions** (§35(4)): Not compensated during commute breaks (§23(2)), recreation (§24(1)(2)), medical visits (§24(1)(4-5)), or fitness during work time (§24(1)(6)), unless §34 intentional harm
 
 ---
 
@@ -90,8 +97,11 @@
 
 ### DailyAllowance
 - **Legal Basis**: Sections 56-62
-- **Duration**: First 28 days at sick pay level (employer pays), then based on annual earnings (vuosityöansio)
-- **Not limited to 1 year** - continues as long as work incapacity exists
+- **First 28 days**: At sick pay level (employer pays) - §58
+- **Day 29 to 1 year**: Based on annual earnings (vuosityöansio) - §§56, 59
+- **Duration**: Maximum 1 year from accident date - §56(1)
+- **After 1 year**: Converts to DisabilityPension (Tapaturmaeläke) - §63
+- **Requirements**: Work capacity reduced by at least 10% (§56(2)), minimum 3 consecutive days inability (§56(3))
 
 ### DisabilityPension
 - **Legal Basis**: Sections 63-68
@@ -102,7 +112,12 @@
 
 ### PermanentDamageCompensation
 - **Legal Basis**: Sections 83-87
+- **Base Amount**: €12,440 per year (§86)
 - **Classes**: 1-20 based on severity
+- **Combination Formula** (§84(4)): For multiple injuries: K = A + B - (A×B)/20, where K=total class, A=larger, B=smaller. Combine largest first, then repeat.
+- **Formula Exceptions** (§84(5)): Does not apply to paired organs (eyes, kidneys) or combined vision+hearing loss
+- **Payment Method** (§87(1)): Classes 1-5 lump sum (kertakaikkinen), Classes 6-20 continuous annual payments (jatkuva)
+- **Rates** (§86): 1.15% to 60% of base depending on class
 
 ### DeathCompensation
 - **Legal Basis**: Sections 99-109
@@ -117,8 +132,9 @@
 | Employee | has_right_to | Compensation | When suffering occupational accident |
 | Employer | must_obtain | MandatoryInsurance | For all employees |
 | InsuranceCompany | must_pay | Compensation | When insured event occurs |
-| InjuredParty | must_file_claim_within | 1 year | From date of knowledge of injury and compensability |
-| InjuredParty | must_file_claim_within | 10 years | Absolute maximum from accident/disease date |
+| InjuredParty | must_file_claim_within | 5 years | From accident date (§116) |
+| InjuredParty | must_file_claim_within | From doctor assessment | Occupational disease only (§116) |
+| InjuredParty | may_file_claim_after_deadline | If justified | When delay not claimant's fault (§116) |
 | Survivor | has_right_to | DeathCompensation | When injured party dies |
 
 ---
