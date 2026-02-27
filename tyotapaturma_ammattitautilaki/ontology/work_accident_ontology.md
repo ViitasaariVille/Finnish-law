@@ -42,6 +42,13 @@
 ### Entrepreneur  
 - **Description**: Self-employed person with YEL insurance
 - **Legal Basis**: Sections 188-190
+- **Voluntary Insurance Rights per §191-194**:
+  - cancellationType: enum [insurer_cancellation, entrepreneur_cancellation, denial]
+  - cancellationReason: enum [unpaid_premium, false_information, voluntary, other]
+  - noticePeriodDays: integer - 30 days per §192
+  - cancellationDate: date
+  - effectiveEndDate: date
+  - reinstatementPossible: boolean
 
 ### InjuredParty
 - **Description**: Person who suffered a work accident or occupational disease
@@ -51,6 +58,21 @@
   - injuryType (vamman laatu) - §111.2.1 REQUIRED
   - severity (vakavuus)
   - medicalFindings (lääketieteelliset löydökset)
+
+### ClaimantObligation (Korvausasian selvittämiseen myötävaikuttaminen)
+- **Description**: Injured party's obligations to cooperate in claim processing per §130-134
+- **Legal Basis**: §130-134
+- **Attributes**:
+  - dutyType: enum [information, rehabilitation, examination, treatment, change_notification]
+  - obligationStartDate: date
+  - complianceStatus: enum [compliant, non_compliant, partially_compliant]
+  - nonComplianceConsequence: string
+- **Subclasses per §130-134**:
+  - ClaimantInformationDuty (§130) - Tiedonantovelvollisuus
+  - RehabilitationCooperationDuty (§131) - Kuntoutusvelvollisuus
+  - MedicalExaminationDuty (§132) - Tutkimusvelvollisuus
+  - TreatmentDuty (§133) - Hoitoon hakeutumisvelvollisuus
+  - ChangeNotificationDuty (§134) - Muutosilmoitusvelvollisuus
   - personId (henkilötunnus) - REQUIRED
   - name (nimi)
   - contactInformation (yhteystiedot) - §111.2.1
@@ -134,6 +156,20 @@
   - industrySector (toimiala) - §159.1
   - workStartDate (työn alkamisaika) - §159.1
   - ownershipStructure (omistussuhteet) - §159.1
+
+### BankruptcyEffect (Konkurssin vaikutus vakuutukseen)
+- **Description**: Effects of bankruptcy on insurance per §163-165
+- **Legal Basis**: §163-165
+- **Attributes**:
+  - terminationTrigger: enum [bankruptcy_filing, insolvency_certificate, insurer_insolvency]
+  - effectiveDate: date
+  - continuationRequired: boolean
+  - estateLiability: boolean - §164 Konkurssipesän vastuu
+  - newInsuranceDeadline: date
+- **Subclasses**:
+  - BankruptcyInsuranceTermination (§163)
+  - BankruptcyEstateInsurance (§164) - konkurssipesän vakuuttamisvelvollisuus
+  - InsurerInsolvencyEffect (§165)
 - **exemptionType values**: none, below-threshold-1200, state-employer
 - **Legal Basis**: 
   - §3.2: Exemption when annual payroll ≤ €1,200
@@ -185,7 +221,14 @@
 - **Description**: Medical expert providing professional opinions
 - **Attributes**: expertType, specialization, certification
 - **expertType values**: treating-physician, independent-examiner, occupational-health
-- **Legal Basis**: §111
+- **Legal Basis**: §111, §121
+- **§121 Participation Requirements**:
+  - participationRequired: boolean - true if medical issue evaluation per §121
+  - assessmentDocumentationRequired: boolean - per §121
+  - assessmentRecorded: boolean - whether expert opinion recorded in files
+  - assessmentBasis: string - perusteltu arvio (reasoned assessment)
+  - formalRequirementsWaived: boolean - §121 allows waiver of formality requirements
+  - participationDate: date
 
 ### Physician (Lääkäri)
 - **Description**: Doctor providing medical treatment
@@ -261,6 +304,36 @@
 - **Note**: For experience-rated employers (erikoismaksuperusteinen), claims and full cost charges are already considered in premium
 - **Attributes**: documentationDate, safetyMeasures, trainingPrograms, riskAssessment, incidentHistory
 
+### VakuutusmaksuaVastaavaMaksu (InsurancePremiumEquivalentPayment)
+- **Description**: Payment corresponding to insurance premium for uninsured workers - charged when employer fails to obtain mandatory insurance per §181
+- **Legal Basis**: §181
+- **Attributes**:
+  - paymentAmount: MonetaryAmount - equivalent to what premium would have been
+  - calculationBasis: enum [premium_equivalent, actual_damage_costs, combined]
+  - premiumRateApplied: number - percentage used for calculation
+  - assessmentPeriod: period - period for which assessment is made
+  - isFinalAssessment: boolean
+  - employerLiability: reference to Employer
+- **Purpose**: Employer who fails to insure must pay equivalent to premium plus possible surcharges
+
+### Laiminlyöntimaksu (NegligenceFine)
+- **Description**: Fine imposed for insurance obligation negligence per §182-183
+- **Legal Basis**: §182-183
+- **Attributes**:
+  - fineAmount: MonetaryAmount
+  - fineType: enum [full_amount, increased, reduced]
+  - increasePercentage: number - §182.2 increased amount (50-200%)
+  - reductionPercentage: number - §183 reduction for good safety record (up to 30%)
+  - assessmentDate: date
+  - paymentDeadline: date
+  - calculationBasis: enum [fixed_percentage, actual_costs, combined]
+  - annualPayroll: MonetaryAmount - basis for calculation
+  - accidentHistoryYears: integer - years of accident data considered
+- **Calculation** (§182):
+  - Full negligence fine: percentage of payroll or fixed amount
+  - Increased amount (§182.2): 50-200% of base fine for serious negligence
+- **Reduction** (§183): Up to 30% reduction for demonstrably good safety record
+
 ### Omavastuu (EmployerSelfResponsibility)
 - **Description**: Employer's own responsibility share of insurance premiums per §184
 - **Legal Basis**: §184
@@ -278,6 +351,42 @@
   - Minimum €1,250 or percentage of premium, whichever is higher
   - Purpose: Incentivize workplace safety
 - **Note**: Different rules apply to table-based (taulustomaksuperusteinen) vs experience-rated (erikoismaksuperusteinen) employers
+
+### CompensationRightLoss (Korvausoikeuden menettäminen)
+- **Description**: Loss of compensation rights due to systematic social security circumvention per §185
+- **Legal Basis**: §185
+- **Attributes**:
+  - lossType: enum [intentional_circumvention, employee_complicity, systematic_avoidance]
+  - employerIntentionality: boolean - employer intentionally failed to insure
+  - employeeKnowledge: boolean - employee knew of circumvention per §185
+  - employeeFacilitation: boolean - employee facilitated circumvention
+  - affectedBenefits: enum array [work_accident, pension, unemployment]
+  - lossEffectiveDate: date
+  - isIrreversible: boolean - rights cannot be restored
+  - scope: enum [full_loss, partial_loss]
+  - legalDetermination: string - formal determination of loss
+- **Conditions** (§185):
+  - Employer failed mandatory insurance obligation (§3)
+  - Failure part of systematic social security circumvention
+  - Employee was aware of circumvention AND facilitated it
+  - Loss is permanent/irreversible
+- **Distinction**: Different from §61 negligence reduction (partial) - this is complete loss of all compensation rights
+- **Relation**: EmployerCircumvention → causes → CompensationRightLoss
+
+### CircumventionDetermination (Kiertämisen toteaminen)
+- **Description**: Formal determination of social security circumvention per §186
+- **Legal Basis**: §186
+- **Attributes**:
+  - determinationDate: date
+  - determinationType: enum [insurance_circumvention, premium_evasion, systematic_violation]
+  - findings: array of string - key findings
+  - evidenceBasis: string - evidence for determination
+  - employerInvolved: reference to Employer
+  - periodCovered: period - period of circumvention
+  - systemicPattern: boolean - indicates systematic nature
+  - consequences: enum array [compensation_right_loss, employer_liability, criminal_referral]
+- **Authority**: Tapaturmavakuutuskeskus or insurance company makes determination
+- **Relation**: CircumventionDetermination → triggers → CompensationRightLoss or employer liability
 
 ### InsuranceTransfer (Vakuutuksen siirto)
 - **Description**: Transfer of insurance policy from one insurance company to another
@@ -404,6 +513,44 @@
 - **Description**: Insurance company commitment to pay for treatment
 - **Legal Basis**: §42, §45
 - **Purpose**: Directs injured to specific healthcare provider
+
+### InterimPayment (Ennakko)
+- **Description**: Advance payment of compensation before formal decision per §138
+- **Legal Basis**: §138
+- **Attributes**:
+  - paymentAmount: MonetaryAmount
+  - advanceReason: enum [undisputed_right, preliminary_eligibility, urgent_need]
+  - deductionFromFinal: boolean - deducted from final compensation per §138
+  - claimantNotification: boolean - written notification given per §138
+  - preliminaryDecisionBasis: text - basis for preliminary eligibility assessment
+  - paymentDate: date
+  - relatedCompensationType: enum [daily_allowance, disability_pension, medical_care, other]
+  - finalDecisionPending: boolean
+  - finalDecisionDate: date (when issued)
+- **Requirements** (§138):
+  - Compensation right must be undisputed (oikeus korvaukseen riidattomaksi)
+  - Formal decision (§124) cannot yet be issued
+  - Written notification to compensation recipient required
+  - Amount must be deducted from final compensation
+- **Relation**: InsuranceCompany may_pay → InterimPayment → deducted_from → CompensationDecision
+
+### PaymentPriority (Korvausten maksamisen etusijajärjestys)
+- **Description**: Priority order for compensation payments per §145
+- **Legal Basis**: §145
+- **Attributes**:
+  - priorityList: array of PriorityLevel
+  - totalPaymentAmount: MonetaryAmount
+  - distributionDate: date
+  - residualAmount: MonetaryAmount - amount to injured party after priorities
+- **Priority Levels per §145**:
+  1. InsuranceCompany - recovery of overpayment (§247)
+  2. Kansaneläkelaitos (Kela) - social insurance recovery
+  3. Employer - wage compensation recovery (§139)
+  4. UnemploymentFund - unemployment benefit recovery (§141)
+  5. PensionInstitution - pension recovery (§140)
+  6. Municipality - social care recovery (§143)
+  7. Kansaneläkelaitos - study grant recovery
+  8. EnforcementAuthority - debt collection
 
 ### MedicalCertificate (Lääketieteellinen todistus)
 - **Description**: Medical certificate documenting injury or disease
@@ -1143,10 +1290,61 @@
 - **Legal Basis**: Sections 209-225
 - Central coordinating organization
 
+### SupervisionAuthority (Vakuuttamisen valvonta)
+- **Description**: Insurance supervision authorities per §177-180
+- **Legal Basis**: §177-180
+- **Attributes**:
+  - supervisionType: enum [general, enforcement, register_maintenance, compliance_monitoring]
+  - authority: reference to Institution
+  - enforcementPower: enum [warning, compulsory_insurance, penalty_imposition]
+  - inspectionRight: boolean
+- **Subclasses**:
+  - InsuranceSupervision (§177) - Tapaturmavakuutuskeskuksen valvonta
+  - MandatoryInsuranceEnforcement (§177) - Pakkovakuuttaminen
+  - InsuranceRegisterMaintenance (§178) - Vakuutusrekisterin ylläpito
+  - EmployerComplianceMonitoring (§179) - Työnantajavalvonta
+  - OccupationalSafetyAuthorityRole (§180) - Työsuojeluviranomainen
+
+### NonCompliancePenalty (Vakuuttamisen laiminlyönnin seuraamukset)
+- **Description**: Penalties for insurance obligation violations per §181-184
+- **Legal Basis**: §181-184, §177
+- **Attributes**:
+  - penaltyType: enum [premium_equivalent_payment, non_compliance_penalty, self_responsibility_payment]
+  - premiumEquivalentAmount: MonetaryAmount - §181 (up to 5 years)
+  - calculationPeriod: period - max 5 years + current year
+  - nonCompliancePenaltyAmount: MonetaryAmount - §182 (max 3x premium equivalent)
+  - maxMultiplier: integer - max 3 per §182
+  - selfResponsibilityAmount: MonetaryAmount - §184 (max €5,000 per accident)
+  - employer: reference to Employer
+  - violationPeriod: period
+  - assessmentDate: date
+  - paymentStatus: enum [pending, paid, waived]
+  - assessedBy: reference to StateTreasury - Valtiokonttori per §183
+
 ### ClaimAppealBoard (Tapaturma-asiain korvauslautakunta)
 - **Legal Basis**: Sections 226-228
 - **Description**: Advisory body for uniform compensation practice - issues recommendations and opinions
 - **NOT an appeal body** - provides expert opinions to insurers
+
+### KorvauslautakunnanLausunto (CompensationBoardOpinion)
+- **Description**: Opinion issued by Tapaturma-asiain korvauszakunta on principled legal or medical interpretation questions per §123, §226-228
+- **Legal Basis**: §123, §226-228
+- **Attributes**:
+  - requestingInsuranceCompany: reference to InsuranceCompany
+  - requestDate: date
+  - opinionType: enum [legal_interpretation, medical_interpretation, uniform_practice]
+  - subjectMatter: string - description of question posed
+  - opinionText: string - the board's advisory opinion
+  - opinionDate: date
+  - isBinding: boolean - false (advisory only per §123)
+  - legalBasis: string - "§123, §226"
+  - uniformPracticePurpose: boolean - promotes uniform application of law
+- **Purpose**: Insurance companies must request opinions before making decisions on principled questions
+- **Relationships**:
+  - InsuranceCompany → requests → KorvauslautakunnanLausunto
+  - ClaimAppealBoard → issues → KorvauslautakunnanLausunto
+  - KorvauslautakunnanLausunto → advises → CompensationDecision
+- **Distinction**: Different from AccidentAppealsBoard (Muutoksenhakulautakunta) which is actual appeal body per §237
 
 ### AccidentAppealsBoard (Tapaturma-asiainratkaisulautakunta / Muutoksenhakulautakunta)
 - **Legal Basis**: §237
@@ -1268,6 +1466,56 @@
 ### DistrictCourt (Käräjäoikeus)
 - **Legal Basis**: Section 228
 - **First instance court for disputes
+
+### Työsuojelumaksu (OccupationalSafetyFee)
+- **Description**: Fee paid to Occupational Safety Fund for workplace safety promotion per §233
+- **Legal Basis**: §233
+- **Attributes**:
+  - feeAmount: MonetaryAmount
+  - feeType: enum [base_fee, additional_contribution, exemption]
+  - calculationBasis: enum [payroll_based, flat_rate, risk_based]
+  - ratePercentage: number - percentage applied to payroll
+  - paymentPeriod: period - year for which fee is assessed
+  - exemptionApplies: boolean - §233.2 exemptions
+  - fundContribution: MonetaryAmount - contribution to Työsuojelurahasto
+- **Purpose**: Funds occupational safety and health research and promotion
+
+### Työsuojelurahasto (OccupationalSafetyFund)
+- **Description**: Fund for occupational safety and health research and promotion per §233
+- **Legal Basis**: §233
+- **Attributes**:
+  - fundName: string - "Työsuojelurahasto"
+  - administrator: string - fund managing entity
+  - purpose: enum [research, prevention, training, equipment]
+  - fundingSource: enum [occupational_safety_fee, state_budget, mixed]
+  - annualBudget: MonetaryAmount
+  - grantPrograms: array of string
+  - eligibleRecipients: enum [employers, researchers, organizations]
+- **Related**: Työsuojelumaksu (§233) - main funding source
+
+### Lisävakuutusmaksu (AdditionalInsurancePremium)
+- **Description**: Additional premium for supplementary insurance coverage per §229
+- **Legal Basis**: §229
+- **Attributes**:
+  - premiumAmount: MonetaryAmount
+  - additionalCoverageType: enum [extended_coverage, increased_limits, optional_benefits]
+  - basePremium: MonetaryAmount - original premium
+  - additionalPercentage: number - percentage added to base
+  - coverageStartDate: date
+  - coverageEndDate: date
+  - isVoluntary: boolean - optional vs mandatory additional coverage
+
+### Yhteistakuumaksu (JointGuaranteePremium)
+- **Description**: Joint guarantee premium for distribution system participation per §230
+- **Legal Basis**: §230
+- **Attributes**:
+  - premiumAmount: MonetaryAmount
+  - guaranteeType: enum [mutual_guarantee, collective_liability]
+  - calculationMethod: enum [fixed_rate, claims_related, risk_adjusted]
+  - companyShare: number - percentage of joint liability
+  - annualAssessment: boolean
+  - settlementPeriod: period
+  - systemContribution: MonetaryAmount - contribution to distribution system
 
 ### DistributionSystem (Jakojarjestelma)
 - **Description**: Shared risk distribution system among insurance companies for workers' compensation
