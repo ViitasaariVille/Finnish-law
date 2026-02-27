@@ -29,11 +29,32 @@
 
 ### Survivor
 - **Description**: Family member entitled to benefits after death
-- **Subclasses**: Widow, Child, Dependent
+- **Subclasses**: 
+  - Leski (WidowEquivalent)
+    - Aviopuoliso (StatutorySpouse)
+    - Avopuoliso (CohabitingPartner) - conditions: §100.2 continuous cohabitation, marriage-like conditions, common child or notarized support agreement, deceased not married at death
+  - LapseneläkkeenSaaja (ChildPensionRecipient)
+  - Dependent
+
+### VakuuttamatonTyo (UninsuredWork)
+- **Description**: Work performed without mandatory insurance coverage
+- **Attributes**: workType, exemptionReason, liabilityEntity
+- **workType values**: non-mandatory, below-threshold, exempt
+- **exemptionReason values**: €1200-threshold, state-employer, other
+- **liabilityEntity**: Tapaturmavakuutuskeskus (when uninsured)
+- **Legal Basis**: §2.4, §3, §209.2.1
 
 ### Employer
 - **Description**: Entity with mandatory insurance obligation
-- **Attributes**: businessId, companyName, annualPayroll
+- **Attributes**: businessId, companyName, annualPayroll, isExemptFromInsurance, exemptionType, annualPayrollEUR
+- **exemptionType values**: none, below-threshold-1200, state-employer
+- **Legal Basis**: §3.2 (exemption when annual payroll <= €1,200), §3.3 (state employer exemption)
+
+### Vakuutuksenottaja (PolicyHolder)
+- **Description**: Entity that takes out insurance policy (can be different from Employer)
+- **Attributes**: policyHolderId, policyHolderType, reportingObligations
+- **policyHolderType values**: employer, entrepreneur, other
+- **Legal Basis**: §156-160
 
 ---
 
@@ -67,6 +88,11 @@
 ### OccupationalDisease
 - **Legal Basis**: Sections 26-32
 - **Attributes**: diseaseCode, exposureDuration, latencyPeriod
+- **Subclasses**:
+  - AmmattitautiluetteloSairaus (StatutoryListDisease) - diseases on official occupational disease list
+  - YlaraajanJannetulehdus (UpperLimbTendonInflammation) - §28, condition: repetitive, unusual upper limb movements
+  - Rannekanavaoireyhtyma (CarpalTunnelSyndrome) - §29, condition: repetitive, forceful, wrist-bending movements
+  - TyostaAiheutunutPaheneminen (WorkRelatedDeterioration) - §30, essential worsening of pre-existing condition
 
 ### RepetitiveStrainInjury
 - **Legal Basis**: Section 33
@@ -127,6 +153,28 @@
 ### PermanentDamageCompensation
 - **Legal Basis**: Sections 83-87
 - **Classes**: 1-20 based on severity
+- **Base Amount**: €12,440
+- **Haittaluokka (DisabilityClass) Enumeration**:
+  - Class 1: 1.15%
+  - Class 2: 2.27%
+  - Class 3: 3.42%
+  - Class 4: 4.60%
+  - Class 5: 5.80%
+  - Class 6: 7.03%
+  - Class 7: 8.28%
+  - Class 8: 9.55%
+  - Class 9: 9.55%
+  - Class 10: 10.15%
+  - Class 11: 13%
+  - Class 12: 16%
+  - Class 13: 20%
+  - Class 14: 25%
+  - Class 15: 30%
+  - Class 16: 35%
+  - Class 17: 40%
+  - Class 18: 45%
+  - Class 19: 52%
+  - Class 20: 60%
 
 ### DeathCompensation
 - **Legal Basis**: Sections 99-109
