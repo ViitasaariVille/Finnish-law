@@ -56,7 +56,57 @@
 - **policyHolderType values**: employer, entrepreneur, other
 - **Legal Basis**: §156-160
 
+### InsurancePeriod (Vakuutuskausi)
+- **Description**: Period of insurance coverage
+- **Attributes**: startDate, endDate, periodType, premiumBasis
+- **periodType values**: annual, quarterly, monthly
+- **premiumBasis values**: payroll-based, flat-rate, mixed
+- **Legal Basis**: §156-160
+
+### VakuutettuTyo (InsuredWork)
+- **Description**: Work performed with mandatory insurance coverage
+- **Attributes**: workType, coverageLevel, insurancePolicy
+- **coverageLevel values**: full, partial
+- **Legal Basis**: §3
+
+### Edunsaaja (Beneficiary)
+- **Description**: Person entitled to receive insurance benefits
+- **Attributes**: beneficiaryType, relationshipToInsured, benefitEntitlement
+- **beneficiaryType values**: primary, contingent, statutory
+- **Legal Basis**: §99-109
+
+### Asianosainen (Party)
+- **Description**: Party to an insurance matter or dispute
+- **Attributes**: partyType, role, legalStatus
+- **partyType values**: claimant, respondent, third-party, intervener
+- **Legal Basis**: §226-228
+
 ---
+
+## 1.1. Representatives & Experts
+
+### AccidentRepresentative (Tapaturma-asiamies)
+- **Description**: Representative for accident victims
+- **Attributes**: representativeType, authorization, scopeOfRepresentation
+- **representativeType values**: legal-counsel, family-member, organizational
+- **Legal Basis**: §119
+
+### MedicalExpert (Lääkäriasiantuntija)
+- **Description**: Medical expert providing professional opinions
+- **Attributes**: expertType, specialization, certification
+- **expertType values**: treating-physician, independent-examiner, occupational-health
+- **Legal Basis**: §111
+
+### Physician (Lääkäri)
+- **Description**: Doctor providing medical treatment
+- **Attributes**: licenseNumber, specialization, affiliation
+- **Legal Basis**: §36-49
+
+### HealthcareProvider (Terveydenhuollon palveluntarjoaja)
+- **Description**: Healthcare service provider
+- **Attributes**: providerType, authorization, region
+- **providerType values**: public, private, occupational-health
+- **Legal Basis**: §36-49
 
 ## 2. Insurance Types
 
@@ -72,6 +122,49 @@
 ### VoluntaryFreeTimeInsurance
 - **Description**: Voluntary insurance for leisure time accidents
 - **Legal Basis**: Sections 199-203
+
+### InsuranceDuration (Vakuutuksen kesto)
+- **Description**: Duration of insurance coverage period
+- **Attributes**: durationType, renewalTerms, terminationConditions
+- **durationType values**: fixed-term, indefinite, continuous
+- **Legal Basis**: §156-160
+
+### PremiumBasis (Vakuutusmaksuperuste)
+- **Description**: Basis for calculating insurance premium
+- **Attributes**: calculationMethod, rateType, adjustmentFactors
+- **calculationMethod values**: payroll-based, per-capita, risk-based
+- **rateType values**: fixed-rate, percentage, hybrid
+- **Legal Basis**: §161-168
+
+---
+
+## 2.1. Procedural Documentation
+
+### ClaimApplication (Korvaushakemus)
+- **Description**: Application for compensation
+- **Attributes**: submissionDate, completeness, attachments
+- **Legal Basis**: §111
+
+### MedicalCertificate (Lääketieteellinen todistus)
+- **Description**: Medical certificate documenting injury or disease
+- **Attributes**: certificateType, issuingPhysician, expirationDate
+- **certificateType values**: initial, follow-up, final
+- **Legal Basis**: §111
+
+### AccidentReport (Tapaturmailmoitus)
+- **Description**: Report of work accident or occupational disease
+- **Attributes**: reportDate, reporter, incidentDetails
+- **Legal Basis**: §107
+
+### InsurancePolicy (Vakuutussopimus)
+- **Description**: Insurance policy document
+- **Attributes**: policyNumber, coverageTerms, exclusions
+- **Legal Basis**: §156-160
+
+### Decision (Päätös)
+- **Description**: Compensation decision document
+- **Attributes**: decisionDate, decisionMaker, appealInstructions
+- **Legal Basis**: §112-116
 
 ---
 
@@ -94,9 +187,11 @@
   - Rannekanavaoireyhtyma (CarpalTunnelSyndrome) - §29, condition: repetitive, forceful, wrist-bending movements
   - TyostaAiheutunutPaheneminen (WorkRelatedDeterioration) - §30, essential worsening of pre-existing condition
 
-### RepetitiveStrainInjury
+### WorkMotionStrain (Työliikekipeytyminen)
 - **Legal Basis**: Section 33
+- **Description**: Acute muscle/tendon strain from single strenuous work movement (NOT repetitive)
 - **Note**: Maximum 6 weeks compensation
+- **Attributes**: strainLocation, workActivityDuringStrain, onsetDate
 
 ### ViolenceDamage
 - **Legal Basis**: Section 34
@@ -212,9 +307,17 @@
 - **Legal Basis**: Sections 226-228
 - Dispute resolution
 
+### InsuranceCourt (Vakuutusoikeus)
+- **Legal Basis**: Section 227
+- Appellate body for insurance decisions
+
+### DistrictCourt (Käräjäoikeus)
+- **Legal Basis**: Section 228
+- First instance court for disputes
+
 ---
 
-## 7. Key Dates
+## 5.1. Procedural Documentation
 
 - **Effective Date**: 2016-01-01
 - **Replaced Laws**:
