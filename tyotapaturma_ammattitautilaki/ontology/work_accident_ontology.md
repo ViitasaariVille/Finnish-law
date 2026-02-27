@@ -1508,6 +1508,8 @@
   - **has_contract_with** → Employer (§156-160)
   - **approves** → Treatment (§42, §45)
   - **issues** → PaymentCommitment (§42, §45)
+  - **participates_in** → CostDistributionSystem (§213)
+  - **requests_opinion_from** → ClaimAppealBoard (§226-228)
 - Authorized to provide insurance
 
 ### StateTreasury (Valtiokonttori)
@@ -1528,6 +1530,10 @@
 ### AccidentInsuranceCentre (Tapaturmavakuutuskeskus)
 - **Legal Basis**: Sections 209-225
 - Central coordinating organization
+- **Relationships**:
+  - **supervises** → InsuranceCompany (§209)
+  - **maintains** → WorkAccidentRegister (§235)
+  - **processes_claims_for** → UninsuredWork (§209.2)
 - **Attributes**:
   - **§209.1 Promotion Tasks (edistämistehtävät)**:
     - promotionTasks: enum [uniform_implementation, implementation_system_development, cooperation_insurance_companies, cooperation_authorities, recommendations, information_dissemination]
@@ -1569,6 +1575,8 @@
 - **Legal Basis**: Sections 226-228
 - **Description**: Advisory body for uniform compensation practice - issues recommendations and opinions
 - **NOT an appeal body** - provides expert opinions to insurers
+- **Relationships**:
+  - **issues** → KorvauslautakunnanLausunto (§226-228)
 
 ### KorvauslautakunnanLausunto (CompensationBoardOpinion)
 - **Description**: Opinion issued by Tapaturma-asiain korvauszakunta on principled legal or medical interpretation questions per §123, §226-228
@@ -1594,6 +1602,8 @@
 - **Legal Basis**: §237
 - **Description**: First instance appeal body for vakuutuslaitos decisions - distinct from ClaimAppealBoard (§226-228)
 - **Appeal deadline**: 30 days (§241)
+- **Relationships**:
+  - **handles_appeals_from** → InsuranceCompany (§237)
 - **Attributes**: 
   - boardName (Finnish: Tapaturma-asiainratkaisulautakunta)
   - finnishName: "Tapaturma-asioiden muutoksenhakulautakunta"
