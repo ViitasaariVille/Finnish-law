@@ -228,6 +228,24 @@
 - **Note**: For experience-rated employers (erikoismaksuperusteinen), claims and full cost charges are already considered in premium
 - **Attributes**: documentationDate, safetyMeasures, trainingPrograms, riskAssessment, incidentHistory
 
+### Omavastuu (EmployerSelfResponsibility)
+- **Description**: Employer's own responsibility share of insurance premiums per §184
+- **Legal Basis**: §184
+- **Purpose**: Employers participate in bearing the costs of work accidents and occupational diseases through a mandatory self-responsibility component
+- **Attributes**:
+  - selfResponsibilityType: enum [fixed_amount, percentage_based, combined]
+  - baseAmount: fixed base per §184.1 (€1,250 minimum)
+  - percentageRate: percentage of premium (§184.1)
+  - calculationYear: year for which self-responsibility is calculated
+  - employerCategory: enum [table_based, experience_rated, new_employer]
+  - reductionApplied: boolean - reductions may apply for good safety record
+  - documentation: reference to required documentation
+- **Application** (§184.1): 
+  - Mandatory component in premium calculation
+  - Minimum €1,250 or percentage of premium, whichever is higher
+  - Purpose: Incentivize workplace safety
+- **Note**: Different rules apply to table-based (taulustomaksuperusteinen) vs experience-rated (erikoismaksuperusteinen) employers
+
 ### InsuranceTransfer (Vakuutuksen siirto)
 - **Description**: Transfer of insurance policy from one insurance company to another
 - **Legal Basis**: §162
@@ -486,6 +504,20 @@
 - **Legal Basis**: Sections 63-68
 - **Requirement**: Minimum 10% work capacity reduction
 
+### Kertakorotus (PensionIncrease)
+- **Description**: One-time increase to disability pension per §67
+- **Legal Basis**: §67
+- **Attributes**:
+  - increasePercentage: 20% (twenty percent increase per §67.1)
+  - baseAmount: reference to base disability pension
+  - effectiveDate: date when increase begins
+  - reason: enum [age_60, age_65, vocational_rehabilitation_failure]
+  - applicationDate: date of application
+- **Conditions** (§67.1): 
+  - Recipient has reached age 60, OR
+  - Recipient has reached age 65 with no vocational rehabilitation opportunity
+- **Note**: Applies to full disability pension, not partial
+
 ### RehabilitationAllowance
 - **Legal Basis**: Sections 69, 88-98
 
@@ -565,6 +597,34 @@
   - isIdentified: boolean
   - insuranceStatus: enum [insured, uninsured, unknown]
 - **Legal Basis**: §95-96
+
+### Vahinko (Damage)
+- **Description**: Damage as a consequence of a vahinkotapahtuma (damage event) - the actual injury/illness resulting from the insured event
+- **Legal Basis**: §2.3, §15-16
+- **Attributes**:
+  - damageType: enum [physical_injury, occupational_disease, psychological_injury, death]
+  - severity: enum [minor, moderate, severe, total]
+  - bodyPartAffected: string
+  - medicalDiagnosis: string
+  - causationToEvent: reference to SyyYhteys
+  - manifestationDate: date
+  - isPermanent: boolean
+- **Causal Chain**: Vahinkotapahtuma (Event) → Vahinko (Damage) → Korvaus (Compensation)
+- **Related**: §83-87 (disability classification depends on damage consequence)
+
+### SyyYhteys (CausalConnection)
+- **Description**: Causal connection between work accident/occupational disease and the damage/injury
+- **Legal Basis**: §16, §19, §30
+- **Attributes**:
+  - connectionType: enum [direct_cause, contributing_cause, aggravation]
+  - assessmentDate: date
+  - assessor: string (medical expert)
+  - medicalOpinion: string
+  - workContribution: number (percentage 0-100)
+  - preExistingCondition: boolean
+  - deteriorationType: reference to PreExistingConditionDeterioration
+- **Assessment Criteria** (§16): Damage must be caused by work accident or occupational disease
+- **Required for**: All compensation claims except funeral expenses
 
 ### StatisticHistory (Tilastohistoria)
 - **Description**: Statistical history data for insurance transfers per §167
@@ -727,6 +787,8 @@
   - **adjustmentFactor**: Annual adjustment factor per §231.4
   - **advanceEstimate**: Preliminary estimate per §231.4
   - **finalSettlement**: Final settlement amounts per §231.5
+  - **largeDamageThreshold**: €8.4 million per §231.1 (threshold for extraordinary cost distribution)
+  - **largeDamagePool**: Separate pool for costs exceeding threshold
 - **Related Entities**:
   - **Tapaturmavakuutuskeskus**: System administrator
   - **InsuranceCompany**: System participants
