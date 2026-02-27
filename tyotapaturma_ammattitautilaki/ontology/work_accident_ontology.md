@@ -233,6 +233,22 @@
   - TravelCostApplication - §50
   - CareCostApplication - §53
   - PropertyDamageApplication - §54
+- **Enumeration Values per Claim Type**:
+  - **TravelCostApplication** (§50):
+    - **transportMethod**: enum [public_transport, private_car, special_vehicle]
+    - **accommodationRequired**: boolean
+    - **companionUsed**: boolean
+    - **rateCalculation**: enum [actual_cost, tax_free_km_allowance_50_percent]
+  - **CareCostApplication** (§51):
+    - **careLevel**: enum [perus (8.70€), korotettu (19.55€), ylin (23.41€)]
+  - **ClothingAllowanceApplication** (§52):
+    - **allowanceLevel**: enum [basic (0.58€), elevated (2.31€)]
+    - **minimumDurationMet**: boolean - requires 3 months continuous
+  - **HouseholdCostsApplication** (§53):
+    - **householdTasks**: enum array [cleaning, laundry, shopping, childcare]
+    - **maxDurationDays**: 365 (1 year from accident)
+  - **PropertyDamageApplication** (§54):
+    - **itemTypes**: enum array [glasses, hearing_aid, dental_prosthesis, support, prosthetic, clothing, ring]
 
 ### Notification (Ilmoitus)
 - **Description**: Formal notification of accident
@@ -327,8 +343,20 @@
 ### WorkMotionStrain (Työliikekipeytyminen)
 - **Legal Basis**: Section 33
 - **Description**: Acute muscle/tendon strain from single strenuous work movement (NOT repetitive)
-- **Note**: Maximum 6 weeks compensation
-- **Attributes**: strainLocation, workActivityDuringStrain, onsetDate
+- **Note**: Maximum 6 weeks (42 days) compensation per §33
+- **Attributes**: 
+  - strainLocation, workActivityDuringStrain, onsetDate
+  - **isSingleMovement**: boolean - distinguishes from repetitive strain (REQUIRED)
+  - **maximumDurationDays**: 42 - 6 weeks per §33
+  - **priorInjuryExists**: boolean - checks for prior injury (aikaisempi vamma)
+  - **priorIllnessExists**: boolean - checks for prior illness (sairaus)
+  - **exclusionApplies**: boolean - whether exclusion condition applies
+  - **exclusionReason**: enum - [prior_injury, prior_illness, tissue_damage_only_from_accident]
+  - **isCompensable**: boolean - derived attribute based on all conditions
+- **Compensability Criteria** (§33):
+  - Must be single movement (NOT repetitive)
+  - Must occur during work (§21) or approved fitness activity (§24.1.6)
+  - NOT compensable if due to prior injury, prior illness, or tissue damage that could ONLY occur from accident
 
 ### ViolenceDamage
 - **Legal Basis**: Section 34
@@ -444,6 +472,19 @@
 - **Attributes**: assessmentDate, capacityPercentage, assessmentBasis
 - **capacityLevels**: full, partial, none
 - **Legal Basis**: §63-68, §88-98
+
+### WorkCapacityReduction (Työkyvyn heikentymä)
+- **Description**: Reduction in work capacity as defined in §63 - core concept for disability pension eligibility
+- **Legal Basis**: §63-68
+- **Attributes**:
+  - **reductionPercentage**: number - minimum 10% required per §63.1
+  - **earningCapacityBefore**: MonetaryAmount - pre-injury earning capacity (adjusted with wage coefficient per TyEL §96)
+  - **earningCapacityAfter**: MonetaryAmount - post-injury earning capacity
+  - **causationVerified**: boolean - must establish connection between injury and reduced work capacity
+  - **assessmentFactors**: enum array [education, prior_activity, age, residence] - factors to consider per §63.2
+  - **wageCoefficientApplied**: number - wage coefficient (palkkakerroin) per TyEL §96
+  - **minimumThresholdMet**: boolean - at least 10% reduction AND at least 1/20 of minimum annual work income reduction per §63.1
+- **Related**: DisabilityPension (§63-68)
 
 ### Takautumisoikeus (RecourseRight)
 - **Description**: Right of recourse - insurer's right to claim compensation from liable third party
