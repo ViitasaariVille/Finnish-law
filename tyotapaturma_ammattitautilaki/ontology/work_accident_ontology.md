@@ -18,6 +18,9 @@
 ### Employee
 - **Description**: Person working in employment relationship under employment contract, public service, or similar
 - **Legal Basis**: Section 8
+- **Relationships**:
+  - **works_for** → Employer (§8)
+  - **is_insured_by** → InsuranceCompany (§3)
 
 ### Student (Opiskelija)
 - **Description**: Person whose primary occupation is studying
@@ -58,6 +61,9 @@
   - injuryType (vamman laatu) - §111.2.1 REQUIRED
   - severity (vakavuus)
   - medicalFindings (lääketieteelliset löydökset)
+- **Relationships**:
+  - **suffers** → OccupationalAccident (§15-16)
+  - **files** → ClaimApplication (§128)
 
 ### ClaimantObligation (Korvausasian selvittämiseen myötävaikuttaminen)
 - **Description**: Injured party's obligations to cooperate in claim processing per §130-134
@@ -226,6 +232,10 @@
   - industrySector (toimiala) - §159.1
   - workStartDate (työn alkamisaika) - §159.1
   - ownershipStructure (omistussuhteet) - §159.1
+- **Relationships**:
+  - **employs** → Employee (§8)
+  - **provides_insurance_for** → Employee (§3)
+  - **has_insurance_with** → InsuranceCompany (§156-160)
 
 ### BankruptcyEffect (Konkurssin vaikutus vakuutukseen)
 - **Description**: Effects of bankruptcy on insurance per §163-165
@@ -591,6 +601,9 @@
   - **TravelCostApplication** (§50):
     - **transportMethod**: enum [public_transport, private_car, special_vehicle]
     - **accommodationRequired**: boolean
+- **Relationships**:
+  - **requests** → CompensationDecision (§36-109)
+  - **is_processed_by** → InsuranceCompany (§119-127)
 
 ### InvestigationObligation (Selvittämisvelvollisuus)
 - **Description**: Insurance company's legal investigation obligations per §119-120
@@ -673,6 +686,10 @@
 - **Attributes**: decisionDate, decisionType, amount, reasoning, appealInstructions
 - **decisionType values**: grant, deny, partial
 - **Deadline**: 30 days from sufficient documentation (§127)
+- **Relationships**:
+  - **pays** → InjuredParty (§36-109)
+  - **covers** → Vahinko (Damage) (§36-49)
+  - **issued_by** → InsuranceCompany
 
 ### PaymentCommitment (Maksusitoumus)
 - **Description**: Insurance company commitment to pay for treatment
@@ -782,6 +799,8 @@
     - **Condition**: Caused by abnormal thermal environment
   - RadiationInjury (Säteilyn aiheuttama vamma tai sairaus) - §18.5
   - PressureVariationInjury (Huomattava fysikaalisen paineen vaihtelu) - §18.6
+- **Relationships**:
+  - **causes** → Vahinko (Damage) (§16)
 
 ### OccupationalDisease
 - **Legal Basis**: Sections 26-32
@@ -1259,6 +1278,8 @@
   - manifestationDate: date
   - isPermanent: boolean
 - **Causal Chain**: Vahinkotapahtuma (Event) → Vahinko (Damage) → Korvaus (Compensation)
+- **Relationships**:
+  - **leads_to** → ClaimApplication (§128)
 - **Related**: §83-87 (disability classification depends on damage consequence)
 
 ### SyyYhteys (CausalConnection)
@@ -1466,6 +1487,9 @@
 
 ### InsuranceCompany
 - **Legal Basis**: Section 205
+- **Relationships**:
+  - **insures** → Employee (§3)
+  - **has_contract_with** → Employer (§156-160)
 - Authorized to provide insurance
 
 ### StateTreasury (Valtiokonttori)
