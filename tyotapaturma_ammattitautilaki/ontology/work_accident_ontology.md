@@ -90,7 +90,8 @@
 
 ### DailyAllowance
 - **Legal Basis**: Sections 56-62
-- **Maximum Duration**: 1 year from accident date
+- **Duration**: First 28 days at sick pay level (employer pays), then based on annual earnings (vuosityöansio)
+- **Not limited to 1 year** - continues as long as work incapacity exists
 
 ### DisabilityPension
 - **Legal Basis**: Sections 63-68
@@ -116,8 +117,33 @@
 | Employee | has_right_to | Compensation | When suffering occupational accident |
 | Employer | must_obtain | MandatoryInsurance | For all employees |
 | InsuranceCompany | must_pay | Compensation | When insured event occurs |
-| InjuredParty | must_file_claim_within | 5 years | From accident/disease date |
+| InjuredParty | must_file_claim_within | 1 year | From date of knowledge of injury and compensability |
+| InjuredParty | must_file_claim_within | 10 years | Absolute maximum from accident/disease date |
 | Survivor | has_right_to | DeathCompensation | When injured party dies |
+
+---
+
+## 5b. Procedural Rules (Sections 117-121)
+
+### Parties to Proceedings (§117)
+- **Parties**: Injured party (vahingoittunut) and survivors (edunsaajat)
+- **Not parties**: Employer, healthcare provider, municipality
+
+### Right to be Heard (§118)
+- Close relative or caregiver can represent injured party if unable
+- Until guardian (edunvalvoja) is appointed
+
+### Investigation Procedures (§119)
+- Must start investigation within 7 business days
+- Must inform claimant of 1-year deadline
+
+### Vocational Rehabilitation Assessment (§120)
+- Must assess need within 3 months of disability start
+- Review every 3 months thereafter
+
+### Medical Expert Involvement (§121)
+- Licensed physician must participate in medical assessments
+- Must document findings in records
 
 ---
 
