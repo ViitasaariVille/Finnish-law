@@ -200,8 +200,8 @@
 **Missing Attributes:**
 | Attribute | Law Section | Severity | Description |
 |-----------|-------------|----------|-------------|
-| `socialSecurityNumber` | §111.2.1 | **Critical** | Finnish personal identity code (henkilötunnus) |
-| `dateOfBirth` | §111.2.1 | **Medium** | Alternative when SSN not available |
+| `socialSecurityNumber` | §111.2 | **Critical** | Finnish personal identity code (henkilötunnus) |
+| `dateOfBirth` | §111.2 | **Medium** | Alternative when SSN not available |
 | `workDescription` | §111.2.4 | **Medium** | Description of work being performed |
 | `employmentRelationshipDetails` | §111.2.4 | **Medium** | Details of employment relationship |
 | `compensationPaidByEmployer` | §111.2.4 | **Medium** | Compensation/consideration paid |
@@ -212,7 +212,7 @@ The ontology lists attributes but doesn't structure them per the law's mandatory
 
 | Required Content | Law Section | Status |
 |------------------|-------------|--------|
-| Injured party's name, personal ID, contact info | §111.2.1 | ✓ Present |
+| Injured party's name, personal ID, contact info | §111.2 | ✓ Present |
 | Employer's name, business ID, contact info | §111.2.2 | ✓ Present |
 | Accident date, time, place, circumstances, causes, consequences | §111.2.3 | ✓ Present |
 | Work description, employment relationship, compensation | §111.2.4 | ✓ Present |

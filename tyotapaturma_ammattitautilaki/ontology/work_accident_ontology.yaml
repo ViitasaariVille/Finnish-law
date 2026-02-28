@@ -122,12 +122,12 @@ classes:
       type: date
       finnish: tapaturmapäivä
       required: true
-      legal_basis: §111
+      legal_basis: §111.2
     - key: injuryType
       type: string
       finnish: vamman laatu
       required: true
-      legal_basis: §111
+      legal_basis: §111.2
     - key: severity
       type: enum
       values:
@@ -148,7 +148,7 @@ classes:
     - key: contactInformation
       type: string
       finnish: yhteystiedot
-      legal_basis: §111
+      legal_basis: §111.2
   beneficiary:
     label: Beneficiary
     finnish: Edunsaaja
@@ -497,7 +497,7 @@ classes:
     - key: appealDeadline
       type: integer
       value: 60
-      legal_basis: §241.4
+      legal_basis: Oikeudenkäymiskaari 4/1734 §30
   appealChain:
     label: AppealChain
     finnish: Muutoksenhaku
@@ -520,14 +520,13 @@ classes:
     - key: supremeCourtDeadlineDays
       type: integer
       value: 60
-      legal_basis: §241.4
+      legal_basis: Oikeudenkäymiskaari 4/1734 §30
     - key: lateFilingAllowed
       type: boolean
       legal_basis: §241.2
     - key: additionalEvidenceDeadline
       type: integer
       value: 60
-      legal_basis: §241.5
   treatment:
     label: Treatment
     finnish: Hoito

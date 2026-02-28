@@ -57,8 +57,8 @@
 - **Description**: Person who suffered a work accident or occupational disease
 - **Legal Basis**: §2.6, §15-16
 - **Attributes**: 
-  - injuryDate (tapaturmapäivä) - §111.2.1 REQUIRED
-  - injuryType (vamman laatu) - §111.2.1 REQUIRED
+  - injuryDate (tapaturmapäivä) - §111.2 REQUIRED
+  - injuryType (vamman laatu) - §111.2 REQUIRED
   - severity (vakavuus)
   - medicalFindings (lääketieteelliset löydökset)
 - **Relationships**:
@@ -84,10 +84,10 @@
   - ChangeNotificationDuty (§134) - Muutosilmoitusvelvollisuus
   - personId (henkilötunnus) - REQUIRED
   - name (nimi)
-  - contactInformation (yhteystiedot) - §111.2.1
-  - injuryCause (tapaturman syy) - §111.2.1
-  - injuryTime (tapaturman ajankohta) - §111.2.1
-  - injuryLocation (tapaturman paikka) - §111.2.1
+  - contactInformation (yhteystiedot) - §111.2
+  - injuryCause (tapaturman syy) - §111.2
+  - injuryTime (tapaturman ajankohta) - §111.2
+  - injuryLocation (tapaturman paikka) - §111.2
   - otherEmployment (muu työsuhde) - §111.2.5
   - otherEntrepreneurWork (muu yrittäjätyö) - §111.2.5
   - witnesses (todistajat) - §111.2.3
