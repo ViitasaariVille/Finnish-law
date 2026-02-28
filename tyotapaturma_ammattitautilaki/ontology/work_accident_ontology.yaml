@@ -270,7 +270,7 @@ classes:
     finnish: Työtapaturma
     description: Work accident defined as injury suffered in circumstances covered
       by the law
-    legal_basis: §17-25
+    legal_basis: §20-25
     category: event
     note: workplaceAccident and commuteAccident are defined as separate related classes
   vahinko:
@@ -682,7 +682,7 @@ classes:
     label: WorkTripAccident
     finnish: Työmatkatapaturma
     description: Accident during work-related trip
-    legal_basis: §22
+    legal_basis: §21
     category: event
   specialCircumstancesAccident:
     label: SpecialCircumstancesAccident
