@@ -30,7 +30,8 @@ classes:
   executiveEmployee:
     label: ExecutiveEmployee
     finnish: Johtavassa asemassa oleva
-    description: Person in a leading position (managing director, board member, partner with controlling interest)
+    description: Person in a leading position (managing director, board member, partner
+      with controlling interest)
     legal_basis: §9
     category: person
     attributes:
@@ -151,7 +152,8 @@ classes:
   beneficiary:
     label: Beneficiary
     finnish: Edunsaaja
-    description: Person entitled to family pension after death (spouse/partner §100, child §101)
+    description: Person entitled to family pension after death (spouse/partner §100,
+      child §101)
     legal_basis: §100-101
     category: person
     subclasses:
@@ -213,7 +215,8 @@ classes:
   vakuutuslaitos:
     label: InsuranceInstitution
     finnish: Vakuutuslaitos
-    description: Collective term for insurance institutions providing work accident insurance under §6 (insurance companies, state treasury, municipal pension institutions)
+    description: Collective term for insurance institutions providing work accident
+      insurance under §6 (insurance companies, state treasury, municipal pension institutions)
     legal_basis: §6
     category: organization
     attributes:
@@ -231,7 +234,8 @@ classes:
     description: Work performed without mandatory work accident insurance - by AccidentInsuranceCentre
     legal_basis: §2.4
     category handled: event
-    note: When employer fails to obtain insurance, AccidentInsuranceCentre handles claims
+    note: When employer fails to obtain insurance, AccidentInsuranceCentre handles
+      claims
   stateTreasury:
     label: StateTreasury
     finnish: Valtiokonttori
@@ -309,7 +313,8 @@ classes:
   SyyYhteys:
     label: Causation
     finnish: SyyYhteys
-    description: Medical causation assessment - link between injury/occupational disease and the accident/event per §16
+    description: Medical causation assessment - link between injury/occupational disease
+      and the accident/event per §16
     legal_basis: §16
     category: assessment
     attributes:
@@ -329,7 +334,8 @@ classes:
   deathCompensation:
     label: DeathCompensation
     finnish: Kuolemantapauskorvaus
-    description: Compensation paid when injury results in death (survivors pension + funeral assistance)
+    description: Compensation paid when injury results in death (survivors pension
+      + funeral assistance)
     legal_basis: §100-102 (perhe-eläke), §109 (hauta-apu)
     category: compensation
   claimApplication:
@@ -479,7 +485,8 @@ classes:
   supremeCourt:
     label: SupremeCourt
     finnish: Korkein oikeus
-    description: Final appellate court - highest instance for Finnish courts, leave to appeal required
+    description: Final appellate court - highest instance for Finnish courts, leave
+      to appeal required
     legal_basis: §243
     category: institution
     attributes:
@@ -614,12 +621,11 @@ classes:
       type: boolean
       value: true
       legal_basis: §107
-
-  # §17 - Foundational accident definition
   tapaturma:
     label: Tapaturma
     finnish: Tapaturma
-    description: Accident as defined in Finnish work accident law - sudden, unexpected external event causing injury
+    description: Accident as defined in Finnish work accident law - sudden, unexpected
+      external event causing injury
     legal_basis: §17
     category: event
     attributes:
@@ -646,8 +652,6 @@ classes:
       type: boolean
       value: true
       note: Injury must manifest within reasonable time
-
-  # §18 - Injuries treated as accident-caused
   quasiAccidentInjury:
     label: QuasiAccidentInjury
     finnish: Tapaturmaksi katsottava vamma
@@ -666,8 +670,6 @@ classes:
     - key: workConnection
       type: boolean
       value: true
-
-  # §19 - Aggravation caused by accident
   aggravatedConditionByAccident:
     label: AggravatedConditionByAccident
     finnish: Tapaturman aiheuttama paheneminen
@@ -682,42 +684,34 @@ classes:
     - key: causalConnection
       type: boolean
       value: true
-
-  # §21 - Accident during work
   workDuringAccident:
     label: WorkDuringAccident
     finnish: Työssä sattunut tapaturma
-    description: Work accident occurring at employer's premises or under employer's direction
+    description: Work accident occurring at employer's premises or under employer's
+      direction
     legal_basis: §21
     category: event
     subclasses:
     - workplaceAccident
     - workTripAccident
-
   workTripAccident:
     label: WorkTripAccident
     finnish: Työmatkatapaturma
     description: Accident during work-related trip
     legal_basis: §22
     category: event
-
-  # §24 - Accident in special circumstances
   specialCircumstancesAccident:
     label: SpecialCircumstancesAccident
     finnish: Tapaturma erityisissä olosuhteissa
     description: Accident covered under special circumstances provisions
     legal_basis: §24
     category: event
-
-  # §25 - Work at home or undefined location
   homeWorkAccidentRule:
     label: HomeWorkAccidentRule
     finnish: Kotona tehtävän työn tapaturma
     description: Rules for accidents when working at home or undefined location
     legal_basis: §25
     category: rule
-
-  # §26 - Occupational disease (top-level)
   occupationalDisease:
     label: OccupationalDisease
     finnish: Ammattitauti
@@ -741,16 +735,12 @@ classes:
     - tendinopathyUpperLimb
     - carpalTunnelSyndrome
     - aggravatedOccupationalCondition
-
-  # §27 - Occupational disease list
   occupationalDiseaseList:
     label: OccupationalDiseaseList
     finnish: Ammattitautiluettelo
     description: Official list of occupational diseases and their criteria
     legal_basis: §27
     category: registry
-
-  # §28 - Upper limb tendinopathy
   tendinopathyUpperLimb:
     label: TendinopathyUpperLimb
     finnish: Yläraajan jännetulehdus
@@ -766,8 +756,6 @@ classes:
       - elbow
       - wrist
       - hand
-
-  # §29 - Carpal tunnel syndrome
   carpalTunnelSyndrome:
     label: CarpalTunnelSyndrome
     finnish: Rannekanavaoireyhtymä
@@ -775,24 +763,18 @@ classes:
     legal_basis: §29
     category: event
     parent: occupationalDisease
-
-  # §30 - Aggravated occupational condition
   aggravatedOccupationalCondition:
     label: AggravatedOccupationalCondition
     finnish: Ammattitautina korvattava paheneminen
     description: Aggravation of occupational disease that qualifies for compensation
     legal_basis: §30
     category: event
-
-  # §33 - Work strain injury (työliikekipeytyminen)
   workStrainInjury:
     label: WorkStrainInjury
     finnish: Työliikekipeytyminen
     description: Injury from repetitive work movements or strain
     legal_basis: §33
     category: event
-
-  # §34 - Assault and intentional act
   assaultInjury:
     label: AssaultInjury
     finnish: Pahoinpitely ja tahallinen teko
@@ -804,8 +786,6 @@ classes:
       type: boolean
     - key: policeReport
       type: boolean
-
-  # §35 - Psychological trauma reaction
   psychologicalTraumaReaction:
     label: PsychologicalTraumaReaction
     finnish: Henkinen järkytysreaktio
@@ -820,8 +800,6 @@ classes:
       - violent_event
       - threatening_situation
       - other_traumatic
-
-  # §50 - Travel and accommodation costs
   travelAndAccommodationCosts:
     label: TravelAndAccommodationCosts
     finnish: Matka- ja majoituskulut
@@ -844,8 +822,6 @@ classes:
       type: integer
     - key: priorAuthorization
       type: boolean
-
-  # §51 - Care allowance (hoitotuki)
   careAllowance:
     label: CareAllowance
     finnish: Hoitotuki
@@ -863,20 +839,17 @@ classes:
       type: MonetaryAmount
     - key: assessmentDate
       type: date
-
-  # §52 - Clothing allowance (vaatelisä)
   clothingAllowance:
     label: ClothingAllowance
     finnish: Vaatelisä
     description: Additional compensation for clothing damaged due to injury
     legal_basis: §52
     category: compensation
-
-  # §93 - Service housing additional costs
   serviceHousingAdditionalCosts:
     label: ServiceHousingAdditionalCosts
     finnish: Palveluasumisen lisäkustannukset
-    description: Additional costs for service housing (palveluasuminen) when injury requires special arrangements
+    description: Additional costs for service housing (palveluasuminen) when injury
+      requires special arrangements
     legal_basis: §93
     category: compensation
     attributes:
@@ -888,8 +861,6 @@ classes:
       - assisted_living
     - key: additionalServicesRequired
       type: array
-
-  # §53 - Home care additional costs
   homeCareAdditionalCosts:
     label: HomeCareAdditionalCosts
     finnish: Kodinhoidon lisäkustannukset
@@ -901,20 +872,17 @@ classes:
       type: string
     - key: additionalHours
       type: decimal
-
-  # §54 - Personal property compensation
   personalPropertyCompensation:
     label: PersonalPropertyCompensation
     finnish: Henkilökohtaisten esineiden korvaus
     description: Compensation for personal items damaged in accident
     legal_basis: §54
     category: compensation
-
-  # §56 - Daily allowance (päiväraha)
   dailyAllowance:
     label: DailyAllowance
     finnish: Päiväraha
-    description: Daily allowance for loss of earning capacity during treatment and recovery
+    description: Daily allowance for loss of earning capacity during treatment and
+      recovery
     legal_basis: §56
     category: compensation
     attributes:
@@ -923,13 +891,11 @@ classes:
     - key: calculationBasis
       type: enum
       values:
-        - actual_wages
-        - minimum_daily
-        - fixed_percentage
+      - actual_wages
+      - minimum_daily
+      - fixed_percentage
     - key: paymentPeriod
       type: period
-
-  # §63 - Accident pension (tapaturmaeläke)
   accidentPension:
     label: AccidentPension
     finnish: Tapaturmaeläke
@@ -948,8 +914,6 @@ classes:
       - partial
     - key: amount
       type: MonetaryAmount
-
-  # §69 - Rehabilitation allowance (kuntoutusraha)
   rehabilitationAllowance:
     label: RehabilitationAllowance
     finnish: Kuntoutusraha
@@ -967,8 +931,6 @@ classes:
       type: period
     - key: amount
       type: MonetaryAmount
-
-  # §83-87 - Impairment allowance (haittaraha)
   impairmentAllowance:
     label: ImpairmentAllowance
     finnish: Haittaraha
@@ -1060,7 +1022,8 @@ classes:
   travelCostApplication:
     label: TravelCostApplication
     finnish: Matkakustannushakemus
-    description: Application for reimbursement of travel costs related to medical treatment
+    description: Application for reimbursement of travel costs related to medical
+      treatment
     legal_basis: §128
     category: procedure
     attributes:
@@ -1140,7 +1103,8 @@ classes:
   occupationalSafetyFund:
     label: OccupationalSafetyFund
     finnish: Työsuojelurahasto
-    description: Fund for promoting occupational safety, financed by a percentage of insurance premiums
+    description: Fund for promoting occupational safety, financed by a percentage
+      of insurance premiums
     legal_basis: §233, §209.2.11
     category: institution
     attributes:
@@ -1153,6 +1117,13 @@ classes:
       type: reference
       to: accidentInsuranceCentre
       note: Tapaturmavakuutuskeskus collects and remits the fees
+  thirdParty:
+    label: ThirdParty
+    finnish: Kolmas osapuoli
+    description: Third party in recourse cases per §244-249
+    legal_basis: §244-249
+    category: party
+    attributes: []
 relationships:
 - source: employee
   target: employer
@@ -1193,12 +1164,13 @@ relationships:
   target: deathCompensation
   type: receives
   legal_basis: §100-102, §109
-  note: 'survivors pension §100-102, funeral assistance §109'
+  note: survivors pension §100-102, funeral assistance §109
 - source: beneficiary
   target: injuredParty
   type: is_dependent_of
   legal_basis: §100-101
-  note: 'composite relation - no general dependent category in law; specific relations: spouse (§100), child (§101)'
+  note: 'composite relation - no general dependent category in law; specific relations:
+    spouse (§100), child (§101)'
 - source: employer
   target: employee
   type: employs
@@ -1344,8 +1316,6 @@ relationships:
   type: handles_appeals_from
   legal_basis: §237
   note: ''
-
-# New relationships for added classes
 - source: injuredParty
   target: tapaturma
   type: suffers
@@ -1432,43 +1402,34 @@ relationships:
   legal_basis: §63
   note: ''
 - source: compensationDecision
+  target: impairmentAllowance
   type: covers
-  legal_basis: §83-§87
-
-# Issue #485: Rehabilitation assessment obligation (§65, §120)
+  legal_basis: §83-87
 - source: insuranceCompany
   target: injuredParty
   type: requests_rehabilitation_assessment
   legal_basis: §65, §120
   note: Insurer must assess rehabilitation need
-
-# Issue #484: Employer notifies accident within 10 working days (§111)
 - source: employer
   target: insuranceCompany
   type: notifies_accident
   legal_basis: §111
   note: Employer must notify within 10 working days
-
-# Issue #488: Right of recourse / Takautumisoikeus (§244-§249)
 - source: insuranceCompany
   target: employer
   type: has_right_of_recourse
   legal_basis: §244-§249
   note: Insurer can recover compensation from employer in certain cases
 - source: insuranceCompany
-  target: third_party
+  target: thirdParty
   type: has_right_of_recourse
   legal_basis: §244-§249
   note: Insurer can recover from liable third party
-
-# Issue #487: Service housing additional costs (§93)
 - source: injuredParty
   target: serviceHousingAdditionalCosts
   type: is_entitled_to
   legal_basis: §93
   note: Additional costs for service housing arrangements
-
-# Issue #504: Appeal chain relations - missing legal basis in appealChain class relations
 - source: injuredParty
   target: appealChain
   type: can_appeal_via
