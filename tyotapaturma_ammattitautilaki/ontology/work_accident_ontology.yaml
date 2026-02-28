@@ -1257,7 +1257,7 @@ relationships:
   note: ''
 - source: healthcareProvider
   target: insuranceCompany
-  type: submits_claim_to
+  type: notifies_about_treatment
   legal_basis: §41
   note: ''
 - source: medicalCareCompensation
