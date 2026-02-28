@@ -13,7 +13,7 @@ classes:
     finnish: Työntekijä
     description: Person working in employment relationship under employment contract,
       public service, or similar
-    legal_basis: Section 8
+    legal_basis: §8
     category: person
     attributes:
     - key: employmentType
@@ -185,7 +185,7 @@ classes:
     label: InsuranceCompany
     finnish: Vakuutusyhtiö
     description: Insurance company authorized to provide work accident insurance
-    legal_basis: Section 205
+    legal_basis: §205
     category: organization
   stateTreasury:
     label: StateTreasury
@@ -510,6 +510,183 @@ classes:
       - medical_interpretation
     - key: requestDate
       type: date
+  statutorySpouse:
+    label: StatutorySpouse
+    finnish: Leski
+    description: Widow/widower entitled to family pension under statutory provisions
+    legal_basis: §100
+    category: person
+    attributes:
+    - key: marriageDate
+      type: date
+    - key: incomeAdjustmentApplies
+      type: boolean
+      value: true
+      legal_basis: §107
+  cohabitingPartner:
+    label: CohabitingPartner
+    finnish: Avopuoliso
+    description: Cohabiting partner entitled to family pension under certain conditions
+    legal_basis: §100.2
+    category: person
+    attributes:
+    - key: cohabitationStartDate
+      type: date
+    - key: sharedHousehold
+      type: boolean
+  childPensionRecipient:
+    label: ChildPensionRecipient
+    finnish: Lapseneläkkeen saaja
+    description: Child entitled to survivor's pension after parent's death
+    legal_basis: §101
+    category: person
+    attributes:
+    - key: age
+      type: integer
+    - key: studentStatus
+      type: boolean
+      legal_basis: §101.2
+  dependent:
+    label: Dependent
+    finnish: Huollettava
+    description: Person financially dependent on deceased insured person
+    legal_basis: §102
+    category: person
+    attributes:
+    - key: dependencyReason
+      type: enum
+      values:
+      - age
+      - disability
+      - education
+  workplaceAccident:
+    label: WorkplaceAccident
+    finnish: Työpaikkatapaturma
+    description: Accident occurring at the workplace during work hours
+    legal_basis: §22
+    category: event
+    attributes:
+    - key: location
+      type: string
+    - key: workingHours
+      type: boolean
+  commuteAccident:
+    label: CommuteAccident
+    finnish: Työmatkatapaturma
+    description: Accident occurring during commute between home and workplace
+    legal_basis: §23
+    category: event
+    attributes:
+    - key: commuteRoute
+      type: string
+    - key: detourReason
+      type: string
+  wageCompensationApplication:
+    label: WageCompensationApplication
+    finnish: Palkkakorvaushakemus
+    description: Application for wage compensation during illness/injury
+    legal_basis: §128
+    category: procedure
+    attributes:
+    - key: employer
+      type: reference
+      to: employer
+  travelCostApplication:
+    label: TravelCostApplication
+    finnish: Matkakustannushakemus
+    description: Application for reimbursement of travel costs related to medical treatment
+    legal_basis: §128
+    category: procedure
+    attributes:
+    - key: travelDate
+      type: date
+    - key: distance
+      type: decimal
+  careCostApplication:
+    label: CareCostApplication
+    finnish: Hoitokustannushakemus
+    description: Application for reimbursement of care-related costs
+    legal_basis: §128
+    category: procedure
+    attributes:
+    - key: careType
+      type: enum
+      values:
+      - medical
+      - dental
+      - rehabilitation
+  propertyDamageApplication:
+    label: PropertyDamageApplication
+    finnish: Omaisuusvahinkohakemus
+    description: Application for compensation for property damage
+    legal_basis: §128
+    category: procedure
+    attributes:
+    - key: damageDescription
+      type: string
+    - key: estimatedValue
+      type: MonetaryAmount
+  publicHealthcare:
+    label: PublicHealthcare
+    finnish: Julkinen terveydenhuolto
+    description: Healthcare provided by public healthcare system
+    legal_basis: §39
+    category: healthcare
+    attributes:
+    - key: providerName
+      type: string
+    - key: region
+      type: string
+  privateHealthcare:
+    label: PrivateHealthcare
+    finnish: Yksityinen terveydenhuolto
+    description: Healthcare provided by private healthcare providers
+    legal_basis: §40
+    category: healthcare
+    attributes:
+    - key: providerName
+      type: string
+    - key: contractWithInsurance
+      type: boolean
+  foreignHealthcare:
+    label: ForeignHealthcare
+    finnish: Ulkomainen terveydenhuolto
+    description: Healthcare received outside Finland
+    legal_basis: §44
+    category: healthcare
+    attributes:
+    - key: country
+      type: string
+    - key: priorAuthorization
+      type: boolean
+      legal_basis: §44.2
+  medicine:
+    label: Medicine
+    finnish: Lääkkeet
+    description: Pharmaceutical compensation for medicine costs
+    legal_basis: §38
+    category: compensation
+    attributes:
+    - key: prescription
+      type: boolean
+    - key: reimbursementRate
+      type: decimal
+  occupationalSafetyFund:
+    label: OccupationalSafetyFund
+    finnish: Työsuojelurahasto
+    description: Fund for promoting occupational safety, financed by a percentage of insurance premiums
+    legal_basis: §233, §209.2.11
+    category: institution
+    attributes:
+    - key: fundingPercentage
+      type: decimal
+      value: 1.75
+      note: percent of insurance premium
+      legal_basis: §233
+    - key: collectingInstitution
+      type: reference
+      to: accidentInsuranceCentre
+      note: Tapaturmavakuutuskeskus collects and remits the fees
 relationships:
 - source: employee
   target: employer
@@ -686,6 +863,11 @@ relationships:
   type: maintains
   legal_basis: §235
   note: ''
+- source: accidentInsuranceCentre
+  target: occupationalSafetyFund
+  type: remits_fees_to
+  legal_basis: §233
+  note: Collects 1.75% of premiums and remits to fund
 - source: claimAppealBoard
   target: korvauslautakunnanLausunto
   type: issues
