@@ -171,9 +171,19 @@ If repo is broken or need urgent help:
 - Create GitHub Issue with `urgent` label
 - Tag both agents
 
-If repo is broken or need urgent help:
-- Create GitHub Issue with `urgent` label
-- Tag both agents
+---
+
+## 📌 Issue Tracking Policy
+
+⚠️ **All issues must be tracked as GitHub issues only.**
+
+Do not create local issue files in any folder. Use GitHub Issues exclusively.
+
+### Why?
+- Single source of truth
+- Searchable and cross-referenced
+- Linked to PRs and commits
+- Notifications and assignment
 
 ---
 
