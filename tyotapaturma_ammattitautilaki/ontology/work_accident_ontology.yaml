@@ -138,6 +138,7 @@ classes:
     - key: medicalFindings
       type: string
       finnish: lääketieteelliset löydökset
+      legal_basis: §16, §111
     - key: personId
       type: string
       finnish: henkilötunnus
