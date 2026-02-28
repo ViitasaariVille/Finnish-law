@@ -127,7 +127,7 @@ classes:
       type: string
       finnish: vamman laatu
       required: true
-      legal_basis: § 2(6)
+      legal_basis: §2(6)
     - key: severity
       type: enum
       values:
@@ -149,7 +149,7 @@ classes:
     - key: contactInformation
       type: string
       finnish: yhteystiedot
-      legal_basis: § 2(6)
+      legal_basis: §2(6)
   beneficiary:
     label: Beneficiary
     finnish: Edunsaaja
