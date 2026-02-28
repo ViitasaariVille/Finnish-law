@@ -102,7 +102,7 @@ classes:
     label: Entrepreneur
     finnish: Yrittäjä
     description: Self-employed person with YEL insurance
-    legal_basis: §188-190
+    legal_basis: §188–190
     category: person
     attributes:
     - key: businessId
@@ -115,19 +115,19 @@ classes:
     label: InjuredParty
     finnish: Vahingoittunut
     description: Person who suffered a work accident or occupational disease
-    legal_basis: 2 § 6, 15-16
+    legal_basis: § 2(6), 15-16
     category: person
     attributes:
     - key: injuryDate
       type: date
       finnish: tapaturmapäivä
       required: true
-      legal_basis: 2 § 6
+      legal_basis: § 2(6)
     - key: injuryType
       type: string
       finnish: vamman laatu
       required: true
-      legal_basis: 2 § 6
+      legal_basis: § 2(6)
     - key: severity
       type: enum
       values:
@@ -149,13 +149,13 @@ classes:
     - key: contactInformation
       type: string
       finnish: yhteystiedot
-      legal_basis: 2 § 6
+      legal_basis: § 2(6)
   beneficiary:
     label: Beneficiary
     finnish: Edunsaaja
     description: Person entitled to family pension after death (spouse/partner §100,
       child §101)
-    legal_basis: §100-101
+    legal_basis: §100–101
     category: person
     note: Includes statutorySpouse, cohabitingPartner, childPensionRecipient, dependent as related classes
   employer:
@@ -263,21 +263,21 @@ classes:
     label: VoluntaryWorkTimeInsurance
     finnish: Vapaaehtoinen työajan vakuutus
     description: Voluntary insurance for work time accidents
-    legal_basis: §196-198
+    legal_basis: §196–198
     category: insurance_type
   occupationalAccident:
     label: OccupationalAccident
     finnish: Työtapaturma
     description: Work accident defined as injury suffered in circumstances covered
       by the law
-    legal_basis: §20-25
+    legal_basis: §20–25
     category: event
     note: workplaceAccident and commuteAccident are defined as separate related classes
   vahinko:
     label: Vahinko
     finnish: Vahinko
     description: Damage as a consequence of a vahinkotapahtuma - the actual injury/illness
-    legal_basis: §2(3), §15-16
+    legal_basis: §2(3), §15–16
     category: event
     attributes:
     - key: damageType
@@ -331,7 +331,7 @@ classes:
     finnish: Kuolemantapauskorvaus
     description: Compensation paid when injury results in death (survivors pension
       + funeral assistance)
-    legal_basis: §100-102 (perhe-eläke), §109 (hauta-apu)
+    legal_basis: §100–102 (perhe-eläke), §109 (hauta-apu)
     category: compensation
   claimApplication:
     label: ClaimApplication
@@ -351,7 +351,7 @@ classes:
     label: CompensationDecision
     finnish: Korvauspäätös
     description: Written decision on compensation
-    legal_basis: §124-127
+    legal_basis: §124–127
     category: decision
     attributes:
     - key: decisionDate
@@ -377,7 +377,7 @@ classes:
     label: HealthcareProvider
     finnish: Terveydenhuollon palveluntarjoaja
     description: Healthcare service provider
-    legal_basis: §36-49
+    legal_basis: §36–49
     category: organization
     attributes:
     - key: providerType
@@ -394,7 +394,7 @@ classes:
     label: MedicalCareCompensation
     finnish: Korvaus sairaanhoitokustannuksista
     description: Compensation for medical care costs
-    legal_basis: §36-49
+    legal_basis: §36–49
     category: compensation
     note: publicHealthcare, privateHealthcare, foreignHealthcare, medicine are defined separately
   paymentCommitment:
@@ -407,7 +407,7 @@ classes:
     label: AccidentInsuranceCentre
     finnish: Tapaturmavakuutuskeskus
     description: Central coordinating organization for work accident insurance
-    legal_basis: §209-225
+    legal_basis: §209–225
     category: institution
     attributes:
     - key: promotionTasks
@@ -444,7 +444,7 @@ classes:
     label: ClaimAppealBoard
     finnish: Tapaturma-asiain korvauslautakunta
     description: Advisory body for uniform compensation practice
-    legal_basis: §226-228
+    legal_basis: §226–228
     category: institution
     note: NOT an appeal body - provides expert opinions to insurers
   accidentAppealsBoard:
@@ -489,7 +489,7 @@ classes:
     label: AppealChain
     finnish: Muutoksenhaku
     description: Structured hierarchy of appeal bodies
-    legal_basis: §237-243
+    legal_basis: §237–243
     category: procedure
     attributes:
     - key: currentLevel
@@ -549,7 +549,7 @@ classes:
     label: SurvivorsPension
     finnish: Perhe-eläke
     description: Pension paid to survivors of deceased insured person
-    legal_basis: §100-102
+    legal_basis: §100–102
     category: compensation
     attributes:
     - key: pensionType
@@ -560,8 +560,8 @@ classes:
       - dependent
     - key: amount
       type: MonetaryAmount
-  funeralExpenses:
-    label: FuneralExpenses
+  funeralAssistance:
+    label: FuneralAssistance
     finnish: Hautausapu
     description: Compensation for funeral expenses
     legal_basis: §109
@@ -570,9 +570,9 @@ classes:
     - key: amount
       type: MonetaryAmount
       value: €4,760
-  workAccidentRegister:
-    label: WorkAccidentRegister
-    finnish: Tapaturmarekisteri
+  accidentAndOccupationalDiseaseRegister:
+    label: AccidentAndOccupationalDiseaseRegister
+    finnish: Työtapaturma- ja ammattitautirekisteri
     description: Register of work accidents maintained by AccidentInsuranceCentre
     legal_basis: §235
     category: registry
@@ -584,7 +584,7 @@ classes:
     label: KorvauslautakunnanLausunto
     finnish: Korvauslautakunnan lausunto
     description: Opinion issued by ClaimAppealBoard on legal/medical interpretation
-    legal_basis: §226-228
+    legal_basis: §226–228
     category: decision
     attributes:
     - key: opinionType
@@ -915,7 +915,7 @@ classes:
     label: ImpairmentAllowance
     finnish: Haittaraha
     description: Lump sum compensation for permanent physical or mental impairment
-    legal_basis: §83-87
+    legal_basis: §83–87
     category: compensation
     attributes:
     - key: impairmentPercentage
@@ -1118,13 +1118,13 @@ relationships:
 - source: injuredParty
   target: occupationalAccident
   type: suffers
-  legal_basis: §15-16
+  legal_basis: §15–16
   note: ''
 - source: injuredParty
   target: deathCompensation
   type: dies
   legal_basis: §99
-  note: §99 is general provision; creates survivor rights (perhe-eläke §100-102, hautausapu §109)
+  note: §99 is general provision; creates survivor rights (perhe-eläke §100–102, hautausapu §109)
 - source: injuredParty
   target: claimApplication
   type: files
@@ -1133,18 +1133,18 @@ relationships:
 - source: injuredParty
   target: healthcareProvider
   type: receives_treatment_from
-  legal_basis: §36-49
+  legal_basis: §36–49
   note: ''
 - source: injuredParty
   target: medicalCareCompensation
   type: is_entitled_to
-  legal_basis: §36-49
+  legal_basis: §36–49
   note: ''
 - source: beneficiary
   target: deathCompensation
   type: receives
-  legal_basis: §100-102, §109
-  note: survivors pension §100-102, funeral assistance §109
+  legal_basis: §100–102, §109
+  note: survivors pension §100–102, funeral assistance §109
 - source: beneficiary
   target: injuredParty
   type: is_dependent_of
@@ -1224,7 +1224,7 @@ relationships:
 - source: deathCompensation
   target: survivorsPension
   type: includes
-  legal_basis: §100-102
+  legal_basis: §100–102
   note: ''
 - source: deathCompensation
   target: funeralExpenses
@@ -1244,12 +1244,12 @@ relationships:
 - source: compensationDecision
   target: injuredParty
   type: pays
-  legal_basis: §124-127
+  legal_basis: §124–127
   note: ''
 - source: compensationDecision
   target: vahinko
   type: covers
-  legal_basis: §36-49
+  legal_basis: §36–49
   note: ''
 - source: compensationDecision
   target: insuranceCompany
@@ -1264,7 +1264,7 @@ relationships:
 - source: medicalCareCompensation
   target: treatment
   type: covers
-  legal_basis: §36-49
+  legal_basis: §36–49
   note: ''
 - source: paymentCommitment
   target: treatment
@@ -1277,7 +1277,7 @@ relationships:
   legal_basis: §209
   note: ''
 - source: accidentInsuranceCentre
-  target: workAccidentRegister
+  target: accidentAndOccupationalDiseaseRegister
   type: maintains
   legal_basis: §235
   note: ''
@@ -1369,7 +1369,7 @@ relationships:
 - source: injuredParty
   target: impairmentAllowance
   type: is_entitled_to
-  legal_basis: §83-87
+  legal_basis: §83–87
   note: ''
 - source: compensationDecision
   target: dailyAllowance
@@ -1384,7 +1384,7 @@ relationships:
 - source: compensationDecision
   target: impairmentAllowance
   type: covers
-  legal_basis: §83-87
+  legal_basis: §83–87
 - source: insuranceCompany
   target: injuredParty
   type: requests_rehabilitation_assessment
@@ -1413,7 +1413,7 @@ relationships:
 - source: injuredParty
   target: appealChain
   type: can_appeal_via
-  legal_basis: §237-243
+  legal_basis: §237–243
   note: Right to appeal compensation decision through structured appeal process
 - source: compensationDecision
   target: appealChain
