@@ -251,7 +251,7 @@ classes:
       legal_basis: §212
     - key: participatesInCostDistribution
       type: boolean
-      legal_basis: §213
+      legal_basis: §231
   mandatoryInsurance:
     label: MandatoryInsurance
     finnish: Pakollinen vakuutus
@@ -1188,7 +1188,7 @@ relationships:
 - source: insuranceCompany
   target: costDistributionSystem
   type: participates_in
-  legal_basis: §213
+  legal_basis: §231
   note: ''
 - source: insuranceCompany
   target: claimAppealBoard
