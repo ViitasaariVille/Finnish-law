@@ -306,6 +306,26 @@ classes:
       type: date
     - key: isPermanent
       type: boolean
+  SyyYhteys:
+    label: Causation
+    finnish: SyyYhteys
+    description: Medical causation assessment - link between injury/occupational disease and the accident/event per §16
+    legal_basis: §16
+    category: assessment
+    attributes:
+    - key: assessmentDate
+      type: date
+    - key: assessor
+      type: string
+    - key: causalConnection
+      type: enum
+      values:
+      - confirmed
+      - probable
+      - unlikely
+      - excluded
+    - key: assessmentBasis
+      type: string
   deathCompensation:
     label: DeathCompensation
     finnish: Kuolemantapauskorvaus
@@ -360,7 +380,7 @@ classes:
     label: HealthcareProvider
     finnish: Terveydenhuollon palveluntarjoaja
     description: Healthcare service provider
-    legal_basis: §36-49, §252
+    legal_basis: §36-49
     category: organization
     attributes:
     - key: providerType
