@@ -1153,8 +1153,8 @@ relationships:
 - source: employer
   target: employee
   type: employs
-  legal_basis: §8
-  note: ''
+  legal_basis: §3, §8
+  note: §3 establishes employer obligation and employment relationship; §8 defines what constitutes employee work
 - source: employer
   target: employee
   type: provides_insurance_for
@@ -1233,8 +1233,8 @@ relationships:
 - source: claimApplication
   target: compensationDecision
   type: requests
-  legal_basis: §119-127
-  note: '§119-127: procedural rules; §124 specifically defines compensation decision'
+  legal_basis: §119
+  note: §119 defines investigation obligation - duty to obtain necessary information after claim is filed
 - source: claimApplication
   target: insuranceCompany
   type: is_processed_by
