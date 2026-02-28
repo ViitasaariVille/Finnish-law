@@ -229,7 +229,7 @@ classes:
     finnish: Vakuuttamaton työ
     description: Work performed without mandatory work accident insurance - by AccidentInsuranceCentre
     legal_basis: 2 § 4
-    category handled: event
+    category: event
     note: When employer fails to obtain insurance, AccidentInsuranceCentre handles
       claims
   stateTreasury:
@@ -450,7 +450,7 @@ classes:
     label: AccidentAppealsBoard
     finnish: Tapaturma-asiainratkaisulautakunta
     description: First instance appeal body for insurance company decisions
-    legal_basis: §237
+    legal_basis: Laki tapaturma-asioiden muutoksenhakulautakunnasta (1316/2010), §237
     category: institution
     attributes:
     - key: appealDeadline
@@ -1100,7 +1100,7 @@ classes:
     label: ThirdParty
     finnish: Kolmas osapuoli
     description: Third party in recourse cases per §244-249
-    legal_basis: §244-249
+    legal_basis: §270
     category: party
     attributes: []
 relationships:
@@ -1147,7 +1147,7 @@ relationships:
 - source: beneficiary
   target: injuredParty
   type: is_dependent_of
-  legal_basis: 100-101 §
+  legal_basis: §99-109
   note: 'composite relation - no general dependent category in law; specific relations:
     spouse (§100), child (§101)'
 - source: employer
@@ -1163,7 +1163,7 @@ relationships:
 - source: employer
   target: insuranceCompany
   type: has_insurance_with
-  legal_basis: §159-160
+  legal_basis: §3, §156
   note: ''
 - source: insuranceCompany
   target: employee
@@ -1173,7 +1173,7 @@ relationships:
 - source: insuranceCompany
   target: employer
   type: has_contract_with
-  legal_basis: §159-160
+  legal_basis: §3, §156
   note: ''
 - source: insuranceCompany
   target: treatment
