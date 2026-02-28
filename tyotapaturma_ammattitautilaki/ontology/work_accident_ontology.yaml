@@ -1133,12 +1133,12 @@ relationships:
 - source: injuredParty
   target: healthcareProvider
   type: receives_treatment_from
-  legal_basis: §36-49
+  legal_basis: 36-49 §
   note: ''
 - source: injuredParty
   target: medicalCareCompensation
   type: is_entitled_to
-  legal_basis: §36-49
+  legal_basis: 36-49 §
   note: ''
 - source: beneficiary
   target: deathCompensation
@@ -1194,8 +1194,8 @@ relationships:
 - source: insuranceCompany
   target: claimAppealBoard
   type: requests_opinion_from
-  legal_basis: §226-228
-  note: ''
+  legal_basis: 226 §, 228 §
+  note: §226 establishes board purpose; §228 defines request procedure
 - source: stateTreasury
   target: employee
   type: pays_compensation_for
@@ -1249,7 +1249,7 @@ relationships:
 - source: compensationDecision
   target: vahinko
   type: covers
-  legal_basis: §36-49
+  legal_basis: 36-49 §
   note: ''
 - source: compensationDecision
   target: insuranceCompany
@@ -1264,7 +1264,7 @@ relationships:
 - source: medicalCareCompensation
   target: treatment
   type: covers
-  legal_basis: §36-49
+  legal_basis: 36-49 §
   note: ''
 - source: paymentCommitment
   target: treatment
@@ -1289,7 +1289,7 @@ relationships:
 - source: claimAppealBoard
   target: korvauslautakunnanLausunto
   type: issues
-  legal_basis: §226, §228
+  legal_basis: 226 §, 228 §
   note: '§226: board purpose (gives opinions/guidelines); §228: opinion request procedure'
 - source: accidentAppealsBoard
   target: insuranceCompany
@@ -1354,7 +1354,7 @@ relationships:
 - source: injuredParty
   target: dailyAllowance
   type: is_entitled_to
-  legal_basis: §56
+  legal_basis: 56 §
   note: ''
 - source: injuredParty
   target: accidentPension
@@ -1374,7 +1374,7 @@ relationships:
 - source: compensationDecision
   target: dailyAllowance
   type: covers
-  legal_basis: §56
+  legal_basis: 56 §
   note: ''
 - source: compensationDecision
   target: accidentPension
@@ -1384,7 +1384,7 @@ relationships:
 - source: compensationDecision
   target: impairmentAllowance
   type: covers
-  legal_basis: §83-87
+  legal_basis: 83-87 §
 - source: insuranceCompany
   target: injuredParty
   type: requests_rehabilitation_assessment
