@@ -138,7 +138,7 @@ classes:
     - key: medicalFindings
       type: string
       finnish: lääketieteelliset löydökset
-      legal_basis: §16, §111
+      legal_basis: §16
     - key: personId
       type: string
       finnish: henkilötunnus
@@ -194,15 +194,15 @@ classes:
     - key: industrySector
       type: string
       finnish: toimiala
-      legal_basis: §159(1)
+      legal_basis: §111
     - key: workStartDate
       type: date
       finnish: työn alkamisaika
-      legal_basis: §159(1)
+      legal_basis: §111
     - key: ownershipStructure
       type: string
       finnish: omistussuhteet
-      legal_basis: §159(1)
+      legal_basis: §111
   insuranceCompany:
     label: InsuranceCompany
     finnish: Vakuutusyhtiö
@@ -1085,7 +1085,7 @@ classes:
     finnish: Työsuojelurahasto
     description: Fund for promoting occupational safety, financed by a percentage
       of insurance premiums
-    legal_basis: §233, 209 § 2
+    legal_basis: §233, §209(2)
     category: institution
     attributes:
     - key: fundingPercentage
