@@ -15,6 +15,10 @@ classes:
       public service, or similar
     legal_basis: §8
     category: person
+    excluded_categories:
+    - athlete
+    - agricultural_entrepreneur
+    - grant_recipient
     attributes:
     - key: employmentType
       type: enum
@@ -23,6 +27,25 @@ classes:
       - part_time
       - temporary
       - probationary
+  executiveEmployee:
+    label: ExecutiveEmployee
+    finnish: Johtavassa asemassa oleva
+    description: Person in a leading position (managing director, board member, partner with controlling interest)
+    legal_basis: §9
+    category: person
+    attributes:
+    - key: positionType
+      type: enum
+      values:
+      - managing_director
+      - board_member
+      - partner
+      - proportional_owner
+    - key: ownershipPercentage
+      type: decimal
+      note: Required if partner or owner (over 50% for some provisions)
+    - key: controlsCompany
+      type: boolean
   student:
     label: Student
     finnish: Opiskelija
@@ -78,7 +101,7 @@ classes:
     label: Entrepreneur
     finnish: Yrittäjä
     description: Self-employed person with YEL insurance
-    legal_basis: Sections 188-190
+    legal_basis: §188-190
     category: person
     attributes:
     - key: businessId
@@ -187,6 +210,28 @@ classes:
     description: Insurance company authorized to provide work accident insurance
     legal_basis: §205
     category: organization
+  vakuutuslaitos:
+    label: InsuranceInstitution
+    finnish: Vakuutuslaitos
+    description: Collective term for insurance institutions providing work accident insurance under §6 (insurance companies, state treasury, municipal pension institutions)
+    legal_basis: §6
+    category: organization
+    attributes:
+    - key: institutionType
+      type: enum
+      values:
+      - private_insurance_company
+      - state_treasury
+      - municipal_pension_institution
+    - key: authorizedForWorkAccident
+      type: boolean
+  uninsuredWork:
+    label: UninsuredWork
+    finnish: Vakuuttamaton työ
+    description: Work performed without mandatory work accident insurance - by AccidentInsuranceCentre
+    legal_basis: §2.4
+    category handled: event
+    note: When employer fails to obtain insurance, AccidentInsuranceCentre handles claims
   stateTreasury:
     label: StateTreasury
     finnish: Valtiokonttori
@@ -781,6 +826,23 @@ classes:
     legal_basis: §52
     category: compensation
 
+  # §93 - Service housing additional costs
+  serviceHousingAdditionalCosts:
+    label: ServiceHousingAdditionalCosts
+    finnish: Palveluasumisen lisäkustannukset
+    description: Additional costs for service housing (palveluasuminen) when injury requires special arrangements
+    legal_basis: §93
+    category: compensation
+    attributes:
+    - key: housingType
+      type: enum
+      values:
+      - service_apartment
+      - group_home
+      - assisted_living
+    - key: additionalServicesRequired
+      type: array
+
   # §53 - Home care additional costs
   homeCareAdditionalCosts:
     label: HomeCareAdditionalCosts
@@ -1324,12 +1386,38 @@ relationships:
   legal_basis: §63
   note: ''
 - source: compensationDecision
-  target: rehabilitationAllowance
-  type: covers
-  legal_basis: §69
-  note: ''
-- source: compensationDecision
-  target: impairmentAllowance
   type: covers
   legal_basis: §83-§87
-  note: ''
+
+# Issue #485: Rehabilitation assessment obligation (§65, §120)
+- source: insuranceCompany
+  target: injuredParty
+  type: requests_rehabilitation_assessment
+  legal_basis: §65, §120
+  note: Insurer must assess rehabilitation need
+
+# Issue #484: Employer notifies accident within 10 working days (§111)
+- source: employer
+  target: insuranceCompany
+  type: notifies_accident
+  legal_basis: §111
+  note: Employer must notify within 10 working days
+
+# Issue #488: Right of recourse / Takautumisoikeus (§244-§249)
+- source: insuranceCompany
+  target: employer
+  type: has_right_of_recourse
+  legal_basis: §244-§249
+  note: Insurer can recover compensation from employer in certain cases
+- source: insuranceCompany
+  target: third_party
+  type: has_right_of_recourse
+  legal_basis: §244-§249
+  note: Insurer can recover from liable third party
+
+# Issue #487: Service housing additional costs (§93)
+- source: injuredParty
+  target: serviceHousingAdditionalCosts
+  type: is_entitled_to
+  legal_basis: §93
+  note: Additional costs for service housing arrangements
