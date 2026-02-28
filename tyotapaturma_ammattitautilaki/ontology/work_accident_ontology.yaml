@@ -231,7 +231,7 @@ classes:
     - commuteAccident
   vahinko:
     label: Vahinko
-    finnish: Damage
+    finnish: Vahinko
     description: Damage as a consequence of a vahinkotapahtuma - the actual injury/illness
     legal_basis: §2.3, §15-16
     category: event
@@ -330,7 +330,7 @@ classes:
       type: string
   medicalCareCompensation:
     label: MedicalCareCompensation
-    finnish: Korvaus sairaanusthoitokannuksista
+    finnish: Korvaus sairaanhoitokustannuksista
     description: Compensation for medical care costs
     legal_basis: Sections 36-49
     category: compensation
