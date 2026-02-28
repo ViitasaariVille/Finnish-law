@@ -465,6 +465,32 @@ classes:
       type: integer
       value: 30
       legal_basis: §241
+  insuranceCourt:
+    label: InsuranceCourt
+    finnish: Vakuutusoikeus
+    description: Second instance appeal body for accident appeals board decisions
+    legal_basis: §242
+    category: institution
+    attributes:
+    - key: appealDeadline
+      type: integer
+      value: 30
+      legal_basis: §242
+  supremeCourt:
+    label: SupremeCourt
+    finnish: Korkein oikeus
+    description: Final appellate court - highest instance for Finnish courts, leave to appeal required
+    legal_basis: §243
+    category: institution
+    attributes:
+    - key: leaveToAppealRequired
+      type: boolean
+      value: true
+      legal_basis: §243
+    - key: appealDeadline
+      type: integer
+      value: 60
+      legal_basis: §241.4
   appealChain:
     label: AppealChain
     finnish: Muutoksenhaku
@@ -1441,3 +1467,30 @@ relationships:
   type: is_entitled_to
   legal_basis: §93
   note: Additional costs for service housing arrangements
+
+# Issue #504: Appeal chain relations - missing legal basis in appealChain class relations
+- source: injuredParty
+  target: appealChain
+  type: can_appeal_via
+  legal_basis: §237-243
+  note: Right to appeal compensation decision through structured appeal process
+- source: compensationDecision
+  target: appealChain
+  type: can_be_appealed_via
+  legal_basis: §237
+  note: Compensation decisions can be appealed through the appeal chain
+- source: compensationDecision
+  target: accidentAppealsBoard
+  type: appeals_to
+  legal_basis: §237
+  note: First instance appeal body for insurance company decisions
+- source: accidentAppealsBoard
+  target: insuranceCourt
+  type: appeals_to
+  legal_basis: §242
+  note: Second instance - insurance court (Vakuutusoikeus)
+- source: insuranceCourt
+  target: supremeCourt
+  type: appeals_to
+  legal_basis: §243
+  note: Final appeal to Supreme Court (Korkein oikeus) with leave to appeal
