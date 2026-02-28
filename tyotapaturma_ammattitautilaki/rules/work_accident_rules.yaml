@@ -1,5 +1,1342 @@
 # Work Accident Insurance Business Rules
-# DMN/DRL rules for Finnish Work Accident Insurance (työtapaturma-ammattitautilaki)
-# To be populated with thorough decision logic
+# DMN-type decision logic for Finnish Work Accident Insurance
+# Source law: Työtapaturma- ja ammattitautilaki (459/2015)
+# Ontology: work_accident_ontology.yaml
+# Author: Lumen ⚖️ (Claude Sonnet 4.6)
+# Last updated: 2026-02-28
 
-rules: []
+metadata:
+  name: Work Accident Insurance Decision Rules
+  law: Työtapaturma- ja ammattitautilaki (459/2015)
+  effective_date: "2016-01-01"
+  author: Lumen ⚖️
+  version: "1.0"
+
+# ============================================================
+# DECISION 1: Insurance Obligation (Vakuuttamisvelvollisuus)
+# §3 – Determines whether employer must insure workers
+# ============================================================
+decisions:
+  - id: D1_insurance_obligation
+    label: Insurance Obligation
+    finnish: Vakuuttamisvelvollisuus
+    legal_basis: §3
+    input:
+      - id: employer.annualPayroll
+        label: Employer Annual Payroll (€)
+        type: decimal
+      - id: employer.exemptionType
+        label: Exemption Type
+        type: enum
+        values: [none, below_threshold_1200, state_employer, other_statutory_exemption]
+    output:
+      - id: insuranceRequired
+        label: Insurance Required
+        type: boolean
+      - id: insuranceBody
+        label: Insurance Body
+        type: enum
+        values: [private_insurance_company, state_treasury, not_required]
+    rules:
+      - id: D1_R1
+        description: State employer – no insurance obligation, State Treasury pays
+        condition:
+          employer.exemptionType: state_employer
+        result:
+          insuranceRequired: false
+          insuranceBody: state_treasury
+        legal_basis: §3.3
+      - id: D1_R2
+        description: Annual payroll at or below €1,200 – no insurance obligation
+        condition:
+          employer.annualPayroll: "<= 1200"
+          employer.exemptionType: below_threshold_1200
+        result:
+          insuranceRequired: false
+          insuranceBody: not_required
+        legal_basis: §3.2
+      - id: D1_R3
+        description: All other employers – mandatory insurance required
+        condition:
+          employer.annualPayroll: "> 1200"
+          employer.exemptionType: none
+        result:
+          insuranceRequired: true
+          insuranceBody: private_insurance_company
+        legal_basis: §3.1
+
+# ============================================================
+# DECISION 2: Scope of Application (Soveltamisalan henkilöpiiri)
+# §8–§12 – Is the person covered by this law?
+# ============================================================
+  - id: D2_personal_scope
+    label: Personal Scope of Application
+    finnish: Henkilöllinen soveltamisala
+    legal_basis: §8–§12
+    input:
+      - id: person.workerType
+        label: Worker Type
+        type: enum
+        values:
+          - employment_contract       # §8.1 – työsopimuslaki
+          - maritime_employment       # §8.2 – merityösopimuslaki
+          - civil_servant_state       # §8.3 – valtion virkamies
+          - civil_servant_municipality # §8.4 – kunnallinen viranhaltija
+          - civil_servant_church      # §8.5 – kirkkolaki
+          - civil_servant_parliament  # §8.6 – eduskunnan virkamieslaki
+          - constitutional_position   # §8.7 – presidentti, ministeri, kansanedustaja
+          - other_public_law_position # §8.8 – muu julkisoikeudellinen virka
+          - agricultural_entrepreneur # §11 – excluded
+          - grant_recipient           # §11 – excluded
+          - athlete                   # §12 – excluded
+          - entrepreneur_voluntary    # §188–190 – voluntary only
+      - id: person.executiveOwnershipPercent
+        label: Executive Ownership Percentage (solo)
+        type: decimal
+        note: Relevant only for executiveEmployee classification (§9)
+      - id: person.executiveFamilyOwnershipPercent
+        label: Executive Family Combined Ownership Percentage
+        type: decimal
+        note: Relevant only for executiveEmployee classification (§9)
+    output:
+      - id: personCovered
+        label: Person Covered by Law
+        type: boolean
+      - id: coverageType
+        label: Coverage Type
+        type: enum
+        values: [mandatory, voluntary_only, excluded]
+      - id: exclusionReason
+        label: Exclusion Reason
+        type: string
+    rules:
+      - id: D2_R1
+        description: Agricultural entrepreneur – excluded, covered by MATA
+        condition:
+          person.workerType: agricultural_entrepreneur
+        result:
+          personCovered: false
+          coverageType: excluded
+          exclusionReason: "Covered by maatalousyrittäjien tapaturmavakuutuslaki (1026/1981)"
+        legal_basis: §11
+      - id: D2_R2
+        description: Grant recipient – excluded
+        condition:
+          person.workerType: grant_recipient
+        result:
+          personCovered: false
+          coverageType: excluded
+          exclusionReason: "Apurahansaajan työ excluded from scope"
+        legal_basis: §11
+      - id: D2_R3
+        description: Athlete – excluded, covered by urheilijan tapaturma- ja eläketurvalaki
+        condition:
+          person.workerType: athlete
+        result:
+          personCovered: false
+          coverageType: excluded
+          exclusionReason: "Covered by laki urheilijan tapaturma- ja eläketurvasta (276/2009)"
+        legal_basis: §12
+      - id: D2_R4
+        description: Executive employee – covered if owns ≤30% alone AND family owns ≤50%
+        condition:
+          person.executiveOwnershipPercent: "<= 30"
+          person.executiveFamilyOwnershipPercent: "<= 50"
+        result:
+          personCovered: true
+          coverageType: mandatory
+          exclusionReason: ""
+        legal_basis: §9.1
+      - id: D2_R5
+        description: Executive employee – excluded if owns >30% alone OR family owns >50%
+        condition:
+          person.executiveOwnershipPercent: "> 30"
+        result:
+          personCovered: false
+          coverageType: excluded
+          exclusionReason: "Executive ownership exceeds 30% threshold (§9)"
+        legal_basis: §9.1
+      - id: D2_R6
+        description: Entrepreneur – voluntary insurance only
+        condition:
+          person.workerType: entrepreneur_voluntary
+        result:
+          personCovered: true
+          coverageType: voluntary_only
+          exclusionReason: ""
+        legal_basis: §188–190
+      - id: D2_R7
+        description: All standard employment relationships – covered
+        condition:
+          person.workerType:
+            - employment_contract
+            - maritime_employment
+            - civil_servant_state
+            - civil_servant_municipality
+            - civil_servant_church
+            - civil_servant_parliament
+            - constitutional_position
+            - other_public_law_position
+        result:
+          personCovered: true
+          coverageType: mandatory
+          exclusionReason: ""
+        legal_basis: §8
+
+# ============================================================
+# DECISION 3: Compensable Event Classification
+# §15–§35 – What type of injury/event qualifies for compensation?
+# ============================================================
+  - id: D3_event_classification
+    label: Compensable Event Classification
+    finnish: Vahinkotapahtuman luokittelu
+    legal_basis: §15–§35
+    input:
+      - id: event.type
+        label: Event Type
+        type: enum
+        values:
+          - sudden_external_accident       # §17 tapaturma
+          - quasi_accident                 # §18 tapaturmana pidettävä
+          - pre_existing_aggravation       # §19 paheneminen
+          - occupational_disease           # §26 ammattitauti
+          - listed_occupational_disease    # §27 ammattitautiluettelo
+          - upper_limb_tendinopathy        # §28
+          - carpal_tunnel_syndrome         # §29
+          - occupational_disease_aggravation # §30
+          - work_strain_injury             # §33 työliikekipeytyminen
+          - assault_by_third_party         # §34 pahoinpitely
+          - psychological_trauma           # §35 henkinen järkytysreaktio
+      - id: event.occurredDuring
+        label: Activity During Which Event Occurred
+        type: enum
+        values:
+          - during_work              # §21
+          - at_workplace             # §22
+          - commuting                # §23.1
+          - lunch_break_nearby       # §23.2
+          - employer_training        # §24.1.1
+          - employer_recreation      # §24.1.2
+          - occupational_health      # §24.1.3–5
+          - employer_approved_fitness # §24.1.6
+          - travel_to_special_event  # §24.1.7
+          - remote_accommodation     # §24.1.8
+          - home_work                # §25
+          - other_non_covered
+      - id: event.causalLinkToProbable
+        label: Probable Medical Causal Link Confirmed
+        type: boolean
+        note: §16 – todennäköinen lääketieteellinen syy-yhteys
+      - id: event.exposureWithin24h
+        label: Exposure Within 24h (for §18 quasi-accidents)
+        type: boolean
+      - id: event.assaultWorkDutyMotivated
+        label: Assault Motivated by Work Duties
+        type: boolean
+        note: §34.1
+      - id: event.psychTraumaDirectlyInvolved
+        label: Directly Involved in Traumatic Event
+        type: boolean
+        note: §35.3
+      - id: event.psychTraumaSymptomsWithin6Months
+        label: PTSD Symptoms Confirmed Within 6 Months
+        type: boolean
+        note: §35.2
+    output:
+      - id: eventCompensable
+        label: Event Compensable
+        type: boolean
+      - id: eventCategory
+        label: Event Category
+        type: enum
+        values:
+          - occupational_accident
+          - occupational_disease
+          - work_strain_injury
+          - assault_injury
+          - psychological_trauma
+          - not_compensable
+      - id: nonCompensableReason
+        label: Non-Compensable Reason
+        type: string
+    rules:
+      - id: D3_R1
+        description: Classic work accident – sudden external event during work/commute/covered activity with probable causal link
+        condition:
+          event.type: sudden_external_accident
+          event.occurredDuring:
+            - during_work
+            - at_workplace
+            - commuting
+            - employer_training
+            - employer_recreation
+            - occupational_health
+            - employer_approved_fitness
+            - travel_to_special_event
+            - remote_accommodation
+          event.causalLinkToProbable: true
+        result:
+          eventCompensable: true
+          eventCategory: occupational_accident
+          nonCompensableReason: ""
+        legal_basis: §17, §20–§24
+      - id: D3_R2
+        description: Quasi-accident (§18) – e.g. friction, caustic, gas, temperature, radiation, pressure – must occur within 24h, not occupational disease
+        condition:
+          event.type: quasi_accident
+          event.exposureWithin24h: true
+          event.causalLinkToProbable: true
+        result:
+          eventCompensable: true
+          eventCategory: occupational_accident
+          nonCompensableReason: ""
+        legal_basis: §18
+      - id: D3_R3
+        description: Quasi-accident – excluded if exposure >24h
+        condition:
+          event.type: quasi_accident
+          event.exposureWithin24h: false
+        result:
+          eventCompensable: false
+          eventCategory: not_compensable
+          nonCompensableReason: "§18 requires exposure within 24h of symptom onset"
+        legal_basis: §18
+      - id: D3_R4
+        description: Pre-existing condition aggravation – compensable proportional to causal share, max 6 months
+        condition:
+          event.type: pre_existing_aggravation
+          event.causalLinkToProbable: true
+        result:
+          eventCompensable: true
+          eventCategory: occupational_accident
+          nonCompensableReason: ""
+        legal_basis: §19
+        note: Compensation proportional to accident causal share; max 6 months unless delayed recovery
+      - id: D3_R5
+        description: Accident during home work – §22 and §23 commute/break provisions do NOT apply
+        condition:
+          event.type: sudden_external_accident
+          event.occurredDuring: home_work
+        result:
+          eventCompensable: false
+          eventCategory: not_compensable
+          nonCompensableReason: "§25: §22 and §23 provisions do not apply to home workers"
+        legal_basis: §25
+      - id: D3_R6
+        description: Occupational disease – probable primary causation from work exposure confirmed
+        condition:
+          event.type:
+            - occupational_disease
+            - listed_occupational_disease
+          event.causalLinkToProbable: true
+        result:
+          eventCompensable: true
+          eventCategory: occupational_disease
+          nonCompensableReason: ""
+        legal_basis: §26–§27
+      - id: D3_R7
+        description: Upper limb tendinopathy – compensable as occupational disease (§28 specific test)
+        condition:
+          event.type: upper_limb_tendinopathy
+          event.causalLinkToProbable: true
+        result:
+          eventCompensable: true
+          eventCategory: occupational_disease
+          nonCompensableReason: ""
+        legal_basis: §28
+        note: Requires repetitive, one-sided or unfamiliar upper limb movements; work-independent cause excludes
+      - id: D3_R8
+        description: Carpal tunnel syndrome – compensable as occupational disease (§29 specific test)
+        condition:
+          event.type: carpal_tunnel_syndrome
+          event.causalLinkToProbable: true
+        result:
+          eventCompensable: true
+          eventCategory: occupational_disease
+          nonCompensableReason: ""
+        legal_basis: §29
+        note: Requires prolonged repetitive movements with significant grip force and wrist flexion
+      - id: D3_R9
+        description: Work strain injury (§33) – max 6 weeks compensation
+        condition:
+          event.type: work_strain_injury
+          event.occurredDuring:
+            - during_work
+            - employer_approved_fitness
+          event.causalLinkToProbable: true
+        result:
+          eventCompensable: true
+          eventCategory: work_strain_injury
+          nonCompensableReason: ""
+        legal_basis: §33
+        note: Max 6 weeks; excluded if caused by pre-existing injury or disease
+      - id: D3_R10
+        description: Assault by third party – compensable only if motivated by work duties
+        condition:
+          event.type: assault_by_third_party
+          event.assaultWorkDutyMotivated: true
+        result:
+          eventCompensable: true
+          eventCategory: assault_injury
+          nonCompensableReason: ""
+        legal_basis: §34.1
+      - id: D3_R11
+        description: Assault – excluded if motivated by private life
+        condition:
+          event.type: assault_by_third_party
+          event.assaultWorkDutyMotivated: false
+        result:
+          eventCompensable: false
+          eventCategory: not_compensable
+          nonCompensableReason: "§34.2: Assault motivated by private life not compensable"
+        legal_basis: §34.2
+      - id: D3_R12
+        description: Psychological trauma – compensable if directly involved AND work-connected AND symptoms within 6 months (PTSD)
+        condition:
+          event.type: psychological_trauma
+          event.psychTraumaDirectlyInvolved: true
+          event.psychTraumaSymptomsWithin6Months: true
+          event.causalLinkToProbable: true
+        result:
+          eventCompensable: true
+          eventCategory: psychological_trauma
+          nonCompensableReason: ""
+        legal_basis: §35
+      - id: D3_R13
+        description: Psychological trauma – excluded if not directly involved or symptoms outside 6-month window
+        condition:
+          event.type: psychological_trauma
+          event.psychTraumaDirectlyInvolved: false
+        result:
+          eventCompensable: false
+          eventCategory: not_compensable
+          nonCompensableReason: "§35.3: Direct involvement required for psychological trauma compensation"
+        legal_basis: §35.3
+
+# ============================================================
+# DECISION 4: Daily Allowance Eligibility (Päiväraha)
+# §56–§62 – Is the injured party entitled to daily allowance?
+# ============================================================
+  - id: D4_daily_allowance_eligibility
+    label: Daily Allowance Eligibility
+    finnish: Oikeus päivärahaan
+    legal_basis: §56–§62
+    input:
+      - id: injuredParty.daysSinceInjury
+        label: Days Since Injury Date (excluding injury day)
+        type: integer
+      - id: injuredParty.incapacityPercent
+        label: Work Incapacity Percentage
+        type: integer
+        note: 0–100
+      - id: injuredParty.consecutiveDaysIncapacitated
+        label: Consecutive Incapacity Days (excl. injury day)
+        type: integer
+      - id: injuredParty.earningsReductionAboveMinThreshold
+        label: Earnings Reduction Above 1/20 of Minimum Annual Earnings
+        type: boolean
+        note: §56.2 – vähimmäisvuosityöansion (€13,680) 1/20 = €684/year threshold
+      - id: injuredParty.onPensionAtInjury
+        label: On Old-Age or Disability Pension at Time of Injury
+        type: boolean
+        note: §56.4 – vanhuus- tai työkyvyttömyyseläke
+    output:
+      - id: dailyAllowanceEligible
+        label: Entitled to Daily Allowance
+        type: boolean
+      - id: dailyAllowanceMaxDays
+        label: Maximum Payment Days from Injury Date
+        type: integer
+      - id: nonEligibleReason
+        label: Non-Eligibility Reason
+        type: string
+    rules:
+      - id: D4_R1
+        description: Not entitled – incapacity below 10%
+        condition:
+          injuredParty.incapacityPercent: "< 10"
+        result:
+          dailyAllowanceEligible: false
+          dailyAllowanceMaxDays: 0
+          nonEligibleReason: "§56.2: Incapacity below 10% threshold"
+        legal_basis: §56.2
+      - id: D4_R2
+        description: Not entitled – earnings reduction below minimum threshold
+        condition:
+          injuredParty.earningsReductionAboveMinThreshold: false
+        result:
+          dailyAllowanceEligible: false
+          dailyAllowanceMaxDays: 0
+          nonEligibleReason: "§56.2: Earnings reduction below 1/20 of minimum annual earnings (€684)"
+        legal_basis: §56.2
+      - id: D4_R3
+        description: Not entitled – fewer than 3 consecutive incapacity days
+        condition:
+          injuredParty.consecutiveDaysIncapacitated: "< 3"
+          injuredParty.incapacityPercent: ">= 10"
+        result:
+          dailyAllowanceEligible: false
+          dailyAllowanceMaxDays: 0
+          nonEligibleReason: "§56.3: Fewer than 3 consecutive incapacity days"
+        legal_basis: §56.3
+      - id: D4_R4
+        description: Entitled to daily allowance – standard case, max 365 days from injury date
+        condition:
+          injuredParty.incapacityPercent: ">= 10"
+          injuredParty.consecutiveDaysIncapacitated: ">= 3"
+          injuredParty.earningsReductionAboveMinThreshold: true
+          injuredParty.daysSinceInjury: "<= 365"
+        result:
+          dailyAllowanceEligible: true
+          dailyAllowanceMaxDays: 365
+          nonEligibleReason: ""
+        legal_basis: §56.1, §56.3
+
+# ============================================================
+# DECISION 5: Daily Allowance Amount (Päivärahan määrä)
+# §58–§62 – Calculate the daily allowance amount
+# ============================================================
+  - id: D5_daily_allowance_amount
+    label: Daily Allowance Amount
+    finnish: Päivärahan määrä
+    legal_basis: §58–§62
+    input:
+      - id: injuredParty.daysSinceInjury
+        label: Days Since Injury Date (excluding injury day)
+        type: integer
+      - id: injuredParty.sickPayReceived
+        label: Sick Pay (Sairausajan palkka) Received from Employer
+        type: decimal
+        note: §58 – applies for first 28 days
+      - id: injuredParty.annualEarnings
+        label: Annual Earnings (Vuosityöansio) in €
+        type: decimal
+        note: §71–§78
+      - id: injuredParty.incapacityPercent
+        label: Work Incapacity Percentage
+        type: integer
+        note: 0–100; rounded to nearest 5%
+      - id: injuredParty.minimumAnnualEarnings
+        label: Minimum Annual Earnings Threshold (€)
+        type: decimal
+        value: 13680
+        note: §79
+    output:
+      - id: dailyAllowanceDailyAmount
+        label: Daily Allowance Daily Amount (€)
+        type: decimal
+      - id: calculationMethod
+        label: Calculation Method
+        type: enum
+        values: [sick_pay_based, annual_earnings_based, minimum_earnings_based]
+    rules:
+      - id: D5_R1
+        description: First 28 days – based on sick pay received from employer
+        condition:
+          injuredParty.daysSinceInjury: "<= 28"
+          injuredParty.sickPayReceived: "> 0"
+        result:
+          dailyAllowanceDailyAmount: "= injuredParty.sickPayReceived / days_in_period"
+          calculationMethod: sick_pay_based
+        legal_basis: §58.1
+        note: Equals actual sick pay paid; employer reimbursed for same amount
+      - id: D5_R2
+        description: First 28 days – no sick pay received, use annual earnings basis
+        condition:
+          injuredParty.daysSinceInjury: "<= 28"
+          injuredParty.sickPayReceived: "= 0"
+        result:
+          dailyAllowanceDailyAmount: "= max(injuredParty.annualEarnings / 360, 13680 / 360) * (injuredParty.incapacityPercent / 100)"
+          calculationMethod: annual_earnings_based
+        legal_basis: §58.2, §60
+      - id: D5_R3
+        description: After 28 days – based on annual earnings (1/360 of vuosityöansio)
+        condition:
+          injuredParty.daysSinceInjury: "> 28"
+        result:
+          dailyAllowanceDailyAmount: "= max(injuredParty.annualEarnings, 13680) / 360 * (injuredParty.incapacityPercent / 100)"
+          calculationMethod: annual_earnings_based
+        legal_basis: §59, §60
+        note: Minimum based on €13,680 minimum annual earnings (§79); rounded to nearest 5% incapacity
+      - id: D5_R4
+        description: Partial incapacity – proportional share of full daily allowance
+        condition:
+          injuredParty.incapacityPercent: ">= 10"
+          injuredParty.incapacityPercent: "< 100"
+        result:
+          dailyAllowanceDailyAmount: "= (full_daily_allowance * incapacityPercent_rounded_to_5) / 100"
+          calculationMethod: annual_earnings_based
+        legal_basis: §57
+
+# ============================================================
+# DECISION 6: Accident Pension Eligibility (Tapaturmaeläke)
+# §63–§68 – Entitled to accident pension after 1-year daily allowance period?
+# ============================================================
+  - id: D6_accident_pension_eligibility
+    label: Accident Pension Eligibility
+    finnish: Oikeus tapaturmaeläkkeeseen
+    legal_basis: §63–§68
+    input:
+      - id: injuredParty.daysSinceInjury
+        label: Days Since Injury Date
+        type: integer
+      - id: injuredParty.residualWorkCapacityReductionPercent
+        label: Residual Work Capacity Reduction Percentage
+        type: integer
+        note: Assessed as ability to earn income in available work (§63.2)
+      - id: injuredParty.earningsReductionAboveMinThreshold
+        label: Earnings Reduction Above 1/20 of Minimum Annual Earnings
+        type: boolean
+      - id: injuredParty.rehabilitationNeedAssessed
+        label: Rehabilitation Need and Options Assessed
+        type: boolean
+        note: §65 – must be done before granting permanent pension
+      - id: injuredParty.age
+        label: Age at Time of Assessment
+        type: integer
+    output:
+      - id: accidentPensionEligible
+        label: Entitled to Accident Pension
+        type: boolean
+      - id: accidentPensionType
+        label: Accident Pension Type
+        type: enum
+        values: [temporary, permanent, not_eligible]
+      - id: maxPensionRatePercent
+        label: Maximum Pension Rate (% of annual earnings)
+        type: decimal
+      - id: nonEligibleReason
+        label: Non-Eligibility Reason
+        type: string
+    rules:
+      - id: D6_R1
+        description: Not eligible – capacity reduction below 10%
+        condition:
+          injuredParty.residualWorkCapacityReductionPercent: "< 10"
+        result:
+          accidentPensionEligible: false
+          accidentPensionType: not_eligible
+          maxPensionRatePercent: 0
+          nonEligibleReason: "§63.1: Work capacity reduction below 10%"
+        legal_basis: §63.1
+      - id: D6_R2
+        description: Not eligible – daily allowance period not yet completed (< 366 days)
+        condition:
+          injuredParty.daysSinceInjury: "< 366"
+        result:
+          accidentPensionEligible: false
+          accidentPensionType: not_eligible
+          maxPensionRatePercent: 0
+          nonEligibleReason: "§63.1: Accident pension begins from anniversary of injury date"
+        legal_basis: §63.1
+      - id: D6_R3
+        description: Temporary pension – rehabilitation need not yet assessed
+        condition:
+          injuredParty.daysSinceInjury: ">= 366"
+          injuredParty.residualWorkCapacityReductionPercent: ">= 10"
+          injuredParty.earningsReductionAboveMinThreshold: true
+          injuredParty.rehabilitationNeedAssessed: false
+        result:
+          accidentPensionEligible: true
+          accidentPensionType: temporary
+          maxPensionRatePercent: 85
+          nonEligibleReason: ""
+        legal_basis: §65
+        note: §65 prohibits permanent pension until rehabilitation need assessed
+      - id: D6_R4
+        description: Permanent pension – before age 65, max 85% of annual earnings
+        condition:
+          injuredParty.daysSinceInjury: ">= 366"
+          injuredParty.residualWorkCapacityReductionPercent: ">= 10"
+          injuredParty.earningsReductionAboveMinThreshold: true
+          injuredParty.rehabilitationNeedAssessed: true
+          injuredParty.age: "< 65"
+        result:
+          accidentPensionEligible: true
+          accidentPensionType: permanent
+          maxPensionRatePercent: 85
+          nonEligibleReason: ""
+        legal_basis: §66.1
+      - id: D6_R5
+        description: Permanent pension – age 65 or older, max 70% of annual earnings
+        condition:
+          injuredParty.daysSinceInjury: ">= 366"
+          injuredParty.residualWorkCapacityReductionPercent: ">= 10"
+          injuredParty.earningsReductionAboveMinThreshold: true
+          injuredParty.rehabilitationNeedAssessed: true
+          injuredParty.age: ">= 65"
+        result:
+          accidentPensionEligible: true
+          accidentPensionType: permanent
+          maxPensionRatePercent: 70
+          nonEligibleReason: ""
+        legal_basis: §66.1
+
+# ============================================================
+# DECISION 7: Impairment Allowance (Haittaraha)
+# §83–§87 – Compensation for permanent general impairment
+# ============================================================
+  - id: D7_impairment_allowance
+    label: Impairment Allowance
+    finnish: Haittaraha
+    legal_basis: §83–§87
+    input:
+      - id: injuredParty.impairmentClass
+        label: Impairment Class (Haittaluokka)
+        type: integer
+        note: 1–20, as determined by Government Decree per §85
+      - id: injuredParty.impairmentIsPermanent
+        label: Impairment is Permanent
+        type: boolean
+        note: §83.2 – permanent means no further improvement expected; earliest 1 year after injury
+      - id: injuredParty.monthsSinceInjury
+        label: Months Since Injury
+        type: integer
+    output:
+      - id: impairmentAllowanceEligible
+        label: Entitled to Impairment Allowance
+        type: boolean
+      - id: paymentType
+        label: Payment Type
+        type: enum
+        values: [lump_sum, continuous, not_eligible]
+      - id: annualAmountEur
+        label: Annual Amount (€)
+        type: decimal
+      - id: nonEligibleReason
+        label: Non-Eligibility Reason
+        type: string
+    constants:
+      baseAmount: 12440
+      # Percentage of base per haittaluokka per §86:
+      classPercentages:
+        1: 1.15
+        2: 2.27
+        3: 3.36
+        4: 4.42
+        5: 5.45
+        6: 6.45
+        7: 7.42
+        8: 8.36
+        9: 9.27
+        10: 10.15
+        11: 13.0
+        12: 16.0
+        13: 19.0
+        14: 22.0
+        15: 25.0
+        16: 32.0
+        17: 39.0
+        18: 46.0
+        19: 53.0
+        20: 60.0
+    rules:
+      - id: D7_R1
+        description: Not eligible – impairment not yet permanent (< 12 months since injury)
+        condition:
+          injuredParty.monthsSinceInjury: "< 12"
+        result:
+          impairmentAllowanceEligible: false
+          paymentType: not_eligible
+          annualAmountEur: 0
+          nonEligibleReason: "§83.2: Permanence assessed earliest 12 months after injury"
+        legal_basis: §83.2
+      - id: D7_R2
+        description: Not eligible – impairment not confirmed as permanent
+        condition:
+          injuredParty.impairmentIsPermanent: false
+          injuredParty.monthsSinceInjury: ">= 12"
+        result:
+          impairmentAllowanceEligible: false
+          paymentType: not_eligible
+          annualAmountEur: 0
+          nonEligibleReason: "§83.2: Impairment not confirmed as permanent"
+        legal_basis: §83.2
+      - id: D7_R3
+        description: Classes 1–5 – lump sum payment
+        condition:
+          injuredParty.impairmentIsPermanent: true
+          injuredParty.impairmentClass: ">= 1"
+          injuredParty.impairmentClass: "<= 5"
+          injuredParty.monthsSinceInjury: ">= 12"
+        result:
+          impairmentAllowanceEligible: true
+          paymentType: lump_sum
+          annualAmountEur: "= 12440 * classPercentages[impairmentClass] / 100"
+          nonEligibleReason: ""
+        legal_basis: §87.1
+        note: Lump sum = annualAmountEur × actuarial present value factor (per §87.3 and STM decree)
+      - id: D7_R4
+        description: Classes 6–20 – continuous payment
+        condition:
+          injuredParty.impairmentIsPermanent: true
+          injuredParty.impairmentClass: ">= 6"
+          injuredParty.impairmentClass: "<= 20"
+          injuredParty.monthsSinceInjury: ">= 12"
+        result:
+          impairmentAllowanceEligible: true
+          paymentType: continuous
+          annualAmountEur: "= 12440 * classPercentages[impairmentClass] / 100"
+          nonEligibleReason: ""
+        legal_basis: §87.1
+
+# ============================================================
+# DECISION 8: Care Allowance (Hoitotuki)
+# §51 – Daily care allowance based on care need level
+# ============================================================
+  - id: D8_care_allowance
+    label: Care Allowance
+    finnish: Hoitotuki
+    legal_basis: §51
+    input:
+      - id: injuredParty.careNeedLevel
+        label: Care Need Level
+        type: enum
+        values:
+          - none
+          - regular_in_some_activities     # säännöllinen tai lähes säännöllinen joissakin
+          - regular_and_daily              # säännöllinen ja jokapäiväinen
+          - continuous_time_consuming_daily # yhtämittainen, aikaa vievä ja jokapäiväinen
+          - blind                          # sokea – §51.2 special rule
+      - id: injuredParty.inInstitutionalCare
+        label: Currently in Hospital or Institutional Care
+        type: boolean
+        note: §51.3 – no care allowance during institutional care
+      - id: injuredParty.monthsSinceBlindness
+        label: Months Since Blindness (if applicable)
+        type: integer
+    output:
+      - id: careAllowanceDailyAmount
+        label: Care Allowance Daily Amount (€)
+        type: decimal
+      - id: careAllowanceLevel
+        label: Care Allowance Level
+        type: enum
+        values: [basic, enhanced, highest, none]
+    rules:
+      - id: D8_R1
+        description: No allowance during institutional care
+        condition:
+          injuredParty.inInstitutionalCare: true
+        result:
+          careAllowanceDailyAmount: 0
+          careAllowanceLevel: none
+        legal_basis: §51.3
+      - id: D8_R2
+        description: Basic care allowance – regular or near-regular need in some activities
+        condition:
+          injuredParty.careNeedLevel: regular_in_some_activities
+          injuredParty.inInstitutionalCare: false
+        result:
+          careAllowanceDailyAmount: 8.70
+          careAllowanceLevel: basic
+        legal_basis: §51.1
+      - id: D8_R3
+        description: Enhanced care allowance – regular and daily need
+        condition:
+          injuredParty.careNeedLevel: regular_and_daily
+          injuredParty.inInstitutionalCare: false
+        result:
+          careAllowanceDailyAmount: 19.55
+          careAllowanceLevel: enhanced
+        legal_basis: §51.1
+      - id: D8_R4
+        description: Highest care allowance – continuous, time-consuming and daily need
+        condition:
+          injuredParty.careNeedLevel: continuous_time_consuming_daily
+          injuredParty.inInstitutionalCare: false
+        result:
+          careAllowanceDailyAmount: 23.41
+          careAllowanceLevel: highest
+        legal_basis: §51.1
+      - id: D8_R5
+        description: Blind person – highest level for first 24 months after blindness
+        condition:
+          injuredParty.careNeedLevel: blind
+          injuredParty.monthsSinceBlindness: "<= 24"
+          injuredParty.inInstitutionalCare: false
+        result:
+          careAllowanceDailyAmount: 23.41
+          careAllowanceLevel: highest
+        legal_basis: §51.2
+      - id: D8_R6
+        description: Blind person – 50% of highest level after 24 months
+        condition:
+          injuredParty.careNeedLevel: blind
+          injuredParty.monthsSinceBlindness: "> 24"
+          injuredParty.inInstitutionalCare: false
+        result:
+          careAllowanceDailyAmount: 11.705
+          careAllowanceLevel: enhanced
+        legal_basis: §51.2
+        note: 50% of highest amount (€23.41 / 2 = €11.705/day)
+
+# ============================================================
+# DECISION 9: Clothing Allowance (Vaatelisä)
+# §52 – Daily clothing supplement for prosthetic/support device users
+# ============================================================
+  - id: D9_clothing_allowance
+    label: Clothing Allowance
+    finnish: Vaatelisä
+    legal_basis: §52
+    input:
+      - id: injuredParty.assistiveDeviceType
+        label: Type of Assistive Device Used
+        type: enum
+        values:
+          - none
+          - soft_material_small_area     # pehmeistä materiaaleista, pienellä alueella
+          - double_amputation_prosthesis # kaksoisamputointi tai reisi-/sääriproteesi
+          - lower_leg_long_support       # alaraajan pitkä tukisidos
+          - hard_material_torso_support  # kovasta materiaalista vartalon tukiliiviä tai korsetti
+          - other_comparable_heavy_use   # muu vastaava suuri käyttötarve
+      - id: injuredParty.continuousDeviceUseMonths
+        label: Continuous Device Use Duration (months)
+        type: integer
+    output:
+      - id: clothingAllowanceDailyAmount
+        label: Clothing Allowance Daily Amount (€)
+        type: decimal
+      - id: clothingAllowanceLevel
+        label: Allowance Level
+        type: enum
+        values: [standard, enhanced, none]
+    rules:
+      - id: D9_R1
+        description: No allowance – device use less than 3 continuous months
+        condition:
+          injuredParty.continuousDeviceUseMonths: "< 3"
+        result:
+          clothingAllowanceDailyAmount: 0
+          clothingAllowanceLevel: none
+        legal_basis: §52
+      - id: D9_R2
+        description: Standard clothing allowance (€0.58/day) – soft-material/small-area device ≥ 3 months
+        condition:
+          injuredParty.assistiveDeviceType: soft_material_small_area
+          injuredParty.continuousDeviceUseMonths: ">= 3"
+        result:
+          clothingAllowanceDailyAmount: 0.58
+          clothingAllowanceLevel: standard
+        legal_basis: §52.1
+      - id: D9_R3
+        description: Enhanced clothing allowance (€2.31/day) – double amputation or major prostheses ≥ 3 months
+        condition:
+          injuredParty.assistiveDeviceType:
+            - double_amputation_prosthesis
+            - lower_leg_long_support
+            - hard_material_torso_support
+            - other_comparable_heavy_use
+          injuredParty.continuousDeviceUseMonths: ">= 3"
+        result:
+          clothingAllowanceDailyAmount: 2.31
+          clothingAllowanceLevel: enhanced
+        legal_basis: §52.2
+
+# ============================================================
+# DECISION 10: Survivors' Pension Eligibility (Perhe-eläke)
+# §99–§109 – Family pension after death from work accident
+# ============================================================
+  - id: D10_survivors_pension
+    label: Survivors Pension Eligibility and Amount
+    finnish: Perhe-eläke
+    legal_basis: §99–§109
+    input:
+      - id: deceased.deathCausedByWorkEvent
+        label: Death Caused by Work Accident or Occupational Disease
+        type: boolean
+        note: §99.3 – impairment class ≥18 presumed cause
+      - id: deceased.annualEarnings
+        label: Deceased Annual Earnings (€)
+        type: decimal
+      - id: beneficiary.type
+        label: Beneficiary Type
+        type: enum
+        values: [spouse, cohabiting_partner, child, orphan]
+      - id: beneficiary.childCount
+        label: Number of Child Pension Recipients
+        type: integer
+      - id: beneficiary.hasOrphanChildren
+        label: Are There Orphan Children (Both Parents Dead)
+        type: boolean
+      - id: beneficiary.spouseIncome
+        label: Spouse Income/Pension (€/year) for Income Test
+        type: decimal
+        note: §107 tulosovitus
+      - id: beneficiary.marriageAfterEvent
+        label: Marriage Occurred After the Work Event
+        type: boolean
+        note: §102
+      - id: beneficiary.marriageDurationYears
+        label: Duration of Post-Event Marriage (years)
+        type: decimal
+    output:
+      - id: survivorsPensionEligible
+        label: Entitled to Survivors Pension
+        type: boolean
+      - id: survivorsPensionAnnualAmount
+        label: Annual Pension Amount (€) before income test
+        type: decimal
+      - id: incomeTestApplies
+        label: Income Test Applies to Spouse Pension
+        type: boolean
+      - id: nonEligibleReason
+        label: Non-Eligibility Reason
+        type: string
+    constants:
+      maxFamilyPensionPercent: 70        # §104.1 – 70% of annual earnings
+      spousePensionPercents:             # §104.2
+        no_children: 40
+        one_child: 35
+        two_children: 30
+        three_children: 20
+        four_or_more_children: 15
+      childPensionPercents:              # §104.3
+        one_child: 25
+        two_children: 40
+        three_children: 50
+        four_or_more_children: 55
+      orphanSupplement: 15               # §104.4 – additional 15% for full orphans
+      incomeTestMultiplier: 2.15         # §107.2 – 2.15 × minimum annual earnings
+      incomeTestBaseAmount: 13680        # §79
+    rules:
+      - id: D10_R1
+        description: Not eligible – death not caused by compensable work event
+        condition:
+          deceased.deathCausedByWorkEvent: false
+        result:
+          survivorsPensionEligible: false
+          survivorsPensionAnnualAmount: 0
+          incomeTestApplies: false
+          nonEligibleReason: "§99: Death must be caused by compensable work accident or occupational disease"
+        legal_basis: §99
+      - id: D10_R2
+        description: Post-event marriage – eligible only if there is a child OR marriage lasted ≥3 years
+        condition:
+          deceased.deathCausedByWorkEvent: true
+          beneficiary.marriageAfterEvent: true
+          beneficiary.childCount: "= 0"
+          beneficiary.marriageDurationYears: "< 3"
+        result:
+          survivorsPensionEligible: false
+          survivorsPensionAnnualAmount: 0
+          incomeTestApplies: false
+          nonEligibleReason: "§102: Post-event marriage requires either a child or ≥3 years duration"
+        legal_basis: §102
+      - id: D10_R3
+        description: Spouse pension – no children, 40% of annual earnings
+        condition:
+          deceased.deathCausedByWorkEvent: true
+          beneficiary.type: spouse
+          beneficiary.childCount: "= 0"
+        result:
+          survivorsPensionEligible: true
+          survivorsPensionAnnualAmount: "= deceased.annualEarnings * 0.40"
+          incomeTestApplies: true
+          nonEligibleReason: ""
+        legal_basis: §104.2
+      - id: D10_R4
+        description: Spouse pension – with 1 child, 35% of annual earnings
+        condition:
+          deceased.deathCausedByWorkEvent: true
+          beneficiary.type: spouse
+          beneficiary.childCount: "= 1"
+        result:
+          survivorsPensionEligible: true
+          survivorsPensionAnnualAmount: "= deceased.annualEarnings * 0.35"
+          incomeTestApplies: true
+          nonEligibleReason: ""
+        legal_basis: §104.2
+      - id: D10_R5
+        description: Child pension – 1 child receives 25% of annual earnings
+        condition:
+          deceased.deathCausedByWorkEvent: true
+          beneficiary.type: child
+          beneficiary.childCount: "= 1"
+        result:
+          survivorsPensionEligible: true
+          survivorsPensionAnnualAmount: "= deceased.annualEarnings * 0.25"
+          incomeTestApplies: false
+          nonEligibleReason: ""
+        legal_basis: §104.3
+      - id: D10_R6
+        description: Funeral assistance – fixed amount regardless of survivors
+        condition:
+          deceased.deathCausedByWorkEvent: true
+        result:
+          survivorsPensionEligible: true
+          survivorsPensionAnnualAmount: 4760
+          incomeTestApplies: false
+          nonEligibleReason: ""
+        legal_basis: §109
+        note: €4,760 paid to estate or those who arranged funeral; separate from pension
+
+# ============================================================
+# DECISION 11: Claim Filing Deadline (Vireilletulon määräaika)
+# §116 – Is the claim filed within the limitation period?
+# ============================================================
+  - id: D11_claim_deadline
+    label: Claim Filing Deadline
+    finnish: Korvausasian vireilletulon määräaika
+    legal_basis: §116
+    input:
+      - id: claim.daysSinceInjuryDate
+        label: Days Since Injury Date (työtapaturma)
+        type: integer
+      - id: claim.daysSinceFirstOccupationalDiseaseAssessment
+        label: Days Since First Doctor Assessment of Occupational Disease Origin
+        type: integer
+        note: §116.1 – for occupational disease, limit runs from first doctor assessment
+      - id: claim.eventType
+        label: Event Type
+        type: enum
+        values: [occupational_accident, occupational_disease]
+      - id: claim.lateFilingBeyondControlOfInjured
+        label: Late Filing Not Caused by Injured Party
+        type: boolean
+        note: §116.2 – exceptional late filing allowed
+    output:
+      - id: claimWithinDeadline
+        label: Claim Within Deadline
+        type: boolean
+      - id: lateFilingAllowed
+        label: Late Filing Exceptionally Allowed
+        type: boolean
+      - id: deadlineReason
+        label: Deadline Assessment Reason
+        type: string
+    rules:
+      - id: D11_R1
+        description: Work accident – within 5 years of injury date
+        condition:
+          claim.eventType: occupational_accident
+          claim.daysSinceInjuryDate: "<= 1826"
+        result:
+          claimWithinDeadline: true
+          lateFilingAllowed: false
+          deadlineReason: "§116.1: Claim within 5-year period from injury date"
+        legal_basis: §116.1
+      - id: D11_R2
+        description: Work accident – outside 5-year limit, late filing not beyond injured party's control
+        condition:
+          claim.eventType: occupational_accident
+          claim.daysSinceInjuryDate: "> 1826"
+          claim.lateFilingBeyondControlOfInjured: false
+        result:
+          claimWithinDeadline: false
+          lateFilingAllowed: false
+          deadlineReason: "§116.1: Claim outside 5-year limitation period"
+        legal_basis: §116.1
+      - id: D11_R3
+        description: Late filing – exceptionally allowed if delay not caused by injured party and strict deadline would be unreasonable
+        condition:
+          claim.daysSinceInjuryDate: "> 1826"
+          claim.lateFilingBeyondControlOfInjured: true
+        result:
+          claimWithinDeadline: false
+          lateFilingAllowed: true
+          deadlineReason: "§116.2: Exceptional late filing allowed – delay not attributable to injured party"
+        legal_basis: §116.2
+      - id: D11_R4
+        description: Occupational disease – within 5 years of first doctor assessment
+        condition:
+          claim.eventType: occupational_disease
+          claim.daysSinceFirstOccupationalDiseaseAssessment: "<= 1826"
+        result:
+          claimWithinDeadline: true
+          lateFilingAllowed: false
+          deadlineReason: "§116.1: Occupational disease claim within 5-year period from first medical assessment"
+        legal_basis: §116.1
+
+# ============================================================
+# DECISION 12: Compensation Decision Deadline (Korvauspäätöksen määräaika)
+# §127 – Insurer must make decision within 30 days of sufficient documentation
+# ============================================================
+  - id: D12_decision_deadline
+    label: Compensation Decision Deadline
+    finnish: Korvauspäätöksen antamisen määräaika
+    legal_basis: §127
+    input:
+      - id: case.documentationSufficientDate
+        label: Date Documentation Became Sufficient
+        type: date
+      - id: case.decisionDate
+        label: Actual Decision Date
+        type: date
+    output:
+      - id: decisionWithinDeadline
+        label: Decision Made Within 30-Day Deadline
+        type: boolean
+      - id: deadlineExceededDays
+        label: Days by Which Deadline Was Exceeded
+        type: integer
+    rules:
+      - id: D12_R1
+        description: Decision within 30 calendar days of sufficient documentation
+        condition:
+          "case.decisionDate - case.documentationSufficientDate": "<= 30"
+        result:
+          decisionWithinDeadline: true
+          deadlineExceededDays: 0
+        legal_basis: §127
+      - id: D12_R2
+        description: Decision beyond 30 calendar days – deadline exceeded
+        condition:
+          "case.decisionDate - case.documentationSufficientDate": "> 30"
+        result:
+          decisionWithinDeadline: false
+          deadlineExceededDays: "= (decisionDate - documentationSufficientDate) - 30"
+        legal_basis: §127
+
+# ============================================================
+# DECISION 13: Appeal Deadline (Muutoksenhakuaika)
+# §241–§243 – Deadline to appeal decisions
+# ============================================================
+  - id: D13_appeal_deadline
+    label: Appeal Deadline
+    finnish: Muutoksenhakuaika
+    legal_basis: §237–§243
+    input:
+      - id: appeal.currentDecisionBody
+        label: Body That Issued the Decision Being Appealed
+        type: enum
+        values:
+          - insurance_company     # → appeal to tapaturma-asiainratkaisulautakunta
+          - accident_appeals_board # → appeal to vakuutusoikeus
+          - insurance_court        # → appeal to korkein oikeus (leave to appeal required)
+      - id: appeal.daysSinceDecisionServed
+        label: Days Since Decision Was Served to Appellant
+        type: integer
+    output:
+      - id: appealWithinDeadline
+        label: Appeal Within Deadline
+        type: boolean
+      - id: appealBody
+        label: Appeal Body
+        type: enum
+        values:
+          - accident_appeals_board
+          - insurance_court
+          - supreme_court
+          - deadline_expired
+      - id: leaveToAppealRequired
+        label: Leave to Appeal Required
+        type: boolean
+    rules:
+      - id: D13_R1
+        description: Appeal from insurance company decision – within 30 days to accident appeals board
+        condition:
+          appeal.currentDecisionBody: insurance_company
+          appeal.daysSinceDecisionServed: "<= 30"
+        result:
+          appealWithinDeadline: true
+          appealBody: accident_appeals_board
+          leaveToAppealRequired: false
+        legal_basis: §241
+      - id: D13_R2
+        description: Appeal from insurance company – deadline expired
+        condition:
+          appeal.currentDecisionBody: insurance_company
+          appeal.daysSinceDecisionServed: "> 30"
+        result:
+          appealWithinDeadline: false
+          appealBody: deadline_expired
+          leaveToAppealRequired: false
+        legal_basis: §241
+      - id: D13_R3
+        description: Appeal from accident appeals board – within 30 days to insurance court
+        condition:
+          appeal.currentDecisionBody: accident_appeals_board
+          appeal.daysSinceDecisionServed: "<= 30"
+        result:
+          appealWithinDeadline: true
+          appealBody: insurance_court
+          leaveToAppealRequired: false
+        legal_basis: §242
+      - id: D13_R4
+        description: Appeal from insurance court – within 60 days to supreme court (leave required)
+        condition:
+          appeal.currentDecisionBody: insurance_court
+          appeal.daysSinceDecisionServed: "<= 60"
+        result:
+          appealWithinDeadline: true
+          appealBody: supreme_court
+          leaveToAppealRequired: true
+        legal_basis: §243
+
+# ============================================================
+# DECISION 14: Rehabilitation Allowance (Kuntoutusraha)
+# §69 – During vocational rehabilitation
+# ============================================================
+  - id: D14_rehabilitation_allowance
+    label: Rehabilitation Allowance
+    finnish: Kuntoutusraha
+    legal_basis: §69
+    input:
+      - id: injuredParty.inVocationalRehabilitation
+        label: Currently in Vocational Rehabilitation (§89–§90)
+        type: boolean
+      - id: injuredParty.daysSinceInjury
+        label: Days Since Injury Date
+        type: integer
+      - id: injuredParty.annualEarnings
+        label: Annual Earnings (Vuosityöansio) (€)
+        type: decimal
+      - id: injuredParty.canWorkDespiteRehabilitation
+        label: Can Perform Suitable Gainful Work Despite Rehabilitation
+        type: boolean
+        note: §69.2 – if yes, allowance calculated per §56–§57 or §63–§64 instead
+    output:
+      - id: rehabilitationAllowanceEligible
+        label: Entitled to Rehabilitation Allowance
+        type: boolean
+      - id: rehabilitationAllowanceDailyAmount
+        label: Daily Amount (€)
+        type: decimal
+      - id: basisForCalculation
+        label: Basis for Calculation
+        type: enum
+        values: [full_daily_allowance, full_accident_pension, proportional, not_eligible]
+    rules:
+      - id: D14_R1
+        description: Not eligible – not in vocational rehabilitation
+        condition:
+          injuredParty.inVocationalRehabilitation: false
+        result:
+          rehabilitationAllowanceEligible: false
+          rehabilitationAllowanceDailyAmount: 0
+          basisForCalculation: not_eligible
+        legal_basis: §69.1
+      - id: D14_R2
+        description: Can work during rehabilitation – proportional allowance per §56–§64
+        condition:
+          injuredParty.inVocationalRehabilitation: true
+          injuredParty.canWorkDespiteRehabilitation: true
+        result:
+          rehabilitationAllowanceEligible: true
+          rehabilitationAllowanceDailyAmount: "= calculated per §56–§57 or §63–§64 based on actual incapacity"
+          basisForCalculation: proportional
+        legal_basis: §69.2
+      - id: D14_R3
+        description: In rehabilitation, cannot work, within first year of injury – full daily allowance regardless of incapacity
+        condition:
+          injuredParty.inVocationalRehabilitation: true
+          injuredParty.canWorkDespiteRehabilitation: false
+          injuredParty.daysSinceInjury: "<= 365"
+        result:
+          rehabilitationAllowanceEligible: true
+          rehabilitationAllowanceDailyAmount: "= max(annualEarnings, 13680) / 360"
+          basisForCalculation: full_daily_allowance
+        legal_basis: §69.2
+      - id: D14_R4
+        description: In rehabilitation, cannot work, after first year – full accident pension amount regardless of incapacity
+        condition:
+          injuredParty.inVocationalRehabilitation: true
+          injuredParty.canWorkDespiteRehabilitation: false
+          injuredParty.daysSinceInjury: "> 365"
+        result:
+          rehabilitationAllowanceEligible: true
+          rehabilitationAllowanceDailyAmount: "= max(annualEarnings, 13680) * 0.85 / 360"
+          basisForCalculation: full_accident_pension
+        legal_basis: §69.2
+        note: Full accident pension = 85% of annual earnings before age 65
