@@ -430,6 +430,86 @@ classes:
       type: integer
       value: 60
       legal_basis: §241.5
+  treatment:
+    label: Treatment
+    finnish: Hoito
+    description: Medical treatment provided to injured party
+    legal_basis: §42, §45
+    category: healthcare
+    attributes:
+    - key: treatmentType
+      type: enum
+      values:
+      - surgery
+      - medication
+      - rehabilitation
+      - therapy
+    - key: startDate
+      type: date
+    - key: endDate
+      type: date
+  costDistributionSystem:
+    label: CostDistributionSystem
+    finnish: Jakojärjestelmä
+    description: System for sharing costs among insurance companies
+    legal_basis: §231
+    category: system
+    attributes:
+    - key: distributionType
+      type: enum
+      values:
+      - proportional
+      - risk_based
+      - claim_specific
+  survivorsPension:
+    label: SurvivorsPension
+    finnish: Perhe-eläke
+    description: Pension paid to survivors of deceased insured person
+    legal_basis: §100-102
+    category: compensation
+    attributes:
+    - key: pensionType
+      type: enum
+      values:
+      - widow
+      - child
+      - dependent
+    - key: amount
+      type: MonetaryAmount
+  funeralExpenses:
+    label: FuneralExpenses
+    finnish: Hautausapu
+    description: Compensation for funeral expenses
+    legal_basis: §109
+    category: compensation
+    attributes:
+    - key: amount
+      type: MonetaryAmount
+      value: €4,760
+  workAccidentRegister:
+    label: WorkAccidentRegister
+    finnish: Tapaturmarekisteri
+    description: Register of work accidents maintained by AccidentInsuranceCentre
+    legal_basis: §235
+    category: registry
+    attributes:
+    - key: registerName
+      type: string
+      value: Tapaturma- ja vaarailmoitusrekisteri
+  korvauslautakunnanLausunto:
+    label: KorvauslautakunnanLausunto
+    finnish: Korvauslautakunnan lausunto
+    description: Opinion issued by ClaimAppealBoard on legal/medical interpretation
+    legal_basis: §226-228
+    category: decision
+    attributes:
+    - key: opinionType
+      type: enum
+      values:
+      - legal_interpretation
+      - medical_interpretation
+    - key: requestDate
+      type: date
 relationships:
 - source: employee
   target: employer
