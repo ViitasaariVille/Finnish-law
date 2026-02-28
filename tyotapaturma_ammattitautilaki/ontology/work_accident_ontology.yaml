@@ -162,7 +162,7 @@ classes:
     label: Employer
     finnish: Työnantaja
     description: Entity with mandatory insurance obligation
-    legal_basis: §3, §159
+    legal_basis: §3
     category: organization
     attributes:
     - key: businessId
