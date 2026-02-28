@@ -1398,12 +1398,12 @@ relationships:
 - source: insuranceCompany
   target: employer
   type: has_right_of_recourse
-  legal_basis: §244-§249
+  legal_basis: §244-249
   note: Insurer can recover compensation from employer in certain cases
 - source: insuranceCompany
   target: thirdParty
   type: has_right_of_recourse
-  legal_basis: §244-§249
+  legal_basis: §244-249
   note: Insurer can recover from liable third party
 - source: injuredParty
   target: serviceHousingAdditionalCosts
