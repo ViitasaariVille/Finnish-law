@@ -523,6 +523,364 @@ classes:
       type: boolean
       value: true
       legal_basis: §107
+
+  # §17 - Foundational accident definition
+  tapaturma:
+    label: Tapaturma
+    finnish: Tapaturma
+    description: Accident as defined in Finnish work accident law - sudden, unexpected external event causing injury
+    legal_basis: §17
+    category: event
+    attributes:
+    - key: suddenness
+      type: boolean
+      value: true
+      note: Must be sudden event
+    - key: externality
+      type: boolean
+      value: true
+      note: External cause outside the person
+    - key: injuryConnection
+      type: boolean
+      value: true
+      note: Must cause bodily injury or illness
+    - key: coveredActivity
+      type: enum
+      values:
+      - at_work
+      - commuting
+      - work_trips
+      - certain_non_work
+    - key: temporalConnection
+      type: boolean
+      value: true
+      note: Injury must manifest within reasonable time
+
+  # §18 - Injuries treated as accident-caused
+  quasiAccidentInjury:
+    label: QuasiAccidentInjury
+    finnish: Tapaturmaksi katsottava vamma
+    description: Injury treated as work accident under specific circumstances
+    legal_basis: §18
+    category: event
+    attributes:
+    - key: quasiAccidentType
+      type: enum
+      values:
+      - sudden_strain
+      - loss_of_consciousness
+      - heart_attack
+      - stroke
+      - other_sudden_event
+    - key: workConnection
+      type: boolean
+      value: true
+
+  # §19 - Aggravation caused by accident
+  aggravatedConditionByAccident:
+    label: AggravatedConditionByAccident
+    finnish: Tapaturman aiheuttama paheneminen
+    description: Aggravation of pre-existing condition caused by work accident
+    legal_basis: §19
+    category: event
+    attributes:
+    - key: originalCondition
+      type: string
+    - key: aggravationDate
+      type: date
+    - key: causalConnection
+      type: boolean
+      value: true
+
+  # §21 - Accident during work
+  workDuringAccident:
+    label: WorkDuringAccident
+    finnish: Työssä sattunut tapaturma
+    description: Work accident occurring at employer's premises or under employer's direction
+    legal_basis: §21
+    category: event
+    subclasses:
+    - workplaceAccident
+    - workTripAccident
+
+  workTripAccident:
+    label: WorkTripAccident
+    finnish: Työmatkatapaturma
+    description: Accident during work-related trip
+    legal_basis: §22
+    category: event
+
+  # §24 - Accident in special circumstances
+  specialCircumstancesAccident:
+    label: SpecialCircumstancesAccident
+    finnish: Tapaturma erityisissä olosuhteissa
+    description: Accident covered under special circumstances provisions
+    legal_basis: §24
+    category: event
+
+  # §25 - Work at home or undefined location
+  homeWorkAccidentRule:
+    label: HomeWorkAccidentRule
+    finnish: Kotona tehtävän työn tapaturma
+    description: Rules for accidents when working at home or undefined location
+    legal_basis: §25
+    category: rule
+
+  # §26 - Occupational disease (top-level)
+  occupationalDisease:
+    label: OccupationalDisease
+    finnish: Ammattitauti
+    description: Disease contracted primarily due to occupational exposure
+    legal_basis: §26
+    category: event
+    attributes:
+    - key: diseaseType
+      type: string
+    - key: occupationalOrigin
+      type: boolean
+      value: true
+    - key: exposureDuration
+      type: integer
+      note: Minimum exposure time required
+    - key: diseaseListNumber
+      type: integer
+      legal_basis: §27
+    subclasses:
+    - occupationalDiseaseList
+    - tendinopathyUpperLimb
+    - carpalTunnelSyndrome
+    - aggravatedOccupationalCondition
+
+  # §27 - Occupational disease list
+  occupationalDiseaseList:
+    label: OccupationalDiseaseList
+    finnish: Ammattitautiluettelo
+    description: Official list of occupational diseases and their criteria
+    legal_basis: §27
+    category: registry
+
+  # §28 - Upper limb tendinopathy
+  tendinopathyUpperLimb:
+    label: TendinopathyUpperLimb
+    finnish: Yläraajan jännetulehdus
+    description: Tendinopathy of upper limb recognized as occupational disease
+    legal_basis: §28
+    category: event
+    parent: occupationalDisease
+    attributes:
+    - key: bodyPart
+      type: enum
+      values:
+      - shoulder
+      - elbow
+      - wrist
+      - hand
+
+  # §29 - Carpal tunnel syndrome
+  carpalTunnelSyndrome:
+    label: CarpalTunnelSyndrome
+    finnish: Rannekanavaoireyhtymä
+    description: Carpal tunnel syndrome recognized as occupational disease
+    legal_basis: §29
+    category: event
+    parent: occupationalDisease
+
+  # §30 - Aggravated occupational condition
+  aggravatedOccupationalCondition:
+    label: AggravatedOccupationalCondition
+    finnish: Ammattitautina korvattava paheneminen
+    description: Aggravation of occupational disease that qualifies for compensation
+    legal_basis: §30
+    category: event
+
+  # §33 - Work strain injury (työliikekipeytyminen)
+  workStrainInjury:
+    label: WorkStrainInjury
+    finnish: Työliikekipeytyminen
+    description: Injury from repetitive work movements or strain
+    legal_basis: §33
+    category: event
+
+  # §34 - Assault and intentional act
+  assaultInjury:
+    label: AssaultInjury
+    finnish: Pahoinpitely ja tahallinen teko
+    description: Injury from assault or intentional act by another person
+    legal_basis: §34
+    category: event
+    attributes:
+    - key: perpetratorIdentified
+      type: boolean
+    - key: policeReport
+      type: boolean
+
+  # §35 - Psychological trauma reaction
+  psychologicalTraumaReaction:
+    label: PsychologicalTraumaReaction
+    finnish: Henkinen järkytysreaktio
+    description: Psychological injury from traumatic event at work
+    legal_basis: §35
+    category: event
+    attributes:
+    - key: traumaType
+      type: enum
+      values:
+      - sudden_shock
+      - violent_event
+      - threatening_situation
+      - other_traumatic
+
+  # §50 - Travel and accommodation costs
+  travelAndAccommodationCosts:
+    label: TravelAndAccommodationCosts
+    finnish: Matka- ja majoituskulut
+    description: Reimbursement for travel and accommodation related to medical treatment
+    legal_basis: §50
+    category: compensation
+    attributes:
+    - key: travelMethod
+      type: enum
+      values:
+      - public_transport
+      - personal_vehicle
+      - taxi
+      - ambulance
+      - flight
+    - key: distance
+      type: decimal
+      unit: km
+    - key: accommodationNights
+      type: integer
+    - key: priorAuthorization
+      type: boolean
+
+  # §51 - Care allowance (hoitotuki)
+  careAllowance:
+    label: CareAllowance
+    finnish: Hoitotuki
+    description: Allowance for constant care and attendance needs
+    legal_basis: §51
+    category: compensation
+    attributes:
+    - key: careLevel
+      type: enum
+      values:
+      - constant_care
+      - regular_care
+      - part_time_care
+    - key: amount
+      type: MonetaryAmount
+    - key: assessmentDate
+      type: date
+
+  # §52 - Clothing allowance (vaatelisä)
+  clothingAllowance:
+    label: ClothingAllowance
+    finnish: Vaatelisä
+    description: Additional compensation for clothing damaged due to injury
+    legal_basis: §52
+    category: compensation
+
+  # §53 - Home care additional costs
+  homeCareAdditionalCosts:
+    label: HomeCareAdditionalCosts
+    finnish: Kodinhoidon lisäkustannukset
+    description: Compensation for additional home care costs due to injury
+    legal_basis: §53
+    category: compensation
+    attributes:
+    - key: careProvider
+      type: string
+    - key: additionalHours
+      type: decimal
+
+  # §54 - Personal property compensation
+  personalPropertyCompensation:
+    label: PersonalPropertyCompensation
+    finnish: Henkilökohtaisten esineiden korvaus
+    description: Compensation for personal items damaged in accident
+    legal_basis: §54
+    category: compensation
+
+  # §56 - Daily allowance (päiväraha)
+  dailyAllowance:
+    label: DailyAllowance
+    finnish: Päiväraha
+    description: Daily allowance for loss of earning capacity during treatment and recovery
+    legal_basis: §56
+    category: compensation
+    attributes:
+    - key: dailyRate
+      type: MonetaryAmount
+    - key: calculationBasis
+      type: enum
+      values:
+        - actual_wages
+        - minimum_daily
+        - fixed_percentage
+    - key: paymentPeriod
+      type: period
+
+  # §63 - Accident pension (tapaturmaeläke)
+  accidentPension:
+    label: AccidentPension
+    finnish: Tapaturmaeläke
+    description: Pension compensation for reduced work capacity due to work accident
+    legal_basis: §63
+    category: compensation
+    attributes:
+    - key: reductionPercentage
+      type: integer
+      note: Work capacity reduction percentage
+    - key: pensionType
+      type: enum
+      values:
+      - temporary
+      - permanent
+      - partial
+    - key: amount
+      type: MonetaryAmount
+
+  # §69 - Rehabilitation allowance (kuntoutusraha)
+  rehabilitationAllowance:
+    label: RehabilitationAllowance
+    finnish: Kuntoutusraha
+    description: Compensation during vocational rehabilitation
+    legal_basis: §69
+    category: compensation
+    attributes:
+    - key: rehabilitationType
+      type: enum
+      values:
+      - vocational
+      - medical
+      - combined
+    - key: duration
+      type: period
+    - key: amount
+      type: MonetaryAmount
+
+  # §83-87 - Impairment allowance (haittaraha)
+  impairmentAllowance:
+    label: ImpairmentAllowance
+    finnish: Haittaraha
+    description: Lump sum compensation for permanent physical or mental impairment
+    legal_basis: §83-§87
+    category: compensation
+    attributes:
+    - key: impairmentPercentage
+      type: integer
+      note: Medical assessment of permanent impairment
+    - key: impairmentType
+      type: enum
+      values:
+      - physical
+      - mental
+      - combined
+    - key: assessmentBasis
+      type: string
+    - key: lumpSumAmount
+      type: MonetaryAmount
   cohabitingPartner:
     label: CohabitingPartner
     finnish: Avopuoliso
@@ -877,4 +1235,101 @@ relationships:
   target: insuranceCompany
   type: handles_appeals_from
   legal_basis: §237
+  note: ''
+
+# New relationships for added classes
+- source: injuredParty
+  target: tapaturma
+  type: suffers
+  legal_basis: §17
+  note: ''
+- source: injuredParty
+  target: quasiAccidentInjury
+  type: suffers
+  legal_basis: §18
+  note: ''
+- source: injuredParty
+  target: occupationalDisease
+  type: contracts
+  legal_basis: §26
+  note: ''
+- source: injuredParty
+  target: workStrainInjury
+  type: suffers
+  legal_basis: §33
+  note: ''
+- source: injuredParty
+  target: assaultInjury
+  type: suffers
+  legal_basis: §34
+  note: ''
+- source: injuredParty
+  target: psychologicalTraumaReaction
+  type: suffers
+  legal_basis: §35
+  note: ''
+- source: injuredParty
+  target: travelAndAccommodationCosts
+  type: is_entitled_to
+  legal_basis: §50
+  note: ''
+- source: injuredParty
+  target: careAllowance
+  type: is_entitled_to
+  legal_basis: §51
+  note: ''
+- source: injuredParty
+  target: clothingAllowance
+  type: is_entitled_to
+  legal_basis: §52
+  note: ''
+- source: injuredParty
+  target: homeCareAdditionalCosts
+  type: is_entitled_to
+  legal_basis: §53
+  note: ''
+- source: injuredParty
+  target: personalPropertyCompensation
+  type: is_entitled_to
+  legal_basis: §54
+  note: ''
+- source: injuredParty
+  target: dailyAllowance
+  type: is_entitled_to
+  legal_basis: §56
+  note: ''
+- source: injuredParty
+  target: accidentPension
+  type: is_entitled_to
+  legal_basis: §63
+  note: ''
+- source: injuredParty
+  target: rehabilitationAllowance
+  type: is_entitled_to
+  legal_basis: §69
+  note: ''
+- source: injuredParty
+  target: impairmentAllowance
+  type: is_entitled_to
+  legal_basis: §83-§87
+  note: ''
+- source: compensationDecision
+  target: dailyAllowance
+  type: covers
+  legal_basis: §56
+  note: ''
+- source: compensationDecision
+  target: accidentPension
+  type: covers
+  legal_basis: §63
+  note: ''
+- source: compensationDecision
+  target: rehabilitationAllowance
+  type: covers
+  legal_basis: §69
+  note: ''
+- source: compensationDecision
+  target: impairmentAllowance
+  type: covers
+  legal_basis: §83-§87
   note: ''
