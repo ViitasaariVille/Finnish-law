@@ -1100,7 +1100,7 @@ classes:
   thirdParty:
     label: ThirdParty
     finnish: Kolmas osapuoli
-    description: Third party in recourse cases per §244-249
+    description: Third party in recourse cases per §270
     legal_basis: §270
     category: party
     attributes: []
@@ -1398,12 +1398,12 @@ relationships:
 - source: insuranceCompany
   target: employer
   type: has_right_of_recourse
-  legal_basis: §244-249
+  legal_basis: §270
   note: Insurer can recover compensation from employer in certain cases
 - source: insuranceCompany
   target: thirdParty
   type: has_right_of_recourse
-  legal_basis: §244-249
+  legal_basis: §270
   note: Insurer can recover from liable third party
 - source: injuredParty
   target: serviceHousingAdditionalCosts
