@@ -115,19 +115,19 @@ classes:
     label: InjuredParty
     finnish: Vahingoittunut
     description: Person who suffered a work accident or occupational disease
-    legal_basis: §2(6), §15-16
+    legal_basis: 2 § 6, 15-16
     category: person
     attributes:
     - key: injuryDate
       type: date
       finnish: tapaturmapäivä
       required: true
-      legal_basis: §2(6)
+      legal_basis: 2 § 6
     - key: injuryType
       type: string
       finnish: vamman laatu
       required: true
-      legal_basis: §2(6)
+      legal_basis: 2 § 6
     - key: severity
       type: enum
       values:
@@ -149,7 +149,7 @@ classes:
     - key: contactInformation
       type: string
       finnish: yhteystiedot
-      legal_basis: §2(6)
+      legal_basis: 2 § 6
   beneficiary:
     label: Beneficiary
     finnish: Edunsaaja
@@ -1085,7 +1085,7 @@ classes:
     finnish: Työsuojelurahasto
     description: Fund for promoting occupational safety, financed by a percentage
       of insurance premiums
-    legal_basis: §233, §209(2.11)
+    legal_basis: §233, 209 § 2
     category: institution
     attributes:
     - key: fundingPercentage
@@ -1123,7 +1123,7 @@ relationships:
 - source: injuredParty
   target: deathCompensation
   type: dies
-  legal_basis: §99-109
+  legal_basis: §99
   note: §99 is general provision; creates survivor rights (perhe-eläke §100-102, hautausapu §109)
 - source: injuredParty
   target: claimApplication
@@ -1148,7 +1148,7 @@ relationships:
 - source: beneficiary
   target: injuredParty
   type: is_dependent_of
-  legal_basis: §99-109
+  legal_basis: §99
   note: 'composite relation - no general dependent category in law; specific relations:
     spouse (§100), child (§101)'
 - source: employer
