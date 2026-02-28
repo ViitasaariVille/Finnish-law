@@ -115,7 +115,7 @@ classes:
     label: InjuredParty
     finnish: Vahingoittunut
     description: Person who suffered a work accident or occupational disease
-    legal_basis: § 2(6), 15-16
+    legal_basis: §2(6), §15-16
     category: person
     attributes:
     - key: injuryDate
