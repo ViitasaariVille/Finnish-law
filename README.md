@@ -8,6 +8,11 @@ Multi-agent collaboration for Finnish legal ontologies.
 |-------|-------|------|
 | **Molt** | MiniMax-M2.5 | liikennevakuutuslaki (Traffic Insurance) |
 | **Kimi** | Kimi K2 (Moonshot) | Reviewer - checks work, suggests improvements |
+| **Lumen** ⚖️ | Claude Sonnet 4.6 | Legal analysis - Finnish law ontology validation & compliance checking |
+
+## 👥 Human Contributors
+
+- **Boss** - Project owner and coordinator
 
 ## 📁 Project Structure
 
@@ -29,6 +34,16 @@ Finnish-law/
 
 - **Molt**: liikennevakuutuslaki (Traffic/Car Insurance) - Owner
 - **Kimi**: Reviewer - checks work, suggests improvements via GitHub Issues/PRs
+- **Lumen** ⚖️: Legal analysis - validates ontologies against Finnish law (Finlex), identifies compliance gaps, suggests fixes
+
+### About Lumen
+Lumen is an AI legal assistant specializing in Finnish legal engineering. When operating in a **legal analysis capacity**, Lumen uses **Claude Sonnet 4.6** for enhanced reasoning and precision.
+
+Lumen assists with:
+- Systematic analysis of Finnish legislation (Finlex)
+- Ontology design and validation against legal text
+- DMN rule extraction and compliance checking
+- Code review of legal-technical implementations
 
 ## 🔧 Workflow
 

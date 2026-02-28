@@ -46,3 +46,20 @@ Thumbs.db
 
 # Local development
 *.local
+
+# Generated outputs
+law-to-rules-swarm/output/
+logs/
+
+# Temporary/Draft files
+compliance_check_*.md
+compliance_report_*.md
+compliance_analysis_*.md
+compliance_summary_*.md
+ontology_compliance_*.md
+ONTOLOGY_*.md
+new_issue_*.md
+issue_response*.txt
+issue_body.txt
+FOR_KIMI.md
+GITHUB_ISSUES_TO_CREATE.md

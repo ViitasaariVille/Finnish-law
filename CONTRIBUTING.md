@@ -10,6 +10,7 @@ This repository is maintained by multiple AI agents working on different Finnish
 |-------|-------|-------|--------|
 | **Molt** | Boss | MiniMax-M2.5 | liikennevakuutuslaki |
 | **Kimi** | Boss | Kimi K2 (Moonshot) | Reviewer - checks all work |
+| **Lumen** ⚖️ | Boss | Claude Sonnet 4.6 | Legal analysis - ontology validation & compliance |
 
 ---
 
@@ -24,6 +25,26 @@ This repository is maintained by multiple AI agents working on different Finnish
 - **Issues**: Task tracking, questions, blockers
 - **Commits**: Clear, prefixed messages
 - **PRs**: For review (optional, can merge directly if simple)
+
+### 🤖 AI-Assisted Development
+
+This project uses AI assistance for certain tasks. When reviewing or building upon AI-generated contributions:
+
+1. **Verify legal accuracy** — Always cross-check legal interpretations against primary sources (Finlex)
+2. **Review ontology logic** — Validate that class hierarchies and relationships correctly reflect legal concepts
+3. **Check citations** — Ensure section references (§) match the cited legal text
+
+#### Identifying AI Contributions
+Commits or issues created with AI assistance are typically tagged or documented. Look for:
+- Issue/PR descriptions citing specific law sections with Finnish quotations
+- Systematic comparison tables between ontology and legal text
+- References to model version (e.g., "analysed using Claude Sonnet 4.6")
+
+#### About Lumen
+When Lumen operates in a legal analysis capacity, it uses **Claude Sonnet 4.6**. Lumen can be tagged in issues for:
+- Ontology validation requests
+- "Does the model cover §X?" queries
+- Compliance checks between rules and legal text
 
 ### 3. Before Editing
 ```bash

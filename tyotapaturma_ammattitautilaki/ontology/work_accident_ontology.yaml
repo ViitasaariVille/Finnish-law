@@ -114,19 +114,19 @@ classes:
     label: InjuredParty
     finnish: Vahingoittunut
     description: Person who suffered a work accident or occupational disease
-    legal_basis: §15-16, §111.2
+    legal_basis: §15-16, §111
     category: person
     attributes:
     - key: injuryDate
       type: date
       finnish: tapaturmapäivä
       required: true
-      legal_basis: §111.2.1
+      legal_basis: §111
     - key: injuryType
       type: string
       finnish: vamman laatu
       required: true
-      legal_basis: §111.2.1
+      legal_basis: §111
     - key: severity
       type: enum
       values:
@@ -147,7 +147,7 @@ classes:
     - key: contactInformation
       type: string
       finnish: yhteystiedot
-      legal_basis: §111.2.1
+      legal_basis: §111
   beneficiary:
     label: Beneficiary
     finnish: Edunsaaja
@@ -163,7 +163,7 @@ classes:
     label: Employer
     finnish: Työnantaja
     description: Entity with mandatory insurance obligation
-    legal_basis: §3, §111.2.2, §159
+    legal_basis: §3, §111, §159
     category: organization
     attributes:
     - key: businessId
@@ -1166,7 +1166,7 @@ relationships:
 - source: employer
   target: insuranceCompany
   type: has_insurance_with
-  legal_basis: §156-160
+  legal_basis: §159-160
   note: ''
 - source: insuranceCompany
   target: employee
@@ -1176,7 +1176,7 @@ relationships:
 - source: insuranceCompany
   target: employer
   type: has_contract_with
-  legal_basis: §156-160
+  legal_basis: §159-160
   note: ''
 - source: insuranceCompany
   target: treatment
@@ -1236,7 +1236,7 @@ relationships:
 - source: claimApplication
   target: compensationDecision
   type: requests
-  legal_basis: §36-109
+  legal_basis: §124-127
   note: ''
 - source: claimApplication
   target: insuranceCompany
@@ -1246,7 +1246,7 @@ relationships:
 - source: compensationDecision
   target: injuredParty
   type: pays
-  legal_basis: §36-109
+  legal_basis: §124-127
   note: ''
 - source: compensationDecision
   target: vahinko
