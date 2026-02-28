@@ -122,12 +122,12 @@ classes:
       type: date
       finnish: tapaturmapäivä
       required: true
-      legal_basis: 111 § 2
+      legal_basis: 2 § 6
     - key: injuryType
       type: string
       finnish: vamman laatu
       required: true
-      legal_basis: 111 § 2
+      legal_basis: 2 § 6
     - key: severity
       type: enum
       values:
@@ -148,7 +148,7 @@ classes:
     - key: contactInformation
       type: string
       finnish: yhteystiedot
-      legal_basis: 111 § 2
+      legal_basis: 2 § 6
   beneficiary:
     label: Beneficiary
     finnish: Edunsaaja
@@ -156,11 +156,7 @@ classes:
       child §101)
     legal_basis: 100-101 §
     category: person
-    subclasses:
-    - statutorySpouse
-    - cohabitingPartner
-    - childPensionRecipient
-    - dependent
+    note: Includes statutorySpouse, cohabitingPartner, childPensionRecipient, dependent as related classes
   employer:
     label: Employer
     finnish: Työnantaja
@@ -275,9 +271,7 @@ classes:
       by the law
     legal_basis: 17-25 §
     category: event
-    subclasses:
-    - workplaceAccident
-    - commuteAccident
+    note: workplaceAccident and commuteAccident are defined as separate related classes
   vahinko:
     label: Vahinko
     finnish: Vahinko
@@ -344,11 +338,7 @@ classes:
     description: Application for compensation
     legal_basis: §112
     category: procedure
-    subclasses:
-    - wageCompensationApplication
-    - travelCostApplication
-    - careCostApplication
-    - propertyDamageApplication
+    note: wageCompensationApplication, travelCostApplication, careCostApplication, propertyDamageApplication are defined separately
     attributes:
     - key: submissionDate
       type: date
@@ -405,11 +395,7 @@ classes:
     description: Compensation for medical care costs
     legal_basis: 36-49 §
     category: compensation
-    subclasses:
-    - publicHealthcare
-    - privateHealthcare
-    - foreignHealthcare
-    - medicine
+    note: publicHealthcare, privateHealthcare, foreignHealthcare, medicine are defined separately
   paymentCommitment:
     label: PaymentCommitment
     finnish: Maksusitoumus
@@ -690,9 +676,7 @@ classes:
       direction
     legal_basis: §21
     category: event
-    subclasses:
-    - workplaceAccident
-    - workTripAccident
+    note: workplaceAccident and workTripAccident are defined separately
   workTripAccident:
     label: WorkTripAccident
     finnish: Työmatkatapaturma
@@ -729,11 +713,7 @@ classes:
     - key: diseaseListNumber
       type: integer
       legal_basis: §27
-    subclasses:
-    - occupationalDiseaseList
-    - tendinopathyUpperLimb
-    - carpalTunnelSyndrome
-    - aggravatedOccupationalCondition
+    note: occupationalDiseaseList, tendinopathyUpperLimb, carpalTunnelSyndrome, aggravatedOccupationalCondition are defined separately
   occupationalDiseaseList:
     label: OccupationalDiseaseList
     finnish: Ammattitautiluettelo
@@ -1253,8 +1233,8 @@ relationships:
 - source: claimApplication
   target: compensationDecision
   type: requests
-  legal_basis: 124-127 §
-  note: ''
+  legal_basis: §119-127
+  note: '§119-127: procedural rules; §124 specifically defines compensation decision'
 - source: claimApplication
   target: insuranceCompany
   type: is_processed_by
@@ -1308,8 +1288,8 @@ relationships:
 - source: claimAppealBoard
   target: korvauslautakunnanLausunto
   type: issues
-  legal_basis: §226-228
-  note: ''
+  legal_basis: §226, §228
+  note: '§226: board purpose (gives opinions/guidelines); §228: opinion request procedure'
 - source: accidentAppealsBoard
   target: insuranceCompany
   type: handles_appeals_from
