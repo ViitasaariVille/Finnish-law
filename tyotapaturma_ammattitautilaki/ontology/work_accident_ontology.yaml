@@ -151,8 +151,8 @@ classes:
   beneficiary:
     label: Beneficiary
     finnish: Edunsaaja
-    description: Person entitled to family pension after death
-    legal_basis: §99-109
+    description: Person entitled to family pension after death (spouse/partner §100, child §101)
+    legal_basis: §100-101
     category: person
     subclasses:
     - statutorySpouse
@@ -309,14 +309,14 @@ classes:
   deathCompensation:
     label: DeathCompensation
     finnish: Kuolemantapauskorvaus
-    description: Compensation paid when injury results in death
-    legal_basis: Sections 99-109
+    description: Compensation paid when injury results in death (survivors pension + funeral assistance)
+    legal_basis: §100-102 (perhe-eläke), §109 (hauta-apu)
     category: compensation
   claimApplication:
     label: ClaimApplication
     finnish: Korvaushakemus
     description: Application for compensation
-    legal_basis: §128
+    legal_basis: §112
     category: procedure
     subclasses:
     - wageCompensationApplication
@@ -1126,13 +1126,13 @@ relationships:
 - source: injuredParty
   target: deathCompensation
   type: dies
-  legal_basis: §99
-  note: creates survivor rights
+  legal_basis: §99-109
+  note: creates survivor rights (perhe-eläke §100-102, hautausapu §109)
 - source: injuredParty
   target: claimApplication
   type: files
-  legal_basis: §128
-  note: ''
+  legal_basis: §112
+  note: case becomes active when notification received
 - source: injuredParty
   target: healthcareProvider
   type: receives_treatment_from
@@ -1146,13 +1146,13 @@ relationships:
 - source: beneficiary
   target: deathCompensation
   type: receives
-  legal_basis: §99-109
-  note: ''
+  legal_basis: §100-102, §109
+  note: 'survivors pension §100-102, funeral assistance §109'
 - source: beneficiary
   target: injuredParty
   type: is_dependent_of
-  legal_basis: §99-109
-  note: ''
+  legal_basis: §100-101
+  note: 'composite relation - no general dependent category in law; specific relations: spouse (§100), child (§101)'
 - source: employer
   target: employee
   type: employs
@@ -1221,8 +1221,8 @@ relationships:
 - source: vahinko
   target: claimApplication
   type: leads_to
-  legal_basis: §128
-  note: ''
+  legal_basis: §112
+  note: accident leads to claim when case becomes active
 - source: deathCompensation
   target: survivorsPension
   type: includes
@@ -1241,8 +1241,8 @@ relationships:
 - source: claimApplication
   target: insuranceCompany
   type: is_processed_by
-  legal_basis: §119-127
-  note: ''
+  legal_basis: §112, §119, §124
+  note: case becomes active §112, duty to investigate §119, decision issued §124
 - source: compensationDecision
   target: injuredParty
   type: pays
