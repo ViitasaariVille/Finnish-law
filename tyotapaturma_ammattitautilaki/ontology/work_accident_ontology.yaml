@@ -102,7 +102,7 @@ classes:
     label: Entrepreneur
     finnish: Yrittäjä
     description: Self-employed person with YEL insurance
-    legal_basis: §188-190
+    legal_basis: 188-190 §
     category: person
     attributes:
     - key: businessId
@@ -115,19 +115,19 @@ classes:
     label: InjuredParty
     finnish: Vahingoittunut
     description: Person who suffered a work accident or occupational disease
-    legal_basis: §2.6, §15-16
+    legal_basis: 2 § 6, 15-16 §
     category: person
     attributes:
     - key: injuryDate
       type: date
       finnish: tapaturmapäivä
       required: true
-      legal_basis: §111.2
+      legal_basis: 111 § 2
     - key: injuryType
       type: string
       finnish: vamman laatu
       required: true
-      legal_basis: §111.2
+      legal_basis: 111 § 2
     - key: severity
       type: enum
       values:
@@ -148,13 +148,13 @@ classes:
     - key: contactInformation
       type: string
       finnish: yhteystiedot
-      legal_basis: §111.2
+      legal_basis: 111 § 2
   beneficiary:
     label: Beneficiary
     finnish: Edunsaaja
     description: Person entitled to family pension after death (spouse/partner §100,
       child §101)
-    legal_basis: §100-101
+    legal_basis: 100-101 §
     category: person
     subclasses:
     - statutorySpouse
@@ -197,15 +197,15 @@ classes:
     - key: industrySector
       type: string
       finnish: toimiala
-      legal_basis: §159.1
+      legal_basis: 159 § 1
     - key: workStartDate
       type: date
       finnish: työn alkamisaika
-      legal_basis: §159.1
+      legal_basis: 159 § 1
     - key: ownershipStructure
       type: string
       finnish: omistussuhteet
-      legal_basis: §159.1
+      legal_basis: 159 § 1
   insuranceCompany:
     label: InsuranceCompany
     finnish: Vakuutusyhtiö
@@ -232,7 +232,7 @@ classes:
     label: UninsuredWork
     finnish: Vakuuttamaton työ
     description: Work performed without mandatory work accident insurance - by AccidentInsuranceCentre
-    legal_basis: §2.4
+    legal_basis: 2 § 4
     category handled: event
     note: When employer fails to obtain insurance, AccidentInsuranceCentre handles
       claims
@@ -240,7 +240,7 @@ classes:
     label: StateTreasury
     finnish: Valtiokonttori
     description: Pays compensation for state employees when the State is the employer
-    legal_basis: §3.3, §207, §212, §213
+    legal_basis: 3 § 3, §207, §212, §213
     category: organization
     attributes:
     - key: institutionName
@@ -266,14 +266,14 @@ classes:
     label: VoluntaryWorkTimeInsurance
     finnish: Vapaaehtoinen työajan vakuutus
     description: Voluntary insurance for work time accidents
-    legal_basis: §196-198
+    legal_basis: 196-198 §
     category: insurance_type
   occupationalAccident:
     label: OccupationalAccident
     finnish: Työtapaturma
     description: Work accident defined as injury suffered in circumstances covered
       by the law
-    legal_basis: Sections 17-25
+    legal_basis: 17-25 §
     category: event
     subclasses:
     - workplaceAccident
@@ -282,7 +282,7 @@ classes:
     label: Vahinko
     finnish: Vahinko
     description: Damage as a consequence of a vahinkotapahtuma - the actual injury/illness
-    legal_basis: §2.3, §15-16
+    legal_basis: 2 § 3, §15-16
     category: event
     attributes:
     - key: damageType
@@ -360,7 +360,7 @@ classes:
     label: CompensationDecision
     finnish: Korvauspäätös
     description: Written decision on compensation
-    legal_basis: §124-127
+    legal_basis: 124-127 §
     category: decision
     attributes:
     - key: decisionDate
@@ -403,7 +403,7 @@ classes:
     label: MedicalCareCompensation
     finnish: Korvaus sairaanhoitokustannuksista
     description: Compensation for medical care costs
-    legal_basis: Sections 36-49
+    legal_basis: 36-49 §
     category: compensation
     subclasses:
     - publicHealthcare
@@ -420,7 +420,7 @@ classes:
     label: AccidentInsuranceCentre
     finnish: Tapaturmavakuutuskeskus
     description: Central coordinating organization for work accident insurance
-    legal_basis: Sections 209-225
+    legal_basis: 209-225 §
     category: institution
     attributes:
     - key: promotionTasks
@@ -432,7 +432,7 @@ classes:
       - cooperation_authorities
       - recommendations
       - information_dissemination
-      legal_basis: §209.1
+      legal_basis: 209 § 1
     - key: specificTasks
       type: enum
       values:
@@ -452,12 +452,12 @@ classes:
       - statement_form_approval
       - eu_coordination_residence
       - other_government_assigned_tasks
-      legal_basis: §209.2
+      legal_basis: 209 § 2
   claimAppealBoard:
     label: ClaimAppealBoard
     finnish: Tapaturma-asiain korvauslautakunta
     description: Advisory body for uniform compensation practice
-    legal_basis: Sections 226-228
+    legal_basis: 226-228 §
     category: institution
     note: NOT an appeal body - provides expert opinions to insurers
   accidentAppealsBoard:
@@ -502,7 +502,7 @@ classes:
     label: AppealChain
     finnish: Muutoksenhaku
     description: Structured hierarchy of appeal bodies
-    legal_basis: §237-243
+    legal_basis: 237-243 §
     category: procedure
     attributes:
     - key: currentLevel
@@ -523,7 +523,7 @@ classes:
       legal_basis: Oikeudenkäymiskaari 4/1734 §30
     - key: lateFilingAllowed
       type: boolean
-      legal_basis: §241.2
+      legal_basis: 241 § 2
     - key: additionalEvidenceDeadline
       type: integer
       value: 60
@@ -934,7 +934,7 @@ classes:
     label: ImpairmentAllowance
     finnish: Haittaraha
     description: Lump sum compensation for permanent physical or mental impairment
-    legal_basis: §83-§87
+    legal_basis: 83-87 §
     category: compensation
     attributes:
     - key: impairmentPercentage
@@ -954,7 +954,7 @@ classes:
     label: CohabitingPartner
     finnish: Avopuoliso
     description: Cohabiting partner entitled to family pension under certain conditions
-    legal_basis: §100.2
+    legal_basis: 100 § 2
     category: person
     attributes:
     - key: cohabitationStartDate
@@ -972,7 +972,7 @@ classes:
       type: integer
     - key: studentStatus
       type: boolean
-      legal_basis: §101.2
+      legal_basis: 101 § 2
   dependent:
     label: Dependent
     finnish: Huollettava
@@ -1087,7 +1087,7 @@ classes:
       type: string
     - key: priorAuthorization
       type: boolean
-      legal_basis: §44.2
+      legal_basis: 44 § 2
   medicine:
     label: Medicine
     finnish: Lääkkeet
@@ -1104,7 +1104,7 @@ classes:
     finnish: Työsuojelurahasto
     description: Fund for promoting occupational safety, financed by a percentage
       of insurance premiums
-    legal_basis: §233, §209.2.11
+    legal_basis: §233, 209 § 2.11
     category: institution
     attributes:
     - key: fundingPercentage
@@ -1167,7 +1167,7 @@ relationships:
 - source: beneficiary
   target: injuredParty
   type: is_dependent_of
-  legal_basis: §100-101
+  legal_basis: 100-101 §
   note: 'composite relation - no general dependent category in law; specific relations:
     spouse (§100), child (§101)'
 - source: employer
@@ -1228,7 +1228,7 @@ relationships:
 - source: stateTreasury
   target: insuranceCompany
   type: alternative_to
-  legal_basis: §3.3, §207
+  legal_basis: 3 § 3, §207
   note: for state employees
 - source: occupationalAccident
   target: vahinko
@@ -1253,7 +1253,7 @@ relationships:
 - source: claimApplication
   target: compensationDecision
   type: requests
-  legal_basis: §124-127
+  legal_basis: 124-127 §
   note: ''
 - source: claimApplication
   target: insuranceCompany
@@ -1263,7 +1263,7 @@ relationships:
 - source: compensationDecision
   target: injuredParty
   type: pays
-  legal_basis: §124-127
+  legal_basis: 124-127 §
   note: ''
 - source: compensationDecision
   target: vahinko
@@ -1388,7 +1388,7 @@ relationships:
 - source: injuredParty
   target: impairmentAllowance
   type: is_entitled_to
-  legal_basis: §83-§87
+  legal_basis: 83-87 §
   note: ''
 - source: compensationDecision
   target: dailyAllowance
@@ -1432,7 +1432,7 @@ relationships:
 - source: injuredParty
   target: appealChain
   type: can_appeal_via
-  legal_basis: §237-243
+  legal_basis: 237-243 §
   note: Right to appeal compensation decision through structured appeal process
 - source: compensationDecision
   target: appealChain
