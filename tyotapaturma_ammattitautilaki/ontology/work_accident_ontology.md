@@ -24,7 +24,7 @@
 
 ### Student (Opiskelija)
 - **Description**: Person whose primary occupation is studying
-- **Legal Basis**: §70, §76, §77
+- **Legal Basis**: §76, §77
 - **Attributes**: 
   - studentType: enum [higher_education, vocational, basic_secondary]
   - studyProgram, enrollmentDate, expectedGraduationDate
@@ -55,7 +55,7 @@
 
 ### InjuredParty
 - **Description**: Person who suffered a work accident or occupational disease
-- **Legal Basis**: §15-16, §111.2
+- **Legal Basis**: §2.6, §15-16
 - **Attributes**: 
   - injuryDate (tapaturmapäivä) - §111.2.1 REQUIRED
   - injuryType (vamman laatu) - §111.2.1 REQUIRED
@@ -227,7 +227,7 @@
 
 ### Employer
 - **Description**: Entity with mandatory insurance obligation
-- **Legal Basis**: §3, §111.2.2, §159
+- **Legal Basis**: §3, §159
 - **Attributes**: 
   - businessId, companyName, annualPayroll, isExemptFromInsurance, exemptionType, annualPayrollEUR
   - exemptionReason: enum [none, below_threshhold_1200, state_employer, other_statutory_exemption]

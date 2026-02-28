@@ -50,7 +50,7 @@ classes:
     label: Student
     finnish: Opiskelija
     description: Person whose primary occupation is studying
-    legal_basis: §70, §76, §77
+    legal_basis: §76, §77
     category: person
     attributes:
     - key: studentType
@@ -114,7 +114,7 @@ classes:
     label: InjuredParty
     finnish: Vahingoittunut
     description: Person who suffered a work accident or occupational disease
-    legal_basis: §15-16, §111
+    legal_basis: §2.6, §15-16
     category: person
     attributes:
     - key: injuryDate
@@ -163,7 +163,7 @@ classes:
     label: Employer
     finnish: Työnantaja
     description: Entity with mandatory insurance obligation
-    legal_basis: §3, §111, §159
+    legal_basis: §3, §159
     category: organization
     attributes:
     - key: businessId
