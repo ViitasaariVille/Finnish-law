@@ -450,8 +450,8 @@ classes:
   accidentAppealsBoard:
     label: AccidentAppealsBoard
     finnish: Tapaturma-asiainratkaisulautakunta
-    description: First instance appeal body for insurance company decisions
-    legal_basis: Laki tapaturma-asioiden muutoksenhakulautakunnasta (1316/2010), §237
+    description: First instance appeal body for insurance company decisions, established by Laki tapaturma-asioiden muutoksenhakulautakunnasta (1316/2010). Listed in §237 as appeal body.
+    legal_basis: Laki tapaturma-asioiden muutoksenhakulautakunnasta (1316/2010)
     category: institution
     attributes:
     - key: appealDeadline
@@ -935,7 +935,7 @@ classes:
     label: CohabitingPartner
     finnish: Avopuoliso
     description: Cohabiting partner entitled to family pension under certain conditions
-    legal_basis: §100(2)
+    legal_basis: §100(2), §100(3)
     category: person
     attributes:
     - key: cohabitationStartDate
@@ -953,7 +953,7 @@ classes:
       type: integer
     - key: studentStatus
       type: boolean
-      legal_basis: §101(2)
+      legal_basis: §101(1)
   dependent:
     label: Dependent
     finnish: Huollettava
@@ -1097,10 +1097,10 @@ classes:
       type: reference
       to: accidentInsuranceCentre
       note: Tapaturmavakuutuskeskus collects and remits the fees
-  thirdParty:
-    label: ThirdParty
-    finnish: Kolmas osapuoli
-    description: Third party in recourse cases per §270
+  liableThirdParty:
+    label: LiableThirdParty
+    finnish: Korvausvastuullinen kolmas osapuoli
+    description: Third party liable for compensation under §270 recourse (takautumisoikeus) provisions
     legal_basis: §270
     category: party
     attributes: []
@@ -1401,7 +1401,7 @@ relationships:
   legal_basis: §270
   note: Insurer can recover compensation from employer in certain cases
 - source: insuranceCompany
-  target: thirdParty
+  target: liableThirdParty
   type: has_right_of_recourse
   legal_basis: §270
   note: Insurer can recover from liable third party
