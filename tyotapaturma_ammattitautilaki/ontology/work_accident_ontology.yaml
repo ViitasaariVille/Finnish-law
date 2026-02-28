@@ -102,7 +102,7 @@ classes:
     label: Entrepreneur
     finnish: Yrittäjä
     description: Self-employed person with YEL insurance
-    legal_basis: 188-190 §
+    legal_basis: §188-190
     category: person
     attributes:
     - key: businessId
@@ -115,19 +115,19 @@ classes:
     label: InjuredParty
     finnish: Vahingoittunut
     description: Person who suffered a work accident or occupational disease
-    legal_basis: 2 § 6, 15-16 §
+    legal_basis: §2(6), §15-16
     category: person
     attributes:
     - key: injuryDate
       type: date
       finnish: tapaturmapäivä
       required: true
-      legal_basis: 2 § 6
+      legal_basis: §2(6)
     - key: injuryType
       type: string
       finnish: vamman laatu
       required: true
-      legal_basis: 2 § 6
+      legal_basis: §2(6)
     - key: severity
       type: enum
       values:
@@ -149,13 +149,13 @@ classes:
     - key: contactInformation
       type: string
       finnish: yhteystiedot
-      legal_basis: 2 § 6
+      legal_basis: §2(6)
   beneficiary:
     label: Beneficiary
     finnish: Edunsaaja
     description: Person entitled to family pension after death (spouse/partner §100,
       child §101)
-    legal_basis: 100-101 §
+    legal_basis: §100-101
     category: person
     note: Includes statutorySpouse, cohabitingPartner, childPensionRecipient, dependent as related classes
   employer:
@@ -194,15 +194,15 @@ classes:
     - key: industrySector
       type: string
       finnish: toimiala
-      legal_basis: 159 § 1
+      legal_basis: §159(1)
     - key: workStartDate
       type: date
       finnish: työn alkamisaika
-      legal_basis: 159 § 1
+      legal_basis: §159(1)
     - key: ownershipStructure
       type: string
       finnish: omistussuhteet
-      legal_basis: 159 § 1
+      legal_basis: §159(1)
   insuranceCompany:
     label: InsuranceCompany
     finnish: Vakuutusyhtiö
