@@ -1,0 +1,1433 @@
+metadata:
+  name: Finnish Motor Vehicle Liability Insurance — DMN Business Rules
+  version: "1.0"
+  source_law: Liikennevakuutuslaki (460/2016)
+  language: en
+  effective_date: "2017-01-01"
+  source_url: https://www.finlex.fi/fi/laki/alkup/2016/20160460
+  created: "2026-03-01"
+  format: DMN_style_decision_tables
+  author: Lumen ⚖️ — Finnish Legal Engineer
+  note: >
+    Monetary thresholds listed here are statutory amounts at time of enactment.
+    Where the law links adjustment to palkkakerroin or other index, this is noted
+    with indexAdjusted: true and baseYear: 2016.
+
+decisions:
+
+# ============================================================
+# D1 — INSURANCE OBLIGATION
+# ============================================================
+  D1:
+    id: D1
+    label: Insurance Obligation
+    finnish: Vakuuttamisvelvollisuus
+    legal_basis: §5, §6, §7, §8
+    description: >
+      Determines whether a vehicle must be insured under Finnish law,
+      whether a border traffic insurance is needed, and who bears the obligation.
+    inputs:
+      - id: permanentHomeState
+        label: Vehicle's permanent home state
+        type: enum
+        values: [Finland, other_ETA, third_country]
+      - id: vehicleType
+        label: Vehicle type / category
+        type: enum
+        values:
+          - standard_motor_vehicle
+          - trailer_registered
+          - trailer_unregistered
+          - slow_work_machine_max15kmh_unregistered
+          - combine_harvester_unregistered
+          - child_only_vehicle_unregistered
+          - disabled_wheelchair_unregistered
+          - unregistered_offroad_only
+          - state_owned
+          - export_registered
+      - id: removedFromTrafficUse
+        label: Vehicle removed from traffic use (liikennekäytöstä poistettu)
+        type: boolean
+      - id: permanentlyRemoved
+        label: Vehicle permanently removed from traffic use (lopullinen poisto)
+        type: boolean
+      - id: usedInTraffic
+        label: Vehicle actually used in traffic despite removal status
+        type: boolean
+      - id: greenCardValid
+        label: Vehicle has valid green card
+        type: boolean
+      - id: LVKCommitmentToRespond
+        label: LVK has committed to respond for this vehicle
+        type: boolean
+    outputs:
+      - id: insuranceObligation
+        label: Insurance obligation
+        type: enum
+        values: [mandatory, exempt_may_insure_voluntarily, border_traffic_required, no_obligation]
+      - id: obligedParties
+        label: Obliged parties
+        type: string
+      - id: obligationStartDate
+        label: When obligation begins
+        type: string
+    rules:
+      - id: D1-R1
+        description: Standard Finnish vehicle — mandatory insurance
+        conditions:
+          permanentHomeState: Finland
+          vehicleType: standard_motor_vehicle
+          removedFromTrafficUse: false
+          permanentlyRemoved: false
+        result:
+          insuranceObligation: mandatory
+          obligedParties: owner and keeper, jointly and severally
+          obligationStartDate: From date of ownership/keepership transfer
+        legal_basis: §5(1), §6(1)
+
+      - id: D1-R2
+        description: Slow work machine (≤15 km/h, unregistered) — exempt
+        conditions:
+          vehicleType: slow_work_machine_max15kmh_unregistered
+        result:
+          insuranceObligation: exempt_may_insure_voluntarily
+          obligedParties: none (voluntary)
+          obligationStartDate: N/A
+        legal_basis: §8(1)(1)
+
+      - id: D1-R3
+        description: Combine harvester / farm harvest machine (unregistered) — exempt
+        conditions:
+          vehicleType: combine_harvester_unregistered
+        result:
+          insuranceObligation: exempt_may_insure_voluntarily
+          obligedParties: none (voluntary)
+          obligationStartDate: N/A
+        legal_basis: §8(1)(2)
+
+      - id: D1-R4
+        description: Unregistered trailer — exempt
+        conditions:
+          vehicleType: trailer_unregistered
+        result:
+          insuranceObligation: exempt_may_insure_voluntarily
+          obligedParties: none (voluntary)
+          obligationStartDate: N/A
+        legal_basis: §8(1)(3)
+
+      - id: D1-R5
+        description: Child-only unregistered vehicle — exempt
+        conditions:
+          vehicleType: child_only_vehicle_unregistered
+        result:
+          insuranceObligation: exempt_may_insure_voluntarily
+          obligedParties: none (voluntary)
+          obligationStartDate: N/A
+        legal_basis: §8(1)(4)
+
+      - id: D1-R6
+        description: Disabled electric wheelchair / similar light vehicle (unregistered) — exempt
+        conditions:
+          vehicleType: disabled_wheelchair_unregistered
+        result:
+          insuranceObligation: exempt_may_insure_voluntarily
+          obligedParties: none (voluntary)
+          obligationStartDate: N/A
+        legal_basis: §8(1)(5)
+
+      - id: D1-R7
+        description: State-owned vehicle — exempt (Valtiokonttori acts as insurer)
+        conditions:
+          vehicleType: state_owned
+        result:
+          insuranceObligation: no_obligation
+          obligedParties: N/A — Valtiokonttori bears liability
+          obligationStartDate: N/A
+        legal_basis: §8(1)(7), §32(2)
+
+      - id: D1-R8
+        description: Vehicle removed from traffic use AND not used in traffic — exempt
+        conditions:
+          removedFromTrafficUse: true
+          usedInTraffic: false
+        result:
+          insuranceObligation: exempt_may_insure_voluntarily
+          obligedParties: none (voluntary)
+          obligationStartDate: N/A
+        legal_basis: §8(1)(9)
+
+      - id: D1-R9
+        description: Vehicle permanently removed — no obligation
+        conditions:
+          permanentlyRemoved: true
+        result:
+          insuranceObligation: no_obligation
+          obligedParties: none
+          obligationStartDate: N/A
+        legal_basis: §8(1)(10)
+
+      - id: D1-R10
+        description: Third-country vehicle brought temporarily to Finland — border traffic insurance required (unless green card or LVK commitment)
+        conditions:
+          permanentHomeState: third_country
+          greenCardValid: false
+          LVKCommitmentToRespond: false
+        result:
+          insuranceObligation: border_traffic_required
+          obligedParties: person bringing vehicle to Finland
+          obligationStartDate: Before entry into Finland
+        legal_basis: §7(1)
+
+      - id: D1-R11
+        description: Third-country vehicle with valid green card — no border traffic insurance needed
+        conditions:
+          permanentHomeState: third_country
+          greenCardValid: true
+        result:
+          insuranceObligation: no_obligation
+          obligedParties: N/A
+          obligationStartDate: N/A
+        legal_basis: §7(2)
+
+      - id: D1-R12
+        description: Other ETA vehicle — insured per home state law; LVK bears Finnish liability
+        conditions:
+          permanentHomeState: other_ETA
+        result:
+          insuranceObligation: no_obligation
+          obligedParties: home state rules apply
+          obligationStartDate: N/A
+        legal_basis: §43(2), §32(4)
+        note: LVK is primarily liable for accidents in Finland caused by these vehicles
+
+# ============================================================
+# D2 — PERSONAL SCOPE (WHO IS COVERED)
+# ============================================================
+  D2:
+    id: D2
+    label: Personal Scope — Who May Claim Compensation
+    finnish: Henkilöllinen soveltamisala — korvaukseen oikeutetut
+    legal_basis: §33, §34, §37, §40, §46, §49, §50
+    description: >
+      Determines whether a specific person is entitled to claim compensation from
+      the insurance of a specific vehicle.
+    inputs:
+      - id: personRole
+        label: Role of the person in relation to the vehicle
+        type: enum
+        values:
+          - driver_of_vehicle
+          - passenger_of_vehicle
+          - owner_of_vehicle
+          - keeper_of_vehicle
+          - third_party_pedestrian_cyclist
+      - id: damageType
+        label: Type of damage suffered
+        type: enum
+        values: [personal_injury, property_damage]
+      - id: propertyType
+        label: Property damaged (if property damage)
+        type: enum
+        values:
+          - insured_vehicle_itself
+          - coupled_other_vehicle
+          - property_in_insured_vehicle
+          - personal_effects_passenger
+          - other_vehicle_owned_by_driver
+          - other_third_party_property
+      - id: knewVehicleUninsured
+        label: Person knew vehicle was uninsured (§46 case)
+        type: boolean
+      - id: knewUnauthorisedUse
+        label: Person knew vehicle was taken without authorisation
+        type: boolean
+      - id: ageUnder12
+        label: Person is under 12 years of age
+        type: boolean
+      - id: legallyNonCulpable
+        label: Person was legally non-culpable at time of accident
+        type: boolean
+    outputs:
+      - id: entitled
+        label: Entitled to claim
+        type: boolean
+      - id: fromWhichInsurance
+        label: Which insurance to claim against
+        type: string
+      - id: restrictions
+        label: Restrictions / notes
+        type: string
+    rules:
+      - id: D2-R1
+        description: Personal injury to any person (driver, passenger, third party) — generally covered
+        conditions:
+          damageType: personal_injury
+          knewVehicleUninsured: false
+          knewUnauthorisedUse: false
+        result:
+          entitled: true
+          fromWhichInsurance: Vehicle's insurer (or LVK where applicable)
+          restrictions: Subject to §47/48 reductions if contributory negligence or alcohol
+        legal_basis: §31, §34
+
+      - id: D2-R2
+        description: Occupant/driver knew vehicle was uninsured — generally not entitled from LVK
+        conditions:
+          knewVehicleUninsured: true
+          personRole:
+            in: [driver_of_vehicle, passenger_of_vehicle, owner_of_vehicle, keeper_of_vehicle]
+        result:
+          entitled: false
+          fromWhichInsurance: N/A
+          restrictions: LVK can exclude per §46(2) if it can prove knowledge
+        legal_basis: §46(2)
+
+      - id: D2-R3
+        description: Person in unlawfully used vehicle and knew of it — compensation only for special reason
+        conditions:
+          knewUnauthorisedUse: true
+        result:
+          entitled: false
+          fromWhichInsurance: N/A
+          restrictions: Only compensated for special reason (erityinen syy)
+        legal_basis: §49
+
+      - id: D2-R4
+        description: Under 12 / legally non-culpable — §47-49 contributory negligence rules cannot be invoked
+        conditions:
+          ageUnder12: true
+        result:
+          entitled: true
+          fromWhichInsurance: Full coverage regardless of own conduct
+          restrictions: §47, §48, §49 reductions cannot be applied
+        legal_basis: §50
+
+      - id: D2-R5
+        description: Property damage — own vehicle damage NOT covered by own insurance
+        conditions:
+          damageType: property_damage
+          propertyType: insured_vehicle_itself
+        result:
+          entitled: false
+          fromWhichInsurance: N/A
+          restrictions: Own vehicle damage excluded from own motor liability insurance
+        legal_basis: §40(1)
+
+      - id: D2-R6
+        description: Property damage — personal effects of passenger (not owner/keeper) — covered
+        conditions:
+          damageType: property_damage
+          propertyType: personal_effects_passenger
+          personRole: passenger_of_vehicle
+        result:
+          entitled: true
+          fromWhichInsurance: Vehicle's insurance
+          restrictions: Passenger must not be owner or keeper of the vehicle
+        legal_basis: §40(2)
+
+      - id: D2-R7
+        description: Property damage — owner/keeper/driver own property — NOT covered (except another vehicle they own)
+        conditions:
+          damageType: property_damage
+          propertyType:
+            in: [property_in_insured_vehicle, other_third_party_property]
+          personRole:
+            in: [driver_of_vehicle, owner_of_vehicle, keeper_of_vehicle]
+        result:
+          entitled: false
+          fromWhichInsurance: N/A
+          restrictions: Owner/keeper/driver own property excluded; exception for other vehicle they own
+        legal_basis: §40(2)
+
+# ============================================================
+# D3 — TERRITORIAL SCOPE
+# ============================================================
+  D3:
+    id: D3
+    label: Territorial Scope — Where Coverage Applies
+    finnish: Alueellinen soveltamisala
+    legal_basis: §13
+    inputs:
+      - id: accidentCountry
+        label: Country where accident occurred
+        type: enum
+        values: [Finland, other_ETA, green_card_state_non_ETA, non_green_card_transit, third_country]
+      - id: vehicleInsuredInFinland
+        label: Vehicle insured under Finnish law
+        type: boolean
+      - id: claimantResidenceFinland
+        label: Claimant has residence in Finland
+        type: boolean
+      - id: journeyType
+        label: Nature of journey (for transit states)
+        type: enum
+        values: [direct_ETA_to_ETA, other]
+      - id: claimantEtaNational
+        label: Claimant is ETA national
+        type: boolean
+    outputs:
+      - id: covered
+        label: Covered by Finnish insurance
+        type: boolean
+      - id: applicableLaw
+        label: Applicable compensation law
+        type: string
+      - id: claimantChoice
+        label: Claimant may choose Finnish law
+        type: boolean
+    rules:
+      - id: D3-R1
+        description: Accident in Finland — always covered, Finnish law applies
+        conditions:
+          accidentCountry: Finland
+          vehicleInsuredInFinland: true
+        result:
+          covered: true
+          applicableLaw: Finnish law (liikennevakuutuslaki)
+          claimantChoice: false
+        legal_basis: §13(1)
+
+      - id: D3-R2
+        description: Accident in other ETA state — covered, law of accident state (or Finnish if better)
+        conditions:
+          accidentCountry: other_ETA
+          vehicleInsuredInFinland: true
+        result:
+          covered: true
+          applicableLaw: Accident state law OR Finnish law if Finnish law is better
+          claimantChoice: true
+        legal_basis: §13(1), §13(3), §13(4)
+        note: Finnish resident may choose Finnish law per §13(4) if damage would otherwise be governed by non-Finnish ETA law
+
+      - id: D3-R3
+        description: Transit through non-green-card state on direct ETA-to-ETA journey — covered for ETA nationals
+        conditions:
+          accidentCountry: non_green_card_transit
+          vehicleInsuredInFinland: true
+          journeyType: direct_ETA_to_ETA
+          claimantEtaNational: true
+        result:
+          covered: true
+          applicableLaw: Finnish law
+          claimantChoice: false
+        legal_basis: §13(2)
+
+      - id: D3-R4
+        description: Accident in non-ETA, non-green-card third country — not covered
+        conditions:
+          accidentCountry: third_country
+          vehicleInsuredInFinland: true
+        result:
+          covered: false
+          applicableLaw: N/A
+          claimantChoice: false
+        legal_basis: §13
+
+# ============================================================
+# D4 — COMPENSABLE EVENT CLASSIFICATION
+# ============================================================
+  D4:
+    id: D4
+    label: Compensable Event Classification
+    finnish: Korvattavan tapahtuman luokittelu
+    legal_basis: §1, §2(6), §31, §37, §40, §42
+    inputs:
+      - id: vehicleInTrafficUse
+        label: Vehicle was in traffic use at time of accident
+        type: boolean
+      - id: locationContext
+        label: Location context of vehicle use
+        type: enum
+        values:
+          - on_road_normal_traffic
+          - off_road_non_transport_purpose
+          - stored_repaired_serviced_washed
+          - closed_area_competition_testing
+          - isolated_area_other
+      - id: damageToOwnVehicle
+        label: Damage is to the insured vehicle itself
+        type: boolean
+      - id: vehicleStationary_workPerformance
+        label: Damage occurred while vehicle stationary during work performance
+        type: boolean
+      - id: damageToWorkObject
+        label: Damage is to the object of work or other vehicle involved in that work
+        type: boolean
+    outputs:
+      - id: compensable
+        label: Event is compensable as traffic damage
+        type: boolean
+      - id: damageCategory
+        label: Damage category
+        type: enum
+        values: [personal_injury, property_damage, excluded]
+      - id: exclusionReason
+        label: Reason for exclusion if not compensable
+        type: string
+    rules:
+      - id: D4-R1
+        description: Vehicle in normal traffic use on road — compensable
+        conditions:
+          vehicleInTrafficUse: true
+          locationContext: on_road_normal_traffic
+          damageToOwnVehicle: false
+        result:
+          compensable: true
+          damageCategory: personal_injury or property_damage (based on type)
+          exclusionReason: null
+        legal_basis: §1, §31
+
+      - id: D4-R2
+        description: Vehicle used off road for non-transport purpose — NOT compensable
+        conditions:
+          locationContext: off_road_non_transport_purpose
+        result:
+          compensable: false
+          damageCategory: excluded
+          exclusionReason: §1(1) — off-road use for non-transport purpose
+        legal_basis: §1(1)
+
+      - id: D4-R3
+        description: Vehicle stored, repaired, serviced or washed off road — NOT compensable
+        conditions:
+          locationContext: stored_repaired_serviced_washed
+        result:
+          compensable: false
+          damageCategory: excluded
+          exclusionReason: §1(2) — storage/maintenance off road
+        legal_basis: §1(2)
+
+      - id: D4-R4
+        description: Vehicle in competition/testing on traffic-isolated area — NOT compensable
+        conditions:
+          locationContext: closed_area_competition_testing
+        result:
+          compensable: false
+          damageCategory: excluded
+          exclusionReason: §1(3) — competition or testing on isolated area
+        legal_basis: §1(3)
+
+      - id: D4-R5
+        description: Damage to own vehicle — excluded from own insurance
+        conditions:
+          damageToOwnVehicle: true
+        result:
+          compensable: false
+          damageCategory: excluded
+          exclusionReason: §40(1) — own vehicle damage not covered by own insurance
+        legal_basis: §40(1)
+
+      - id: D4-R6
+        description: Damage during work performance while stationary — to worker or work object — excluded
+        conditions:
+          vehicleStationary_workPerformance: true
+          damageToWorkObject: true
+        result:
+          compensable: false
+          damageCategory: excluded
+          exclusionReason: §42 — work performance damage excluded
+        legal_basis: §42
+
+# ============================================================
+# D5 — LIABILITY DETERMINATION
+# ============================================================
+  D5:
+    id: D5
+    label: Liability Determination — Insurer vs Insurer
+    finnish: Korvausvastuun määräytyminen
+    legal_basis: §31, §32, §33, §51
+    inputs:
+      - id: numberOfVehiclesInvolved
+        label: Number of vehicles involved in accident
+        type: enum
+        values: [one, two_or_more]
+      - id: faultOfParties
+        label: Fault found on parties' side
+        type: enum
+        values:
+          - no_fault_identified
+          - fault_vehicle_A_only
+          - fault_vehicle_B_only
+          - shared_fault
+          - defect_or_loading_vehicle_A
+          - defect_or_loading_vehicle_B
+      - id: victimWasOccupant
+        label: Victim was occupant (driver or passenger) of one vehicle
+        type: boolean
+      - id: vehicleOccupiedByVictim
+        label: Vehicle in which victim was an occupant (if applicable)
+        type: string
+        description: ID reference to specific vehicle
+    outputs:
+      - id: primaryLiableInsurer
+        label: Insurer primarily liable to claimant
+        type: string
+      - id: interInsurerAllocation
+        label: Inter-insurer allocation basis
+        type: string
+    rules:
+      - id: D5-R1
+        description: Single vehicle — strict liability, own insurer compensates
+        conditions:
+          numberOfVehiclesInvolved: one
+        result:
+          primaryLiableInsurer: Insurer of the vehicle
+          interInsurerAllocation: N/A (single vehicle)
+        legal_basis: §31, §32(1)
+
+      - id: D5-R2
+        description: Multiple vehicles — victim was occupant — personal injury paid by occupant's vehicle insurer first
+        conditions:
+          numberOfVehiclesInvolved: two_or_more
+          victimWasOccupant: true
+        result:
+          primaryLiableInsurer: Insurer of the vehicle in which victim was occupant/driver
+          interInsurerAllocation: Inter-insurer split per §51 based on fault and circumstances
+        legal_basis: §33(3), §51
+
+      - id: D5-R3
+        description: Multiple vehicles — third party victim may choose any involved vehicle's insurer
+        conditions:
+          numberOfVehiclesInvolved: two_or_more
+          victimWasOccupant: false
+        result:
+          primaryLiableInsurer: Any insurer of vehicles involved (claimant's choice)
+          interInsurerAllocation: Inter-insurer split per §51 based on fault and circumstances
+        legal_basis: §33(3), §60(2)
+
+      - id: D5-R4
+        description: Damage due solely to one vehicle's defect/loading — that vehicle's insurer bears full cost
+        conditions:
+          numberOfVehiclesInvolved: two_or_more
+          faultOfParties:
+            in: [defect_or_loading_vehicle_A, defect_or_loading_vehicle_B]
+        result:
+          primaryLiableInsurer: Insurer of the defective/misladen vehicle
+          interInsurerAllocation: 100% to defective vehicle insurer
+        legal_basis: §51
+
+# ============================================================
+# D6 — PERSONAL INJURY COMPENSATION ELIGIBILITY
+# ============================================================
+  D6:
+    id: D6
+    label: Personal Injury Compensation — Eligibility and Amount
+    finnish: Henkilövahingon korvauksen oikeus ja määrä
+    legal_basis: §34, §35, §36, §47, §48, §50
+    inputs:
+      - id: injuryIsMajor
+        label: Injury is more than minor (vähäinen)
+        type: boolean
+      - id: injuryType
+        label: Type of personal injury
+        type: enum
+        values: [pain_suffering_temporary, loss_of_earnings, permanent_disability, death_benefits, loss_of_maintenance]
+      - id: parallelTapaturmaRight
+        label: Right to compensation under työtapaturma/maatalousyrittäjä/urheilija act
+        type: boolean
+      - id: continuousCompensation
+        label: Is compensation continuous (jatkuva korvaus)
+        type: boolean
+    outputs:
+      - id: eligible
+        label: Eligible for this compensation type
+        type: boolean
+      - id: compensationBasis
+        label: Basis for calculation
+        type: string
+      - id: coordinationRequired
+        label: Coordination with other statutory schemes required
+        type: boolean
+      - id: indexAdjusted
+        label: Subject to annual index adjustment
+        type: boolean
+      - id: indexMechanism
+        label: Index mechanism if applicable
+        type: string
+    rules:
+      - id: D6-R1
+        description: Pain and suffering — only if injury is more than minor
+        conditions:
+          injuryType: pain_suffering_temporary
+          injuryIsMajor: true
+        result:
+          eligible: true
+          compensationBasis: VahL §5:2 — non-economic loss
+          coordinationRequired: false
+          indexAdjusted: false
+          indexMechanism: null
+        legal_basis: §34(1)
+
+      - id: D6-R2
+        description: Pain and suffering — minor injury → not eligible
+        conditions:
+          injuryType: pain_suffering_temporary
+          injuryIsMajor: false
+        result:
+          eligible: false
+          compensationBasis: N/A
+          coordinationRequired: false
+          indexAdjusted: false
+          indexMechanism: null
+        legal_basis: §34(1)
+
+      - id: D6-R3
+        description: Loss of earnings — eligible; index adjusted; coordinate with työtapaturma
+        conditions:
+          injuryType: loss_of_earnings
+        result:
+          eligible: true
+          compensationBasis: VahL §5:2 — actual loss; historical earnings adjusted by palkkakerroin to accident year
+          coordinationRequired: true
+          indexAdjusted: true
+          indexMechanism: Continuing compensation adjusted annually by työeläkeindeksi (§35(1)); historical wages adjusted by palkkakerroin to accident year (§35(2))
+        legal_basis: §34(1), §35, §36
+
+      - id: D6-R4
+        description: Permanent disability — eligible; board opinion mandatory if serious
+        conditions:
+          injuryType: permanent_disability
+        result:
+          eligible: true
+          compensationBasis: VahL §5:2 — functional impairment; LVL board opinion mandatory if serious (vaikea vamma)
+          coordinationRequired: true
+          indexAdjusted: true
+          indexMechanism: Continuing compensation adjusted annually by työeläkeindeksi
+        legal_basis: §34(1), §35, §66(1)(3)
+
+      - id: D6-R5
+        description: Death benefits / loss of maintenance — eligible; board opinion for continuing compensation
+        conditions:
+          injuryType:
+            in: [death_benefits, loss_of_maintenance]
+        result:
+          eligible: true
+          compensationBasis: VahL §§5:4, 5:4a, 5:4b — survivors' benefits and grief compensation
+          coordinationRequired: false
+          indexAdjusted: true
+          indexMechanism: Continuing maintenance loss compensation adjusted by työeläkeindeksi annually
+        legal_basis: §34(1), §35, §66(1)(1)
+
+      - id: D6-R6
+        description: Parallel työtapaturma right — motor insurance pays only excess
+        conditions:
+          parallelTapaturmaRight: true
+        result:
+          eligible: true
+          compensationBasis: Only the portion not compensated under tapaturma law
+          coordinationRequired: true
+          indexAdjusted: true
+          indexMechanism: Per injury type above
+        legal_basis: §36
+
+# ============================================================
+# D7 — PROPERTY DAMAGE COMPENSATION
+# ============================================================
+  D7:
+    id: D7
+    label: Property Damage Compensation — Amount and Limits
+    finnish: Esinevahingon korvaus — määrä ja enimmäismäärä
+    legal_basis: §37, §38, §40
+    inputs:
+      - id: vehicleDamageType
+        label: Extent of vehicle damage
+        type: enum
+        values: [repairable, total_loss_or_uneconomical_to_repair]
+      - id: propertyCategory
+        label: Category of property damaged
+        type: enum
+        values:
+          - vehicle
+          - personal_effects_of_non_owner_passenger
+          - other_third_party_property
+          - excluded_property
+      - id: totalClaimsExceedCap
+        label: Total property claims in this accident exceed €5 000 000 cap
+        type: boolean
+    outputs:
+      - id: compensationAmount
+        label: Compensation amount / basis
+        type: string
+      - id: capped
+        label: Subject to per-insurance cap
+        type: boolean
+      - id: titleTransfer
+        label: Vehicle title transfers to insurer
+        type: boolean
+    rules:
+      - id: D7-R1
+        description: Repairable vehicle — repair cost or equivalent amount
+        conditions:
+          propertyCategory: vehicle
+          vehicleDamageType: repairable
+        result:
+          compensationAmount: Repair cost or equivalent amount; vehicle value depreciation NOT compensated
+          capped: true
+          titleTransfer: false
+        legal_basis: §37(2)
+
+      - id: D7-R2
+        description: Total loss vehicle — fair market value before accident
+        conditions:
+          propertyCategory: vehicle
+          vehicleDamageType: total_loss_or_uneconomical_to_repair
+        result:
+          compensationAmount: Fair market value immediately before accident
+          capped: true
+          titleTransfer: true
+        legal_basis: §37(2)
+
+      - id: D7-R3
+        description: Property cap per liable insurance — €5 000 000 max
+        conditions:
+          totalClaimsExceedCap: true
+        result:
+          compensationAmount: Claims paid proportionally to claimants' relative entitlements up to €5 000 000 per liable insurer
+          capped: true
+          titleTransfer: false
+        legal_basis: §38(1)
+        note: >
+          Amount of €5 000 000 is not index-linked by law text.
+          If cap is insufficient, later claimants still receive their proportional share
+          even if cap is technically exceeded.
+
+      - id: D7-R4
+        description: Excluded property — no compensation
+        conditions:
+          propertyCategory: excluded_property
+        result:
+          compensationAmount: No compensation
+          capped: false
+          titleTransfer: false
+        legal_basis: §40
+
+# ============================================================
+# D8 — CLAIM FILING DEADLINE
+# ============================================================
+  D8:
+    id: D8
+    label: Claim Filing Deadline
+    finnish: Korvausvaatimuksen esittämisen määräaika ja vanhentuminen
+    legal_basis: §61
+    inputs:
+      - id: awarenessDate
+        label: Date claimant became aware of accident and damage
+        type: date
+      - id: damageSufferingDate
+        label: Date damage consequence occurred
+        type: date
+      - id: compellingReason
+        label: Compelling reason exists for late filing
+        type: boolean
+    outputs:
+      - id: filingDeadline
+        label: Filing deadline
+        type: string
+      - id: absoluteDeadline
+        label: Absolute deadline regardless of awareness
+        type: string
+      - id: lateFilingPossible
+        label: Late filing may still be accepted
+        type: boolean
+    rules:
+      - id: D8-R1
+        description: Standard deadline — 3 years from awareness
+        conditions:
+          compellingReason: false
+        result:
+          filingDeadline: 3 years from awareness of accident and damage consequence
+          absoluteDeadline: 10 years from occurrence of damage consequence
+          lateFilingPossible: false
+        legal_basis: §61(1)
+
+      - id: D8-R2
+        description: Compelling reason — late claim may be accepted
+        conditions:
+          compellingReason: true
+        result:
+          filingDeadline: May be accepted after the 3-year deadline
+          absoluteDeadline: Not specified — case-by-case assessment
+          lateFilingPossible: true
+        legal_basis: §61(3)
+
+# ============================================================
+# D9 — INSURER DECISION DEADLINE
+# ============================================================
+  D9:
+    id: D9
+    label: Insurer Decision Deadline
+    finnish: Vakuutusyhtiön päätöksenteon määräaika
+    legal_basis: §62
+    inputs:
+      - id: receiptOfClaim
+        label: Date claim received
+        type: date
+      - id: receiptOfDocuments
+        label: Date all required documents and information received
+        type: date
+      - id: liabilityDisputed
+        label: Liability is disputed or unclear
+        type: boolean
+      - id: quantumFullyDetermined
+        label: Full quantum of compensation has been determined
+        type: boolean
+    outputs:
+      - id: investigationDeadline
+        label: Investigation start deadline
+        type: string
+      - id: paymentOrDenialDeadline
+        label: Deadline to pay or deny
+        type: string
+      - id: reasonedResponseDeadline
+        label: Deadline for reasoned response if disputed
+        type: string
+    rules:
+      - id: D9-R1
+        description: Investigation must begin within 7 working days of claim receipt
+        result:
+          investigationDeadline: 7 working days from claim receipt
+          paymentOrDenialDeadline: N/A (separate)
+          reasonedResponseDeadline: N/A (separate)
+        legal_basis: §62(1)
+
+      - id: D9-R2
+        description: Clear liability and quantum — pay within 1 month of receiving all docs
+        conditions:
+          liabilityDisputed: false
+          quantumFullyDetermined: true
+        result:
+          investigationDeadline: 7 working days
+          paymentOrDenialDeadline: 1 month from receipt of all required documents
+          reasonedResponseDeadline: N/A
+        legal_basis: §62(2)
+
+      - id: D9-R3
+        description: Undisputed portion — must pay within 1 month even if total is disputed
+        conditions:
+          liabilityDisputed: false
+          quantumFullyDetermined: false
+        result:
+          investigationDeadline: 7 working days
+          paymentOrDenialDeadline: 1 month — undisputed portion must be paid
+          reasonedResponseDeadline: 3 months from claim — reasoned response for disputed remainder
+        legal_basis: §62(2), §62(3), §62(4)
+
+      - id: D9-R4
+        description: Liability unclear — reasoned response within 3 months
+        conditions:
+          liabilityDisputed: true
+        result:
+          investigationDeadline: 7 working days
+          paymentOrDenialDeadline: 1 month — undisputed portion if any
+          reasonedResponseDeadline: 3 months from claim presentation
+        legal_basis: §62(4)
+
+# ============================================================
+# D10 — APPEAL CHAIN AND DEADLINES
+# ============================================================
+  D10:
+    id: D10
+    label: Appeal Chain and Deadlines
+    finnish: Muutoksenhakuketju ja määräajat
+    legal_basis: §65, §66, §79, §81
+    inputs:
+      - id: disputeType
+        label: Type of dispute
+        type: enum
+        values:
+          - compensation_amount_or_denial
+          - serious_permanent_disability_compensation
+          - continuing_loss_of_earnings_or_maintenance
+          - full_cost_payment_municipality
+          - other_insurer_decision
+      - id: writtenDecisionReceived
+        label: Written insurer decision received with deadline notice
+        type: boolean
+      - id: courtDecisionFinal
+        label: Final court judgment already given on the matter
+        type: boolean
+    outputs:
+      - id: step1_LVLBoard
+        label: Step 1 — LVL Board opinion
+        type: string
+      - id: step2_generalCourt
+        label: Step 2 — General court action
+        type: string
+      - id: obligatoryLVLConsultation
+        label: Insurer must consult LVL Board before deciding
+        type: boolean
+    rules:
+      - id: D10-R1
+        description: Standard compensation dispute — LVL board optional for claimant (1 year), court action (3 years)
+        conditions:
+          disputeType: compensation_amount_or_denial
+          courtDecisionFinal: false
+        result:
+          step1_LVLBoard: Optional — claimant, insurer or court may request opinion within 1 year of insurer decision
+          step2_generalCourt: Court action within 3 years of written insurer decision + deadline notice; LVL/board proceedings suspend limitation
+          obligatoryLVLConsultation: false
+        legal_basis: §65(1), §79(1)
+
+      - id: D10-R2
+        description: Serious permanent disability, continuing loss of earnings/maintenance — insurer MUST consult LVL Board
+        conditions:
+          disputeType:
+            in: [serious_permanent_disability_compensation, continuing_loss_of_earnings_or_maintenance]
+        result:
+          step1_LVLBoard: Mandatory — insurer must request LVL board opinion before issuing decision
+          step2_generalCourt: Court action within 3 years of written insurer decision
+          obligatoryLVLConsultation: true
+        legal_basis: §66(1)
+
+      - id: D10-R3
+        description: Full cost payment (täyskustannusmaksu) dispute by municipality/joint authority
+        conditions:
+          disputeType: full_cost_payment_municipality
+        result:
+          step1_LVLBoard: Not applicable (municipality is not claimant)
+          step2_generalCourt: Administrative appeal per hallintolainkäyttölaki
+          obligatoryLVLConsultation: false
+        legal_basis: §81(2)
+
+      - id: D10-R4
+        description: Court judgment already final — LVL Board cannot consider that aspect
+        conditions:
+          courtDecisionFinal: true
+        result:
+          step1_LVLBoard: LVL Board may not consider aspects already determined by final court judgment
+          step2_generalCourt: N/A (already decided)
+          obligatoryLVLConsultation: false
+        legal_basis: §65(2)
+
+# ============================================================
+# D11 — LVK LIABILITY (UNINSURED / UNKNOWN / EXEMPT VEHICLES)
+# ============================================================
+  D11:
+    id: D11
+    label: LVK Liability — Uninsured, Unknown and Exempt Vehicle Claims
+    finnish: Liikennevakuutuskeskuksen korvausvastuu
+    legal_basis: §43, §44, §45, §46
+    inputs:
+      - id: vehicleIdentified
+        label: Vehicle identified
+        type: boolean
+      - id: vehicleHadInsurance
+        label: Vehicle had valid insurance at time of accident
+        type: boolean
+      - id: vehicleExemptFromObligation_cat1to5
+        label: Vehicle exempt per §8(1)(1)-(5) (slow, combine, trailer, child, wheelchair)
+        type: boolean
+      - id: permanentHomeState
+        label: Vehicle's permanent home state
+        type: enum
+        values: [Finland, other_ETA, third_country]
+      - id: accidentInFinland
+        label: Accident occurred in Finland
+        type: boolean
+      - id: damageType
+        label: Type of damage
+        type: enum
+        values: [personal_injury, property_damage_hoofed_animals, property_damage_significant_with_personal, other_property_damage]
+      - id: claimantKnewUninsured
+        label: Claimant (occupant/driver) knew vehicle was uninsured
+        type: boolean
+    outputs:
+      - id: LVKLiable
+        label: LVK is liable
+        type: boolean
+      - id: conditionsForLiability
+        label: Conditions and scope of LVK liability
+        type: string
+    rules:
+      - id: D11-R1
+        description: Uninsured Finnish vehicle — LVK liable regardless of fault
+        conditions:
+          vehicleIdentified: true
+          vehicleHadInsurance: false
+          permanentHomeState: Finland
+          claimantKnewUninsured: false
+        result:
+          LVKLiable: true
+          conditionsForLiability: LVK compensates as if it were the insurer
+        legal_basis: §46(1)
+
+      - id: D11-R2
+        description: Claimant (occupant/driver) knew vehicle was uninsured — LVK may deny
+        conditions:
+          vehicleHadInsurance: false
+          claimantKnewUninsured: true
+        result:
+          LVKLiable: false
+          conditionsForLiability: LVK may deny if it can prove claimant's knowledge of no insurance
+        legal_basis: §46(2)
+
+      - id: D11-R3
+        description: Unknown (hit-and-run) vehicle — LVK covers personal injury and hoofed animal damage; also other property damage if significant personal injury
+        conditions:
+          vehicleIdentified: false
+          accidentInFinland: true
+          damageType:
+            in: [personal_injury, property_damage_hoofed_animals, property_damage_significant_with_personal]
+        result:
+          LVKLiable: true
+          conditionsForLiability: LVK liable for personal injury, hoofed animal property damage, and significant property damage connected to significant personal injury
+        legal_basis: §44
+
+      - id: D11-R4
+        description: Exempt Finnish vehicle (§8(1)(1)-(5)) — LVK liable in Finland
+        conditions:
+          vehicleExemptFromObligation_cat1to5: true
+          permanentHomeState: Finland
+          accidentInFinland: true
+        result:
+          LVKLiable: true
+          conditionsForLiability: LVK compensates for accidents in Finland caused by these exempt vehicles
+        legal_basis: §43(1)
+
+      - id: D11-R5
+        description: Exempt Finnish vehicle causing accident in another ETA state — LVK liable
+        conditions:
+          vehicleExemptFromObligation_cat1to5: true
+          permanentHomeState: Finland
+          accidentInFinland: false
+        result:
+          LVKLiable: true
+          conditionsForLiability: LVK liable for ETA accidents by exempt Finnish vehicles (unless state-owned)
+        legal_basis: §45(1)
+
+      - id: D11-R6
+        description: Foreign ETA vehicle — LVK primarily liable for accidents in Finland
+        conditions:
+          permanentHomeState: other_ETA
+          accidentInFinland: true
+        result:
+          LVKLiable: true
+          conditionsForLiability: LVK primarily liable; may reclaim from home state national guarantee fund
+        legal_basis: §32(4), §74
+
+# ============================================================
+# D12 — FOREIGN VEHICLE HANDLING
+# ============================================================
+  D12:
+    id: D12
+    label: Foreign Vehicle — Applicable Procedure
+    finnish: Ulkomaisen ajoneuvon käsittely
+    legal_basis: §7, §32(4), §45, §70, §71, §72, §91
+    inputs:
+      - id: vehicleHomeState
+        label: Vehicle's permanent home state
+        type: enum
+        values: [other_ETA, third_country_green_card, third_country_no_green_card]
+      - id: claimantResidence
+        label: Claimant's residence
+        type: enum
+        values: [Finland, other_ETA]
+      - id: insurerIdentified
+        label: Responsible insurer identified
+        type: boolean
+      - id: timeSinceAccident_months
+        label: Months elapsed since accident
+        type: integer
+      - id: compensationRepresentativeNamed
+        label: Compensation representative named in Finland
+        type: boolean
+    outputs:
+      - id: claimProcedure
+        label: Correct claim procedure
+        type: string
+      - id: LVKRole
+        label: LVK's role
+        type: string
+    rules:
+      - id: D12-R1
+        description: ETA vehicle, insurer identified, Finnish claimant — claim against insurer or Finnish rep within 3 months
+        conditions:
+          vehicleHomeState: other_ETA
+          claimantResidence: Finland
+          insurerIdentified: true
+          compensationRepresentativeNamed: true
+        result:
+          claimProcedure: File claim with responsible insurer or its Finnish compensation representative; 3-month response deadline
+          LVKRole: Fallback if no response within 3 months (§71)
+        legal_basis: §70(1), §70(2), §71
+
+      - id: D12-R2
+        description: ETA vehicle, Finnish claimant, insurer not identified within 2 months — claim to LVK
+        conditions:
+          vehicleHomeState: other_ETA
+          claimantResidence: Finland
+          insurerIdentified: false
+          timeSinceAccident_months:
+            greaterThan: 2
+        result:
+          claimProcedure: File claim directly with LVK as compensation body
+          LVKRole: Acts as compensation body (korvauselin) under EU Directive art. 10
+        legal_basis: §45(3), §71
+
+      - id: D12-R3
+        description: Third-country vehicle with no green card arriving in Finland — Customs collects border insurance premium
+        conditions:
+          vehicleHomeState: third_country_no_green_card
+        result:
+          claimProcedure: Customs (Tulli) collects border insurance premium at border; issues ETA-valid certificate on behalf of insurers
+          LVKRole: Receives premium collected by Customs
+        legal_basis: §91(2)
+
+# ============================================================
+# D13 — REDUCTION / DENIAL OF COMPENSATION
+# ============================================================
+  D13:
+    id: D13
+    label: Reduction or Denial of Compensation
+    finnish: Korvauksen alentaminen tai epääminen
+    legal_basis: §47, §48, §49, §50
+    inputs:
+      - id: causeType
+        label: Basis for reduction/denial
+        type: enum
+        values:
+          - victim_self_inflicted_intentionally
+          - victim_gross_negligence
+          - victim_ordinary_negligence
+          - alcohol_severe_BAC_1_2_permille_or_0_53_mg
+          - alcohol_moderate_BAC_0_5_permille_or_0_22_mg
+          - impairment_other_substance_severe
+          - impairment_other_substance_moderate
+          - knowing_unauthorised_vehicle_use
+          - no_reduction_basis
+      - id: damageType
+        label: Type of damage
+        type: enum
+        values: [personal_injury, property_damage, rehabilitation]
+      - id: ageUnder12
+        label: Victim under 12 years
+        type: boolean
+      - id: legallyNonCulpable
+        label: Victim legally non-culpable
+        type: boolean
+      - id: actingUnderNecessity
+        label: Victim acting under necessity to prevent damage
+        type: boolean
+    outputs:
+      - id: reductionApplied
+        label: Reduction applied
+        type: boolean
+      - id: reductionDegree
+        label: Degree of reduction
+        type: string
+      - id: rehabilitationAffected
+        label: Rehabilitation compensation affected
+        type: boolean
+    rules:
+      - id: D13-R1
+        description: Self-inflicted intentional injury — personal injury compensated only for contribution of other circumstances
+        conditions:
+          causeType: victim_self_inflicted_intentionally
+          damageType: personal_injury
+          ageUnder12: false
+          legallyNonCulpable: false
+        result:
+          reductionApplied: true
+          reductionDegree: Only proportion attributable to other circumstances compensated (can approach zero)
+          rehabilitationAffected: false
+        legal_basis: §47(1)
+
+      - id: D13-R2
+        description: Gross negligence — personal injury may be reduced or denied
+        conditions:
+          causeType: victim_gross_negligence
+          damageType: personal_injury
+          ageUnder12: false
+          legallyNonCulpable: false
+        result:
+          reductionApplied: true
+          reductionDegree: Reduction or denial proportional to circumstances
+          rehabilitationAffected: false
+        legal_basis: §47(1)
+
+      - id: D13-R3
+        description: Property damage contributory negligence — proportional reduction
+        conditions:
+          damageType: property_damage
+        result:
+          reductionApplied: true
+          reductionDegree: Equitable reduction proportional to victim's degree of fault
+          rehabilitationAffected: false
+        legal_basis: §47(3)
+
+      - id: D13-R4
+        description: Severe alcohol impairment (BAC ≥ 1.2 ‰ or ≥ 0.53 mg/l) — near-full denial of personal injury
+        conditions:
+          causeType:
+            in: [alcohol_severe_BAC_1_2_permille_or_0_53_mg, impairment_other_substance_severe]
+          damageType: personal_injury
+          ageUnder12: false
+          legallyNonCulpable: false
+        result:
+          reductionApplied: true
+          reductionDegree: Only contribution of other circumstances compensated (typically minimal)
+          rehabilitationAffected: false
+        legal_basis: §48(1)
+        note: BAC 1.2 ‰ in blood or 0.53 mg/l exhaled air triggers severe rule
+
+      - id: D13-R5
+        description: Moderate alcohol impairment (BAC ≥ 0.5 ‰ or ≥ 0.22 mg/l) — proportional reduction
+        conditions:
+          causeType:
+            in: [alcohol_moderate_BAC_0_5_permille_or_0_22_mg, impairment_other_substance_moderate]
+          damageType: personal_injury
+          ageUnder12: false
+          legallyNonCulpable: false
+        result:
+          reductionApplied: true
+          reductionDegree: Reduction proportional to victim's contribution to accident
+          rehabilitationAffected: false
+        legal_basis: §48(2)
+
+      - id: D13-R6
+        description: Rehabilitation compensation — NEVER reduced under §47 or §48
+        conditions:
+          damageType: rehabilitation
+        result:
+          reductionApplied: false
+          reductionDegree: No reduction regardless of contributory negligence or alcohol
+          rehabilitationAffected: false
+        legal_basis: §47(2), §48(3)
+        note: Exception — if personal injury compensation is denied entirely, rehabilitation is also not paid
+
+      - id: D13-R7
+        description: Under 12 / legally non-culpable / necessity — no reduction under §47-49
+        conditions:
+          ageUnder12: true
+        result:
+          reductionApplied: false
+          reductionDegree: No reduction; §47, §48, §49 cannot be invoked
+          rehabilitationAffected: false
+        legal_basis: §50
+
+      - id: D13-R8
+        description: Knowing unauthorised use of vehicle — compensation only for special reason
+        conditions:
+          causeType: knowing_unauthorised_vehicle_use
+          ageUnder12: false
+          legallyNonCulpable: false
+        result:
+          reductionApplied: true
+          reductionDegree: Generally denied; paid only for special reason (erityinen syy)
+          rehabilitationAffected: true
+        legal_basis: §49
+
+# ============================================================
+# D14 — SUBROGATION / RIGHT OF RECOURSE
+# ============================================================
+  D14:
+    id: D14
+    label: Subrogation / Right of Recourse
+    finnish: Takautumisoikeus
+    legal_basis: §73, §74
+    inputs:
+      - id: thirdPartyType
+        label: Type of party against whom recourse is sought
+        type: enum
+        values:
+          - private_individual
+          - employee_or_civil_servant
+          - vehicle_owner_keeper_driver_passenger
+          - company_or_organization
+          - national_guarantee_fund_ETA
+          - foreign_compensation_body_ETA
+      - id: causationBasis
+        label: Basis on which third party caused the event
+        type: enum
+        values:
+          - intent
+          - gross_negligence
+          - driving_under_severe_alcohol_influence
+          - ordinary_negligence_or_strict
+      - id: recoveryContext
+        label: Context of the LVK payment giving rise to recourse
+        type: enum
+        values:
+          - LVK_paid_for_uninsured_vehicle
+          - LVK_paid_for_unknown_vehicle
+          - LVK_paid_because_no_insurer_identified
+          - LVK_paid_insurer_insolvency
+          - insurer_paid_and_subrogates
+    outputs:
+      - id: recourseAvailable
+        label: Right of recourse available
+        type: boolean
+      - id: recourseAgainst
+        label: Recourse against whom
+        type: string
+      - id: conditions
+        label: Conditions for recourse
+        type: string
+    rules:
+      - id: D14-R1
+        description: Insurer subrogates against private individuals / vehicle parties — only for intent, gross negligence, or severe alcohol driving
+        conditions:
+          thirdPartyType:
+            in: [private_individual, employee_or_civil_servant, vehicle_owner_keeper_driver_passenger]
+          causationBasis:
+            in: [intent, gross_negligence, driving_under_severe_alcohol_influence]
+          recoveryContext: insurer_paid_and_subrogates
+        result:
+          recourseAvailable: true
+          recourseAgainst: The individual who caused the event intentionally, with gross negligence or while severely intoxicated
+          conditions: Insurer steps into claimant's shoes up to amount paid
+        legal_basis: §73
+
+      - id: D14-R2
+        description: Insurer subrogates against company/organization — for any causation basis
+        conditions:
+          thirdPartyType: company_or_organization
+          recoveryContext: insurer_paid_and_subrogates
+        result:
+          recourseAvailable: true
+          recourseAgainst: The company or organisation
+          conditions: Full subrogation without restriction to intent/gross negligence
+        legal_basis: §73
+
+      - id: D14-R3
+        description: LVK recourse against national guarantee fund — for uninsured ETA vehicle
+        conditions:
+          recoveryContext: LVK_paid_for_uninsured_vehicle
+          thirdPartyType: national_guarantee_fund_ETA
+        result:
+          recourseAvailable: true
+          recourseAgainst: National guarantee fund of ETA state where vehicle has permanent home (§74(1)(5))
+          conditions: LVK has paid and vehicle's home state fund is liable
+        legal_basis: §74(1)(5)
+
+      - id: D14-R4
+        description: LVK recourse against national guarantee fund — for unknown vehicle
+        conditions:
+          recoveryContext: LVK_paid_for_unknown_vehicle
+          thirdPartyType: national_guarantee_fund_ETA
+        result:
+          recourseAvailable: true
+          recourseAgainst: National guarantee fund of ETA state where accident occurred (§74(1)(3))
+          conditions: LVK has paid and vehicle remained unidentified
+        legal_basis: §74(1)(3)
+
+      - id: D14-R5
+        description: LVK recourse against foreign compensation body — where LVK paid due to insurer delay
+        conditions:
+          recoveryContext: LVK_paid_because_no_insurer_identified
+          thirdPartyType: foreign_compensation_body_ETA
+        result:
+          recourseAvailable: true
+          recourseAgainst: Compensation body of ETA state where responsible insurer has its seat
+          conditions: LVK subrogates to claimant's rights up to amount paid; and claimant's rights against tortfeasor/insurer also transfer to LVK
+        legal_basis: §74(2)
+
+      - id: D14-R6
+        description: LVK recourse following insurer insolvency — against liquidation/bankruptcy estate
+        conditions:
+          recoveryContext: LVK_paid_insurer_insolvency
+        result:
+          recourseAvailable: true
+          recourseAgainst: Liquidation or bankruptcy estate of insolvent insurer
+          conditions: Claimant's rights against estate transfer to LVK to the extent LVK has paid
+        legal_basis: §74(3)
