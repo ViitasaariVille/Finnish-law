@@ -126,11 +126,11 @@ def create_pyvis_network(G):
             title = f"{data.get('label', node)}\n({data.get('finnish', '')})\n\n{data.get('description', '')}\n\nLegal basis: {data.get('legal_basis', 'N/A')}"
             net.add_node(node, label=data.get("label", node), color=color, title=title, shape="box")
     
-    # Get list of existing nodes in the network
-    existing_nodes = set(G.nodes())
+    # Get list of existing nodes in the filtered network
+    existing_nodes = set(G_filtered.nodes())
     
-    for source, target, data in G.edges(data=True):
-        # Only add edge if both nodes exist
+    for source, target, data in G_filtered.edges(data=True):
+        # Only add edge if both nodes exist (they should, but just to be safe)
         if source in existing_nodes and target in existing_nodes:
             label = data.get("relationship", "")
             title = f"{label}\n\nLegal basis: {data.get('legal_basis', 'N/A')}\n\nNote: {data.get('note', 'N/A')}"
