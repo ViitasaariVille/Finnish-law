@@ -282,7 +282,11 @@ for node, data in G_filtered.nodes(data=True):
     net.add_node(node, label=data.get("label", node)[:25], color=color, title=title, shape=shape, size=size)
 
 # Add edges
+existing_nodes = set(G_filtered.nodes())
 for source, target, data in G_filtered.edges(data=True):
+    # Skip edges where nodes were filtered out
+    if source not in existing_nodes or target not in existing_nodes:
+        continue
     edge_type = data.get("edge_type", "unknown")
     color = data.get("color", "#888888")
     
