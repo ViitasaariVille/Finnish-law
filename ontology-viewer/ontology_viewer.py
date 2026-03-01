@@ -16,10 +16,12 @@ st.set_page_config(page_title="Finnish Work Accident Ontology", layout="wide")
 st.title("🇫🇮 Finnish Work Accident & Occupational Disease Insurance Ontology")
 st.markdown("Interactive knowledge graph visualization of Työtapaturma-ammattitautilaki (459/2015)")
 
+ONTOLOGY_PATH = os.path.join(os.path.dirname(__file__), "work_accident_ontology.yaml")
+
 # Load ontology
 @st.cache_data
 def load_ontology():
-    with open("tyotapaturma_ammattitautilaki/ontology/work_accident_ontology.yaml", "r", encoding="utf-8") as f:
+    with open(ONTOLOGY_PATH, "r", encoding="utf-8") as f:
         return yaml.safe_load(f)
 
 ontology = load_ontology()
