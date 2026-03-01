@@ -84,6 +84,10 @@ decisions:
           obligedParties: owner and keeper, jointly and severally
           obligationStartDate: From date of ownership/keepership transfer
         legal_basis: §5(1), §6(1)
+        automation:
+          level: full_auto
+          reason: "All conditions are objective, verifiable facts: vehicle's home state from registry, vehicle type, and removal status are all registry data. No discretion required."
+          legal_basis: "§5(1) — 'Ajoneuvo, jonka pysyvä kotipaikka on Suomessa, on vakuutettava'; §6(1) — 'Ajoneuvon omistaja ja haltija ovat velvollisia vakuuttamaan ajoneuvon'"
 
       - id: D1-R2
         description: Slow work machine (≤15 km/h, unregistered) — exempt
@@ -94,6 +98,10 @@ decisions:
           obligedParties: none (voluntary)
           obligationStartDate: N/A
         legal_basis: §8(1)(1)
+        automation:
+          level: full_auto
+          reason: "Vehicle type and maximum speed are objective, technically measurable criteria. Exempt category is defined by unambiguous statutory conditions."
+          legal_basis: "§8(1)(1) — 'sellaiselle moottorityökoneelle tai traktorille, jota ei tarvitse rekisteröidä ja jonka suurin rakenteellinen nopeus on enintään 15 kilometriä tunnissa'"
 
       - id: D1-R3
         description: Combine harvester / farm harvest machine (unregistered) — exempt
@@ -104,6 +112,10 @@ decisions:
           obligedParties: none (voluntary)
           obligationStartDate: N/A
         legal_basis: §8(1)(2)
+        automation:
+          level: full_auto
+          reason: "Vehicle type (combine harvester, farm harvest machine) and registration status are objective criteria determinable from vehicle specifications and registry data."
+          legal_basis: "§8(1)(2) — 'leikkuupuimurille tai muulle sadonkorjuuseen tarkoitetulle maatilatalouden moottorityökoneelle, jota ei tarvitse rekisteröidä'"
 
       - id: D1-R4
         description: Unregistered trailer — exempt
@@ -114,6 +126,10 @@ decisions:
           obligedParties: none (voluntary)
           obligationStartDate: N/A
         legal_basis: §8(1)(3)
+        automation:
+          level: full_auto
+          reason: "Trailer type and registration requirement are objective, technically defined criteria."
+          legal_basis: "§8(1)(3) — 'perävaunulle, jota ei tarvitse rekisteröidä'"
 
       - id: D1-R5
         description: Child-only unregistered vehicle — exempt
@@ -124,6 +140,10 @@ decisions:
           obligedParties: none (voluntary)
           obligationStartDate: N/A
         legal_basis: §8(1)(4)
+        automation:
+          level: full_auto
+          reason: "Vehicle design specification ('intended exclusively for children') is an objective technical criterion. Registration status verifiable from registry."
+          legal_basis: "§8(1)(4) — 'sellaiselle yksinomaan lapsen kuljetettavaksi tarkoitetulle ajoneuvolle, jota ei tarvitse rekisteröidä'"
 
       - id: D1-R6
         description: Disabled electric wheelchair / similar light vehicle (unregistered) — exempt
@@ -134,6 +154,10 @@ decisions:
           obligedParties: none (voluntary)
           obligationStartDate: N/A
         legal_basis: §8(1)(5)
+        automation:
+          level: full_auto
+          reason: "Vehicle category (electric wheelchair or equivalent light vehicle for disabled use) is an objective technical criterion verifiable from vehicle type classification."
+          legal_basis: "§8(1)(5) — 'sellaiselle yksinomaan vammaisten käyttöön tarkoitetulle sähköpyörätuolille tai muulle vastaavalle kevytrakenteiselle ajoneuvolle, jota ei tarvitse rekisteröidä'"
 
       - id: D1-R7
         description: State-owned vehicle — exempt (Valtiokonttori acts as insurer)
@@ -144,6 +168,10 @@ decisions:
           obligedParties: N/A — Valtiokonttori bears liability
           obligationStartDate: N/A
         legal_basis: §8(1)(7), §32(2)
+        automation:
+          level: full_auto
+          reason: "Ownership by the Finnish State is an objective, verifiable fact from the vehicle registry. No discretion required."
+          legal_basis: "§8(1)(7) — 'ajoneuvolle, jonka omistaja tai haltija on Suomen valtio'; §32(2) — Valtiokonttori bears liability for state-owned vehicles"
 
       - id: D1-R8
         description: Vehicle removed from traffic use AND not used in traffic — exempt
@@ -155,6 +183,10 @@ decisions:
           obligedParties: none (voluntary)
           obligationStartDate: N/A
         legal_basis: §8(1)(9)
+        automation:
+          level: full_auto
+          reason: "Removal from traffic use (liikennekäytöstä poisto) is a registry fact. Actual non-use in traffic is verifiable from traffic monitoring data. Both conditions are objective."
+          legal_basis: "§8(1)(9) — 'ajoneuvolle, joka on poistettu liikennekäytöstä eikä ajoneuvoa käytetä liikenteessä'"
 
       - id: D1-R9
         description: Vehicle permanently removed — no obligation
@@ -165,6 +197,10 @@ decisions:
           obligedParties: none
           obligationStartDate: N/A
         legal_basis: §8(1)(10)
+        automation:
+          level: full_auto
+          reason: "Permanent removal (lopullinen poisto) is a registry fact — an administrative act recorded in the vehicle registry with a definitive date."
+          legal_basis: "§8(1)(10) — 'ajoneuvolle, joka on poistettu lopullisesti liikennekäytöstä'"
 
       - id: D1-R10
         description: Third-country vehicle brought temporarily to Finland — border traffic insurance required (unless green card or LVK commitment)
@@ -177,6 +213,10 @@ decisions:
           obligedParties: person bringing vehicle to Finland
           obligationStartDate: Before entry into Finland
         legal_basis: §7(1)
+        automation:
+          level: full_auto
+          reason: "All conditions are objectively determinable: vehicle home state from registry/documents, green card validity from document check, LVK commitment from LVK records. No discretion required."
+          legal_basis: "§7(1) — 'Sen, joka tuo Suomeen tilapäistä käyttöä varten ajoneuvon, jonka pysyvä kotipaikka on kolmannessa maassa, tulee ottaa tälle ajoneuvolle rajaliikennevakuutus'"
 
       - id: D1-R11
         description: Third-country vehicle with valid green card — no border traffic insurance needed
@@ -188,6 +228,10 @@ decisions:
           obligedParties: N/A
           obligationStartDate: N/A
         legal_basis: §7(2)
+        automation:
+          level: full_auto
+          reason: "Green card validity is an objective document check. Expiry date and issuing territory are verifiable from the document itself."
+          legal_basis: "§7(2) — 'Rajaliikennevakuutusta ei kuitenkaan tarvitse ottaa sellaista ajoneuvoa varten, jolla on voimassa oleva vihreä kortti'"
 
       - id: D1-R12
         description: Other ETA vehicle — insured per home state law; LVK bears Finnish liability
@@ -199,6 +243,10 @@ decisions:
           obligationStartDate: N/A
         legal_basis: §43(2), §32(4)
         note: LVK is primarily liable for accidents in Finland caused by these vehicles
+        automation:
+          level: full_auto
+          reason: "Vehicle home state (other ETA) is an objective fact from the vehicle registration documents. The routing of liability to LVK is automatic under statute."
+          legal_basis: "§32(4) — 'Liikennevakuutuskeskus on ensisijaisesti vastuussa sellaisen ajoneuvon...Suomessa aiheuttamasta liikennevahingosta'"
 
 # ============================================================
 # D2 — PERSONAL SCOPE (WHO IS COVERED)
@@ -269,6 +317,10 @@ decisions:
           fromWhichInsurance: Vehicle's insurer (or LVK where applicable)
           restrictions: Subject to §47/48 reductions if contributory negligence or alcohol
         legal_basis: §31, §34
+        automation:
+          level: human_review
+          reason: "Basic eligibility (personal injury, no disqualifying knowledge) is determinable from objective facts. However, the §47/48 reduction caveat means a human must assess potential contributory negligence or alcohol impairment before finalising entitlement. System can make preliminary determination; human must confirm no reduction applies."
+          legal_basis: "§31 — 'Liikennevahinko korvataan...vaikka kukaan ei ole henkilökohtaisesti vahingonkorvausvelvollinen'; §47(1) — requires assessment of 'olosuhteet huomioon ottaen'"
 
       - id: D2-R2
         description: Occupant/driver knew vehicle was uninsured — generally not entitled from LVK
@@ -281,6 +333,10 @@ decisions:
           fromWhichInsurance: N/A
           restrictions: LVK can exclude per §46(2) if it can prove knowledge
         legal_basis: §46(2)
+        automation:
+          level: human_review
+          reason: "LVK must affirmatively prove that the claimant 'knew' (tienneen) the vehicle was uninsured. This is an evidentiary/factual assessment requiring human judgment to evaluate available evidence of knowledge."
+          legal_basis: "§46(2) — 'Liikennevakuutuskeskus voi osoittaa hänen tienneen ajoneuvon olleen vakuuttamaton' — burden of proof on LVK to demonstrate knowledge"
 
       - id: D2-R3
         description: Person in unlawfully used vehicle and knew of it — compensation only for special reason
@@ -291,6 +347,10 @@ decisions:
           fromWhichInsurance: N/A
           restrictions: Only compensated for special reason (erityinen syy)
         legal_basis: §49
+        automation:
+          level: human_decision
+          reason: "The exception 'erityinen syy' (special reason) is an explicitly discretionary standard requiring human judgment to assess whether special circumstances justify compensation despite unauthorized use knowledge."
+          legal_basis: "§49 — 'hänelle suoritetaan korvausta ajoneuvon vakuutuksesta vain erityisestä syystä' — the 'erityinen syy' standard is inherently discretionary"
 
       - id: D2-R4
         description: Under 12 / legally non-culpable — §47-49 contributory negligence rules cannot be invoked
@@ -301,6 +361,10 @@ decisions:
           fromWhichInsurance: Full coverage regardless of own conduct
           restrictions: §47, §48, §49 reductions cannot be applied
         legal_basis: §50
+        automation:
+          level: full_auto
+          reason: "Age under 12 is an objective, verifiable fact from identity documents. The statutory bar on invoking §47-49 reductions applies automatically by operation of law."
+          legal_basis: "§50 — 'jos henkilövahinkoa kärsinyt oli vahingon syntyessä kahtatoista vuotta nuorempi' — absolute rule, no discretion"
 
       - id: D2-R5
         description: Property damage — own vehicle damage NOT covered by own insurance
@@ -312,6 +376,10 @@ decisions:
           fromWhichInsurance: N/A
           restrictions: Own vehicle damage excluded from own motor liability insurance
         legal_basis: §40(1)
+        automation:
+          level: full_auto
+          reason: "The exclusion of own vehicle damage from own motor liability insurance is an absolute statutory rule based on objective categorisation of the damaged property."
+          legal_basis: "§40(1) — 'Ajoneuvon vakuutuksesta ei korvata vahinkoa, joka on aiheutunut tälle ajoneuvolle' — absolute exclusion"
 
       - id: D2-R6
         description: Property damage — personal effects of passenger (not owner/keeper) — covered
@@ -324,6 +392,10 @@ decisions:
           fromWhichInsurance: Vehicle's insurance
           restrictions: Passenger must not be owner or keeper of the vehicle
         legal_basis: §40(2)
+        automation:
+          level: full_auto
+          reason: "The conditions (property type = personal effects, person role = non-owner/keeper passenger) are objective and verifiable. The statutory exception is clearly defined without discretionary language."
+          legal_basis: "§40(2) — 'Vakuutuksesta korvataan kuitenkin vahinko, joka on aiheutunut muun matkustajan kuin ajoneuvon omistajan tai haltijan yllä tai mukana olleiden vaatteiden ja henkilökohtaisten käyttöesineiden vahingoittumisesta'"
 
       - id: D2-R7
         description: Property damage — owner/keeper/driver own property — NOT covered (except another vehicle they own)
@@ -338,6 +410,10 @@ decisions:
           fromWhichInsurance: N/A
           restrictions: Owner/keeper/driver own property excluded; exception for other vehicle they own
         legal_basis: §40(2)
+        automation:
+          level: full_auto
+          reason: "The exclusion of owner/keeper/driver own property is a categorical rule based on objective role identification and property categorisation. No discretionary language in the provision."
+          legal_basis: "§40(2) — 'Ajoneuvon vakuutuksesta ei korvata myöskään vahinkoa, joka on aiheutunut ajoneuvon omistajan, haltijan tai kuljettajan muulle kuin ajoneuvoissa tai muutoin hallinnassa olevalle omaisuudelle'"
 
 # ============================================================
 # D3 — TERRITORIAL SCOPE
@@ -386,6 +462,10 @@ decisions:
           applicableLaw: Finnish law (liikennevakuutuslaki)
           claimantChoice: false
         legal_basis: §13(1)
+        automation:
+          level: full_auto
+          reason: "Accident country (Finland) and vehicle insurance status are objective facts. Finnish law automatically applies without any discretion or comparison required."
+          legal_basis: "§13(1) — 'Liikennevakuutus on yhden vakuutusmaksun perusteella voimassa kaikissa ETA-valtioissa'"
 
       - id: D3-R2
         description: Accident in other ETA state — covered, law of accident state (or Finnish if better)
@@ -398,6 +478,10 @@ decisions:
           claimantChoice: true
         legal_basis: §13(1), §13(3), §13(4)
         note: Finnish resident may choose Finnish law per §13(4) if damage would otherwise be governed by non-Finnish ETA law
+        automation:
+          level: human_review
+          reason: "Whether Finnish law is 'better' (parempi) than the accident state law requires a comparative legal analysis of both legal systems' compensation outcomes. A system can flag the choice but a legal professional must verify which law is more favourable for the claimant's specific circumstances."
+          legal_basis: "§13(3) — 'Vakuutus kattaa...tämän lain mukaisen vakuutusturvan, jos se on ensiksi mainittua parempi' — the 'parempi' (better) comparison requires legal analysis"
 
       - id: D3-R3
         description: Transit through non-green-card state on direct ETA-to-ETA journey — covered for ETA nationals
@@ -411,6 +495,10 @@ decisions:
           applicableLaw: Finnish law
           claimantChoice: false
         legal_basis: §13(2)
+        automation:
+          level: full_auto
+          reason: "All conditions are objectively verifiable: accident country (transit state outside green card system), vehicle insurance, journey type (direct ETA-to-ETA from route documents), and claimant's ETA nationality from passport/identity document."
+          legal_basis: "§13(2) — 'korvataan ETA-valtion kansalaiselle myös sellainen liikennevahinko, joka on sattunut läpikuljettavalla alueella muussa kuin vihreä kortti -järjestelmään kuuluvassa valtiossa, kun kysymys on välittömästä matkasta ETA-valtiosta toiseen ETA-valtioon'"
 
       - id: D3-R4
         description: Accident in non-ETA, non-green-card third country — not covered
@@ -422,6 +510,10 @@ decisions:
           applicableLaw: N/A
           claimantChoice: false
         legal_basis: §13
+        automation:
+          level: full_auto
+          reason: "The accident country classification (third country outside ETA and green card system) is an objective, verifiable fact. The non-coverage outcome follows automatically from the statutory territorial limits."
+          legal_basis: "§13 — coverage is limited to ETA states and transit through non-green-card states on direct ETA-to-ETA journeys; third country accidents fall outside this scope by default"
 
 # ============================================================
 # D4 — COMPENSABLE EVENT CLASSIFICATION
@@ -476,6 +568,10 @@ decisions:
           damageCategory: personal_injury or property_damage (based on type)
           exclusionReason: null
         legal_basis: §1, §31
+        automation:
+          level: full_auto
+          reason: "Vehicle in normal road traffic use and damage not to own vehicle are objective, factually determinable conditions. The basic compensability follows automatically."
+          legal_basis: "§1 — 'moottoriajoneuvon liikenteeseen käyttämisestä aiheutuvien...vahinkojen korvaamisesta'; §31 — strict liability rule"
 
       - id: D4-R2
         description: Vehicle used off road for non-transport purpose — NOT compensable
@@ -486,6 +582,10 @@ decisions:
           damageCategory: excluded
           exclusionReason: §1(1) — off-road use for non-transport purpose
         legal_basis: §1(1)
+        automation:
+          level: human_decision
+          reason: "The statute uses 'olennaisesti' (essentially/substantially) muuhun tarkoitukseen — the threshold of 'essentially for non-transport purpose' is a qualitative assessment requiring human judgment. Whether a specific use is 'essentially' non-transport may not be clear from objective facts alone."
+          legal_basis: "§1(1) — 'sitä liikenneväylistä erillään olevassa paikassa käytetään olennaisesti muuhun tarkoitukseen kuin henkilöiden tai tavaran kuljettamiseen' — 'olennaisesti' requires human assessment"
 
       - id: D4-R3
         description: Vehicle stored, repaired, serviced or washed off road — NOT compensable
@@ -496,6 +596,10 @@ decisions:
           damageCategory: excluded
           exclusionReason: §1(2) — storage/maintenance off road
         legal_basis: §1(2)
+        automation:
+          level: full_auto
+          reason: "Storage, repair, servicing or washing are objectively verifiable activities. Location (off road/away from traffic route) is a factual determination. The exclusion applies automatically to these defined activities."
+          legal_basis: "§1(2) — 'se on säilytettävänä, korjattavana, huollettavana tai pestävänä liikenneväylistä erillään olevassa paikassa' — enumerated activities without discretionary language"
 
       - id: D4-R4
         description: Vehicle in competition/testing on traffic-isolated area — NOT compensable
@@ -506,6 +610,10 @@ decisions:
           damageCategory: excluded
           exclusionReason: §1(3) — competition or testing on isolated area
         legal_basis: §1(3)
+        automation:
+          level: full_auto
+          reason: "Competition/testing on traffic-isolated area is an objectively verifiable factual condition. The exclusion is categorical for this defined activity type."
+          legal_basis: "§1(3) — 'sitä käytetään liikenteestä eristetyllä alueella kilpailu- tai testaustarkoituksiin taikka kilpailuun välittömästi liittyvään harjoitteluun' — categorical exclusion"
 
       - id: D4-R5
         description: Damage to own vehicle — excluded from own insurance
@@ -516,6 +624,10 @@ decisions:
           damageCategory: excluded
           exclusionReason: §40(1) — own vehicle damage not covered by own insurance
         legal_basis: §40(1)
+        automation:
+          level: full_auto
+          reason: "Whether the damaged vehicle is the insured vehicle itself is an objective factual determination from vehicle identification data. The exclusion applies automatically."
+          legal_basis: "§40(1) — 'Ajoneuvon vakuutuksesta ei korvata vahinkoa, joka on aiheutunut tälle ajoneuvolle' — absolute exclusion without discretion"
 
       - id: D4-R6
         description: Damage during work performance while stationary — to worker or work object — excluded
@@ -527,6 +639,10 @@ decisions:
           damageCategory: excluded
           exclusionReason: §42 — work performance damage excluded
         legal_basis: §42
+        automation:
+          level: full_auto
+          reason: "Vehicle stationary status and work performance context are objectively verifiable factual conditions. The work object identification is a factual determination. The exclusion applies categorically to these defined circumstances."
+          legal_basis: "§42 — 'ajoneuvon ollessa liikkumattomana...joka suorittaa tässä tarkoitettua työtä' and 'työsuorituksen kohteena olevalle omaisuudelle' — categorical exclusion"
 
 # ============================================================
 # D5 — LIABILITY DETERMINATION
@@ -574,6 +690,10 @@ decisions:
           primaryLiableInsurer: Insurer of the vehicle
           interInsurerAllocation: N/A (single vehicle)
         legal_basis: §31, §32(1)
+        automation:
+          level: full_auto
+          reason: "Single vehicle accident with strict liability is an objective determination. The insurer of that vehicle is automatically liable without inter-insurer allocation complexity."
+          legal_basis: "§31 — 'Liikennevahinko korvataan...vaikka kukaan ei ole henkilökohtaisesti vahingonkorvausvelvollinen'; §32(1) — insurer liable for accidents during policy period"
 
       - id: D5-R2
         description: Multiple vehicles — victim was occupant — personal injury paid by occupant's vehicle insurer first
@@ -584,6 +704,10 @@ decisions:
           primaryLiableInsurer: Insurer of the vehicle in which victim was occupant/driver
           interInsurerAllocation: Inter-insurer split per §51 based on fault and circumstances
         legal_basis: §33(3), §51
+        automation:
+          level: human_decision
+          reason: "While the primary insurer (victim's vehicle) is objectively determinable, the inter-insurer allocation under §51 requires assessment of 'ilmenneeseen tuottamukseen ja muihin vahingon aiheuttaneisiin seikkoihin katsoen on kohtuullista' — fault assessment and 'kohtuullista' (reasonable/equitable) standard inherently require human judgment."
+          legal_basis: "§51 — 'vakuutusyhtiöt vastaavat korvauksesta yhteisvastuullisesti sen mukaan kuin ilmenneeseen tuottamukseen ja muihin vahingon aiheuttaneisiin seikkoihin katsoen on kohtuullista' — 'kohtuullista' is a discretionary standard"
 
       - id: D5-R3
         description: Multiple vehicles — third party victim may choose any involved vehicle's insurer
@@ -594,6 +718,10 @@ decisions:
           primaryLiableInsurer: Any insurer of vehicles involved (claimant's choice)
           interInsurerAllocation: Inter-insurer split per §51 based on fault and circumstances
         legal_basis: §33(3), §60(2)
+        automation:
+          level: human_decision
+          reason: "Claimant's choice of insurer is their autonomous decision. The subsequent inter-insurer allocation under §51 uses 'kohtuullista' (reasonable/equitable) standard requiring assessment of fault and all contributing circumstances — inherently discretionary."
+          legal_basis: "§51 — 'sen mukaan kuin ilmenneeseen tuottamukseen ja muihin vahingon aiheuttaneisiin seikkoihin katsoen on kohtuullista' — fault and circumstance assessment with discretionary 'kohtuullista' standard"
 
       - id: D5-R4
         description: Damage due solely to one vehicle's defect/loading — that vehicle's insurer bears full cost
@@ -605,6 +733,10 @@ decisions:
           primaryLiableInsurer: Insurer of the defective/misladen vehicle
           interInsurerAllocation: 100% to defective vehicle insurer
         legal_basis: §51
+        automation:
+          level: human_review
+          reason: "The determination that damage resulted 'solely' (yksinomaan) from a vehicle's defect or faulty loading requires factual/technical investigation. While the outcome (100% allocation) is automatic once established, a human expert must verify the exclusive causal link."
+          legal_basis: "§51 — 'Jos vahinko on kuitenkin johtunut yksinomaan tietyn ajoneuvon puutteellisuudesta, virheellisestä kuormauksesta tai sen puolella olevasta tuottamuksesta' — 'yksinomaan' (solely) requires causal assessment"
 
 # ============================================================
 # D6 — PERSONAL INJURY COMPENSATION ELIGIBILITY
@@ -657,6 +789,10 @@ decisions:
           indexAdjusted: false
           indexMechanism: null
         legal_basis: §34(1)
+        automation:
+          level: human_review
+          reason: "Whether an injury is 'more than minor' (ei vähäinen) is a medical/legal threshold assessment requiring professional judgment. The system can flag eligibility once the threshold determination is made by a medical expert, but the threshold determination itself requires human expertise."
+          legal_basis: "§34(1) — 'Oikeutta korvaukseen kivusta ja särystä sekä muusta tilapäisestä haitasta ei ole, jos henkilövahinko on vähäinen' — the 'vähäinen' threshold requires medical and legal assessment"
 
       - id: D6-R2
         description: Pain and suffering — minor injury → not eligible
@@ -670,6 +806,10 @@ decisions:
           indexAdjusted: false
           indexMechanism: null
         legal_basis: §34(1)
+        automation:
+          level: human_review
+          reason: "The determination that an injury is 'minor' (vähäinen) requires medical professional assessment. While the consequent ineligibility is automatic, the predicate medical classification cannot be automated."
+          legal_basis: "§34(1) — 'jos henkilövahinko on vähäinen' — medical classification of injury severity requires human expertise"
 
       - id: D6-R3
         description: Loss of earnings — eligible; index adjusted; coordinate with työtapaturma
@@ -682,6 +822,10 @@ decisions:
           indexAdjusted: true
           indexMechanism: Continuing compensation adjusted annually by työeläkeindeksi (§35(1)); historical wages adjusted by palkkakerroin to accident year (§35(2))
         legal_basis: §34(1), §35, §36
+        automation:
+          level: human_review
+          reason: "Eligibility for loss of earnings compensation is objective (injury type). However, calculating actual earnings loss requires verification of employment history, wages, and coordination with tapaturma scheme payments — this requires human professional review even if the index adjustment formulas are automatic."
+          legal_basis: "§35(2) — 'Ansionmenetyksen ja elatuksen menetyksen määrittämistä varten eri vuosien ansiotulot tarkistetaan...palkkakertoimella' — index formula is automatic; §36 — coordination requires professional assessment"
 
       - id: D6-R4
         description: Permanent disability — eligible; board opinion mandatory if serious
@@ -694,6 +838,10 @@ decisions:
           indexAdjusted: true
           indexMechanism: Continuing compensation adjusted annually by työeläkeindeksi
         legal_basis: §34(1), §35, §66(1)(3)
+        automation:
+          level: human_decision
+          reason: "Determining permanent disability degree and whether the injury qualifies as 'vaikea vamma' (serious injury) requiring mandatory LVL Board consultation are inherently medical-legal determinations. The disability assessment and causation analysis cannot be automated. Mandatory LVL Board involvement for serious cases confirms legislative intent that human expert judgment is required."
+          legal_basis: "§66(1)(3) — 'haitan perusteella suoritettavaa korvausta, jos vamma on vaikea' — mandatory LVL consultation reflects that 'vaikea vamma' requires expert judgment; medical causation is also inherently discretionary"
 
       - id: D6-R5
         description: Death benefits / loss of maintenance — eligible; board opinion for continuing compensation
@@ -707,6 +855,10 @@ decisions:
           indexAdjusted: true
           indexMechanism: Continuing maintenance loss compensation adjusted by työeläkeindeksi annually
         legal_basis: §34(1), §35, §66(1)(1)
+        automation:
+          level: human_review
+          reason: "Death as the triggering event is objective. However, calculating loss of maintenance requires assessment of dependency relationships, future earnings projections, and the deceased's contribution — these require professional review. Mandatory LVL consultation for continuing loss of maintenance/earnings applies per §66(1)(1)."
+          legal_basis: "§66(1)(1) — 'pysyvän ansionmenetyksen taikka kuoleman perusteella suoritettavaa jatkuvaa korvausta' — mandatory LVL consultation required for continuing compensation"
 
       - id: D6-R6
         description: Parallel työtapaturma right — motor insurance pays only excess
@@ -719,6 +871,10 @@ decisions:
           indexAdjusted: true
           indexMechanism: Per injury type above
         legal_basis: §36
+        automation:
+          level: human_review
+          reason: "Determining what has been or will be paid under the parallel tapaturma scheme, and calculating the residual motor insurance obligation, requires professional coordination between schemes. The coordination calculation itself requires human review of both schemes' decisions."
+          legal_basis: "§36 — 'korvataan mainitun ajoneuvon liikennevakuutuksesta vain se osa vahingosta, jota ei korvata edellä mainittujen lakien mukaan' — residual calculation requires coordination assessment"
 
 # ============================================================
 # D7 — PROPERTY DAMAGE COMPENSATION
@@ -765,6 +921,10 @@ decisions:
           capped: true
           titleTransfer: false
         legal_basis: §37(2)
+        automation:
+          level: human_review
+          reason: "Determining the actual repair cost or 'equivalent amount' requires assessment of repair shop estimates and reasonableness of costs. The determination of repairability vs. total loss also requires professional technical assessment. A human must verify that quoted repair costs are reasonable."
+          legal_basis: "§37(2) — 'Ajoneuvolle aiheutuneena vahinkona korvataan korjauskustannus tai sitä vastaava määrä' — 'sitä vastaava määrä' (equivalent amount) requires professional assessment of reasonableness"
 
       - id: D7-R2
         description: Total loss vehicle — fair market value before accident
@@ -776,6 +936,10 @@ decisions:
           capped: true
           titleTransfer: true
         legal_basis: §37(2)
+        automation:
+          level: human_review
+          reason: "Determining 'käypä arvo' (fair market value) of a vehicle immediately before the accident requires professional valuation. Market values vary by condition, mileage, optional equipment and comparable sales — this is a professional assessment task, not purely arithmetic."
+          legal_basis: "§37(2) — 'esinevahinkona korvataan ajoneuvon käypä arvo välittömästi ennen vahinkotapahtumaa' — 'käypä arvo' (fair market value) requires professional valuation"
 
       - id: D7-R3
         description: Property cap per liable insurance — €5 000 000 max
@@ -790,6 +954,10 @@ decisions:
           Amount of €5 000 000 is not index-linked by law text.
           If cap is insufficient, later claimants still receive their proportional share
           even if cap is technically exceeded.
+        automation:
+          level: full_auto
+          reason: "Once individual claim amounts are established, the proportional allocation calculation within the €5 000 000 cap is pure arithmetic. The cap amount is a fixed statutory figure. The proportional distribution formula is mathematically deterministic."
+          legal_basis: "§38(1) — 'Esinevahinkona korvataan enintään 5 000 000 euroa kutakin vahingosta vastuussa olevaa liikennevakuutusta kohden' — fixed statutory cap with arithmetic distribution"
 
       - id: D7-R4
         description: Excluded property — no compensation
@@ -800,6 +968,10 @@ decisions:
           capped: false
           titleTransfer: false
         legal_basis: §40
+        automation:
+          level: full_auto
+          reason: "Property categorisation as excluded (own vehicle, coupled vehicle, owner/keeper property) is objective based on property identity and ownership. The exclusion applies automatically once the category is established."
+          legal_basis: "§40 — categorical exclusions apply automatically based on objective property classification"
 
 # ============================================================
 # D8 — CLAIM FILING DEADLINE
@@ -839,6 +1011,10 @@ decisions:
           absoluteDeadline: 10 years from occurrence of damage consequence
           lateFilingPossible: false
         legal_basis: §61(1)
+        automation:
+          level: full_auto
+          reason: "Deadline calculation is pure date arithmetic from the awareness date and damage date. Both 3-year and 10-year periods are fixed statutory terms calculable from objective dates."
+          legal_basis: "§61(1) — 'Korvausvaatimus on esitettävä vakuutusyhtiölle kolmen vuoden kuluessa siitä, kun korvauksen hakija on saanut tietää vahinkotapahtumasta' — fixed 3-year + 10-year statutory periods"
 
       - id: D8-R2
         description: Compelling reason — late claim may be accepted
@@ -849,6 +1025,10 @@ decisions:
           absoluteDeadline: Not specified — case-by-case assessment
           lateFilingPossible: true
         legal_basis: §61(3)
+        automation:
+          level: human_decision
+          reason: "Whether a 'compelling reason' (erityisen painava syy) exists for late filing is an inherently discretionary determination. The law provides no objective criteria — it requires a case-by-case assessment of circumstances that exceed ordinary difficulty."
+          legal_basis: "§61(3) — 'Erityisen painavasta syystä korvausvaatimus voidaan käsitellä myös 1 momentissa säädetyn määräajan jälkeen' — 'erityisen painava syy' is a discretionary threshold"
 
 # ============================================================
 # D9 — INSURER DECISION DEADLINE
@@ -889,6 +1069,10 @@ decisions:
           paymentOrDenialDeadline: N/A (separate)
           reasonedResponseDeadline: N/A (separate)
         legal_basis: §62(1)
+        automation:
+          level: full_auto
+          reason: "Deadline calculation is pure calendar arithmetic (7 working days from claim receipt date). The obligation to begin investigation is automatic; only the deadline calculation is in scope here."
+          legal_basis: "§62(1) — 'Vakuutusyhtiön on aloitettava korvausasian selvittäminen viipymättä ja viimeistään seitsemän arkipäivän kuluessa vireilletulosta' — fixed 7 working day deadline"
 
       - id: D9-R2
         description: Clear liability and quantum — pay within 1 month of receiving all docs
@@ -900,6 +1084,10 @@ decisions:
           paymentOrDenialDeadline: 1 month from receipt of all required documents
           reasonedResponseDeadline: N/A
         legal_basis: §62(2)
+        automation:
+          level: full_auto
+          reason: "Once the predicate conditions (undisputed liability, determined quantum) are established by professional review, the 1-month deadline is pure calendar arithmetic. The deadline tracking itself is fully automatable."
+          legal_basis: "§62(2) — 'suoritettava korvaus...viimeistään kuukauden kuluttua siitä, kun se on saanut...asiakirjat ja tiedot' — fixed 1-month deadline from objective trigger date"
 
       - id: D9-R3
         description: Undisputed portion — must pay within 1 month even if total is disputed
@@ -911,6 +1099,10 @@ decisions:
           paymentOrDenialDeadline: 1 month — undisputed portion must be paid
           reasonedResponseDeadline: 3 months from claim — reasoned response for disputed remainder
         legal_basis: §62(2), §62(3), §62(4)
+        automation:
+          level: human_review
+          reason: "Determining which portion of the quantum is 'undisputed' (riidaton) requires professional legal assessment of the facts and arguments. The deadline calculations are arithmetic once the undisputed amount is identified by a professional."
+          legal_basis: "§62(3) — 'vakuutusyhtiö on kuitenkin velvollinen suorittamaan...korvauksen riidattoman osan' — determining the 'riidaton' (undisputed) portion requires professional assessment"
 
       - id: D9-R4
         description: Liability unclear — reasoned response within 3 months
@@ -921,6 +1113,10 @@ decisions:
           paymentOrDenialDeadline: 1 month — undisputed portion if any
           reasonedResponseDeadline: 3 months from claim presentation
         legal_basis: §62(4)
+        automation:
+          level: human_review
+          reason: "The determination that liability is 'unclear' (epäselvä) is a legal assessment. Once established, the 3-month deadline is arithmetic. Drafting the 'reasoned response' (perusteltu vastaus) is inherently a professional legal task."
+          legal_basis: "§62(4) — 'Jos vastuu korvauksesta on epäselvä...vakuutusyhtiön on...annettava siihen perusteltu vastaus' — 'epäselvä' (unclear) requires legal assessment; perusteltu vastaus requires professional drafting"
 
 # ============================================================
 # D10 — APPEAL CHAIN AND DEADLINES
@@ -967,6 +1163,10 @@ decisions:
           step2_generalCourt: Court action within 3 years of written insurer decision + deadline notice; LVL/board proceedings suspend limitation
           obligatoryLVLConsultation: false
         legal_basis: §65(1), §79(1)
+        automation:
+          level: full_auto
+          reason: "Procedural routing and deadline calculation are objective: 1-year LVL board window and 3-year court action deadline are fixed periods calculable from the insurer decision date. The routing determination (standard dispute, no final court judgment) is based on objective classification of dispute type."
+          legal_basis: "§65(1) — '...oikeus pyytää liikennevahinkolautakunnalta lausuntoa vuoden kuluessa vakuutusyhtiön päätöksen antamisesta'; §79(1) — 'kolmen vuoden kuluessa...kirjallisen tiedon vakuutusyhtiön päätöksestä' — fixed statutory deadlines"
 
       - id: D10-R2
         description: Serious permanent disability, continuing loss of earnings/maintenance — insurer MUST consult LVL Board
@@ -978,6 +1178,10 @@ decisions:
           step2_generalCourt: Court action within 3 years of written insurer decision
           obligatoryLVLConsultation: true
         legal_basis: §66(1)
+        automation:
+          level: full_auto
+          reason: "The trigger for mandatory LVL consultation is objective: the dispute type (serious permanent disability, continuing earnings/maintenance loss) is a categorical classification. Once the category is established, the mandatory consultation requirement activates automatically. The classification itself may require human review (see D6-R4), but the routing rule is automatic."
+          legal_basis: "§66(1) — enumerated categories with mandatory LVL consultation — 'Vakuutusyhtiön on pyydettävä lausunto liikennevahinkolautakunnalta' — mandatory once category is established"
 
       - id: D10-R3
         description: Full cost payment (täyskustannusmaksu) dispute by municipality/joint authority
@@ -988,6 +1192,10 @@ decisions:
           step2_generalCourt: Administrative appeal per hallintolainkäyttölaki
           obligatoryLVLConsultation: false
         legal_basis: §81(2)
+        automation:
+          level: full_auto
+          reason: "Procedural routing for municipality disputes is categorical: municipalities use administrative appeal, not LVL board. The routing determination is based on objective party classification (municipality vs. individual claimant)."
+          legal_basis: "§81(2) — 'Kunta tai kuntayhtymä saa hakea muutosta täyskustannusmaksua koskevaan päätökseen siten kuin hallintolainkäyttölaissa säädetään' — categorical procedural rule"
 
       - id: D10-R4
         description: Court judgment already final — LVL Board cannot consider that aspect
@@ -998,6 +1206,10 @@ decisions:
           step2_generalCourt: N/A (already decided)
           obligatoryLVLConsultation: false
         legal_basis: §65(2)
+        automation:
+          level: full_auto
+          reason: "Whether a final court judgment (lainvoimainen ratkaisu) exists on the matter is an objective, verifiable fact from court records. The consequent bar on LVL Board consideration applies automatically."
+          legal_basis: "§65(2) — 'Jos korvausasiassa on annettu tuomioistuimen lainvoimainen ratkaisu, liikennevahinkolautakunta ei saa käsitellä asiaa siltä osin kuin tuomioistuin on ratkaissut sen' — automatic bar based on objective fact"
 
 # ============================================================
 # D11 — LVK LIABILITY (UNINSURED / UNKNOWN / EXEMPT VEHICLES)
@@ -1050,6 +1262,10 @@ decisions:
           LVKLiable: true
           conditionsForLiability: LVK compensates as if it were the insurer
         legal_basis: §46(1)
+        automation:
+          level: full_auto
+          reason: "All conditions are objectively verifiable: vehicle identification from accident report, insurance status from LVK/insurance register, home state from registry, claimant's lack of knowledge (default unless proven otherwise). LVK liability follows automatically."
+          legal_basis: "§46(1) — 'Liikennevakuutuskeskus korvaa liikennevahingon, jos ajoneuvolla ei vahingon sattuessa ollut voimassaolevaa vakuutusta' — automatic liability rule"
 
       - id: D11-R2
         description: Claimant (occupant/driver) knew vehicle was uninsured — LVK may deny
@@ -1060,6 +1276,10 @@ decisions:
           LVKLiable: false
           conditionsForLiability: LVK may deny if it can prove claimant's knowledge of no insurance
         legal_basis: §46(2)
+        automation:
+          level: human_review
+          reason: "LVK must affirmatively 'prove' (osoittaa) the claimant's knowledge. This evidentiary burden requires assessment of available evidence of knowledge — communications, relationship to the vehicle, circumstances. A human must evaluate the evidence."
+          legal_basis: "§46(2) — 'Liikennevakuutuskeskus voi osoittaa hänen tienneen ajoneuvon olleen vakuuttamaton' — burden of proof on LVK requiring evidentiary assessment"
 
       - id: D11-R3
         description: Unknown (hit-and-run) vehicle — LVK covers personal injury and hoofed animal damage; also other property damage if significant personal injury
@@ -1072,6 +1292,10 @@ decisions:
           LVKLiable: true
           conditionsForLiability: LVK liable for personal injury, hoofed animal property damage, and significant property damage connected to significant personal injury
         legal_basis: §44
+        automation:
+          level: human_review
+          reason: "Whether property damage qualifies as 'significant property damage connected to significant personal injury' (merkittävän henkilövahingon yhteydessä aiheutunut muu esinevahink) requires professional assessment of the injury severity and connection between the personal injury and property damage."
+          legal_basis: "§44 — 'merkittävän henkilövahingon yhteydessä aiheutuneen muun esinevahingon' — 'merkittävä' (significant) personal injury threshold requires professional assessment"
 
       - id: D11-R4
         description: Exempt Finnish vehicle (§8(1)(1)-(5)) — LVK liable in Finland
@@ -1083,6 +1307,10 @@ decisions:
           LVKLiable: true
           conditionsForLiability: LVK compensates for accidents in Finland caused by these exempt vehicles
         legal_basis: §43(1)
+        automation:
+          level: full_auto
+          reason: "All conditions are objective: vehicle exempt category (§8(1)(1)-(5)) from vehicle classification data, Finnish home state from registry, accident location from accident report. LVK liability follows automatically."
+          legal_basis: "§43(1) — 'Liikennevakuutuskeskus korvaa Suomessa sattuneen liikennevahingon, joka on aiheutunut sellaisen ajoneuvon liikenteeseen käyttämisestä, jonka pysyvä kotipaikka on Suomessa ja jolle ei 8 §:n 1 momentin 1–5 kohdan mukaan tarvitse ottaa liikennevakuutusta'"
 
       - id: D11-R5
         description: Exempt Finnish vehicle causing accident in another ETA state — LVK liable
@@ -1094,6 +1322,10 @@ decisions:
           LVKLiable: true
           conditionsForLiability: LVK liable for ETA accidents by exempt Finnish vehicles (unless state-owned)
         legal_basis: §45(1)
+        automation:
+          level: full_auto
+          reason: "All conditions are objective: exempt vehicle category, Finnish home state from registry, accident location from accident report. The exception for state-owned vehicles is an objective ownership check. LVK liability follows automatically."
+          legal_basis: "§45(1) — 'Liikennevakuutuskeskus korvaa 43 §:n 1 momentissa tarkoitetun ajoneuvon liikenteeseen käyttämisestä aiheutuneen liikennevahingon silloin, kun se on sattunut muussa ETA-valtiossa kuin Suomessa, jollei ajoneuvon omistaja tai haltija ole Suomen valtio'"
 
       - id: D11-R6
         description: Foreign ETA vehicle — LVK primarily liable for accidents in Finland
@@ -1104,6 +1336,10 @@ decisions:
           LVKLiable: true
           conditionsForLiability: LVK primarily liable; may reclaim from home state national guarantee fund
         legal_basis: §32(4), §74
+        automation:
+          level: full_auto
+          reason: "Vehicle's ETA home state and accident location in Finland are both objective, verifiable facts. The primary LVK liability for foreign ETA vehicles causing accidents in Finland follows automatically by statute."
+          legal_basis: "§32(4) — 'Liikennevakuutuskeskus on ensisijaisesti vastuussa sellaisen ajoneuvon, jonka pysyvä kotipaikka on muualla kuin Suomessa, Suomessa aiheuttamasta liikennevahingosta'"
 
 # ============================================================
 # D12 — FOREIGN VEHICLE HANDLING
@@ -1150,6 +1386,10 @@ decisions:
           claimProcedure: File claim with responsible insurer or its Finnish compensation representative; 3-month response deadline
           LVKRole: Fallback if no response within 3 months (§71)
         legal_basis: §70(1), §70(2), §71
+        automation:
+          level: full_auto
+          reason: "All conditions are objectively verifiable: vehicle home state, claimant residence, insurer identification from LVK database, compensation representative from LVK registry. The procedural routing and 3-month deadline are automatic."
+          legal_basis: "§70(1)(2) — 'Korvausedustajan on kolmen kuukauden kuluessa...korvattava...liikennevahinko tai tehtävä perusteltu korvaustarjous' — fixed 3-month deadline"
 
       - id: D12-R2
         description: ETA vehicle, Finnish claimant, insurer not identified within 2 months — claim to LVK
@@ -1163,6 +1403,10 @@ decisions:
           claimProcedure: File claim directly with LVK as compensation body
           LVKRole: Acts as compensation body (korvauselin) under EU Directive art. 10
         legal_basis: §45(3), §71
+        automation:
+          level: full_auto
+          reason: "All conditions are objectively verifiable: vehicle home state, claimant residence, insurer non-identification, time elapsed since accident. The routing to LVK triggers automatically once the 2-month period has passed without insurer identification."
+          legal_basis: "§45(3) — 'eikä korvausvelvollista vakuutusyhtiötä saada selville kahden kuukauden kuluessa vahingon tapahtumisesta' — objective time-based trigger"
 
       - id: D12-R3
         description: Third-country vehicle with no green card arriving in Finland — Customs collects border insurance premium
@@ -1172,6 +1416,10 @@ decisions:
           claimProcedure: Customs (Tulli) collects border insurance premium at border; issues ETA-valid certificate on behalf of insurers
           LVKRole: Receives premium collected by Customs
         legal_basis: §91(2)
+        automation:
+          level: full_auto
+          reason: "Third-country vehicle without green card status is objectively determinable at border crossing. Customs collection of the premium and LVK's receipt are administrative procedures following automatically from the vehicle's status."
+          legal_basis: "§91(2) — 'Tulli kantaa vakuutusmaksun siltä ajalta, jona ajoneuvoa on tarkoitus käyttää Suomessa tai muussa ETA-valtiossa' — automatic administrative procedure"
 
 # ============================================================
 # D13 — REDUCTION / DENIAL OF COMPENSATION
@@ -1231,6 +1479,10 @@ decisions:
           reductionDegree: Only proportion attributable to other circumstances compensated (can approach zero)
           rehabilitationAffected: false
         legal_basis: §47(1)
+        automation:
+          level: human_decision
+          reason: "Determining 'what proportion was due to other circumstances' (muut olosuhteet ovat vaikuttaneet vahingon syntymiseen) requires causal analysis weighing intentional action against contributing factors. This causal apportionment is inherently a human judgment call."
+          legal_basis: "§47(1) — 'korvausta suoritetaan ainoastaan siltä osin kuin muut olosuhteet ovat vaikuttaneet vahingon syntymiseen' — causal apportionment between intent and other circumstances requires human judgment"
 
       - id: D13-R2
         description: Gross negligence — personal injury may be reduced or denied
@@ -1244,6 +1496,10 @@ decisions:
           reductionDegree: Reduction or denial proportional to circumstances
           rehabilitationAffected: false
         legal_basis: §47(1)
+        automation:
+          level: human_decision
+          reason: "§47(1) explicitly requires that reduction/denial be 'sen mukaan kuin olosuhteet huomioon ottaen on kohtuullista' (as is reasonable taking circumstances into account). The 'kohtuullista' standard combined with 'olosuhteet huomioon ottaen' is the paradigmatic example of legally mandated human discretion. Automation would violate the statutory standard."
+          legal_basis: "§47(1) — 'törkeällä huolimattomuudella myötävaikuttanut...korvausta voidaan alentaa tai evätä se sen mukaan kuin olosuhteet huomioon ottaen on kohtuullista' — explicit discretion ('kohtuullista' + 'olosuhteet huomioon ottaen')"
 
       - id: D13-R3
         description: Property damage contributory negligence — proportional reduction
@@ -1254,6 +1510,10 @@ decisions:
           reductionDegree: Equitable reduction proportional to victim's degree of fault
           rehabilitationAffected: false
         legal_basis: §47(3)
+        automation:
+          level: human_decision
+          reason: "§47(3) requires reduction 'kohtuuden mukaan' (according to equity/reasonableness) taking into account 'vahinkoa kärsineen viaksi jäävä syyllisyyden määrä ja muut olosuhteet' — both the degree of fault and other circumstances must be weighed. This is explicitly discretionary and cannot be automated."
+          legal_basis: "§47(3) — 'Esinevahingosta suoritettavaa korvausta voidaan...kohtuuden mukaan alentaa...ottaen huomioon vahinkoa kärsineen viaksi jäävä syyllisyyden määrä ja muut olosuhteet' — 'kohtuuden mukaan' + fault degree assessment"
 
       - id: D13-R4
         description: Severe alcohol impairment (BAC ≥ 1.2 ‰ or ≥ 0.53 mg/l) — near-full denial of personal injury
@@ -1269,6 +1529,10 @@ decisions:
           rehabilitationAffected: false
         legal_basis: §48(1)
         note: BAC 1.2 ‰ in blood or 0.53 mg/l exhaled air triggers severe rule
+        automation:
+          level: human_decision
+          reason: "While the BAC threshold (≥1.2‰ or ≥0.53 mg/l) is objectively measurable and triggers the severe rule automatically, the resulting compensation is 'only to the extent other circumstances contributed' — this causal apportionment (what did other circumstances contribute?) requires human judgment. The threshold check is full_auto but the compensation calculation is human_decision."
+          legal_basis: "§48(1) — 'hänelle aiheutunut henkilövahinko korvataan vain siltä osin kuin muut olosuhteet ovat vaikuttaneet vahinkoon' — the 'other circumstances contribution' assessment requires human causal judgment"
 
       - id: D13-R5
         description: Moderate alcohol impairment (BAC ≥ 0.5 ‰ or ≥ 0.22 mg/l) — proportional reduction
@@ -1283,6 +1547,10 @@ decisions:
           reductionDegree: Reduction proportional to victim's contribution to accident
           rehabilitationAffected: false
         legal_basis: §48(2)
+        automation:
+          level: human_decision
+          reason: "§48(2) requires reduction 'sen mukaan, mikä oli hänen osuutensa vahinkoon' (according to what was their contribution to the accident). Determining the claimant's proportional contribution to the accident causation is an inherently discretionary factual and causal assessment."
+          legal_basis: "§48(2) — 'korvausta alennetaan sen mukaan, mikä oli hänen osuutensa vahinkoon' — proportional contribution to accident causation is a discretionary causal assessment"
 
       - id: D13-R6
         description: Rehabilitation compensation — NEVER reduced under §47 or §48
@@ -1294,6 +1562,10 @@ decisions:
           rehabilitationAffected: false
         legal_basis: §47(2), §48(3)
         note: Exception — if personal injury compensation is denied entirely, rehabilitation is also not paid
+        automation:
+          level: full_auto
+          reason: "The statutory prohibition on reducing rehabilitation compensation is absolute — no discretion, no exceptions except total denial of underlying personal injury compensation. The damage type classification (rehabilitation) is objective. The rule applies automatically."
+          legal_basis: "§47(2) — 'Liikennevakuutuslain perusteella korvattavasta kuntoutuksesta annetun lain mukaisiin korvauksiin ei tehdä 1 momentissa tarkoitettua vähennystä'; §48(3) — same absolute bar — no discretionary language"
 
       - id: D13-R7
         description: Under 12 / legally non-culpable / necessity — no reduction under §47-49
@@ -1304,6 +1576,10 @@ decisions:
           reductionDegree: No reduction; §47, §48, §49 cannot be invoked
           rehabilitationAffected: false
         legal_basis: §50
+        automation:
+          level: full_auto
+          reason: "Age under 12 is an objectively verifiable fact. The statutory bar on invoking §47-49 reductions applies absolutely and automatically. No human judgment is required once age is verified."
+          legal_basis: "§50 — 'Vakuutusyhtiö ei saa vastuusta vapautuakseen tai sen rajoittamiseksi vedota 47–49 §:n säännöksiin, jos henkilövahinkoa kärsinyt oli vahingon syntyessä kahtatoista vuotta nuorempi' — absolute rule, no discretion"
 
       - id: D13-R8
         description: Knowing unauthorised use of vehicle — compensation only for special reason
@@ -1316,6 +1592,10 @@ decisions:
           reductionDegree: Generally denied; paid only for special reason (erityinen syy)
           rehabilitationAffected: true
         legal_basis: §49
+        automation:
+          level: human_decision
+          reason: "Whether 'erityinen syy' (special reason) exists to compensate despite knowing unauthorized use is an explicitly discretionary determination. No objective criteria are defined in the law — the special reason standard inherently requires case-by-case human judgment."
+          legal_basis: "§49 — 'hänelle suoritetaan korvausta ajoneuvon vakuutuksesta vain erityisestä syystä' — 'erityinen syy' is a textbook example of legally mandated discretion that cannot be automated"
 
 # ============================================================
 # D14 — SUBROGATION / RIGHT OF RECOURSE
@@ -1355,6 +1635,7 @@ decisions:
           - insurer_paid_and_subrogates
     outputs:
       - id: recourseAvailable
+
         label: Right of recourse available
         type: boolean
       - id: recourseAgainst
@@ -1377,6 +1658,10 @@ decisions:
           recourseAgainst: The individual who caused the event intentionally, with gross negligence or while severely intoxicated
           conditions: Insurer steps into claimant's shoes up to amount paid
         legal_basis: §73
+        automation:
+          level: human_decision
+          reason: "Determining whether the third party acted with 'intent' (tahallisesti) or 'gross negligence' (törkeä huolimattomuus) is a legal assessment requiring human judgment. These are subjective mental state determinations that require evaluation of evidence. The severe alcohol driving condition (BAC ≥1.2‰) is objectively verifiable, but intent and gross negligence are not."
+          legal_basis: "§73 — 'oikeus siirtyy kuitenkin vain, jos hän on aiheuttanut vakuutustapahtuman tahallisesti tai törkeästä huolimattomuudesta' — 'tahallisesti' (intent) and 'törkeä huolimattomuus' (gross negligence) require human legal assessment"
 
       - id: D14-R2
         description: Insurer subrogates against company/organization — for any causation basis
@@ -1388,6 +1673,10 @@ decisions:
           recourseAgainst: The company or organisation
           conditions: Full subrogation without restriction to intent/gross negligence
         legal_basis: §73
+        automation:
+          level: human_review
+          reason: "Party classification as a company/organization is objective. The right of subrogation applies without fault restriction. However, identifying and pursuing the correct legal entity, verifying the amount paid, and establishing that the company caused the event requires professional legal review."
+          legal_basis: "§73(1) — 'Vahinkoa kärsineen oikeus vaatia kolmannelta henkilöltä korvausmäärä...siirtyy vakuutusyhtiölle' — automatic transfer, but company identification and amount verification require professional review"
 
       - id: D14-R3
         description: LVK recourse against national guarantee fund — for uninsured ETA vehicle
@@ -1399,6 +1688,10 @@ decisions:
           recourseAgainst: National guarantee fund of ETA state where vehicle has permanent home (§74(1)(5))
           conditions: LVK has paid and vehicle's home state fund is liable
         legal_basis: §74(1)(5)
+        automation:
+          level: full_auto
+          reason: "The conditions are objectively verifiable: LVK paid compensation, vehicle was uninsured, vehicle's home ETA state is identifiable from registry data. The recourse target (home state national guarantee fund) follows automatically from the statutory rule."
+          legal_basis: "§74(1)(5) — 'kyse on ajoneuvosta, jonka vakuuttamisvelvollisuus on laiminlyöty, sen ETA-valtion kansalliselta takuurahastolta, jossa ajoneuvolla on pysyvä kotipaikka' — automatic entitlement based on objective facts"
 
       - id: D14-R4
         description: LVK recourse against national guarantee fund — for unknown vehicle
@@ -1410,6 +1703,10 @@ decisions:
           recourseAgainst: National guarantee fund of ETA state where accident occurred (§74(1)(3))
           conditions: LVK has paid and vehicle remained unidentified
         legal_basis: §74(1)(3)
+        automation:
+          level: full_auto
+          reason: "LVK's payment for unknown vehicle damage and the accident location (ETA state) are objectively verifiable facts. The recourse target (accident state's national guarantee fund) follows automatically from the statutory rule."
+          legal_basis: "§74(1)(3) — 'ajoneuvo jää tunnistamatta, sen ETA-valtion kansalliselta takuurahastolta, jossa vahinko tapahtui' — automatic entitlement based on objective facts"
 
       - id: D14-R5
         description: LVK recourse against foreign compensation body — where LVK paid due to insurer delay
@@ -1421,6 +1718,10 @@ decisions:
           recourseAgainst: Compensation body of ETA state where responsible insurer has its seat
           conditions: LVK subrogates to claimant's rights up to amount paid; and claimant's rights against tortfeasor/insurer also transfer to LVK
         legal_basis: §74(2)
+        automation:
+          level: full_auto
+          reason: "LVK's payment under §71 (due to insurer delay), the responsible insurer's home ETA state, and the corresponding compensation body are all objectively identifiable from EU insurance registers and LVK records. The recourse right follows automatically by statute."
+          legal_basis: "§74(2) — 'Liikennevakuutuskeskuksella on oikeus vaatia takaisin 71 §:n perusteella maksamansa korvaus sen ETA-valtion korvauselimeltä, jossa vakuutussopimuksen tehneen vakuutusyhtiön toimipaikka on' — automatic statutory entitlement"
 
       - id: D14-R6
         description: LVK recourse following insurer insolvency — against liquidation/bankruptcy estate
@@ -1431,3 +1732,7 @@ decisions:
           recourseAgainst: Liquidation or bankruptcy estate of insolvent insurer
           conditions: Claimant's rights against estate transfer to LVK to the extent LVK has paid
         legal_basis: §74(3)
+        automation:
+          level: full_auto
+          reason: "LVK's payment following insurer insolvency and the existence of the liquidation/bankruptcy estate are objectively verifiable facts. The transfer of claimant's rights to LVK follows automatically by statute up to the amount paid."
+          legal_basis: "§74(3) — 'vahinkoa kärsineen oikeus korvaukseen selvitys- tai konkurssipesästä siirtyy keskukselle siihen määrään saakka kuin tämä on korvausta maksanut' — automatic statutory transfer"
