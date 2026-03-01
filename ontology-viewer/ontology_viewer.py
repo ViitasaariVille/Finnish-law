@@ -127,7 +127,7 @@ def create_pyvis_network(G):
             net.add_node(node, label=data.get("label", node), color=color, title=title, shape="box")
     
     # Get list of existing nodes in the network
-    existing_nodes = set(G.nodes(data=True).keys())
+    existing_nodes = set(G.nodes())
     
     for source, target, data in G.edges(data=True):
         # Only add edge if both nodes exist
