@@ -1,0 +1,1437 @@
+metadata:
+  name: Finnish Work Accident and Occupational Disease Insurance Ontology
+  version: '1.0'
+  source_law: Työtapaturma- ja ammattitautilaki (459/2015)
+  language: en
+  effective_date: '2016-01-01'
+  source_url: https://www.finlex.fi/fi/laki/alkup/2015/20150459
+  created: '2026-02-27'
+  format: knowledge_graph_ready
+classes:
+  employee:
+    label: Employee
+    finnish: Työntekijä
+    description: Person working in employment relationship under employment contract,
+      public service, or similar
+    legal_basis: §8
+    category: person
+    excluded_categories:
+    - athlete
+    - agricultural_entrepreneur
+    - grant_recipient
+    attributes:
+    - key: employmentType
+      type: enum
+      values:
+      - full_time
+      - part_time
+      - temporary
+      - probationary
+  executiveEmployee:
+    label: ExecutiveEmployee
+    finnish: Johtavassa asemassa oleva
+    description: Person in a leading position (managing director, board member, partner
+      with controlling interest)
+    legal_basis: §9
+    category: person
+    attributes:
+    - key: positionType
+      type: enum
+      values:
+      - managing_director
+      - board_member
+      - partner
+      - proportional_owner
+    - key: ownershipPercentage
+      type: decimal
+      note: Required if partner or owner (over 50% for some provisions)
+    - key: controlsCompany
+      type: boolean
+  student:
+    label: Student
+    finnish: Opiskelija
+    description: Person whose primary occupation is studying
+    legal_basis: §76, §77
+    category: person
+    attributes:
+    - key: studentType
+      type: enum
+      values:
+      - higher_education
+      - vocational
+      - basic_secondary
+    - key: studyProgram
+      type: string
+    - key: enrollmentDate
+      type: date
+    - key: expectedGraduationDate
+      type: date
+    - key: isFullTime
+      type: boolean
+    - key: actualEarningsAtInjury
+      type: MonetaryAmount
+    - key: estimatedEarnings3YearsPostGraduation
+      type: decimal
+      legal_basis: §76
+    - key: isWithinOneYearOfCompletion
+      type: boolean
+      legal_basis: §76
+    - key: studyCompletionStatus
+      type: enum
+      values:
+      - ongoing
+      - completed_within_year
+      - completed_over_year_ago
+    - key: minimumEarningsMultiplier
+      type: decimal
+      legal_basis: §77
+      note: 2.0x basic amount for pupils (€13,680 × 2)
+    - key: educationLevel
+      type: enum
+      values:
+      - basic_secondary
+      - vocational
+      - higher_education
+    - key: actualEarningsCalculationMethod
+      type: enum
+      values:
+      - estimated_future
+      - pupil_minimum
+      - actual_earnings
+  entrepreneur:
+    label: Entrepreneur
+    finnish: Yrittäjä
+    description: Self-employed person with YEL insurance
+    legal_basis: §188–190
+    category: person
+    attributes:
+    - key: businessId
+      type: string
+    - key: yelInsured
+      type: boolean
+    - key: voluntaryInsuranceStartDate
+      type: date
+  injuredParty:
+    label: InjuredParty
+    finnish: Vahingoittunut
+    description: Person who suffered a work accident or occupational disease
+    legal_basis: §2(6), §15–16
+    category: person
+    attributes:
+    - key: injuryDate
+      type: date
+      finnish: tapaturmapäivä
+      required: true
+      legal_basis: §2(6)
+    - key: injuryType
+      type: string
+      finnish: vamman laatu
+      required: true
+      legal_basis: §2(6)
+    - key: severity
+      type: enum
+      values:
+      - minor
+      - moderate
+      - severe
+      - total
+    - key: medicalFindings
+      type: string
+      finnish: lääketieteelliset löydökset
+      legal_basis: §16
+    - key: personId
+      type: string
+      finnish: henkilötunnus
+      required: true
+    - key: name
+      type: string
+      finnish: nimi
+    - key: contactInformation
+      type: string
+      finnish: yhteystiedot
+      legal_basis: §2(6)
+  beneficiary:
+    label: Beneficiary
+    finnish: Edunsaaja
+    description: Person entitled to family pension after death (spouse/partner §100,
+      child §101)
+    legal_basis: §100–101
+    category: person
+    note: Includes statutorySpouse, cohabitingPartner, childPensionRecipient, dependent as related classes
+  employer:
+    label: Employer
+    finnish: Työnantaja
+    description: Entity with mandatory insurance obligation
+    legal_basis: §3
+    category: organization
+    attributes:
+    - key: businessId
+      type: string
+    - key: companyName
+      type: string
+    - key: annualPayroll
+      type: MonetaryAmount
+    - key: isExemptFromInsurance
+      type: boolean
+    - key: exemptionType
+      type: enum
+      values:
+      - none
+      - below_threshhold_1200
+      - state_employer
+      - other_statutory_exemption
+    - key: exemptionReason
+      type: enum
+      values:
+      - none
+      - €1200-threshold
+      - state-employer
+      - other
+    - key: exemptionStartDate
+      type: date
+    - key: exemptionEndDate
+      type: date
+    - key: industrySector
+      type: string
+      finnish: toimiala
+      legal_basis: §111
+    - key: workStartDate
+      type: date
+      finnish: työn alkamisaika
+      legal_basis: §111
+    - key: ownershipStructure
+      type: string
+      finnish: omistussuhteet
+      legal_basis: §111
+  insuranceCompany:
+    label: InsuranceCompany
+    finnish: Vakuutusyhtiö
+    description: Insurance company authorized to provide work accident insurance
+    legal_basis: §205
+    category: organization
+  vakuutuslaitos:
+    label: InsuranceInstitution
+    finnish: Vakuutuslaitos
+    description: Collective term for insurance institutions providing work accident
+      insurance under §6 (insurance companies, state treasury, municipal pension institutions)
+    legal_basis: §6
+    category: organization
+    attributes:
+    - key: institutionType
+      type: enum
+      values:
+      - private_insurance_company
+      - state_treasury
+      - municipal_pension_institution
+    - key: authorizedForWorkAccident
+      type: boolean
+  uninsuredWork:
+    label: UninsuredWork
+    finnish: Vakuuttamaton työ
+    description: Work performed without mandatory work accident insurance - by AccidentInsuranceCentre
+    legal_basis: §2(4)
+    category: event
+    note: When employer fails to obtain insurance, AccidentInsuranceCentre handles
+      claims
+  stateTreasury:
+    label: StateTreasury
+    finnish: Valtiokonttori
+    description: Pays compensation for state employees when the State is the employer
+    legal_basis: §3(3), §207, §212, §213
+    category: organization
+    attributes:
+    - key: institutionName
+      type: string
+      value: Valtiokonttori
+    - key: role
+      type: enum
+      values:
+      - compensation_payer_for_state_employees
+    - key: memberOfAccidentCentre
+      type: boolean
+      legal_basis: §212
+    - key: participatesInCostDistribution
+      type: boolean
+      legal_basis: §231
+  mandatoryInsurance:
+    label: MandatoryInsurance
+    finnish: Pakollinen vakuutus
+    description: Mandatory insurance required by law for all employers
+    legal_basis: §3
+    category: insurance_type
+  voluntaryWorkTimeInsurance:
+    label: VoluntaryWorkTimeInsurance
+    finnish: Vapaaehtoinen työajan vakuutus
+    description: Voluntary insurance for work time accidents
+    legal_basis: §196–198
+    category: insurance_type
+  occupationalAccident:
+    label: OccupationalAccident
+    finnish: Työtapaturma
+    description: Work accident defined as injury suffered in circumstances covered
+      by the law
+    legal_basis: §20–25
+    category: event
+    note: workplaceAccident and commuteAccident are defined as separate related classes
+  vahinko:
+    label: Vahinko
+    finnish: Vahinko
+    description: Damage as a consequence of a vahinkotapahtuma - the actual injury/illness
+    legal_basis: §2(3), §15–16
+    category: event
+    attributes:
+    - key: damageType
+      type: enum
+      values:
+      - physical_injury
+      - occupational_disease
+      - psychological_injury
+      - death
+    - key: severity
+      type: enum
+      values:
+      - minor
+      - moderate
+      - severe
+      - total
+    - key: bodyPartAffected
+      type: string
+    - key: medicalDiagnosis
+      type: string
+    - key: causationToEvent
+      type: reference
+      to: SyyYhteys
+    - key: manifestationDate
+      type: date
+    - key: isPermanent
+      type: boolean
+  SyyYhteys:
+    label: Causation
+    finnish: SyyYhteys
+    description: Medical causation assessment - link between injury/occupational disease
+      and the accident/event per §16
+    legal_basis: §16
+    category: assessment
+    attributes:
+    - key: assessmentDate
+      type: date
+    - key: assessor
+      type: string
+    - key: causalConnection
+      type: enum
+      values:
+      - confirmed
+      - probable
+      - unlikely
+      - excluded
+    - key: assessmentBasis
+      type: string
+  deathCompensation:
+    label: DeathCompensation
+    finnish: Kuolemantapauskorvaus
+    description: Compensation paid when injury results in death (survivors pension
+      + funeral assistance)
+    legal_basis: §100–102 (perhe-eläke), §109 (hauta-apu)
+    category: compensation
+  claimApplication:
+    label: ClaimApplication
+    finnish: Korvaushakemus
+    description: Application for compensation
+    legal_basis: §112
+    category: procedure
+    note: wageCompensationApplication, travelCostApplication, careCostApplication, propertyDamageApplication are defined separately
+    attributes:
+    - key: submissionDate
+      type: date
+    - key: completeness
+      type: string
+    - key: attachments
+      type: array
+  compensationDecision:
+    label: CompensationDecision
+    finnish: Korvauspäätös
+    description: Written decision on compensation
+    legal_basis: §124–127
+    category: decision
+    attributes:
+    - key: decisionDate
+      type: date
+    - key: decisionType
+      type: enum
+      values:
+      - grant
+      - deny
+      - partial
+    - key: amount
+      type: MonetaryAmount
+    - key: reasoning
+      type: string
+    - key: appealInstructions
+      type: string
+    - key: deadline
+      type: integer
+      value: 30
+      note: days from sufficient documentation
+      legal_basis: §127
+  healthcareProvider:
+    label: HealthcareProvider
+    finnish: Terveydenhuollon palveluntarjoaja
+    description: Healthcare service provider
+    legal_basis: §36–49
+    category: organization
+    attributes:
+    - key: providerType
+      type: enum
+      values:
+      - public
+      - private
+      - occupational_health
+    - key: authorization
+      type: string
+    - key: region
+      type: string
+  medicalCareCompensation:
+    label: MedicalCareCompensation
+    finnish: Korvaus sairaanhoitokustannuksista
+    description: Compensation for medical care costs
+    legal_basis: §36–49
+    category: compensation
+    note: publicHealthcare, privateHealthcare, foreignHealthcare, medicine are defined separately
+  paymentCommitment:
+    label: PaymentCommitment
+    finnish: Maksusitoumus
+    description: Insurance company commitment to pay for treatment
+    legal_basis: §42, §45
+    category: decision
+  accidentInsuranceCentre:
+    label: AccidentInsuranceCentre
+    finnish: Tapaturmavakuutuskeskus
+    description: Central coordinating organization for work accident insurance
+    legal_basis: §209–225
+    category: institution
+    attributes:
+    - key: promotionTasks
+      type: enum
+      values:
+      - uniform_implementation
+      - implementation_system_development
+      - cooperation_insurance_companies
+      - cooperation_authorities
+      - recommendations
+      - information_dissemination
+      legal_basis: §209(1)
+    - key: specificTasks
+      type: enum
+      values:
+      - uninsured_work_claims
+      - law_applicability_determination
+      - notification_form_approval
+      - delayed_claim_processing
+      - risk_classification_maintenance
+      - insurance_obligation_supervision
+      - insurance_register_maintenance
+      - penalty_payment_applications
+      - joint_guarantee_tasks
+      - distribution_system_tasks
+      - occupational_safety_fee_collection
+      - accident_register_maintenance
+      - statistics_research
+      - statement_form_approval
+      - eu_coordination_residence
+      - other_government_assigned_tasks
+      legal_basis: §209(2)
+  claimAppealBoard:
+    label: ClaimAppealBoard
+    finnish: Tapaturma-asiain korvauslautakunta
+    description: Advisory body for uniform compensation practice
+    legal_basis: §226–228
+    category: institution
+    note: NOT an appeal body - provides expert opinions to insurers
+  accidentAppealsBoard:
+    label: AccidentAppealsBoard
+    finnish: Tapaturma-asiainratkaisulautakunta
+    description: First instance appeal body for insurance company decisions, established by Laki tapaturma-asioiden muutoksenhakulautakunnasta (1316/2010). Listed in §237 as appeal body.
+    legal_basis: Laki tapaturma-asioiden muutoksenhakulautakunnasta (1316/2010)
+    category: institution
+    attributes:
+    - key: appealDeadline
+      type: integer
+      value: 30
+      legal_basis: §241
+  insuranceCourt:
+    label: InsuranceCourt
+    finnish: Vakuutusoikeus
+    description: Second instance appeal body for accident appeals board decisions
+    legal_basis: §242
+    category: institution
+    attributes:
+    - key: appealDeadline
+      type: integer
+      value: 30
+      legal_basis: §242
+  supremeCourt:
+    label: SupremeCourt
+    finnish: Korkein oikeus
+    description: Final appellate court - highest instance for Finnish courts, leave
+      to appeal required
+    legal_basis: §243
+    category: institution
+    attributes:
+    - key: leaveToAppealRequired
+      type: boolean
+      value: true
+      legal_basis: §243
+    - key: appealDeadline
+      type: integer
+      value: 60
+      legal_basis: Oikeudenkäymiskaari 4/1734 §30
+  appealChain:
+    label: AppealChain
+    finnish: Muutoksenhaku
+    description: Structured hierarchy of appeal bodies
+    legal_basis: §237–243
+    category: procedure
+    attributes:
+    - key: currentLevel
+      type: enum
+      values:
+      - accident_appeals_board
+      - insurance_court
+      - supreme_court
+    - key: nextLevelAvailable
+      type: boolean
+    - key: appealDeadlineDays
+      type: integer
+      value: 30
+      legal_basis: §241
+    - key: supremeCourtDeadlineDays
+      type: integer
+      value: 60
+      legal_basis: Oikeudenkäymiskaari 4/1734 §30
+    - key: lateFilingAllowed
+      type: boolean
+      legal_basis: §241(2)
+    - key: additionalEvidenceDeadline
+      type: integer
+      value: 60
+  treatment:
+    label: Treatment
+    finnish: Hoito
+    description: Medical treatment provided to injured party
+    legal_basis: §42, §45
+    category: healthcare
+    attributes:
+    - key: treatmentType
+      type: enum
+      values:
+      - surgery
+      - medication
+      - rehabilitation
+      - therapy
+    - key: startDate
+      type: date
+    - key: endDate
+      type: date
+  costDistributionSystem:
+    label: CostDistributionSystem
+    finnish: Jakojärjestelmä
+    description: System for sharing costs among insurance companies
+    legal_basis: §231
+    category: system
+    attributes:
+    - key: distributionType
+      type: enum
+      values:
+      - proportional
+      - risk_based
+      - claim_specific
+  survivorsPension:
+    label: SurvivorsPension
+    finnish: Perhe-eläke
+    description: Pension paid to survivors of deceased insured person
+    legal_basis: §100–102
+    category: compensation
+    attributes:
+    - key: pensionType
+      type: enum
+      values:
+      - widow
+      - child
+      - dependent
+    - key: amount
+      type: MonetaryAmount
+  funeralAssistance:
+    label: FuneralAssistance
+    finnish: Hautausapu
+    description: Compensation for funeral expenses
+    legal_basis: §109
+    category: compensation
+    attributes:
+    - key: amount
+      type: MonetaryAmount
+      value: €4,760
+  accidentAndOccupationalDiseaseRegister:
+    label: AccidentAndOccupationalDiseaseRegister
+    finnish: Työtapaturma- ja ammattitautirekisteri
+    description: Register of work accidents maintained by AccidentInsuranceCentre
+    legal_basis: §235
+    category: registry
+    attributes:
+    - key: registerName
+      type: string
+      value: Tapaturma- ja vaarailmoitusrekisteri
+  korvauslautakunnanLausunto:
+    label: KorvauslautakunnanLausunto
+    finnish: Korvauslautakunnan lausunto
+    description: Opinion issued by ClaimAppealBoard on legal/medical interpretation
+    legal_basis: §226–228
+    category: decision
+    attributes:
+    - key: opinionType
+      type: enum
+      values:
+      - legal_interpretation
+      - medical_interpretation
+    - key: requestDate
+      type: date
+  statutorySpouse:
+    label: StatutorySpouse
+    finnish: Leski
+    description: Widow/widower entitled to family pension under statutory provisions
+    legal_basis: §100
+    category: person
+    attributes:
+    - key: marriageDate
+      type: date
+    - key: incomeAdjustmentApplies
+      type: boolean
+      value: true
+      legal_basis: §107
+  tapaturma:
+    label: Tapaturma
+    finnish: Tapaturma
+    description: Accident as defined in Finnish work accident law - sudden, unexpected
+      external event causing injury
+    legal_basis: §17
+    category: event
+    attributes:
+    - key: suddenness
+      type: boolean
+      value: true
+      note: Must be sudden event
+    - key: externality
+      type: boolean
+      value: true
+      note: External cause outside the person
+    - key: injuryConnection
+      type: boolean
+      value: true
+      note: Must cause bodily injury or illness
+    - key: coveredActivity
+      type: enum
+      values:
+      - at_work
+      - commuting
+      - work_trips
+      - certain_non_work
+    - key: temporalConnection
+      type: boolean
+      value: true
+      note: Injury must manifest within reasonable time
+  quasiAccidentInjury:
+    label: QuasiAccidentInjury
+    finnish: Tapaturmaksi katsottava vamma
+    description: Injury treated as work accident under specific circumstances
+    legal_basis: §18
+    category: event
+    attributes:
+    - key: quasiAccidentType
+      type: enum
+      values:
+      - sudden_strain
+      - loss_of_consciousness
+      - heart_attack
+      - stroke
+      - other_sudden_event
+    - key: workConnection
+      type: boolean
+      value: true
+  aggravatedConditionByAccident:
+    label: AggravatedConditionByAccident
+    finnish: Tapaturman aiheuttama paheneminen
+    description: Aggravation of pre-existing condition caused by work accident
+    legal_basis: §19
+    category: event
+    attributes:
+    - key: originalCondition
+      type: string
+    - key: aggravationDate
+      type: date
+    - key: causalConnection
+      type: boolean
+      value: true
+  workDuringAccident:
+    label: WorkDuringAccident
+    finnish: Työssä sattunut tapaturma
+    description: Work accident occurring at employer's premises or under employer's
+      direction
+    legal_basis: §21
+    category: event
+    note: workplaceAccident and workTripAccident are defined separately
+  workTripAccident:
+    label: WorkTripAccident
+    finnish: Työmatkatapaturma
+    description: Accident during work-related trip
+    legal_basis: §21
+    category: event
+  specialCircumstancesAccident:
+    label: SpecialCircumstancesAccident
+    finnish: Tapaturma erityisissä olosuhteissa
+    description: Accident covered under special circumstances provisions
+    legal_basis: §24
+    category: event
+  homeWorkAccidentRule:
+    label: HomeWorkAccidentRule
+    finnish: Kotona tehtävän työn tapaturma
+    description: Rules for accidents when working at home or undefined location
+    legal_basis: §25
+    category: rule
+  occupationalDisease:
+    label: OccupationalDisease
+    finnish: Ammattitauti
+    description: Disease contracted primarily due to occupational exposure
+    legal_basis: §26
+    category: event
+    attributes:
+    - key: diseaseType
+      type: string
+    - key: occupationalOrigin
+      type: boolean
+      value: true
+    - key: exposureDuration
+      type: integer
+      note: Minimum exposure time required
+    - key: diseaseListNumber
+      type: integer
+      legal_basis: §27
+    note: occupationalDiseaseList, tendinopathyUpperLimb, carpalTunnelSyndrome, aggravatedOccupationalCondition are defined separately
+  occupationalDiseaseList:
+    label: OccupationalDiseaseList
+    finnish: Ammattitautiluettelo
+    description: Official list of occupational diseases and their criteria
+    legal_basis: §27
+    category: registry
+  tendinopathyUpperLimb:
+    label: TendinopathyUpperLimb
+    finnish: Yläraajan jännetulehdus
+    description: Tendinopathy of upper limb recognized as occupational disease
+    legal_basis: §28
+    category: event
+    parent: occupationalDisease
+    attributes:
+    - key: bodyPart
+      type: enum
+      values:
+      - shoulder
+      - elbow
+      - wrist
+      - hand
+  carpalTunnelSyndrome:
+    label: CarpalTunnelSyndrome
+    finnish: Rannekanavaoireyhtymä
+    description: Carpal tunnel syndrome recognized as occupational disease
+    legal_basis: §29
+    category: event
+    parent: occupationalDisease
+  aggravatedOccupationalCondition:
+    label: AggravatedOccupationalCondition
+    finnish: Ammattitautina korvattava paheneminen
+    description: Aggravation of occupational disease that qualifies for compensation
+    legal_basis: §30
+    category: event
+  workStrainInjury:
+    label: WorkStrainInjury
+    finnish: Työliikekipeytyminen
+    description: Injury from repetitive work movements or strain
+    legal_basis: §33
+    category: event
+  assaultInjury:
+    label: AssaultInjury
+    finnish: Pahoinpitely ja tahallinen teko
+    description: Injury from assault or intentional act by another person
+    legal_basis: §34
+    category: event
+    attributes:
+    - key: perpetratorIdentified
+      type: boolean
+    - key: policeReport
+      type: boolean
+  psychologicalTraumaReaction:
+    label: PsychologicalTraumaReaction
+    finnish: Henkinen järkytysreaktio
+    description: Psychological injury from traumatic event at work
+    legal_basis: §35
+    category: event
+    attributes:
+    - key: traumaType
+      type: enum
+      values:
+      - sudden_shock
+      - violent_event
+      - threatening_situation
+      - other_traumatic
+  travelAndAccommodationCosts:
+    label: TravelAndAccommodationCosts
+    finnish: Matka- ja majoituskulut
+    description: Reimbursement for travel and accommodation related to medical treatment
+    legal_basis: §50
+    category: compensation
+    attributes:
+    - key: travelMethod
+      type: enum
+      values:
+      - public_transport
+      - personal_vehicle
+      - taxi
+      - ambulance
+      - flight
+    - key: distance
+      type: decimal
+      unit: km
+    - key: accommodationNights
+      type: integer
+    - key: priorAuthorization
+      type: boolean
+  careAllowance:
+    label: CareAllowance
+    finnish: Hoitotuki
+    description: Allowance for constant care and attendance needs
+    legal_basis: §51
+    category: compensation
+    attributes:
+    - key: careLevel
+      type: enum
+      values:
+      - constant_care
+      - regular_care
+      - part_time_care
+    - key: amount
+      type: MonetaryAmount
+    - key: assessmentDate
+      type: date
+  clothingAllowance:
+    label: ClothingAllowance
+    finnish: Vaatelisä
+    description: Additional compensation for clothing damaged due to injury
+    legal_basis: §52
+    category: compensation
+  serviceHousingAdditionalCosts:
+    label: ServiceHousingAdditionalCosts
+    finnish: Palveluasumisen lisäkustannukset
+    description: Additional costs for service housing (palveluasuminen) when injury
+      requires special arrangements
+    legal_basis: §93
+    category: compensation
+    attributes:
+    - key: housingType
+      type: enum
+      values:
+      - service_apartment
+      - group_home
+      - assisted_living
+    - key: additionalServicesRequired
+      type: array
+  homeCareAdditionalCosts:
+    label: HomeCareAdditionalCosts
+    finnish: Kodinhoidon lisäkustannukset
+    description: Compensation for additional home care costs due to injury
+    legal_basis: §53
+    category: compensation
+    attributes:
+    - key: careProvider
+      type: string
+    - key: additionalHours
+      type: decimal
+  personalPropertyCompensation:
+    label: PersonalPropertyCompensation
+    finnish: Henkilökohtaisten esineiden korvaus
+    description: Compensation for personal items damaged in accident
+    legal_basis: §54
+    category: compensation
+  dailyAllowance:
+    label: DailyAllowance
+    finnish: Päiväraha
+    description: Daily allowance for loss of earning capacity during treatment and
+      recovery
+    legal_basis: §56
+    category: compensation
+    attributes:
+    - key: dailyRate
+      type: MonetaryAmount
+    - key: calculationBasis
+      type: enum
+      values:
+      - actual_wages
+      - minimum_daily
+      - fixed_percentage
+    - key: paymentPeriod
+      type: period
+  accidentPension:
+    label: AccidentPension
+    finnish: Tapaturmaeläke
+    description: Pension compensation for reduced work capacity due to work accident
+    legal_basis: §63
+    category: compensation
+    attributes:
+    - key: reductionPercentage
+      type: integer
+      note: Work capacity reduction percentage
+    - key: pensionType
+      type: enum
+      values:
+      - temporary
+      - permanent
+      - partial
+    - key: amount
+      type: MonetaryAmount
+  rehabilitationAllowance:
+    label: RehabilitationAllowance
+    finnish: Kuntoutusraha
+    description: Compensation during vocational rehabilitation
+    legal_basis: §69
+    category: compensation
+    attributes:
+    - key: rehabilitationType
+      type: enum
+      values:
+      - vocational
+      - medical
+      - combined
+    - key: duration
+      type: period
+    - key: amount
+      type: MonetaryAmount
+  impairmentAllowance:
+    label: ImpairmentAllowance
+    finnish: Haittaraha
+    description: Lump sum compensation for permanent physical or mental impairment
+    legal_basis: §83–87
+    category: compensation
+    attributes:
+    - key: impairmentPercentage
+      type: integer
+      note: Medical assessment of permanent impairment
+    - key: impairmentType
+      type: enum
+      values:
+      - physical
+      - mental
+      - combined
+    - key: assessmentBasis
+      type: string
+    - key: lumpSumAmount
+      type: MonetaryAmount
+  cohabitingPartner:
+    label: CohabitingPartner
+    finnish: Avopuoliso
+    description: Cohabiting partner entitled to family pension under certain conditions
+    legal_basis: §100(2), §100(3)
+    category: person
+    attributes:
+    - key: cohabitationStartDate
+      type: date
+    - key: sharedHousehold
+      type: boolean
+  childPensionRecipient:
+    label: ChildPensionRecipient
+    finnish: Lapseneläkkeen saaja
+    description: Child entitled to survivor's pension after parent's death
+    legal_basis: §101
+    category: person
+    attributes:
+    - key: age
+      type: integer
+    - key: studentStatus
+      type: boolean
+      legal_basis: §101(1)
+  dependent:
+    label: Dependent
+    finnish: Huollettava
+    description: Person financially dependent on deceased insured person
+    legal_basis: §102
+    category: person
+    attributes:
+    - key: dependencyReason
+      type: enum
+      values:
+      - age
+      - disability
+      - education
+  workplaceAccident:
+    label: WorkplaceAccident
+    finnish: Työpaikkatapaturma
+    description: Accident occurring at the workplace during work hours
+    legal_basis: §22
+    category: event
+    attributes:
+    - key: location
+      type: string
+    - key: workingHours
+      type: boolean
+  commuteAccident:
+    label: CommuteAccident
+    finnish: Työmatkatapaturma
+    description: Accident occurring during commute between home and workplace
+    legal_basis: §23
+    category: event
+    attributes:
+    - key: commuteRoute
+      type: string
+    - key: detourReason
+      type: string
+  wageCompensationApplication:
+    label: WageCompensationApplication
+    finnish: Palkkakorvaushakemus
+    description: Application for wage compensation during illness/injury
+    legal_basis: §128
+    category: procedure
+    attributes:
+    - key: employer
+      type: reference
+      to: employer
+  travelCostApplication:
+    label: TravelCostApplication
+    finnish: Matkakustannushakemus
+    description: Application for reimbursement of travel costs related to medical
+      treatment
+    legal_basis: §128
+    category: procedure
+    attributes:
+    - key: travelDate
+      type: date
+    - key: distance
+      type: decimal
+  careCostApplication:
+    label: CareCostApplication
+    finnish: Hoitokustannushakemus
+    description: Application for reimbursement of care-related costs
+    legal_basis: §128
+    category: procedure
+    attributes:
+    - key: careType
+      type: enum
+      values:
+      - medical
+      - dental
+      - rehabilitation
+  propertyDamageApplication:
+    label: PropertyDamageApplication
+    finnish: Omaisuusvahinkohakemus
+    description: Application for compensation for property damage
+    legal_basis: §128
+    category: procedure
+    attributes:
+    - key: damageDescription
+      type: string
+    - key: estimatedValue
+      type: MonetaryAmount
+  publicHealthcare:
+    label: PublicHealthcare
+    finnish: Julkinen terveydenhuolto
+    description: Healthcare provided by public healthcare system
+    legal_basis: §39
+    category: healthcare
+    attributes:
+    - key: providerName
+      type: string
+    - key: region
+      type: string
+  privateHealthcare:
+    label: PrivateHealthcare
+    finnish: Yksityinen terveydenhuolto
+    description: Healthcare provided by private healthcare providers
+    legal_basis: §40
+    category: healthcare
+    attributes:
+    - key: providerName
+      type: string
+    - key: contractWithInsurance
+      type: boolean
+  foreignHealthcare:
+    label: ForeignHealthcare
+    finnish: Ulkomainen terveydenhuolto
+    description: Healthcare received outside Finland
+    legal_basis: §44
+    category: healthcare
+    attributes:
+    - key: country
+      type: string
+    - key: priorAuthorization
+      type: boolean
+      legal_basis: §44(2)
+  medicine:
+    label: Medicine
+    finnish: Lääkkeet
+    description: Pharmaceutical compensation for medicine costs
+    legal_basis: §38
+    category: compensation
+    attributes:
+    - key: prescription
+      type: boolean
+    - key: reimbursementRate
+      type: decimal
+  occupationalSafetyFund:
+    label: OccupationalSafetyFund
+    finnish: Työsuojelurahasto
+    description: Fund for promoting occupational safety, financed by a percentage
+      of insurance premiums
+    legal_basis: §233, §209(2)
+    category: institution
+    attributes:
+    - key: fundingPercentage
+      type: decimal
+      value: 1.75
+      note: percent of insurance premium
+      legal_basis: §233
+    - key: collectingInstitution
+      type: reference
+      to: accidentInsuranceCentre
+      note: Tapaturmavakuutuskeskus collects and remits the fees
+  liableThirdParty:
+    label: LiableThirdParty
+    finnish: Korvausvastuullinen kolmas osapuoli
+    description: Third party liable for compensation under §270 recourse (takautumisoikeus) provisions
+    legal_basis: §270
+    category: party
+    attributes: []
+relationships:
+- source: employee
+  target: employer
+  type: works_for
+  legal_basis: §8
+  note: ''
+- source: employee
+  target: insuranceCompany
+  type: is_insured_by
+  legal_basis: §3
+  note: ''
+- source: injuredParty
+  target: occupationalAccident
+  type: suffers
+  legal_basis: §15–16
+  note: ''
+- source: injuredParty
+  target: deathCompensation
+  type: dies
+  legal_basis: §99
+  note: §99 is general provision; creates survivor rights (perhe-eläke §100–102, hautausapu §109)
+- source: injuredParty
+  target: claimApplication
+  type: files
+  legal_basis: §112
+  note: case becomes active when notification received
+- source: injuredParty
+  target: healthcareProvider
+  type: receives_treatment_from
+  legal_basis: §36–49
+  note: ''
+- source: injuredParty
+  target: medicalCareCompensation
+  type: is_entitled_to
+  legal_basis: §36–49
+  note: ''
+- source: beneficiary
+  target: deathCompensation
+  type: receives
+  legal_basis: §100–102, §109
+  note: survivors pension §100–102, funeral assistance §109
+- source: beneficiary
+  target: injuredParty
+  type: is_dependent_of
+  legal_basis: §99
+  note: 'composite relation - no general dependent category in law; specific relations:
+    spouse (§100), child (§101)'
+- source: employer
+  target: employee
+  type: employs
+  legal_basis: §3, §8
+  note: §3 establishes employer obligation and employment relationship; §8 defines what constitutes employee work
+- source: employer
+  target: employee
+  type: provides_insurance_for
+  legal_basis: §3
+  note: ''
+- source: employer
+  target: insuranceCompany
+  type: has_insurance_with
+  legal_basis: §3, §156
+  note: ''
+- source: insuranceCompany
+  target: employee
+  type: insures
+  legal_basis: §3
+  note: ''
+- source: insuranceCompany
+  target: employer
+  type: has_contract_with
+  legal_basis: §3, §156
+  note: ''
+- source: insuranceCompany
+  target: treatment
+  type: approves
+  legal_basis: §42, §45
+  note: ''
+- source: insuranceCompany
+  target: paymentCommitment
+  type: issues
+  legal_basis: §42, §45
+  note: ''
+- source: insuranceCompany
+  target: costDistributionSystem
+  type: participates_in
+  legal_basis: §231
+  note: ''
+- source: insuranceCompany
+  target: claimAppealBoard
+  type: requests_opinion_from
+  legal_basis: §226, §228
+  note: §226 establishes board purpose; §228 defines request procedure
+- source: stateTreasury
+  target: employee
+  type: pays_compensation_for
+  legal_basis: §207
+  note: when employer.isStateEmployer = true
+- source: stateTreasury
+  target: accidentInsuranceCentre
+  type: is_member_of
+  legal_basis: §212
+  note: ''
+- source: stateTreasury
+  target: insuranceCompany
+  type: alternative_to
+  legal_basis: §3(3), §207
+  note: for state employees
+- source: occupationalAccident
+  target: vahinko
+  type: causes
+  legal_basis: §16
+  note: ''
+- source: vahinko
+  target: claimApplication
+  type: leads_to
+  legal_basis: §112
+  note: accident leads to claim when case becomes active
+- source: deathCompensation
+  target: survivorsPension
+  type: includes
+  legal_basis: §100–102
+  note: ''
+- source: deathCompensation
+  target: funeralExpenses
+  type: includes
+  legal_basis: §109
+  note: ''
+- source: claimApplication
+  target: compensationDecision
+  type: requests
+  legal_basis: §119
+  note: §119 defines investigation obligation - duty to obtain necessary information after claim is filed
+- source: claimApplication
+  target: insuranceCompany
+  type: is_processed_by
+  legal_basis: §112, §119, §124
+  note: case becomes active §112, duty to investigate §119, decision issued §124
+- source: compensationDecision
+  target: injuredParty
+  type: pays
+  legal_basis: §124–127
+  note: ''
+- source: compensationDecision
+  target: vahinko
+  type: covers
+  legal_basis: §36–49
+  note: ''
+- source: compensationDecision
+  target: insuranceCompany
+  type: issued_by
+  legal_basis: §124
+  note: ''
+- source: healthcareProvider
+  target: insuranceCompany
+  type: notifies_about_treatment
+  legal_basis: §41
+  note: ''
+- source: medicalCareCompensation
+  target: treatment
+  type: covers
+  legal_basis: §36–49
+  note: ''
+- source: paymentCommitment
+  target: treatment
+  type: authorizes
+  legal_basis: §42, §45
+  note: ''
+- source: accidentInsuranceCentre
+  target: insuranceCompany
+  type: supervises
+  legal_basis: §209
+  note: ''
+- source: accidentInsuranceCentre
+  target: accidentAndOccupationalDiseaseRegister
+  type: maintains
+  legal_basis: §235
+  note: ''
+- source: accidentInsuranceCentre
+  target: occupationalSafetyFund
+  type: remits_fees_to
+  legal_basis: §233
+  note: Collects 1.75% of premiums and remits to fund
+- source: claimAppealBoard
+  target: korvauslautakunnanLausunto
+  type: issues
+  legal_basis: §226, §228
+  note: '§226: board purpose (gives opinions/guidelines); §228: opinion request procedure'
+- source: accidentAppealsBoard
+  target: insuranceCompany
+  type: handles_appeals_from
+  legal_basis: §237
+  note: ''
+- source: injuredParty
+  target: tapaturma
+  type: suffers
+  legal_basis: §17
+  note: ''
+- source: injuredParty
+  target: quasiAccidentInjury
+  type: suffers
+  legal_basis: §18
+  note: ''
+- source: injuredParty
+  target: occupationalDisease
+  type: contracts
+  legal_basis: §26
+  note: ''
+- source: injuredParty
+  target: workStrainInjury
+  type: suffers
+  legal_basis: §33
+  note: ''
+- source: injuredParty
+  target: assaultInjury
+  type: suffers
+  legal_basis: §34
+  note: ''
+- source: injuredParty
+  target: psychologicalTraumaReaction
+  type: suffers
+  legal_basis: §35
+  note: ''
+- source: injuredParty
+  target: travelAndAccommodationCosts
+  type: is_entitled_to
+  legal_basis: §50
+  note: ''
+- source: injuredParty
+  target: careAllowance
+  type: is_entitled_to
+  legal_basis: §51
+  note: ''
+- source: injuredParty
+  target: clothingAllowance
+  type: is_entitled_to
+  legal_basis: §52
+  note: ''
+- source: injuredParty
+  target: homeCareAdditionalCosts
+  type: is_entitled_to
+  legal_basis: §53
+  note: ''
+- source: injuredParty
+  target: personalPropertyCompensation
+  type: is_entitled_to
+  legal_basis: §54
+  note: ''
+- source: injuredParty
+  target: dailyAllowance
+  type: is_entitled_to
+  legal_basis: §56
+  note: ''
+- source: injuredParty
+  target: accidentPension
+  type: is_entitled_to
+  legal_basis: §63
+  note: ''
+- source: injuredParty
+  target: rehabilitationAllowance
+  type: is_entitled_to
+  legal_basis: §69
+  note: ''
+- source: injuredParty
+  target: impairmentAllowance
+  type: is_entitled_to
+  legal_basis: §83–87
+  note: ''
+- source: compensationDecision
+  target: dailyAllowance
+  type: covers
+  legal_basis: §56
+  note: ''
+- source: compensationDecision
+  target: accidentPension
+  type: covers
+  legal_basis: §63
+  note: ''
+- source: compensationDecision
+  target: impairmentAllowance
+  type: covers
+  legal_basis: §83–87
+- source: insuranceCompany
+  target: injuredParty
+  type: requests_rehabilitation_assessment
+  legal_basis: §65, §120
+  note: Insurer must assess rehabilitation need
+- source: employer
+  target: insuranceCompany
+  type: notifies_accident
+  legal_basis: §111
+  note: Employer must notify within 10 working days
+- source: insuranceCompany
+  target: employer
+  type: has_right_of_recourse
+  legal_basis: §270
+  note: Insurer can recover compensation from employer in certain cases
+- source: insuranceCompany
+  target: liableThirdParty
+  type: has_right_of_recourse
+  legal_basis: §270
+  note: Insurer can recover from liable third party
+- source: injuredParty
+  target: serviceHousingAdditionalCosts
+  type: is_entitled_to
+  legal_basis: §93
+  note: Additional costs for service housing arrangements
+- source: injuredParty
+  target: appealChain
+  type: can_appeal_via
+  legal_basis: §237–243
+  note: Right to appeal compensation decision through structured appeal process
+- source: compensationDecision
+  target: appealChain
+  type: can_be_appealed_via
+  legal_basis: §237
+  note: Compensation decisions can be appealed through the appeal chain
+- source: compensationDecision
+  target: accidentAppealsBoard
+  type: appeals_to
+  legal_basis: §237
+  note: First instance appeal body for insurance company decisions
+- source: accidentAppealsBoard
+  target: insuranceCourt
+  type: appeals_to
+  legal_basis: §238
+  note: Second instance - insurance court (Vakuutusoikeus)
+- source: insuranceCourt
+  target: supremeCourt
+  type: appeals_to
+  legal_basis: §238
+  note: Final appeal to Supreme Court (Korkein oikeus) with leave to appeal
